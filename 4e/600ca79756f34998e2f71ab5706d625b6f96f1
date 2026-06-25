@@ -1,0 +1,193 @@
+src/components/peserta-didik/form-ubah-biodata.test.tsx
+  s_a31a04a681d446::t_505b08b5b3d826 1-58
+src/components/peserta-didik/form-tambah.test.tsx
+  s_d078222d96448f::t_b01e8addfdbbdf 1-58
+src/app/dashboard/akses/page.test.tsx
+  s_3b02dd2100e1a4::t_a89edf0ae78a18 182
+src/app/dashboard/peserta-didik/[id]/page.tsx
+  s_a31a04a681d446::t_0b946b9fa06754 1-207
+src/components/dashboard-aktif.tsx
+  s_3b02dd2100e1a4::t_cd508b41640513 79-80,85-105
+  s_3b02dd2100e1a4::t_df2cadedae78f5 2,6
+  s_3b02dd2100e1a4::t_e6ef62d38909e9 38-44
+src/lib/auth/otorisasi.ts
+  s_cb08dadf354804::t_dc89e99ede88b7 11-37
+src/components/peserta-didik/form-ubah-status.tsx
+  s_d078222d96448f::t_3c21db067cb6b2 1-64
+src/db/queries/peserta-didik.test.ts
+  s_80ae05479f1c85::t_e4ff281a4cc5ec 1-31,37-44,49-51,54-56,62-284
+  s_b607c72ed81155::t_5e50f2b32ca9df 32-36
+  s_b607c72ed81155::t_40d9e1e5c14f4d 45-48,52-53,57-61
+src/db/queries/mutasi-peserta-didik.ts
+  s_0a183d267e4c53::t_bd973fc73f0b71 1-94
+src/components/peserta-didik/form-mutasi.tsx
+  s_a31a04a681d446::t_be8ec40c0f8199 1-99
+src/db/queries/mutasi-peserta-didik.test.ts
+  s_b607c72ed81155::t_121040179948d3 32-37
+  s_b607c72ed81155::t_804c337ffd5106 60-61,65-69
+  s_0a183d267e4c53::t_d7f291d6895e4e 1-31,38-59,62-64,70-260
+src/app/dashboard/peserta-didik/page.tsx
+  s_d078222d96448f::t_7cfc42be1381f6 1-85
+src/components/peserta-didik/daftar-wali.tsx
+  s_a31a04a681d446::t_2b90534209b6ec 1-59
+src/components/peserta-didik/daftar-riwayat-status.tsx
+  s_a31a04a681d446::t_d284fb875b2f20 1-67
+src/components/peserta-didik/form-wali.tsx
+  s_a31a04a681d446::t_08ea61c877ef72 1-82
+src/db/queries/akses.test.ts
+  s_3b02dd2100e1a4::t_e0671943cb64ec 60-63
+src/components/peserta-didik/form-ubah-biodata.tsx
+  s_a31a04a681d446::t_3252b2da635580 1-107
+src/components/peserta-didik/form-wali.test.tsx
+  s_a31a04a681d446::t_a19e9ccf68c88b 1-66
+src/components/peserta-didik/daftar-riwayat-status.test.tsx
+  s_a31a04a681d446::t_0fe60d5deddeca 1-49
+src/app/dashboard/akses/actions.ts
+  s_cb08dadf354804::t_34f903556cb1e2 43-45
+src/db/queries/kontak-peserta-didik.ts
+  s_a9410cfbf28046::t_78004572a775e6 1-129
+src/db/queries/kontak-peserta-didik.test.ts
+  s_b607c72ed81155::t_b735360acf6b64 60-61,65-69
+  s_b607c72ed81155::t_adc4c858bc9b05 34-38
+  s_a9410cfbf28046::t_1ff73d7037171d 1-33,39-59,62-64,70-282
+src/lib/auth/otorisasi.test.ts
+  s_cb08dadf354804::t_1eb962a06dfa58 155-223
+src/db/schema.ts
+  s_0c465431e9b019::t_19a9de2a65af79 3
+  s_0c465431e9b019::t_78a6759f7ed57f 205-369
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_07dbfd88d2a2ac::t_854b9455d1a7d6 1-800
+src/components/peserta-didik/form-kontak-darurat.tsx
+  s_a31a04a681d446::t_9f2f3aaacb4c0f 1-70
+src/components/peserta-didik/form-mutasi.test.tsx
+  s_a31a04a681d446::t_edeb3ae7b1dacc 1-70,72-73
+  s_a31a04a681d446::t_02f3e5b59e31e0 71
+src/components/akses/daftar-pengguna.test.tsx
+  s_3b02dd2100e1a4::t_aea182edf64c46 56
+src/components/peserta-didik/form-kontak-darurat.test.tsx
+  s_a31a04a681d446::t_9b109d1ec2dbf6 1-80
+src/components/akses/daftar-pengguna.tsx
+  s_cb08dadf354804::t_e3daa904f47e67 18-20,36-41
+src/db/migrations/0002_peserta_didik.sql
+  s_0c465431e9b019::t_dff638dbd04aec 1-139
+src/db/akses.test.ts
+  s_3b02dd2100e1a4::t_46060098a4875a 49-52
+src/app/dashboard/peserta-didik/page.test.tsx
+  s_d078222d96448f::t_dfecda55717cb4 1-199
+src/app/dashboard/peserta-didik/actions.ts
+  s_07dbfd88d2a2ac::t_5ac12fc835be61 28-31
+  s_07dbfd88d2a2ac::t_c8cbdef2c4211c 1-27,32-501
+src/db/queries/peserta-didik.ts
+  s_80ae05479f1c85::t_6eee29f4ec46ff 1-155,161-169,181-197
+  s_80ae05479f1c85::t_6262f270f5b6a3 156-160,170-180
+src/components/peserta-didik/daftar-kontak-darurat.tsx
+  s_a31a04a681d446::t_e44bec01bdd388 1-58
+src/components/peserta-didik/daftar-mutasi.tsx
+  s_a31a04a681d446::t_9131ed1672a0b6 1-58
+src/components/peserta-didik/form-tambah.tsx
+  s_d078222d96448f::t_db327650bee432 1-108
+src/components/peserta-didik/daftar-peserta-didik.tsx
+  s_d078222d96448f::t_453b96d9d9457f 1-164
+src/db/peserta-didik.test.ts
+  s_0c465431e9b019::t_fdcffc9a9151d0 1-24,30-32,37,51-56,60-81,84-86,92-196,202-212,214-433
+  s_0c465431e9b019::t_187c6872c3191e 33-36,38-50,57-59
+  s_b607c72ed81155::t_3cd52c83843c99 25-29
+  s_b607c72ed81155::t_76ceb153462b2d 82-83,87-91
+  s_0c465431e9b019::t_f23eb17f84572d 197-201,213
+src/lib/auth/types.ts
+  s_cb08dadf354804::t_76a3401804529d 16-18,25-28
+src/components/peserta-didik/daftar-peserta-didik.test.tsx
+  s_d078222d96448f::t_ba147fb44a52d0 1-114
+src/app/dashboard/peserta-didik/[id]/page.test.tsx
+  s_a31a04a681d446::t_319bb76f2c9f91 1-267
+src/components/peserta-didik/form-ubah-status.test.tsx
+  s_d078222d96448f::t_be7f5a330a5fe7 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "4e600ca79756f34998e2f71ab5706d625b6f96f1",
+  "prompts": {},
+  "sessions": {
+    "s_07dbfd88d2a2ac": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff40544affelJHjJwd5JP8RQ2",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_0a183d267e4c53": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff4cf60dffeLq0gsnFiZEs1gr",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_0c465431e9b019": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff554e3affeO0tKanxDjMTmZX",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_3b02dd2100e1a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffc2eb8dffeN75AEPQB0oOFEp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_80ae05479f1c85": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff4cf640ffe5TgZKwLNXns07c",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_a31a04a681d446": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff3b29beffeDhROL0fKExocqu",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_a9410cfbf28046": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff4cf61bffe40Wwm14Uf60L5H",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_b607c72ed81155": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff45c637ffeX9h0AbAZU0anaB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_cb08dadf354804": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff554ea0ffe5UmzaS9ox4UppQ",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_d078222d96448f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff3b29c3ffeC71EL7va7Kk1rx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
