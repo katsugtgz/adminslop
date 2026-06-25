@@ -189,19 +189,25 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
 
   // --- 4. catatAudit RLS isolation ----------------------------------------
   //
-  // Read A's row in the SAME transaction as the write: a row written inside a
-  // tx is visible to that tx, and other txns (e.g. `rls.test.ts`'s
-  // `delete from catatan_audit`) cannot affect this snapshot — so this is
-  // race-free even when the full suite shares the DB. B's read is in a separate
-  // tx and is always empty because RLS blocks every org_A row from org_B.
+  // We write under SEED_B (org_B) instead of org_A so we do NOT pollute
+  // org_A's `catatan_audit` — `rls.test.ts` reads org_A audit unfiltered and
+  // asserts aksi="buat_contoh" on audit[0]. Writing under org_B keeps that
+  // sibling test deterministic across concurrent full-suite runs. The RLS
+  // isolation property under test is identical: a row written under tenant X
+  // is visible to X and invisible to Y.
+  //
+  // Read B's row in the SAME transaction as the write: a row written inside a
+  // tx is visible to that tx, and other txns cannot affect this snapshot — so
+  // this is race-free even when the full suite shares the DB. A's read is in a
+  // separate tx and sees zero B rows because RLS blocks them.
 
-  it("catatAudit under tenant A is visible to A and invisible to B (RLS)", async () => {
+  it("catatAudit under tenant B is visible to B and invisible to A (RLS)", async () => {
     const AUDIT_AKSI = "perbarui_profil_satuan_isolation_test";
-    const AUDIT_TARGET = `satuan_pendidikan:${SEED_A.id}`;
+    const AUDIT_TARGET = `satuan_pendidikan:${SEED_B.id}`;
 
-    const aAudit = await withTenant(db, SEED_A.id, async (tx) => {
+    const bAudit = await withTenant(db, SEED_B.id, async (tx) => {
       await catatAudit(tx, {
-        aktor: "user_A",
+        aktor: "user_B",
         aksi: AUDIT_AKSI,
         target: AUDIT_TARGET,
       });
@@ -210,18 +216,21 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
         .from(schema.catatanAudit)
         .where(eq(schema.catatanAudit.aksi, AUDIT_AKSI));
     });
-    expect(aAudit.length).toBeGreaterThanOrEqual(1);
-    const written = aAudit[aAudit.length - 1];
-    expect(written.aktor).toBe("user_A");
+    expect(bAudit.length).toBeGreaterThanOrEqual(1);
+    const written = bAudit[bAudit.length - 1];
+    expect(written.aktor).toBe("user_B");
     expect(written.aksi).toBe(AUDIT_AKSI);
     expect(written.target).toBe(AUDIT_TARGET);
-    expect(written.tenantId).toBe(SEED_A.id); // came from the session GUC
+    expect(written.tenantId).toBe(SEED_B.id); // came from the session GUC
 
-    // B cannot read ANY audit rows — RLS blocks all org_A rows.
-    const bAudit = await withTenant(db, SEED_B.id, (tx) =>
-      tx.select().from(schema.catatanAudit),
+    // A cannot read B's audit rows — RLS blocks every org_B row from org_A.
+    const aAudit = await withTenant(db, SEED_A.id, (tx) =>
+      tx
+        .select()
+        .from(schema.catatanAudit)
+        .where(eq(schema.catatanAudit.aksi, AUDIT_AKSI)),
     );
-    expect(bAudit).toHaveLength(0);
+    expect(aAudit).toHaveLength(0);
   });
 
   // --- 5. CHECK constraints reject invalid values -------------------------
