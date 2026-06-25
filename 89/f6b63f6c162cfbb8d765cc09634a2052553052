@@ -1,0 +1,29 @@
+AGENTS.md
+  s_3d0014290a4513::t_2f67910bb4e111 17-63
+  s_3d0014290a4513::t_99b6ba26c1e531 99,114-124
+  s_7a683c3509a2c7::t_0999b6d9ee706f 100-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "89f6b63f6c162cfbb8d765cc09634a2052553052",
+  "prompts": {},
+  "sessions": {
+    "s_3d0014290a4513": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_101cd1e21ffeSPnNZf9C1Iyh4H",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_7a683c3509a2c7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_10015886dffeUDT31TrklBbyrp",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
