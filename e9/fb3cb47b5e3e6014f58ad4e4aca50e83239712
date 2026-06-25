@@ -1,0 +1,21 @@
+src/components/dashboard-aktif.test.tsx
+  s_3b02dd2100e1a4::t_323967325d724b 1-68
+src/components/dashboard-aktif.tsx
+  s_3b02dd2100e1a4::t_1bb6c9b7f1eab7 1-2,6,51-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "e9fb3cb47b5e3e6014f58ad4e4aca50e83239712",
+  "prompts": {},
+  "sessions": {
+    "s_3b02dd2100e1a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffc2eb8dffeN75AEPQB0oOFEp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
