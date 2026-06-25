@@ -1,0 +1,27 @@
+roadmap.md
+  s_af6bc796f81552::t_34f43074958e66 21-52,88-91
+  s_af6bc796f81552::t_635c433ca98634 1-20,53-87,92-105
+postmvp.md
+  s_af6bc796f81552::t_635c433ca98634 1-27,29-35,40-52
+  s_af6bc796f81552::t_34f43074958e66 28,36-39
+hyperplan/plan.md
+  s_af6bc796f81552::t_635c433ca98634 23,356-357
+  s_af6bc796f81552::t_ded086ad7985ef 44,204,375,443
+  s_af6bc796f81552::t_b2e5d0d4264652 55-57,335,377,442
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "f71e22239376794bd0b34c03c3d94b8026d389f9",
+  "prompts": {},
+  "sessions": {
+    "s_af6bc796f81552": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_102254c9affe4mHBQ1Y5Tm8hCn",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
