@@ -1,0 +1,70 @@
+# ── Secrets (never commit) ──────────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# ── WorkOS / auth local state ───────────────────────────────────────
+.workos/
+
+# ── Dependencies ────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# ── Next.js build output ────────────────────────────────────────────
+.next/
+out/
+build/
+dist/
+
+# ── TypeScript ──────────────────────────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Testing ─────────────────────────────────────────────────────────
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+.playwright/
+
+# ── Drizzle / DB ────────────────────────────────────────────────────
+drizzle/meta/
+
+# ── Vercel ──────────────────────────────────────────────────────────
+.vercel
+
+# ── Misc generated ──────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.turbo
+.cache/
+
+# ── Env / editor ────────────────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.fleet/
+.history/
+
+# ── OS ──────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ── Agent harness runtime state (not project content) ───────────────
+.omo/
