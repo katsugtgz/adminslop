@@ -1,0 +1,19 @@
+.gitignore
+  s_f7a0d140559ce3::t_b15aabef27290e 1-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "2fddc0ba819b9df3e94f4516db010843dde08bca",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
