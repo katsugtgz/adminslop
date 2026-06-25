@@ -1,38 +1,43 @@
-'use client';
+"use client";
 
-import { useAuth } from '@workos-inc/authkit-nextjs/components';
-import { signOutAction } from '@/app/auth/actions';
+import { useAuth } from "@workos-inc/authkit-nextjs/components";
+import { signOutAction } from "@/app/auth/actions";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 export function NavAuth() {
   const { user, loading, refreshAuth } = useAuth();
 
   if (loading) {
-    return <span className="text-gray-400">Loading...</span>;
+    return (
+      <span className="text-sm text-muted-foreground" aria-live="polite">
+        Memuat…
+      </span>
+    );
   }
 
   if (user) {
     return (
-      <div className="flex items-center gap-4">
-        <span className="text-sm">{user.email}</span>
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-muted-foreground max-[400px]:hidden">
+          {user.email}
+        </span>
         <form action={signOutAction}>
-          <button
-            type="submit"
-            className="px-4 py-2 text-sm bg-gray-200 hover:bg-gray-300 rounded"
-          >
-            Sign out
-          </button>
+          <Button type="submit" variant="outline" size="sm">
+            <LogOut aria-hidden="true" />
+            Keluar
+          </Button>
         </form>
       </div>
     );
   }
 
   return (
-    <button
+    <Button
       type="button"
       onClick={() => void refreshAuth({ ensureSignedIn: true })}
-      className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded"
     >
-      Sign in
-    </button>
+      Masuk
+    </Button>
   );
 }
