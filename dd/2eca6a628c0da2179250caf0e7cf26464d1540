@@ -1,0 +1,19 @@
+docs/vendor/workos/llms-full.txt
+  s_f7a0d140559ce3::t_c19781877caa17 1-29215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "dd2eca6a628c0da2179250caf0e7cf26464d1540",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
