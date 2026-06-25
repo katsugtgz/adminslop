@@ -1,0 +1,134 @@
+src/components/dashboard-aktif.tsx
+  s_f69334652e25d1::t_3f7624c35ce43a 203-225
+  s_f69334652e25d1::t_11b04f53d69b92 3
+  s_f69334652e25d1::t_1bde7430c23a62 66-72
+src/components/kurikulum/daftar-alur-tujuan-pembelajaran.tsx
+  s_f69334652e25d1::t_40a82d9f470738 1-47
+src/app/dashboard/kurikulum/page.tsx
+  s_f69334652e25d1::t_191a72162b71df 1-120,124-131,136-146,148-157,159-168,170-245
+  s_f69334652e25d1::t_a793cf2f180a76 121-123,132-135
+  s_f69334652e25d1::t_cc434476756818 147,158,169
+src/components/kurikulum/daftar-tujuan-pembelajaran.tsx
+  s_f69334652e25d1::t_3c2db9b8104a5f 1-74
+src/components/kurikulum/daftar-capaian-pembelajaran.test.tsx
+  s_f69334652e25d1::t_84f4a4a4b185fe 78-85
+  s_f69334652e25d1::t_0b5c9c7ebf4598 1-77,86-109
+src/components/kurikulum/daftar-mata-pelajaran.test.tsx
+  s_f69334652e25d1::t_aed506e63b32f2 1-67
+src/db/kurikulum.test.ts
+  s_108c56645c6a63::t_ac43a521e565c8 1-414
+src/lib/auth/types.ts
+  s_d262db10850061::t_566af1c051a7ec 39-40
+  s_d262db10850061::t_6f2653d0337815 21-23
+src/components/kurikulum/daftar-fase.tsx
+  s_f69334652e25d1::t_7977b9d53ef465 1-66
+src/components/kurikulum/daftar-mata-pelajaran.tsx
+  s_f69334652e25d1::t_88d71502801ad0 1-60
+docs/adr/0001-global-reference-tables.md
+  s_868f88a84a0b94::t_740aea3adf6025 1-71
+src/components/akses/daftar-pengguna.tsx
+  s_d262db10850061::t_7f05503af0f526 61-62
+  s_d262db10850061::t_126f6e517a4adc 27
+src/components/akses/daftar-pengguna.test.tsx
+  s_d262db10850061::t_0a3c4c0935a758 29
+  s_d262db10850061::t_975042993468c7 56
+src/app/dashboard/kurikulum/page.test.tsx
+  s_f69334652e25d1::t_df5d30d5fb8c2b 1-106,108-321
+  s_f69334652e25d1::t_470ea92e1be87e 107
+src/lib/auth/otorisasi.ts
+  s_d262db10850061::t_855c0470591004 26-27
+  s_d262db10850061::t_b68ded20549929 40,42-43,59
+src/components/kurikulum/daftar-alur-tujuan-pembelajaran.test.tsx
+  s_f69334652e25d1::t_a445ed8c98503a 1-31,33-55
+  s_f69334652e25d1::t_905579636af6f4 32
+src/app/dashboard/akses/page.test.tsx
+  s_d262db10850061::t_c9221397a45c23 182
+src/components/dashboard-aktif.test.tsx
+  s_f69334652e25d1::t_e742fdca487cff 99-129
+src/db/queries/kurikulum.ts
+  s_74da475e17e40c::t_16ffb097d16458 1-188
+src/db/queries/kurikulum.test.ts
+  s_74da475e17e40c::t_29609f287bdef2 1-86,103-105,121-124,140-144,195-201,212-228,239-413
+  s_74da475e17e40c::t_594c2d1f733ba2 87-88
+  s_74da475e17e40c::t_7ef35462df0a59 89-102,106-120,125-139,145-194,202-211,229-238
+src/components/kurikulum/daftar-capaian-pembelajaran.tsx
+  s_f69334652e25d1::t_e667f7a56557bb 1-77
+src/components/kurikulum/daftar-kurikulum.tsx
+  s_f69334652e25d1::t_61f85a0fd59c06 1-43,45-47,49-75
+  s_f69334652e25d1::t_6735b639cbd89e 44,48
+src/db/migrations/0005_kurikulum_seed_review_required.sql
+  s_6975516be60098::t_79b592efeb935d 1-126
+src/db/schema.ts
+  s_108c56645c6a63::t_baf568273fb050 539-719
+src/app/dashboard/akses/actions.ts
+  s_d262db10850061::t_e28447993fe845 52
+src/components/kurikulum/daftar-kurikulum.test.tsx
+  s_f69334652e25d1::t_1cf17632446da0 1-14,16-35,37-97
+  s_f69334652e25d1::t_5b21b643579b81 15
+  s_f69334652e25d1::t_dec3eb6ddda175 36
+src/lib/auth/otorisasi.test.ts
+  s_d262db10850061::t_0eb7c488a5d43f 311-340
+src/db/migrations/0004_referensi_kurikulum.sql
+  s_108c56645c6a63::t_3a3db7551a0890 1-79
+src/components/kurikulum/daftar-fase.test.tsx
+  s_f69334652e25d1::t_1e7f35a6fe800f 1-76
+src/components/kurikulum/daftar-tujuan-pembelajaran.test.tsx
+  s_f69334652e25d1::t_2e36c8316ee774 1-31,33-82
+  s_f69334652e25d1::t_c21093f85f67a9 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "caa8f4abee4eff42a2a5bd05634dc2b73f1bc7cd",
+  "prompts": {},
+  "sessions": {
+    "s_108c56645c6a63": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fef5a42affetvajMj0Pa2iDHK",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_6975516be60098": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0feef60bbfferTWxGhZ80W7K57",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_74da475e17e40c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0feef60b5ffe7erS7IB1KINfvt",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_868f88a84a0b94": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fef640bfffe3GdEQ6NSvakg3G",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_d262db10850061": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fef640baffet0UZzpbRwREANi",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f69334652e25d1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fee7e2aeffe4PS8EC2CZfbQlO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
