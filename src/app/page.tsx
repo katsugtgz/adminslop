@@ -42,14 +42,16 @@ export default function BerandaPage() {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Button asChild size="lg">
-            <Link href="/panduan">
-              <Compass aria-hidden="true" />
-              Mulai Tur Awal
+            <Link href="/dashboard">
+              Masuk ke Dashboard
               <ArrowRight aria-hidden="true" />
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="/bantuan">Buka Bantuan</Link>
+            <Link href="/panduan">
+              <Compass aria-hidden="true" />
+              Tur Awal
+            </Link>
           </Button>
         </div>
       </section>

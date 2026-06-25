@@ -16,7 +16,8 @@ export default defineConfig({
         test: {
           name: "unit",
           environment: "jsdom",
-          include: ["src/**/*.test.tsx"],
+          include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+          exclude: ["src/db/**", "node_modules/**"],
         },
       },
       {

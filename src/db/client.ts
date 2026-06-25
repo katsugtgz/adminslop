@@ -28,6 +28,14 @@ export function createDb(connectionString = process.env.DATABASE_URL): {
   return { db: drizzle(pool, { schema }), pool };
 }
 
+let _singleton: { db: Db; pool: pg.Pool } | undefined;
+
+/** Shared singleton client for long-lived runtimes (Next server, dev provider). */
+export function getDb(): { db: Db; pool: pg.Pool } {
+  if (!_singleton) _singleton = createDb();
+  return _singleton;
+}
+
 /**
  * Run `fn` inside a transaction bound to `tenantId` via the session GUC
  * `app.tenant_id`. `set_config(..., true)` is the PgBouncer-safe equivalent of

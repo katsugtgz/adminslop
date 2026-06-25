@@ -11,13 +11,13 @@ describe("BerandaPage (product shell)", () => {
     ).toBeInTheDocument();
   });
 
-  it("menyediakan aksi Tur Awal dan Bantuan", () => {
+  it("menyediakan aksi Dashboard dan Tur Awal", () => {
     render(<BerandaPage />);
     expect(
-      screen.getByRole("link", { name: /Mulai Tur Awal/i })
+      screen.getByRole("link", { name: /Masuk ke Dashboard/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /Buka Bantuan/i })
+      screen.getByRole("link", { name: /^Tur Awal$/i })
     ).toBeInTheDocument();
   });
 
