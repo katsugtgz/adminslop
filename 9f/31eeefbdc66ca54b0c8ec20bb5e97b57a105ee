@@ -1,0 +1,33 @@
+public/globe.svg
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1
+public/window.svg
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1
+public/vercel.svg
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1
+src/app/layout.tsx
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-34
+src/app/globals.css
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-26
+public/file.svg
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1
+public/next.svg
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1
+src/app/page.tsx
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "9f31eeefbdc66ca54b0c8ec20bb5e97b57a105ee",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
