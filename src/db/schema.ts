@@ -1,4 +1,5 @@
 import {
+  boolean,
   jsonb,
   pgTable,
   serial,
@@ -19,6 +20,22 @@ export const satuanPendidikan = pgTable("satuan_pendidikan", {
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+  // Profil (issue #5)
+  npsn: text("npsn"),
+  jenjang: text("jenjang"),
+  alamat: text("alamat"),
+  namaKepala: text("nama_kepala"),
+  logoUrl: text("logo_url"),
+  // Pengaturan (issue #5)
+  tahunAjaranAktif: text("tahun_ajaran_aktif"),
+  semesterAktif: text("semester_aktif"),
+  zonaWaktu: text("zona_waktu").notNull().default("Asia/Jakarta"),
+  // Preferensi Cetak (issue #5)
+  cetakPaperSize: text("cetak_paper_size").notNull().default("A4"),
+  cetakTampilkanLogo: boolean("cetak_tampilkan_logo").notNull().default(true),
+  cetakTampilkanHeader: boolean("cetak_tampilkan_header")
+    .notNull()
+    .default(true),
 });
 
 /**
@@ -64,3 +81,4 @@ export const catatanAudit = pgTable("catatan_audit", {
 export type ContohCatatan = typeof contohCatatan.$inferSelect;
 export type CatatanAudit = typeof catatanAudit.$inferSelect;
 export type CatatanAuditInsert = typeof catatanAudit.$inferInsert;
+export type SatuanPendidikan = typeof satuanPendidikan.$inferSelect;
