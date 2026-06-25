@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "references": {
+    "workos-docs": {
+      "path": "./docs/vendor/workos",
+      "description": "Official WorkOS documentation. Use for AuthKit, users, organizations, memberships, sessions, roles, permissions, webhooks, SSO, Directory Sync, and Admin Portal."
+    },
+    "workos-authkit-sdk": {
+      "repository": "workos/authkit-nextjs",
+      "branch": "main",
+      "description": "Official WorkOS AuthKit SDK source for Next.js. Use to verify APIs and implementation details; this project pins @workos-inc/authkit-nextjs@^4 on Next.js 15.3."
+    }
+  }
+}
