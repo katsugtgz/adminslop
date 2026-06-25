@@ -1,0 +1,69 @@
+import type { IzinSlug, RoleSlug } from "./types";
+
+/**
+ * Baked-in peran (role) → default Izin map. Read-only constant. The starting
+ * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
+ * rows are applied. `dev` mirrors admin for the local DEV_MEMBERSHIP_ALL flow
+ * ONLY — it is NOT a global superuser (scoped to seeded tenants; §13 of the
+ * identity doc).
+ */
+export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+  admin_satuan_pendidikan: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
+  kepala_sekolah: ["akses:baca"],
+  guru: [],
+  wali_kelas: [],
+  dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
+};
+
+/** Input to `evaluasiAkses`. The caller has already confirmed membership. */
+export interface InputEvaluasiAkses {
+  readonly roleSlug: RoleSlug;
+  /** Explicit grants from the `izin_akses` table for this Pengguna+tenant. */
+  readonly izinGrants: readonly IzinSlug[];
+  /** Restrictions from the `pembatasan_akses` table (slug strings). */
+  readonly pembatasan: readonly IzinSlug[];
+  /** The action slug being requested. */
+  readonly diminta: IzinSlug;
+}
+
+/**
+ * Explainable access decision (discriminated union). `sumber` enables
+ * user-facing Pembatasan messaging and audit logging.
+ */
+export type KeputusanAkses =
+  | { readonly diizinkan: true; readonly sumber: "peran" | "izin" }
+  | { readonly diizinkan: false; readonly sumber: "bukan_anggota" | "pembatasan" | "tidak_ada_izin" };
+
+/**
+ * Pure authorization evaluator. No side effects, no I/O, no async.
+ *
+ * NOTE: this function never returns `sumber: "bukan_anggota"`. That source is
+ * for callers (the server resolver) that detect a missing membership BEFORE
+ * invoking this evaluator — they construct the decision themselves. This pure
+ * function only sees a confirmed membership's role/grants/restrictions.
+ */
+export function evaluasiAkses(input: InputEvaluasiAkses): KeputusanAkses {
+  // SECURITY INVARIANT (§13, no global superuser): pembatasan ALWAYS wins,
+  // evaluated before any grant or role default. Even admin/dev cannot bypass a
+  // restriction. This is the single guarantee that no role is omnipotent.
+  if (input.pembatasan.includes(input.diminta)) {
+    return { diizinkan: false, sumber: "pembatasan" };
+  }
+  if (input.izinGrants.includes(input.diminta)) {
+    return { diizinkan: true, sumber: "izin" };
+  }
+  if (PERAN_KE_IZIN_DEFAULT[input.roleSlug].includes(input.diminta)) {
+    return { diizinkan: true, sumber: "peran" };
+  }
+  return { diizinkan: false, sumber: "tidak_ada_izin" };
+}
+
+/** True if `roleSlug`'s defaults include `akses:kelola` (can administer Akses). */
+export function dapatMengelolaAkses(roleSlug: RoleSlug): boolean {
+  return PERAN_KE_IZIN_DEFAULT[roleSlug].includes("akses:kelola");
+}
+
+/** True if `roleSlug`'s defaults include `akses:baca` (can view the Akses page). */
+export function dapatMelihatAkses(roleSlug: RoleSlug): boolean {
+  return PERAN_KE_IZIN_DEFAULT[roleSlug].includes("akses:baca");
+}

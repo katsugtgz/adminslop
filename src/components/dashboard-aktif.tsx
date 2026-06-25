@@ -1,8 +1,12 @@
-import { Building2, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { Building2, CheckCircle2, KeyRound } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
+import { dapatMelihatAkses } from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
+
+import { Button } from "@/components/ui/button";
 
 /**
  * Active Satuan Pendidikan dashboard surface. Reads tenant-scoped data using a
@@ -24,6 +28,12 @@ export async function DashboardAktif({
   } catch {
     jumlahCatatan = null; // database not configured in this environment
   }
+
+  // Reachability link to the Akses management surface (#6 / T6). Visible when
+  // the peran's defaults include `akses:baca` (admin / kepala_sekolah / dev).
+  // The linked PAGE re-checks `boleh("akses:baca")` server-side; this is
+  // convenience reachability, not authorization (identity doc §12).
+  const bolehLihatAkses = dapatMelihatAkses(membership.roleSlug);
 
   return (
     <section className="flex flex-col gap-6">
@@ -64,6 +74,29 @@ export async function DashboardAktif({
           </p>
         </div>
       </div>
+
+      {bolehLihatAkses && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <KeyRound className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Manajemen Akses</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola PTK, Pengguna, Izin, dan Pembatasan untuk Satuan
+                Pendidikan ini.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
     </section>
   );
 }
