@@ -1,0 +1,44 @@
+docker/init.sql
+  s_7d8081a153b68a::t_46f9070b583792 1-10
+src/db/client.ts
+  s_7d8081a153b68a::t_27cb6ed3114e51 1-70
+src/db/migrate.ts
+  s_7d8081a153b68a::t_18063451d86dbf 1-65
+src/db/migrate-cli.ts
+  s_7d8081a153b68a::t_d598e63e0c4a1b 1-29
+docker-compose.yml
+  s_7d8081a153b68a::t_321dbc5794e96e 1-21
+src/db/rls.test.ts
+  s_7d8081a153b68a::t_90e0efe2ed8f03 1-2,4-43,45-104
+  s_7d8081a153b68a::t_d468570deec7be 3,44
+drizzle.config.ts
+  s_7d8081a153b68a::t_b3903225952608 1-10
+src/db/migrations/0000_tenant_spine.sql
+  s_7d8081a153b68a::t_ca18fcac2cd1ba 1-60
+package.json
+  s_7d8081a153b68a::t_2eac7bc9096719 12-16
+  s_7d8081a153b68a::t_75895dff54e25b 23,26,38,42,47
+src/db/schema.ts
+  s_7d8081a153b68a::t_921c7751bb5287 1-8,10-66
+  s_7d8081a153b68a::t_d1b5053c04daf9 9
+.env.example
+  s_7d8081a153b68a::t_42ec1e37ef066a 28-39
+vitest.config.ts
+  s_7d8081a153b68a::t_128e6d434f7e97 5-6,9,13-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "97b8e07f5f3c3213b1640a39ab8615039348be72",
+  "prompts": {},
+  "sessions": {
+    "s_7d8081a153b68a": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f0010-6cb3-7299-96d1-7b111328396b",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
