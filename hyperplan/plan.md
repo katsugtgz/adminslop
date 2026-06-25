@@ -20,7 +20,7 @@
 > Future agents: treat these two as settled. Do **not** re-propose Supabase
 > Auth or Next 16 without owner sign-off.
 
-**Status:** Plan only. Authoritative architectural decisions are converged in `hyperplan/insights-bundle.md` (5-member adversarial hyperplan, 3 rounds). This document **sequences** that bundle — it does not re-decide architecture.
+**Status:** Plan only. Authoritative architectural decisions are converged in `hyperplan/insights-bundle.md` (5-member adversarial hyperplan, 3 rounds). This document **sequences** that bundle — it does not re-decide architecture. MVP roadmap is split into `../roadmap.md`; deferred/Post-MVP scope is split into `../postmvp.md`.
 **Stack (fixed by §A4 + §D, refined by EXECUTION-MODE overrides above):** Next.js 15.3.x ✅ · **WorkOS AuthKit** ✅ (replaces Supabase Auth) · Supabase (DB/RLS/pgvector only) · Drizzle · Tailwind v4 · shadcn/ui · Vercel AI SDK · pgvector · react-to-print · Puppeteer (PDF/DOCX) · nimiq/qr-scanner · Playwright (Chromium, print-CI only) · `agent-browser` CLI (browser automation) · `firecrawl` CLI (scraping). UI strings: **Bahasa Indonesia**.
 **Compliance regime:** UU PDP (in force Oct 2022). Minor student data = "data pribadi spesifik" (highest sensitivity). Signature gate + provenance + RLS-every-table + audit log are **ship-blockers**, not features.
 
@@ -41,7 +41,7 @@ The source app ships 28 sidebar modules. Per bundle §A5, the MVP collapses thes
 | 7 | **Absensi (QR)** | 13, 05, 06, 10 | Live QR scan; Jadwal (05) + Kalender (06) feed `SchoolHoliday`; Jurnal (10) daily-ops. |
 
 **Killed (do not build — §A5):** Cover Administrasi (no AI, trivial) · Panduan Kurikulum (static docs).
-**Deferred to Post-MVP (§C + §A8):** EduExam/CBT · Lembar Jawaban config · Parent WhatsApp channel (external-principal consent flow) · Gamification leaderboards (k-anon gate unmet) · Dapodik retention. See §"Post-MVP / Deferred".
+**Deferred to Post-MVP (§C + §A8):** EduExam/CBT · Lembar Jawaban config · Parent WhatsApp channel (external-principal consent flow) · Gamification leaderboards (k-anon gate unmet) · Dapodik retention · AI-based help/RAG · deterministic AI-assisted curriculum seeding. See §"Post-MVP / Deferred".
 
 ---
 
@@ -52,6 +52,9 @@ The source app ships 28 sidebar modules. Per bundle §A5, the MVP collapses thes
 - `agent-browser` CLI for browser automation (NOT playwright MCP; playwright lib OK for print CI only).
 - `firecrawl` CLI for scraping reference material.
 - Bahasa Indonesia UI strings.
+- Mobile-first responsive UX: HP is the primary target; desktop follows responsively.
+- WCAG/A11Y baseline for all UI: readable text, large tap targets, keyboard/focus states, labels, contrast, and screen-reader semantics.
+- **Panduan Penggunaan** baseline: every core flow must be understandable for older/non-technical users through **Tur Awal** and **Bantuan Kontekstual**. AI-based help is a roadmap enhancement, not a substitute for clear UI.
 
 **Ship-blockers (must exist in Foundation, not bolted on):**
 1. **RLS on EVERY table** + `SET LOCAL app.tenant_id` per transaction (PgBouncer-safe).
@@ -198,7 +201,7 @@ Phase 3: AI Gen Core   Phase 4: Print Core     (parallel wave)
 - **Provenance** immutable per doc: `prompt_hash + provider + model + key_id`.
 - **Signature gate UX**: visible "diverifikasi oleh guru" + one-click verify + offline draft mode.
 - Vercel AI SDK + `generateObject` + Zod schema validation (uncontested).
-- **Curriculum seed corpus** (hand-curated, the compliance artifact): schema `fase/jenjang/mapel/kelas/cp/tp[]/atp[]`. Transcribing public gov facts ≠ ToS violation. No machine-readable source exists (login-gated PDFs).
+- **Curriculum seed corpus** (MVP compliance artifact): schema `fase/jenjang/mapel/kelas/cp/tp[]/atp[]`. The first seed is approved/curated and versioned. Transcribing public gov facts ≠ ToS violation. No machine-readable source exists (login-gated PDFs). Roadmap: deterministic AI-assisted seeding may accelerate future updates only after source snapshots, schema validation, golden diffs, provenance, and human approval are in place.
 - One reference generator wired end-to-end (the E-Raport *deskripsi capatian* generator — reused by the tracer bullet).
 
 **Exit criteria (TDD):**
@@ -329,6 +332,7 @@ Phase 3: AI Gen Core   Phase 4: Print Core     (parallel wave)
 - Golden-set re-validation run after final prompt/model bump.
 - **k-anonymity check** on any leaderboard/analytics (per §A10) — block release if re-identifiable; gamification ships only as shame-free institutional pride (e.g. "Sinkron 5 Hari Berturut-turut"), leaderboards deferred.
 - UU PDP review checklist signed off (consent flows, minimization, minor-data handling).
+- Mobile + WCAG/A11Y review: core flows pass phone viewport checks, tap-target review, labels/focus/contrast checks, and include baseline **Panduan Penggunaan** affordances.
 
 **Dependencies:** Phase 7.
 **Effort:** M.
@@ -349,6 +353,9 @@ Phase 3: AI Gen Core   Phase 4: Print Core     (parallel wave)
 
 ## 6. Post-MVP / Deferred (do NOT sequence into MVP)
 
+> Canonical split file: `../postmvp.md`. The table below is retained as the
+> original hyperplan-derived summary.
+
 From bundle §C (unresolved/deferred) + §A8 + §A5 kills:
 
 | Item | Reason deferred | Trigger to revisit |
@@ -365,7 +372,9 @@ From bundle §C (unresolved/deferred) + §A8 + §A5 kills:
 | **Lembar Jawaban config (source 28)** | Config-only, low value early | Post-MVP |
 | **Cover Administrasi (source 17)** | No AI, trivial | Killed (build inline if needed) |
 | **Panduan Kurikulum (source 03)** | Static docs | Killed (host as static assets) |
+| **Deterministic AI-assisted curriculum seeding** | MVP needs approved CP/TP/ATP seed data first; AI-assisted extraction can be high-quality only with locked source snapshots, repeatable prompts/parsers, schema validation, golden diffs, provenance, and human approval | Post-MVP, after the curriculum seed schema and review workflow stabilize |
 | **pgvector RAG** over curriculum | §A4 — "if/when RAG added" | If seed-corpus retrieval proves insufficient |
+| **Bantuan AI** / RAG-based product help | Requires curated help corpus, retrieval safety, answer evaluation, and stable baseline **Panduan Penggunaan** content first | Post-MVP, after core flows and guidance copy stabilize |
 
 ---
 
@@ -430,6 +439,8 @@ From bundle §C (unresolved/deferred) + §A8 + §A5 kills:
 - **react-to-print #406** nondeterminism → pixel-diff (not byte-hash) is mandatory (Phase 4).
 - **Field-key rotation perf cliff** → incident-only rotation, never scheduled (§A1).
 - **Client JWT tenant escape** → opaque server session is the deliberate rejection of Supabase default (Phase 2) — do not "simplify" back to `auth.uid()`.
+- **Older/non-technical users + phone-first usage** → treat mobile ergonomics, WCAG/A11Y, and baseline **Panduan Penggunaan** as product requirements; do not defer clarity to a future AI chatbot.
+- **Curriculum AI determinism/quality** → AI may assist CP/TP/ATP seeding only through a repeatable, source-locked pipeline with schema validation, golden diffs, provenance, and human approval; unreviewed AI output must not become canonical curriculum data.
 
 ---
 
