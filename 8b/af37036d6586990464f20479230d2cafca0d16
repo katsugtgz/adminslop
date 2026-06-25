@@ -1,0 +1,23 @@
+docs/agents/domain.md
+  s_7a683c3509a2c7::t_0999b6d9ee706f 1-18
+docs/agents/issue-tracker.md
+  s_7a683c3509a2c7::t_0999b6d9ee706f 1-16
+docs/agents/triage-labels.md
+  s_7a683c3509a2c7::t_0999b6d9ee706f 1-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "8baf37036d6586990464f20479230d2cafca0d16",
+  "prompts": {},
+  "sessions": {
+    "s_7a683c3509a2c7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_10015886dffeUDT31TrklBbyrp",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
