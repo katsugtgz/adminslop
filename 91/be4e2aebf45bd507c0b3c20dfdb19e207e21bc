@@ -1,0 +1,19 @@
+docs/architecture/identity-and-access.md
+  s_f7a0d140559ce3::t_ed41865a57c1a9 1-236
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "91be4e2aebf45bd507c0b3c20dfdb19e207e21bc",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
