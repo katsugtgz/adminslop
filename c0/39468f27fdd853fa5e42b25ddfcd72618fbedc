@@ -1,0 +1,204 @@
+src/components/rombongan-belajar/form-tingkat-baru.tsx
+  s_7296a6cf933710::t_5f832e030ae886 1-64
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_4d00efcf5164eb::t_a59b3e3f7b2850 1-422
+src/components/dashboard-aktif.tsx
+  s_3b02dd2100e1a4::t_acf523706cf7f6 52-64
+  s_3b02dd2100e1a4::t_2c90876e6652e3 127-169
+  s_3b02dd2100e1a4::t_27df03c6a82c47 2-9
+src/components/rombongan-belajar/form-tempatkan-peserta-didik.test.tsx
+  s_7296a6cf933710::t_a16ee932fa11ac 1-78
+src/app/dashboard/tahun-ajaran/actions.test.ts
+  s_f9fed925d0773d::t_4190b654c61838 1-399
+src/components/tahun-ajaran/form-tahun-ajaran-baru.tsx
+  s_e38120163fc5b3::t_132578c8985620 1-48
+src/components/tahun-ajaran/daftar-tahun-ajaran.test.tsx
+  s_e38120163fc5b3::t_780c47b8357e04 1-84
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_7296a6cf933710::t_78d76dce837ab2 1-300
+src/db/queries/rombongan-belajar.ts
+  s_a5fece22a2b3d9::t_4b804638924440 1-116
+src/components/rombongan-belajar/daftar-tingkat.tsx
+  s_7296a6cf933710::t_e4e4112df73ae5 1-43
+src/db/queries/rombongan-belajar.test.ts
+  s_a5fece22a2b3d9::t_6c858f12cbe848 1-282
+src/app/dashboard/akses/page.test.tsx
+  s_772c648ab31e55::t_6d9b5ae9896b10 182
+src/components/rombongan-belajar/daftar-rombongan-belajar.tsx
+  s_7296a6cf933710::t_169113c281384f 1-37
+src/app/dashboard/tahun-ajaran/page.tsx
+  s_3b02dd2100e1a4::t_7283aac577b9d4 2
+  s_e38120163fc5b3::t_5398415f960bd9 1,3-55,57-59,61-63,65-99
+  s_3b02dd2100e1a4::t_8d662023299417 56,60,64
+src/components/rombongan-belajar/form-tingkat-baru.test.tsx
+  s_7296a6cf933710::t_fe6cbcfff8a514 1-33
+src/components/tahun-ajaran/kontrol-semester.test.tsx
+  s_e38120163fc5b3::t_35ed96163f9105 1-47
+src/db/rombongan-belajar.test.ts
+  s_c3ea3d43bbebfa::t_a0b049aec874fe 1-334,339,341-360,372-373,381,419-420,425-626
+  s_c3ea3d43bbebfa::t_fd36abde14b4c7 335-338,340,361-371,374-380,382-418,421-424
+src/components/akses/daftar-pengguna.tsx
+  s_772c648ab31e55::t_1fbd83fc2ecdad 21-26,48-59
+src/app/dashboard/tahun-ajaran/page.test.tsx
+  s_e38120163fc5b3::t_af14c8ab682d2f 1-24,26-232
+  s_e38120163fc5b3::t_3a3cdfdc0a271d 25
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_7296a6cf933710::t_160798cd6dd3b8 1-158
+src/components/dashboard-aktif.test.tsx
+  s_3b02dd2100e1a4::t_66a891fcc06a8c 55-98
+src/db/schema.ts
+  s_c3ea3d43bbebfa::t_a11743c77b0771 2,5
+  s_c3ea3d43bbebfa::t_ba565de70a2f15 22-40
+  s_c3ea3d43bbebfa::t_006d7883fdbc5d 384-538
+src/db/migrations/0003_rombongan_belajar.sql
+  s_c3ea3d43bbebfa::t_192371af26d4a3 34-36,40-42
+  s_c3ea3d43bbebfa::t_1ec36ef3cf570b 32-33,37,39,43-44
+  s_c3ea3d43bbebfa::t_583f55cce2aac0 1-31,38,45-135
+src/components/rombongan-belajar/kontrol-progresi.test.tsx
+  s_7296a6cf933710::t_6e2938eb3235a7 1-109
+src/components/rombongan-belajar/form-tempatkan-peserta-didik.tsx
+  s_7296a6cf933710::t_34107d786075c9 1-92
+src/components/rombongan-belajar/form-rombongan-belajar-baru.tsx
+  s_7296a6cf933710::t_9d59db671c8e37 1-80
+src/db/queries/tahun-ajaran.test.ts
+  s_1517f5e582bf0a::t_afc27029343917 6-8
+  s_1517f5e582bf0a::t_f3a8dad3dd56fe 1-5,9-212
+src/lib/auth/types.ts
+  s_772c648ab31e55::t_9240c533727bb1 18-20,30-36
+src/db/queries/penempatan-rombongan-belajar.ts
+  s_b53a495d1888dd::t_232b76ea04402c 1-152
+src/db/queries/tingkat.test.ts
+  s_4c0d95f6dc94a6::t_8b24165da24ba5 1-156
+src/components/rombongan-belajar/form-rombongan-belajar-baru.test.tsx
+  s_7296a6cf933710::t_5e3ee6f47ea29d 1-59
+src/components/rombongan-belajar/daftar-rombongan-belajar.test.tsx
+  s_7296a6cf933710::t_052aaeec3c982f 2-48
+  s_3b02dd2100e1a4::t_1510dc0027835e 1
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_4d00efcf5164eb::t_656e25e44371de 1-85,91-94,104-834
+  s_4d00efcf5164eb::t_e83d50ba6d109d 86-90,95-103
+src/components/rombongan-belajar/kontrol-progresi.tsx
+  s_7296a6cf933710::t_0eeea314ae7836 1-118
+src/components/tahun-ajaran/form-tahun-ajaran-baru.test.tsx
+  s_e38120163fc5b3::t_3a6bdaffcd3ae4 1-30
+src/app/dashboard/akses/actions.ts
+  s_772c648ab31e55::t_eb2fa6006dedd3 46-51
+src/components/akses/daftar-pengguna.test.tsx
+  s_772c648ab31e55::t_9a6fe734007fff 29
+  s_772c648ab31e55::t_9b14ede9ca5ac0 56
+src/lib/auth/otorisasi.ts
+  s_772c648ab31e55::t_7aab90c44a0bb2 20-25,30-40,50-55
+src/lib/auth/otorisasi.test.ts
+  s_772c648ab31e55::t_05724f2116b829 224-310
+src/app/dashboard/tahun-ajaran/actions.ts
+  s_f9fed925d0773d::t_34d7dfc3baecb9 1-155
+src/db/queries/penempatan-rombongan-belajar.test.ts
+  s_b53a495d1888dd::t_ee62fac87e25d6 1-399
+src/components/tahun-ajaran/daftar-tahun-ajaran.tsx
+  s_e38120163fc5b3::t_bfc724f95e2759 1-65
+src/db/queries/tahun-ajaran.ts
+  s_1517f5e582bf0a::t_ec189ae94fc9d3 1-170
+src/components/rombongan-belajar/daftar-tingkat.test.tsx
+  s_3b02dd2100e1a4::t_7d66262c9e347f 1
+  s_7296a6cf933710::t_6f68f90c041971 2-47
+src/db/queries/tingkat.ts
+  s_4c0d95f6dc94a6::t_d395799267474c 1-75
+src/components/tahun-ajaran/kontrol-semester.tsx
+  s_e38120163fc5b3::t_a5680e48acad57 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "c039468f27fdd853fa5e42b25ddfcd72618fbedc",
+  "prompts": {},
+  "sessions": {
+    "s_1517f5e582bf0a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff16e500ffelgNduupXgUb6Be",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_3b02dd2100e1a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffc2eb8dffeN75AEPQB0oOFEp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_4c0d95f6dc94a6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff16e4bfffeuk8SpDRF5cT6p7",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_4d00efcf5164eb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff11f265ffelTfS75Tzo4Rrec",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_7296a6cf933710": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff0c9b16ffevob35JcU3bvQ26",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_772c648ab31e55": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff25468cffeA516GmPApXG1Tu",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_a5fece22a2b3d9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff16e48cffeEzgos1WVePd2ho",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_b53a495d1888dd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff16e480ffexz24zmfxzw9jzd",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_c3ea3d43bbebfa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff254693ffeWqe7IqmTb2iAe4",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_e38120163fc5b3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff0c9b26ffePuNE0IUb714okz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f9fed925d0773d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff11f26bffeSUvfhWR1UHFJs5",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
