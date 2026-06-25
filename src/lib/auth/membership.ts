@@ -2,7 +2,7 @@ import { getWorkOS } from "@workos-inc/authkit-nextjs";
 
 import { getDb } from "@/db/client";
 import * as schema from "@/db/schema";
-import type { Membership } from "./types";
+import type { Membership, RoleSlug } from "./types";
 
 export interface MembershipProvider {
   listForUser(userId: string): Promise<Membership[]>;
@@ -39,7 +39,10 @@ class WorkOSMembershipProvider implements MembershipProvider {
       out.push({
         orgId: membership.organizationId,
         orgName: membership.organizationName,
-        roleSlug: membership.role?.slug ?? "guru",
+        // WorkOS `role.slug` is a free-form string at the API boundary; cast
+        // to our closed RoleSlug union here so the rest of the codebase gets
+        // compile-time safety. Unknown slugs become "guru" below.
+        roleSlug: (membership.role?.slug ?? "guru") as RoleSlug,
       });
     }
     return out;
