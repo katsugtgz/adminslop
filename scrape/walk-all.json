@@ -1,0 +1,939 @@
+✓ Done
+✓ Done
+- generic [ref=e1] clickable [onclick]
+  - generic
+    - generic
+      - generic
+        - image "Profile"
+        - heading "Upgrade Kompetensi" [level=3, ref=e7]
+        - paragraph
+          - StaticText "Bagi Anda yang ingin menaikkan level kompetensi guru secara profesional, silahkan hubungi:"
+          - LineBreak "\n"
+          - LineBreak "\n"
+          - strong
+            - StaticText "Abdul Rohim, M.Pd., CDAI., CT.NNLP., C.Ht."
+          - LineBreak "\n"
+          - StaticText "Master Trainer & Educational Consultant"
+        - link "Hubungi via WhatsApp" [ref=e8]
+        - link "Personal Profil" [ref=e9]
+        - button "Tutup" [ref=e10]
+      - complementary
+        - image "EduAdmin Logo"
+        - StaticText "EduAdmin"
+        - StaticText "PRO PREMIUM"
+        - button [ref=e2]
+        - StaticText "A"
+        - paragraph
+          - StaticText "Abdul Rohim"
+        - paragraph
+          - StaticText "GURU"
+        - navigation
+          - generic
+            - button "MENU UTAMA" [ref=e16]
+              - StaticText "MENU UTAMA"
+            - button "Dashboard" [ref=e17]
+              - StaticText "Dashboard"
+            - button "Profil Saya" [ref=e18]
+              - StaticText "Profil Saya"
+            - button "Pengaturan Sekolah" [ref=e19]
+              - StaticText "Pengaturan Sekolah"
+            - button "Panduan Kurikulum" [ref=e20]
+              - StaticText "Panduan Kurikulum"
+          - generic
+            - button "DATA MASTER" [ref=e21]
+              - StaticText "DATA MASTER"
+            - button "Data Siswa" [ref=e22]
+              - StaticText "Data Siswa"
+            - button "Jadwal Pelajaran" [ref=e23]
+              - StaticText "Jadwal Pelajaran"
+            - button "Kalender Akademik" [ref=e24]
+              - StaticText "Kalender Akademik"
+            - button "Rencana Kerja" [ref=e25]
+              - StaticText "Rencana Kerja"
+            - button "Manajemen Ekskul" [ref=e26]
+              - StaticText "Manajemen Ekskul"
+            - button "Portofolio Prestasi" [ref=e27]
+              - StaticText "Portofolio Prestasi"
+          - generic
+            - button "ADMINISTRASI KBM" [ref=e28]
+              - StaticText "ADMINISTRASI KBM"
+            - button "Jurnal Agenda Guru" [ref=e29]
+              - StaticText "Jurnal Agenda Guru"
+            - button "Penilaian Siswa" [ref=e30]
+              - StaticText "Penilaian Siswa"
+          - generic
+            - button "INPUT DATA RAPORT" [ref=e31]
+              - StaticText "INPUT DATA RAPORT"
+            - button "E-Raport Siswa" [ref=e32]
+              - StaticText "E-Raport Siswa"
+            - button "Absensi Scan Real-time" [ref=e33]
+              - StaticText "Absensi Scan Real-time"
+            - button "Input Nilai Mapel" [ref=e34]
+              - StaticText "Input Nilai Mapel"
+            - button "Input Nilai Ekskul" [ref=e35]
+              - StaticText "Input Nilai Ekskul"
+            - button "Input Rekap Absensi" [ref=e36]
+              - StaticText "Input Rekap Absensi"
+          - generic
+            - button "PERANGKAT AJAR (AI)" [ref=e37]
+              - StaticText "PERANGKAT AJAR (AI)"
+            - button "Cover Administrasi" [ref=e38]
+              - StaticText "Cover Administrasi"
+            - button "Program Tahunan" [ref=e39]
+              - StaticText "Program Tahunan"
+            - button "Program Semester" [ref=e40]
+              - StaticText "Program Semester"
+            - button "Alur Tujuan Pemb." [ref=e41]
+              - StaticText "Alur Tujuan Pemb."
+            - button "Modul Ajar / RPM" [ref=e42]
+              - StaticText "Modul Ajar / RPM"
+            - button "Bahan Ajar" [ref=e43]
+              - StaticText "Bahan Ajar"
+            - button "Modul Kokurikuler" [ref=e44]
+              - StaticText "Modul Kokurikuler"
+          - generic
+            - button "ASESMEN (AI)" [ref=e45]
+              - StaticText "ASESMEN (AI)"
+            - button "Program Asesmen" [ref=e46]
+              - StaticText "Program Asesmen"
+            - button "LKPD" [ref=e47]
+              - StaticText "LKPD"
+            - button "KKTP (Kriteria)" [ref=e48]
+              - StaticText "KKTP (Kriteria)"
+            - button "Bank Soal AI" [ref=e49]
+              - StaticText "Bank Soal AI"
+            - button "Lembar Jawaban Siswa" [ref=e50]
+              - StaticText "Lembar Jawaban Siswa"
+        - button "KELUAR SISTEM" [ref=e3]
+          - StaticText "KELUAR SISTEM"
+      - main
+        - sectionheader
+          - heading "DASHBOARD" [level=2, ref=e11]
+          - paragraph
+            - StaticText "SEKOLAH AKTIF"
+          - paragraph
+            - StaticText "SEKOLAH CONTOH INDONESIA"
+          - button [ref=e12]
+        - generic
+          - generic
+            - image "EduAdmin Logo"
+            - StaticText "EDUADMIN SYSTEM V2.0"
+            - heading "Selamat Datang kembali, Abdul Rohim" [level=1, ref=e51]
+              - StaticText "Selamat Datang kembali,"
+              - LineBreak "\n"
+              - StaticText "Abdul Rohim"
+            - paragraph
+              - StaticText "Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran."
+            - button "BANK SOAL AI" [ref=e52]
+            - button "MODUL AJAR" [ref=e53]
+        - generic [ref=e4] clickable [cursor:pointer, onclick]
+          - heading "Perangkat Ajar" [level=3, ref=e13]
+          - paragraph
+            - StaticText "Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e5] clickable [cursor:pointer, onclick]
+          - heading "Bank Soal AI" [level=3, ref=e14]
+          - paragraph
+            - StaticText "Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e6] clickable [cursor:pointer, onclick]
+          - heading "Kokurikuler" [level=3, ref=e15]
+          - paragraph
+            - StaticText "Dokumen penguat profil pelajar pancasila dan karakter siswa."
+          - StaticText "BUKA FITUR"
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+- generic [ref=e1] clickable [onclick]
+  - generic
+    - generic
+      - generic
+        - image "Profile"
+        - heading "Upgrade Kompetensi" [level=3, ref=e7]
+        - paragraph
+          - StaticText "Bagi Anda yang ingin menaikkan level kompetensi guru secara profesional, silahkan hubungi:"
+          - LineBreak "\n"
+          - LineBreak "\n"
+          - strong
+            - StaticText "Abdul Rohim, M.Pd., CDAI., CT.NNLP., C.Ht."
+          - LineBreak "\n"
+          - StaticText "Master Trainer & Educational Consultant"
+        - link "Hubungi via WhatsApp" [ref=e8]
+        - link "Personal Profil" [ref=e9]
+        - button "Tutup" [ref=e10]
+      - complementary
+        - image "EduAdmin Logo"
+        - StaticText "EduAdmin"
+        - StaticText "PRO PREMIUM"
+        - button [ref=e2]
+        - StaticText "A"
+        - paragraph
+          - StaticText "Abdul Rohim"
+        - paragraph
+          - StaticText "GURU"
+        - navigation
+          - generic
+            - button "MENU UTAMA" [ref=e16]
+              - StaticText "MENU UTAMA"
+            - button "Dashboard" [ref=e17]
+              - StaticText "Dashboard"
+            - button "Profil Saya" [ref=e18]
+              - StaticText "Profil Saya"
+            - button "Pengaturan Sekolah" [ref=e19]
+              - StaticText "Pengaturan Sekolah"
+            - button "Panduan Kurikulum" [ref=e20]
+              - StaticText "Panduan Kurikulum"
+          - generic
+            - button "DATA MASTER" [ref=e21]
+              - StaticText "DATA MASTER"
+            - button "Data Siswa" [ref=e22]
+              - StaticText "Data Siswa"
+            - button "Jadwal Pelajaran" [ref=e23]
+              - StaticText "Jadwal Pelajaran"
+            - button "Kalender Akademik" [ref=e24]
+              - StaticText "Kalender Akademik"
+            - button "Rencana Kerja" [ref=e25]
+              - StaticText "Rencana Kerja"
+            - button "Manajemen Ekskul" [ref=e26]
+              - StaticText "Manajemen Ekskul"
+            - button "Portofolio Prestasi" [ref=e27]
+              - StaticText "Portofolio Prestasi"
+          - generic
+            - button "ADMINISTRASI KBM" [ref=e28]
+              - StaticText "ADMINISTRASI KBM"
+            - button "Jurnal Agenda Guru" [ref=e29]
+              - StaticText "Jurnal Agenda Guru"
+            - button "Penilaian Siswa" [ref=e30]
+              - StaticText "Penilaian Siswa"
+          - generic
+            - button "INPUT DATA RAPORT" [ref=e31]
+              - StaticText "INPUT DATA RAPORT"
+            - button "E-Raport Siswa" [ref=e32]
+              - StaticText "E-Raport Siswa"
+            - button "Absensi Scan Real-time" [ref=e33]
+              - StaticText "Absensi Scan Real-time"
+            - button "Input Nilai Mapel" [ref=e34]
+              - StaticText "Input Nilai Mapel"
+            - button "Input Nilai Ekskul" [ref=e35]
+              - StaticText "Input Nilai Ekskul"
+            - button "Input Rekap Absensi" [ref=e36]
+              - StaticText "Input Rekap Absensi"
+          - generic
+            - button "PERANGKAT AJAR (AI)" [ref=e37]
+              - StaticText "PERANGKAT AJAR (AI)"
+            - button "Cover Administrasi" [ref=e38]
+              - StaticText "Cover Administrasi"
+            - button "Program Tahunan" [ref=e39]
+              - StaticText "Program Tahunan"
+            - button "Program Semester" [ref=e40]
+              - StaticText "Program Semester"
+            - button "Alur Tujuan Pemb." [ref=e41]
+              - StaticText "Alur Tujuan Pemb."
+            - button "Modul Ajar / RPM" [ref=e42]
+              - StaticText "Modul Ajar / RPM"
+            - button "Bahan Ajar" [ref=e43]
+              - StaticText "Bahan Ajar"
+            - button "Modul Kokurikuler" [ref=e44]
+              - StaticText "Modul Kokurikuler"
+          - generic
+            - button "ASESMEN (AI)" [ref=e45]
+              - StaticText "ASESMEN (AI)"
+            - button "Program Asesmen" [ref=e46]
+              - StaticText "Program Asesmen"
+            - button "LKPD" [ref=e47]
+              - StaticText "LKPD"
+            - button "KKTP (Kriteria)" [ref=e48]
+              - StaticText "KKTP (Kriteria)"
+            - button "Bank Soal AI" [ref=e49]
+              - StaticText "Bank Soal AI"
+            - button "Lembar Jawaban Siswa" [ref=e50]
+              - StaticText "Lembar Jawaban Siswa"
+        - button "KELUAR SISTEM" [ref=e3]
+          - StaticText "KELUAR SISTEM"
+      - main
+        - sectionheader
+          - heading "DASHBOARD" [level=2, ref=e11]
+          - paragraph
+            - StaticText "SEKOLAH AKTIF"
+          - paragraph
+            - StaticText "SEKOLAH CONTOH INDONESIA"
+          - button [ref=e12]
+        - generic
+          - generic
+            - image "EduAdmin Logo"
+            - StaticText "EDUADMIN SYSTEM V2.0"
+            - heading "Selamat Datang kembali, Abdul Rohim" [level=1, ref=e51]
+              - StaticText "Selamat Datang kembali,"
+              - LineBreak "\n"
+              - StaticText "Abdul Rohim"
+            - paragraph
+              - StaticText "Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran."
+            - button "BANK SOAL AI" [ref=e52]
+            - button "MODUL AJAR" [ref=e53]
+        - generic [ref=e4] clickable [cursor:pointer, onclick]
+          - heading "Perangkat Ajar" [level=3, ref=e13]
+          - paragraph
+            - StaticText "Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e5] clickable [cursor:pointer, onclick]
+          - heading "Bank Soal AI" [level=3, ref=e14]
+          - paragraph
+            - StaticText "Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e6] clickable [cursor:pointer, onclick]
+          - heading "Kokurikuler" [level=3, ref=e15]
+          - paragraph
+            - StaticText "Dokumen penguat profil pelajar pancasila dan karakter siswa."
+          - StaticText "BUKA FITUR"
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+- generic [ref=e1] clickable [onclick]
+  - generic
+    - generic
+      - generic
+        - image "Profile"
+        - heading "Upgrade Kompetensi" [level=3, ref=e7]
+        - paragraph
+          - StaticText "Bagi Anda yang ingin menaikkan level kompetensi guru secara profesional, silahkan hubungi:"
+          - LineBreak "\n"
+          - LineBreak "\n"
+          - strong
+            - StaticText "Abdul Rohim, M.Pd., CDAI., CT.NNLP., C.Ht."
+          - LineBreak "\n"
+          - StaticText "Master Trainer & Educational Consultant"
+        - link "Hubungi via WhatsApp" [ref=e8]
+        - link "Personal Profil" [ref=e9]
+        - button "Tutup" [ref=e10]
+      - complementary
+        - image "EduAdmin Logo"
+        - StaticText "EduAdmin"
+        - StaticText "PRO PREMIUM"
+        - button [ref=e2]
+        - StaticText "A"
+        - paragraph
+          - StaticText "Abdul Rohim"
+        - paragraph
+          - StaticText "GURU"
+        - navigation
+          - generic
+            - button "MENU UTAMA" [ref=e16]
+              - StaticText "MENU UTAMA"
+            - button "Dashboard" [ref=e17]
+              - StaticText "Dashboard"
+            - button "Profil Saya" [ref=e18]
+              - StaticText "Profil Saya"
+            - button "Pengaturan Sekolah" [ref=e19]
+              - StaticText "Pengaturan Sekolah"
+            - button "Panduan Kurikulum" [ref=e20]
+              - StaticText "Panduan Kurikulum"
+          - generic
+            - button "DATA MASTER" [ref=e21]
+              - StaticText "DATA MASTER"
+            - button "Data Siswa" [ref=e22]
+              - StaticText "Data Siswa"
+            - button "Jadwal Pelajaran" [ref=e23]
+              - StaticText "Jadwal Pelajaran"
+            - button "Kalender Akademik" [ref=e24]
+              - StaticText "Kalender Akademik"
+            - button "Rencana Kerja" [ref=e25]
+              - StaticText "Rencana Kerja"
+            - button "Manajemen Ekskul" [ref=e26]
+              - StaticText "Manajemen Ekskul"
+            - button "Portofolio Prestasi" [ref=e27]
+              - StaticText "Portofolio Prestasi"
+          - generic
+            - button "ADMINISTRASI KBM" [ref=e28]
+              - StaticText "ADMINISTRASI KBM"
+            - button "Jurnal Agenda Guru" [ref=e29]
+              - StaticText "Jurnal Agenda Guru"
+            - button "Penilaian Siswa" [ref=e30]
+              - StaticText "Penilaian Siswa"
+          - generic
+            - button "INPUT DATA RAPORT" [ref=e31]
+              - StaticText "INPUT DATA RAPORT"
+            - button "E-Raport Siswa" [ref=e32]
+              - StaticText "E-Raport Siswa"
+            - button "Absensi Scan Real-time" [ref=e33]
+              - StaticText "Absensi Scan Real-time"
+            - button "Input Nilai Mapel" [ref=e34]
+              - StaticText "Input Nilai Mapel"
+            - button "Input Nilai Ekskul" [ref=e35]
+              - StaticText "Input Nilai Ekskul"
+            - button "Input Rekap Absensi" [ref=e36]
+              - StaticText "Input Rekap Absensi"
+          - generic
+            - button "PERANGKAT AJAR (AI)" [ref=e37]
+              - StaticText "PERANGKAT AJAR (AI)"
+            - button "Cover Administrasi" [ref=e38]
+              - StaticText "Cover Administrasi"
+            - button "Program Tahunan" [ref=e39]
+              - StaticText "Program Tahunan"
+            - button "Program Semester" [ref=e40]
+              - StaticText "Program Semester"
+            - button "Alur Tujuan Pemb." [ref=e41]
+              - StaticText "Alur Tujuan Pemb."
+            - button "Modul Ajar / RPM" [ref=e42]
+              - StaticText "Modul Ajar / RPM"
+            - button "Bahan Ajar" [ref=e43]
+              - StaticText "Bahan Ajar"
+            - button "Modul Kokurikuler" [ref=e44]
+              - StaticText "Modul Kokurikuler"
+          - generic
+            - button "ASESMEN (AI)" [ref=e45]
+              - StaticText "ASESMEN (AI)"
+            - button "Program Asesmen" [ref=e46]
+              - StaticText "Program Asesmen"
+            - button "LKPD" [ref=e47]
+              - StaticText "LKPD"
+            - button "KKTP (Kriteria)" [ref=e48]
+              - StaticText "KKTP (Kriteria)"
+            - button "Bank Soal AI" [ref=e49]
+              - StaticText "Bank Soal AI"
+            - button "Lembar Jawaban Siswa" [ref=e50]
+              - StaticText "Lembar Jawaban Siswa"
+        - button "KELUAR SISTEM" [ref=e3]
+          - StaticText "KELUAR SISTEM"
+      - main
+        - sectionheader
+          - heading "DASHBOARD" [level=2, ref=e11]
+          - paragraph
+            - StaticText "SEKOLAH AKTIF"
+          - paragraph
+            - StaticText "SEKOLAH CONTOH INDONESIA"
+          - button [ref=e12]
+        - generic
+          - generic
+            - image "EduAdmin Logo"
+            - StaticText "EDUADMIN SYSTEM V2.0"
+            - heading "Selamat Datang kembali, Abdul Rohim" [level=1, ref=e51]
+              - StaticText "Selamat Datang kembali,"
+              - LineBreak "\n"
+              - StaticText "Abdul Rohim"
+            - paragraph
+              - StaticText "Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran."
+            - button "BANK SOAL AI" [ref=e52]
+            - button "MODUL AJAR" [ref=e53]
+        - generic [ref=e4] clickable [cursor:pointer, onclick]
+          - heading "Perangkat Ajar" [level=3, ref=e13]
+          - paragraph
+            - StaticText "Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e5] clickable [cursor:pointer, onclick]
+          - heading "Bank Soal AI" [level=3, ref=e14]
+          - paragraph
+            - StaticText "Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e6] clickable [cursor:pointer, onclick]
+          - heading "Kokurikuler" [level=3, ref=e15]
+          - paragraph
+            - StaticText "Dokumen penguat profil pelajar pancasila dan karakter siswa."
+          - StaticText "BUKA FITUR"
+✓ Done
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+- generic [ref=e1] clickable [onclick]
+  - generic
+    - generic
+      - generic
+        - image "Profile"
+        - heading "Upgrade Kompetensi" [level=3, ref=e7]
+        - paragraph
+          - StaticText "Bagi Anda yang ingin menaikkan level kompetensi guru secara profesional, silahkan hubungi:"
+          - LineBreak "\n"
+          - LineBreak "\n"
+          - strong
+            - StaticText "Abdul Rohim, M.Pd., CDAI., CT.NNLP., C.Ht."
+          - LineBreak "\n"
+          - StaticText "Master Trainer & Educational Consultant"
+        - link "Hubungi via WhatsApp" [ref=e8]
+        - link "Personal Profil" [ref=e9]
+        - button "Tutup" [ref=e10]
+      - complementary
+        - image "EduAdmin Logo"
+        - StaticText "EduAdmin"
+        - StaticText "PRO PREMIUM"
+        - button [ref=e2]
+        - StaticText "A"
+        - paragraph
+          - StaticText "Abdul Rohim"
+        - paragraph
+          - StaticText "GURU"
+        - navigation
+          - generic
+            - button "MENU UTAMA" [ref=e16]
+              - StaticText "MENU UTAMA"
+            - button "Dashboard" [ref=e17]
+              - StaticText "Dashboard"
+            - button "Profil Saya" [ref=e18]
+              - StaticText "Profil Saya"
+            - button "Pengaturan Sekolah" [ref=e19]
+              - StaticText "Pengaturan Sekolah"
+            - button "Panduan Kurikulum" [ref=e20]
+              - StaticText "Panduan Kurikulum"
+          - generic
+            - button "DATA MASTER" [ref=e21]
+              - StaticText "DATA MASTER"
+            - button "Data Siswa" [ref=e22]
+              - StaticText "Data Siswa"
+            - button "Jadwal Pelajaran" [ref=e23]
+              - StaticText "Jadwal Pelajaran"
+            - button "Kalender Akademik" [ref=e24]
+              - StaticText "Kalender Akademik"
+            - button "Rencana Kerja" [ref=e25]
+              - StaticText "Rencana Kerja"
+            - button "Manajemen Ekskul" [ref=e26]
+              - StaticText "Manajemen Ekskul"
+            - button "Portofolio Prestasi" [ref=e27]
+              - StaticText "Portofolio Prestasi"
+          - generic
+            - button "ADMINISTRASI KBM" [ref=e28]
+              - StaticText "ADMINISTRASI KBM"
+            - button "Jurnal Agenda Guru" [ref=e29]
+              - StaticText "Jurnal Agenda Guru"
+            - button "Penilaian Siswa" [ref=e30]
+              - StaticText "Penilaian Siswa"
+          - generic
+            - button "INPUT DATA RAPORT" [ref=e31]
+              - StaticText "INPUT DATA RAPORT"
+            - button "E-Raport Siswa" [ref=e32]
+              - StaticText "E-Raport Siswa"
+            - button "Absensi Scan Real-time" [ref=e33]
+              - StaticText "Absensi Scan Real-time"
+            - button "Input Nilai Mapel" [ref=e34]
+              - StaticText "Input Nilai Mapel"
+            - button "Input Nilai Ekskul" [ref=e35]
+              - StaticText "Input Nilai Ekskul"
+            - button "Input Rekap Absensi" [ref=e36]
+              - StaticText "Input Rekap Absensi"
+          - generic
+            - button "PERANGKAT AJAR (AI)" [ref=e37]
+              - StaticText "PERANGKAT AJAR (AI)"
+            - button "Cover Administrasi" [ref=e38]
+              - StaticText "Cover Administrasi"
+            - button "Program Tahunan" [ref=e39]
+              - StaticText "Program Tahunan"
+            - button "Program Semester" [ref=e40]
+              - StaticText "Program Semester"
+            - button "Alur Tujuan Pemb." [ref=e41]
+              - StaticText "Alur Tujuan Pemb."
+            - button "Modul Ajar / RPM" [ref=e42]
+              - StaticText "Modul Ajar / RPM"
+            - button "Bahan Ajar" [ref=e43]
+              - StaticText "Bahan Ajar"
+            - button "Modul Kokurikuler" [ref=e44]
+              - StaticText "Modul Kokurikuler"
+          - generic
+            - button "ASESMEN (AI)" [ref=e45]
+              - StaticText "ASESMEN (AI)"
+            - button "Program Asesmen" [ref=e46]
+              - StaticText "Program Asesmen"
+            - button "LKPD" [ref=e47]
+              - StaticText "LKPD"
+            - button "KKTP (Kriteria)" [ref=e48]
+              - StaticText "KKTP (Kriteria)"
+            - button "Bank Soal AI" [ref=e49]
+              - StaticText "Bank Soal AI"
+            - button "Lembar Jawaban Siswa" [ref=e50]
+              - StaticText "Lembar Jawaban Siswa"
+        - button "KELUAR SISTEM" [ref=e3]
+          - StaticText "KELUAR SISTEM"
+      - main
+        - sectionheader
+          - heading "DASHBOARD" [level=2, ref=e11]
+          - paragraph
+            - StaticText "SEKOLAH AKTIF"
+          - paragraph
+            - StaticText "SEKOLAH CONTOH INDONESIA"
+          - button [ref=e12]
+        - generic
+          - generic
+            - image "EduAdmin Logo"
+            - StaticText "EDUADMIN SYSTEM V2.0"
+            - heading "Selamat Datang kembali, Abdul Rohim" [level=1, ref=e51]
+              - StaticText "Selamat Datang kembali,"
+              - LineBreak "\n"
+              - StaticText "Abdul Rohim"
+            - paragraph
+              - StaticText "Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran."
+            - button "BANK SOAL AI" [ref=e52]
+            - button "MODUL AJAR" [ref=e53]
+        - generic [ref=e4] clickable [cursor:pointer, onclick]
+          - heading "Perangkat Ajar" [level=3, ref=e13]
+          - paragraph
+            - StaticText "Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e5] clickable [cursor:pointer, onclick]
+          - heading "Bank Soal AI" [level=3, ref=e14]
+          - paragraph
+            - StaticText "Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e6] clickable [cursor:pointer, onclick]
+          - heading "Kokurikuler" [level=3, ref=e15]
+          - paragraph
+            - StaticText "Dokumen penguat profil pelajar pancasila dan karakter siswa."
+          - StaticText "BUKA FITUR"
+✓ Done
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+✓ Done
+DASHBOARD
+
+SEKOLAH AKTIF
+
+SEKOLAH CONTOH INDONESIA
+
+EDUADMIN SYSTEM V2.0
+Selamat Datang kembali,
+Abdul Rohim
+
+Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran.
+
+BANK SOAL AI
+MODUL AJAR
+Perangkat Ajar
+
+Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning.
+
+BUKA FITUR
+Bank Soal AI
+
+Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik.
+
+BUKA FITUR
+Kokurikuler
+
+Dokumen penguat profil pelajar pancasila dan karakter siswa.
+
+BUKA FITUR
+✓ Done
+✓ Done
+- generic [ref=e1] clickable [onclick]
+  - generic
+    - generic
+      - generic
+        - image "Profile"
+        - heading "Upgrade Kompetensi" [level=3, ref=e7]
+        - paragraph
+          - StaticText "Bagi Anda yang ingin menaikkan level kompetensi guru secara profesional, silahkan hubungi:"
+          - LineBreak "\n"
+          - LineBreak "\n"
+          - strong
+            - StaticText "Abdul Rohim, M.Pd., CDAI., CT.NNLP., C.Ht."
+          - LineBreak "\n"
+          - StaticText "Master Trainer & Educational Consultant"
+        - link "Hubungi via WhatsApp" [ref=e8]
+        - link "Personal Profil" [ref=e9]
+        - button "Tutup" [ref=e10]
+      - complementary
+        - image "EduAdmin Logo"
+        - StaticText "EduAdmin"
+        - StaticText "PRO PREMIUM"
+        - button [ref=e2]
+        - StaticText "A"
+        - paragraph
+          - StaticText "Abdul Rohim"
+        - paragraph
+          - StaticText "GURU"
+        - navigation
+          - generic
+            - button "MENU UTAMA" [ref=e16]
+              - StaticText "MENU UTAMA"
+            - button "Dashboard" [ref=e17]
+              - StaticText "Dashboard"
+            - button "Profil Saya" [ref=e18]
+              - StaticText "Profil Saya"
+            - button "Pengaturan Sekolah" [ref=e19]
+              - StaticText "Pengaturan Sekolah"
+            - button "Panduan Kurikulum" [ref=e20]
+              - StaticText "Panduan Kurikulum"
+          - generic
+            - button "DATA MASTER" [ref=e21]
+              - StaticText "DATA MASTER"
+            - button "Data Siswa" [ref=e22]
+              - StaticText "Data Siswa"
+            - button "Jadwal Pelajaran" [ref=e23]
+              - StaticText "Jadwal Pelajaran"
+            - button "Kalender Akademik" [ref=e24]
+              - StaticText "Kalender Akademik"
+            - button "Rencana Kerja" [ref=e25]
+              - StaticText "Rencana Kerja"
+            - button "Manajemen Ekskul" [ref=e26]
+              - StaticText "Manajemen Ekskul"
+            - button "Portofolio Prestasi" [ref=e27]
+              - StaticText "Portofolio Prestasi"
+          - generic
+            - button "ADMINISTRASI KBM" [ref=e28]
+              - StaticText "ADMINISTRASI KBM"
+            - button "Jurnal Agenda Guru" [ref=e29]
+              - StaticText "Jurnal Agenda Guru"
+            - button "Penilaian Siswa" [ref=e30]
+              - StaticText "Penilaian Siswa"
+          - generic
+            - button "INPUT DATA RAPORT" [ref=e31]
+              - StaticText "INPUT DATA RAPORT"
+            - button "E-Raport Siswa" [ref=e32]
+              - StaticText "E-Raport Siswa"
+            - button "Absensi Scan Real-time" [ref=e33]
+              - StaticText "Absensi Scan Real-time"
+            - button "Input Nilai Mapel" [ref=e34]
+              - StaticText "Input Nilai Mapel"
+            - button "Input Nilai Ekskul" [ref=e35]
+              - StaticText "Input Nilai Ekskul"
+            - button "Input Rekap Absensi" [ref=e36]
+              - StaticText "Input Rekap Absensi"
+          - generic
+            - button "PERANGKAT AJAR (AI)" [ref=e37]
+              - StaticText "PERANGKAT AJAR (AI)"
+            - button "Cover Administrasi" [ref=e38]
+              - StaticText "Cover Administrasi"
+            - button "Program Tahunan" [ref=e39]
+              - StaticText "Program Tahunan"
+            - button "Program Semester" [ref=e40]
+              - StaticText "Program Semester"
+            - button "Alur Tujuan Pemb." [ref=e41]
+              - StaticText "Alur Tujuan Pemb."
+            - button "Modul Ajar / RPM" [ref=e42]
+              - StaticText "Modul Ajar / RPM"
+            - button "Bahan Ajar" [ref=e43]
+              - StaticText "Bahan Ajar"
+            - button "Modul Kokurikuler" [ref=e44]
+              - StaticText "Modul Kokurikuler"
+          - generic
+            - button "ASESMEN (AI)" [ref=e45]
+              - StaticText "ASESMEN (AI)"
+            - button "Program Asesmen" [ref=e46]
+              - StaticText "Program Asesmen"
+            - button "LKPD" [ref=e47]
+              - StaticText "LKPD"
+            - button "KKTP (Kriteria)" [ref=e48]
+              - StaticText "KKTP (Kriteria)"
+            - button "Bank Soal AI" [ref=e49]
+              - StaticText "Bank Soal AI"
+            - button "Lembar Jawaban Siswa" [ref=e50]
+              - StaticText "Lembar Jawaban Siswa"
+        - button "KELUAR SISTEM" [ref=e3]
+          - StaticText "KELUAR SISTEM"
+      - main
+        - sectionheader
+          - heading "DASHBOARD" [level=2, ref=e11]
+          - paragraph
+            - StaticText "SEKOLAH AKTIF"
+          - paragraph
+            - StaticText "SEKOLAH CONTOH INDONESIA"
+          - button [ref=e12]
+        - generic
+          - generic
+            - image "EduAdmin Logo"
+            - StaticText "EDUADMIN SYSTEM V2.0"
+            - heading "Selamat Datang kembali, Abdul Rohim" [level=1, ref=e51]
+              - StaticText "Selamat Datang kembali,"
+              - LineBreak "\n"
+              - StaticText "Abdul Rohim"
+            - paragraph
+              - StaticText "Asisten cerdas Anda untuk mempermudah administrasi dan memaksimalkan kualitas pembelajaran."
+            - button "BANK SOAL AI" [ref=e52]
+            - button "MODUL AJAR" [ref=e53]
+        - generic [ref=e4] clickable [cursor:pointer, onclick]
+          - heading "Perangkat Ajar" [level=3, ref=e13]
+          - paragraph
+            - StaticText "Buat Rencana Pembelajaran (Modul Ajar/RPM) otomatis dengan Deep Learning."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e5] clickable [cursor:pointer, onclick]
+          - heading "Bank Soal AI" [level=3, ref=e14]
+          - paragraph
+            - StaticText "Generate soal HOTS kustom (PG, Isian, Uraian) dalam hitungan detik."
+          - StaticText "BUKA FITUR"
+        - generic [ref=e6] clickable [cursor:pointer, onclick]
+          - heading "Kokurikuler" [level=3, ref=e15]
+          - paragraph
+            - StaticText "Dokumen penguat profil pelajar pancasila dan karakter siswa."
+          - StaticText "BUKA FITUR"
+✓ Done
+✓ Done
+✓ Done

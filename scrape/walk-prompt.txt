@@ -1,0 +1,16 @@
+I need you to systematically walk every sidebar module in this Indonesian school admin app and extract the visible text content of each. The sidebar contains these modules in order:
+
+Profil Saya, Pengaturan Sekolah, Panduan Kurikulum, Data Siswa, Jadwal Pelajaran, Kalender Akademik, Rencana Kerja, Manajemen Ekskul, Portofolio Prestasi, Jurnal Agenda Guru, Penilaian Siswa, E-Raport Siswa, Absensi Scan Real-time, Input Nilai Mapel, Input Nilai Ekskul, Input Rekap Absensi, Cover Administrasi, Program Tahunan, Program Semester, Alur Tujuan Pemb., Modul Ajar / RPM, Bahan Ajar, Modul Kokurikuler, Program Asesmen, LKPD, KKTP (Kriteria), Bank Soal AI, Lembar Jawaban Siswa
+
+For EACH module, do exactly this:
+1. Click the sidebar button with that exact text
+2. Wait 2 seconds for the page to render
+3. If an AI warning modal appears with button "Saya Mengerti & Lanjut" or "Baik, Saya Paham", click it to dismiss
+4. Wait 1 more second
+5. Capture the innerText of the main content area (the largest visible content panel, NOT the sidebar) — use #document-preview if present, else main, else document.body. Truncate to 6000 chars.
+
+After walking ALL 28 modules, return ONLY a valid JSON array (no other prose) where each element is: {"name": "<module name>", "text": "<captured innerText>"}
+
+If a click fails, scroll the sidebar and retry once, then record text as "CLICK_FAILED".
+
+Take your time. Accuracy over speed. Begin.
