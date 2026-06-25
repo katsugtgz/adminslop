@@ -1,0 +1,30 @@
+eslint.config.mjs
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-16
+package-lock.json
+  s_f7a0d140559ce3::t_ebcb4bf6eb4629 1-6358
+next.config.ts
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-7
+package.json
+  s_f7a0d140559ce3::t_ef7dcae301382b 2
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1,3-27
+postcss.config.mjs
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-5
+tsconfig.json
+  s_f7a0d140559ce3::t_bf8502f7b58c5a 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "5fc456800b08338bdb3849d1e25871bb0075eeb9",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
