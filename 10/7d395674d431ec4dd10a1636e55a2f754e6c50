@@ -1,0 +1,73 @@
+src/lib/auth/otorisasi.test.ts
+  s_2b7a2ccb1952cd::t_a8abb5d5844781 1-38
+src/lib/auth/otorisasi.ts
+  s_2b7a2ccb1952cd::t_15dc27c8580a0e 1-30
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_7c4bbc491e6d6d::t_4166801c687e48 1-106
+src/db/queries/satuan-pendidikan.ts
+  s_3f1028d4e5db91::t_39a3c2b6caaa69 1-85
+src/db/queries/satuan-pendidikan.test.ts
+  s_3f1028d4e5db91::t_76a5187b244588 1-159
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_44158a246be164::t_3a541aadcb8e7d 1-42
+src/app/dashboard/pengaturan/schemas.ts
+  s_7c4bbc491e6d6d::t_deb1d390816bb8 1-40
+src/app/dashboard/pengaturan/actions.ts
+  s_2499d392c9f569::t_b4349288ec18c2 1-117
+src/app/dashboard/pengaturan/actions.test.ts
+  s_2499d392c9f569::t_38eaa7de3c9ce8 1-310
+src/db/schema.ts
+  s_3f1028d4e5db91::t_440e9819829304 23-38
+  s_3f1028d4e5db91::t_27cd45046edf96 84
+  s_3f1028d4e5db91::t_bafb00cda8e286 2
+src/lib/auth/types.ts
+  s_2b7a2ccb1952cd::t_d41689a871f6f2 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "107d395674d431ec4dd10a1636e55a2f754e6c50",
+  "prompts": {},
+  "sessions": {
+    "s_2499d392c9f569": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffb3ac44ffeIUwQNkf56jqbP4",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_2b7a2ccb1952cd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffba10e9ffeWhulcMAHkqE687",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_3f1028d4e5db91": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffb3ac76ffefrWTSHgi4GfSHO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_44158a246be164": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffba735dffe73d2kYN5spbNvt",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_7c4bbc491e6d6d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffba10e4ffeZgyf68XDCrEC0k",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
