@@ -18,6 +18,9 @@ export type RoleSlug =
  * (per CONTEXT.md). `tahun_ajaran:*` govern Tahun Ajaran (academic year)
  * records; `rombongan_belajar:*` govern Rombongan Belajar (class/homeroom)
  * records including `kelola_penempatan` (placement/progression management).
+ * `kurikulum:baca` governs read-only browsing of Kurikulum (curriculum)
+ * reference data — universal: every authenticated member may browse it (no
+ * write slugs; curriculum is seeded via migration, not user-edited).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -33,7 +36,8 @@ export type IzinSlug =
   | "rombongan_belajar:baca"
   | "rombongan_belajar:buat"
   | "rombongan_belajar:ubah"
-  | "rombongan_belajar:kelola_penempatan";
+  | "rombongan_belajar:kelola_penempatan"
+  | "kurikulum:baca";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

@@ -23,6 +23,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
+    // kurikulum:baca — curriculum reference data is universal (read-only).
+    "kurikulum:baca",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -35,9 +37,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "peserta_didik:baca",
     "tahun_ajaran:baca",
     "rombongan_belajar:baca",
+    "kurikulum:baca",
   ],
-  guru: ["peserta_didik:baca", "rombongan_belajar:baca"],
-  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca"],
+  guru: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
+  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
   dev: [
     "ptk:baca",
     "ptk:buat",
@@ -53,6 +56,7 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
+    "kurikulum:baca",
   ],
 };
 

@@ -308,3 +308,33 @@ describe("evaluasiAkses (#8 T2) — tahun_ajaran + rombongan_belajar defaults", 
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });
 });
+
+describe("evaluasiAkses (#9 T2) — kurikulum:baca universal default", () => {
+  // Curriculum reference data is universal — every authenticated member can
+  // browse it (read-only; seeded via migration, no write slugs this issue).
+  it("admin_satuan_pendidikan requesting kurikulum:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("admin_satuan_pendidikan", "kurikulum:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("guru requesting kurikulum:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("guru", "kurikulum:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("wali_kelas requesting kurikulum:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "kurikulum:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("kepala_sekolah requesting kurikulum:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "kurikulum:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+});

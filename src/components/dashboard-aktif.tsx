@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  BookOpen,
   Building2,
   Calendar,
   CheckCircle2,
@@ -61,6 +62,13 @@ export async function DashboardAktif({
   const bolehLihatRombonganBelajar = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("rombongan_belajar:baca");
+
+  // Reachability link to Kurikulum (#9). Every member role receives
+  // `kurikulum:baca` — curriculum reference data is universal read-only. The
+  // page re-checks `boleh("kurikulum:baca")` server-side (§12).
+  const bolehLihatKurikulum = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("kurikulum:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -189,6 +197,29 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatKurikulum && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <BookOpen className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Kurikulum</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Jelajahi Kurikulum Merdeka: Mata Pelajaran, Fase, Capaian, dan
+                Tujuan Pembelajaran.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/kurikulum">Buka Kurikulum</Link>
           </Button>
         </div>
       )}

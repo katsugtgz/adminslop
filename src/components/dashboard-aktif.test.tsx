@@ -96,3 +96,34 @@ describe("DashboardAktif — Tahun Ajaran reachability link (#8)", () => {
     ).toBeNull();
   });
 });
+
+describe("DashboardAktif — Kurikulum reachability link (#9)", () => {
+  // Every member role receives `kurikulum:baca` by default (curriculum is
+  // universal read-only reference data), so ALL member roles see the link.
+  it("admin sees the 'Kurikulum' link pointing at /dashboard/kurikulum", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Kurikulum/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/kurikulum");
+  });
+
+  it("guru sees the link (core teaching reference)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+});
