@@ -52,3 +52,47 @@ describe("DashboardAktif — Akses reachability link (#6 / T6)", () => {
     ).toBeNull();
   });
 });
+
+describe("DashboardAktif — Rombongan Belajar reachability link (#8)", () => {
+  it("admin sees the 'Rombongan Belajar' link pointing at /dashboard/rombongan-belajar", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Rombongan Belajar/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/rombongan-belajar");
+  });
+
+  it("guru sees the link (core teaching data)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Rombongan Belajar/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Rombongan Belajar/i })
+    ).toBeInTheDocument();
+  });
+});
+
+describe("DashboardAktif — Tahun Ajaran reachability link (#8)", () => {
+  it("admin sees the 'Tahun Ajaran' link pointing at /dashboard/tahun-ajaran", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Tahun Ajaran/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/tahun-ajaran");
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Tahun Ajaran/i })
+    ).toBeInTheDocument();
+  });
+
+  it("guru does NOT see the link", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.queryByRole("link", { name: /Tahun Ajaran/i })
+    ).toBeNull();
+  });
+});

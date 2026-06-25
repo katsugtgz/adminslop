@@ -43,6 +43,12 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "peserta_didik:baca",
   "peserta_didik:buat",
   "peserta_didik:ubah",
+  "tahun_ajaran:baca",
+  "tahun_ajaran:kelola",
+  "rombongan_belajar:baca",
+  "rombongan_belajar:buat",
+  "rombongan_belajar:ubah",
+  "rombongan_belajar:kelola_penempatan",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

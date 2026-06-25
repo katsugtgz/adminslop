@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { Building2, CheckCircle2, KeyRound, Users } from "lucide-react";
+import {
+  Building2,
+  Calendar,
+  CheckCircle2,
+  GraduationCap,
+  KeyRound,
+  Users,
+} from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
@@ -41,6 +48,19 @@ export async function DashboardAktif({
   const bolehLihatPesertaDidik = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("peserta_didik:baca");
+
+  // Reachability link to Tahun Ajaran (#8). admin / kepala_sekolah / dev
+  // receive `tahun_ajaran:baca`. The page re-checks server-side (§12).
+  const bolehLihatTahunAjaran = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("tahun_ajaran:baca");
+
+  // Reachability link to Rombongan Belajar (#8). All member roles receive
+  // `rombongan_belajar:baca` (classes are core teaching data). The page
+  // re-checks `boleh("rombongan_belajar:baca")` server-side (§12).
+  const bolehLihatRombonganBelajar = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("rombongan_belajar:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -100,6 +120,52 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/peserta-didik">Buka Peserta Didik</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatRombonganBelajar && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <GraduationCap className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Rombongan Belajar</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola Tingkat, Rombongan Belajar, Penempatan, dan Kenaikan
+                Tingkat.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/rombongan-belajar">Buka Rombongan Belajar</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatTahunAjaran && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Calendar className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Tahun Ajaran</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola Tahun Ajaran dan Semester Aktif untuk Satuan Pendidikan
+                ini.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/tahun-ajaran">Buka Tahun Ajaran</Link>
           </Button>
         </div>
       )}

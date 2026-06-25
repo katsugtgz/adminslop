@@ -17,14 +17,27 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "peserta_didik:baca",
     "peserta_didik:buat",
     "peserta_didik:ubah",
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
   // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
-  // hard-delete per CONTEXT.md).
-  kepala_sekolah: ["akses:baca", "peserta_didik:baca"],
-  guru: ["peserta_didik:baca"],
-  wali_kelas: ["peserta_didik:baca"],
+  // hard-delete per CONTEXT.md). Rombongan Belajar (class) data is likewise
+  // core teaching data -> baca for every teaching role; Tahun Ajaran
+  // management is admin-only, but kepala_sekolah reads it.
+  kepala_sekolah: [
+    "akses:baca",
+    "peserta_didik:baca",
+    "tahun_ajaran:baca",
+    "rombongan_belajar:baca",
+  ],
+  guru: ["peserta_didik:baca", "rombongan_belajar:baca"],
+  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca"],
   dev: [
     "ptk:baca",
     "ptk:buat",
@@ -34,6 +47,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "peserta_didik:baca",
     "peserta_didik:buat",
     "peserta_didik:ubah",
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
   ],
 };
 

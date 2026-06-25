@@ -15,7 +15,9 @@ export type RoleSlug =
  * `ptk:*` govern PTK (Tenaga Kependidikan) data; `akses:*` govern the Akses
  * (role/permission administration) surface; `peserta_didik:*` govern Peserta
  * Didik (student) data. No `peserta_didik:hapus` — archive, not hard-delete
- * (per CONTEXT.md).
+ * (per CONTEXT.md). `tahun_ajaran:*` govern Tahun Ajaran (academic year)
+ * records; `rombongan_belajar:*` govern Rombongan Belajar (class/homeroom)
+ * records including `kelola_penempatan` (placement/progression management).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -25,7 +27,13 @@ export type IzinSlug =
   | "akses:kelola"
   | "peserta_didik:baca"
   | "peserta_didik:buat"
-  | "peserta_didik:ubah";
+  | "peserta_didik:ubah"
+  | "tahun_ajaran:baca"
+  | "tahun_ajaran:kelola"
+  | "rombongan_belajar:baca"
+  | "rombongan_belajar:buat"
+  | "rombongan_belajar:ubah"
+  | "rombongan_belajar:kelola_penempatan";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
