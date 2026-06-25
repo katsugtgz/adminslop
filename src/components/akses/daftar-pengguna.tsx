@@ -15,6 +15,9 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "ptk:hapus",
   "akses:baca",
   "akses:kelola",
+  "peserta_didik:baca",
+  "peserta_didik:buat",
+  "peserta_didik:ubah",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -30,6 +33,12 @@ function labelIzin(slug: IzinSlug): string {
       return "Baca Akses";
     case "akses:kelola":
       return "Kelola Akses";
+    case "peserta_didik:baca":
+      return "Baca Peserta Didik";
+    case "peserta_didik:buat":
+      return "Buat Peserta Didik";
+    case "peserta_didik:ubah":
+      return "Ubah Peserta Didik";
   }
 }
 

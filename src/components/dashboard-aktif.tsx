@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Building2, CheckCircle2, KeyRound } from "lucide-react";
+import { Building2, CheckCircle2, KeyRound, Users } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
-import { dapatMelihatAkses } from "@/lib/auth/otorisasi";
+import { dapatMelihatAkses, PERAN_KE_IZIN_DEFAULT } from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
 
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,13 @@ export async function DashboardAktif({
   // The linked PAGE re-checks `boleh("akses:baca")` server-side; this is
   // convenience reachability, not authorization (identity doc §12).
   const bolehLihatAkses = dapatMelihatAkses(membership.roleSlug);
+
+  // Reachability link to Peserta Didik (#7). All member roles receive
+  // `peserta_didik:baca` by default (students are core teaching data). The
+  // page re-checks `boleh("peserta_didik:baca")` server-side (§12).
+  const bolehLihatPesertaDidik = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("peserta_didik:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -69,11 +76,33 @@ export async function DashboardAktif({
         <div className="rounded-xl border border-border bg-muted/40 p-5">
           <p className="text-sm font-medium">Modul segera hadir</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Peserta Didik, Nilai, E-Raport, dan modul lainnya akan aktif di
-            dalam Satuan Pendidikan ini.
+            Nilai, E-Raport, dan modul lainnya akan aktif di dalam Satuan
+            Pendidikan ini.
           </p>
         </div>
       </div>
+
+      {bolehLihatPesertaDidik && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Users className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Peserta Didik</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola data Peserta Didik, Wali, Kontak Darurat, dan Mutasi.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/peserta-didik">Buka Peserta Didik</Link>
+          </Button>
+        </div>
+      )}
 
       {bolehLihatAkses && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">

@@ -13,14 +13,19 @@ export type RoleSlug =
 /**
  * Izin (permission) slugs. The closed vocabulary evaluated by `evaluasiAkses`.
  * `ptk:*` govern PTK (Tenaga Kependidikan) data; `akses:*` govern the Akses
- * (role/permission administration) surface.
+ * (role/permission administration) surface; `peserta_didik:*` govern Peserta
+ * Didik (student) data. No `peserta_didik:hapus` — archive, not hard-delete
+ * (per CONTEXT.md).
  */
 export type IzinSlug =
   | "ptk:baca"
   | "ptk:buat"
   | "ptk:hapus"
   | "akses:baca"
-  | "akses:kelola";
+  | "akses:kelola"
+  | "peserta_didik:baca"
+  | "peserta_didik:buat"
+  | "peserta_didik:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

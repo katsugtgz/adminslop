@@ -8,11 +8,33 @@ import type { IzinSlug, RoleSlug } from "./types";
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
-  admin_satuan_pendidikan: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
-  kepala_sekolah: ["akses:baca"],
-  guru: [],
-  wali_kelas: [],
-  dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
+  admin_satuan_pendidikan: [
+    "ptk:baca",
+    "ptk:buat",
+    "ptk:hapus",
+    "akses:kelola",
+    "akses:baca",
+    "peserta_didik:baca",
+    "peserta_didik:buat",
+    "peserta_didik:ubah",
+  ],
+  // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
+  // core teaching data, so every teaching role reads by default. Writes
+  // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
+  // hard-delete per CONTEXT.md).
+  kepala_sekolah: ["akses:baca", "peserta_didik:baca"],
+  guru: ["peserta_didik:baca"],
+  wali_kelas: ["peserta_didik:baca"],
+  dev: [
+    "ptk:baca",
+    "ptk:buat",
+    "ptk:hapus",
+    "akses:kelola",
+    "akses:baca",
+    "peserta_didik:baca",
+    "peserta_didik:buat",
+    "peserta_didik:ubah",
+  ],
 };
 
 /** Input to `evaluasiAkses`. The caller has already confirmed membership. */
