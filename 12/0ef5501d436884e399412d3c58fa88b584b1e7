@@ -1,0 +1,43 @@
+hyperplan/round-2-quality-maximalist.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-25
+hyperplan/round-2-contrarian-minimalist.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-41
+hyperplan/round-3-quality-maximalist.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-13
+hyperplan/round-2-depth-researcher.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-45
+hyperplan/round-3-arch-logician.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-21
+hyperplan/round-1-bundle.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-192
+hyperplan/insights-bundle.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-124
+hyperplan/round-2-arch-logician.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-41
+hyperplan/round-3-depth-researcher.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-9
+hyperplan/round-3-wildcard-visionary.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-9
+hyperplan/round-2-wildcard-visionary.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-25
+hyperplan/round-3-contrarian-minimalist.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-17
+hyperplan/plan.md
+  s_f7a0d140559ce3::t_1c030c429ee7e4 1-436
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "120ef5501d436884e399412d3c58fa88b584b1e7",
+  "prompts": {},
+  "sessions": {
+    "s_f7a0d140559ce3": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019efde9-772d-7566-8e4b-adf2a4d874f6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
