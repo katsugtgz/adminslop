@@ -1,0 +1,92 @@
+src/components/akses/daftar-pengguna.tsx
+  s_155a01a2872eea::t_b35450aa706ccf 40
+  s_155a01a2872eea::t_cc859f7367890f 100-101
+src/app/dashboard/sinkronisasi/page.test.tsx
+  s_155a01a2872eea::t_807dfd037da470 1-71,73-178
+  s_155a01a2872eea::t_0408ec2fdbaba4 72
+src/lib/auth/otorisasi.test.ts
+  s_155a01a2872eea::t_455897cdedfe75 476-505
+src/db/migrations/0014_mode_offline.sql
+  s_155a01a2872eea::t_01b290e4a8120e 1-37
+src/lib/offline/store.ts
+  s_155a01a2872eea::t_82fc2201266813 1-262
+src/lib/offline/types.ts
+  s_155a01a2872eea::t_edf07f8cfaa8d4 1-75,77,81-87
+  s_155a01a2872eea::t_49899aa01ab59b 76,78-80
+src/app/api/sinkronisasi/route.ts
+  s_155a01a2872eea::t_e7afbedd802226 1-304
+src/components/akses/daftar-pengguna.test.tsx
+  s_155a01a2872eea::t_04d22c44ad3d4e 29
+  s_155a01a2872eea::t_dc1c06b7872ce2 56
+src/components/offline/daftar-perubahan-tertunda.tsx
+  s_155a01a2872eea::t_a9ef0203001a99 1-184
+src/lib/offline/sync.test.ts
+  s_155a01a2872eea::t_6da7de151769be 1-12,14-18,20-30,45-66,68-77,87-91,93-108,110-122,124-145,147-165,167-181,183-199,201-202,204-230,232-255,257-273,275-286
+  s_155a01a2872eea::t_dd7d20f257bf71 78-84
+  s_155a01a2872eea::t_ee4ea980d9761b 13,19,31-39,41-44,85-86,92,109,123,146,166,182,200,203,231,256,274
+  s_6b3bfae636d12b::t_e06c50cf879b36 40
+  s_6b3bfae636d12b::t_8994c5555544ca 67
+src/lib/offline/guard.ts
+  s_155a01a2872eea::t_4657cafba615e9 1-65
+src/lib/auth/otorisasi.ts
+  s_155a01a2872eea::t_0b9f9064a249e9 67-68,86-87,99-100
+  s_155a01a2872eea::t_5f152556734d00 43-44
+  s_155a01a2872eea::t_68118d7d224589 130-131
+src/components/offline/indikator-offline.tsx
+  s_155a01a2872eea::t_a2069405b71f33 1-51
+src/db/schema.ts
+  s_155a01a2872eea::t_14978f4fcedfca 939-945
+  s_155a01a2872eea::t_4e2e6bfdaa262a 1013-1019
+src/app/dashboard/akses/actions.ts
+  s_155a01a2872eea::t_e1dc5f750cb4f4 65
+src/lib/offline/sync.ts
+  s_155a01a2872eea::t_8ffc59f3040970 1-32,53-66,69-71,73,75-84,86-99,101-103,105-106,108-134,136-142,144-163,165
+  s_155a01a2872eea::t_a73127b1035237 33-52,67-68,72,74,85,100,104,107,135,143,164
+src/components/offline/peringatan-konflik.tsx
+  s_155a01a2872eea::t_27f62ef59c9162 1-37,39,41-64
+  s_155a01a2872eea::t_24ff672106da4b 38,40
+src/components/dashboard-aktif.tsx
+  s_155a01a2872eea::t_a7dd934eb2afed 126-128
+  s_155a01a2872eea::t_6f7f8df0519572 101-107
+  s_155a01a2872eea::t_66b6e154465f2a 217-238
+  s_155a01a2872eea::t_c5cd7fbb698c09 10,22
+src/lib/auth/types.ts
+  s_155a01a2872eea::t_0bf6131ecfe33e 66-67
+  s_155a01a2872eea::t_6992ac66020671 35-37
+src/app/dashboard/sinkronisasi/page.tsx
+  s_155a01a2872eea::t_27dd9948deb5ae 1-42
+src/lib/offline/store.test.ts
+  s_155a01a2872eea::t_b987f7519d202e 1-148
+src/lib/offline/guard.test.ts
+  s_155a01a2872eea::t_e71cc34e813134 1-102
+src/app/dashboard/absensi/page.test.tsx
+  s_155a01a2872eea::t_024c138c9d1db1 373
+src/test/setup.ts
+  s_155a01a2872eea::t_8cc6bd61182b01 2-40
+src/app/dashboard/akses/page.test.tsx
+  s_155a01a2872eea::t_6b4fcbc36c198f 182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "2ab88593a8aaed68c5bf0eb11ae22971072bebd6",
+  "prompts": {},
+  "sessions": {
+    "s_155a01a2872eea": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd9082f0ffeWUnVB6WDm93CJU",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_6b3bfae636d12b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd7266e7ffeu3DHNzdxAkBB9A",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
