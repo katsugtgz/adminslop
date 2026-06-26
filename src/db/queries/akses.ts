@@ -46,13 +46,6 @@ export async function hapusPtk(db: Db | Tx, id: string): Promise<void> {
   await db.delete(ptk).where(eq(ptk.id, id));
 }
 
-/**
- * Find a PTK by id within the current tenant (RLS-scoped). Returns null when
- * absent (including when the id exists only in another tenant). Used by the
- * action layer to prove a formData-supplied ptkId belongs to the active
- * tenant BEFORE linking it — a single-column FK cannot reject a cross-tenant
- * id, so this existence check is the boundary (cubic P1).
- */
 export async function cariPtkById(
   db: Db | Tx,
   id: string
@@ -135,12 +128,28 @@ export async function cariPenggunaByUserId(
 /**
  * Link a pengguna to a PTK (set ptk_id). Pass null to unlink. RLS scopes the
  * update to the current tenant — cross-tenant penggunaId is a silent no-op.
+ *
+ * When `ptkId` is non-null, an explicit same-tenant existence check runs first.
+ * RLS already prevents cross-tenant reads, so a PTK from another Satuan
+ * Pendidikan is invisible here — this guard turns that silent invisibility
+ * into a clear error so callers can surface "PTK tidak ditemukan" rather than
+ * silently leave the pengguna unlinked.
  */
 export async function linkPtk(
   db: Db | Tx,
   penggunaId: string,
   ptkId: string | null
 ): Promise<void> {
+  if (ptkId !== null) {
+    const [existing] = await db
+      .select({ id: ptk.id })
+      .from(ptk)
+      .where(eq(ptk.id, ptkId))
+      .limit(1);
+    if (!existing) {
+      throw new Error("PTK tidak ditemukan dalam Satuan Pendidikan ini.");
+    }
+  }
   await db
     .update(pengguna)
     .set({ ptkId })

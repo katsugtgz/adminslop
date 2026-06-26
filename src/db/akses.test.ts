@@ -46,10 +46,10 @@ describeOrSkip("akses & PTK tables (#6, Wave 1)", () => {
       on conflict (id) do update set nama = excluded.nama;
     `);
     await seed.query(`
-      delete from pembatasan_akses where tenant_id in ('org_A','org_B');
-      delete from izin_akses where tenant_id in ('org_A','org_B');
-      delete from pengguna where tenant_id in ('org_A','org_B');
-      delete from ptk where tenant_id in ('org_A','org_B');
+      delete from pembatasan_akses;
+      delete from izin_akses;
+      delete from pengguna;
+      delete from ptk;
     `);
     await seed.end();
 
