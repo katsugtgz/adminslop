@@ -10,6 +10,7 @@ import {
   FileText,
   GraduationCap,
   KeyRound,
+  Printer,
   Users,
 } from "lucide-react";
 
@@ -104,6 +105,14 @@ export async function DashboardAktif({
   const bolehLihatEraport = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("eraport:baca");
+
+  // Reachability link to Cetak (#14). All member roles receive `cetak:baca`
+  // — Pratinjau Cetak and Dokumen Cetak are visible to every role. The page
+  // re-checks `boleh("cetak:baca")` server-side (§12); writes (Template /
+  // preferensi) apply AC#2 DUAL authz (admin / kepala_sekolah / dev only).
+  const bolehLihatCetak = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("cetak:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -229,6 +238,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/eraport">Buka E-Raport</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatCetak && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Printer className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Cetak E-Raport</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Pratinjau dan cetak E-Raport dengan Template Cetak.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/cetak">Buka Cetak</Link>
           </Button>
         </div>
       )}

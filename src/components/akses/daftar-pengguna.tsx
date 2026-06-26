@@ -42,6 +42,9 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "eraport:buat",
   "eraport:terbit",
   "eraport:revisi",
+  "cetak:baca",
+  "cetak:buat",
+  "cetak:ubah",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -111,6 +114,12 @@ function labelIzin(slug: IzinSlug): string {
       return "Terbitkan E-Raport";
     case "eraport:revisi":
       return "Catat Revisi E-Raport";
+    case "cetak:baca":
+      return "Baca Cetak";
+    case "cetak:buat":
+      return "Buat Cetak";
+    case "cetak:ubah":
+      return "Ubah Cetak";
   }
 }
 

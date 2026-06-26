@@ -48,6 +48,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "eraport:buat",
     "eraport:terbit",
     "eraport:revisi",
+    // Cetak: admin manages the full print/export surface (#14) — templates,
+    // preview, dokumen generation.
+    "cetak:baca",
+    "cetak:buat",
+    "cetak:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -76,6 +81,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // E-Raport: kepala_sekolah reads + publishes (terbit) reports.
     "eraport:baca",
     "eraport:terbit",
+    // Cetak: kepala_sekolah reads + generates dokumen_cetak (cetak:buat).
+    "cetak:baca",
+    "cetak:buat",
   ],
   guru: [
     "peserta_didik:baca",
@@ -98,6 +106,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // others' drafts. Terbit/revisi remain kepala_sekolah/admin.
     "eraport:baca",
     "eraport:buat",
+    // Cetak: guru previews reports (homeroom/teaching oversight).
+    "cetak:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -113,6 +123,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "draf_ai:baca",
     // E-Raport: wali_kelas reads homeroom reports (oversight only).
     "eraport:baca",
+    // Cetak: wali_kelas previews homeroom reports (read-only oversight).
+    "cetak:baca",
   ],
   dev: [
     "ptk:baca",
@@ -149,6 +161,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "eraport:buat",
     "eraport:terbit",
     "eraport:revisi",
+    // Cetak: dev mirrors admin (full print/export surface).
+    "cetak:baca",
+    "cetak:buat",
+    "cetak:ubah",
   ],
 };
 

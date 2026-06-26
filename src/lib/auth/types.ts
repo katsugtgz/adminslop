@@ -41,6 +41,11 @@ export type RoleSlug =
  * from Nilai Akhir) is admin + guru; `eraport:terbit` (publish/lock) is admin
  * + kepala_sekolah; `eraport:revisi` (append a change record) is admin only
  * (kepala_sekolah reads but does not request revisions).
+ * `cetak:*` govern the print/export surface (#14): Template Cetak config,
+ * Pratinjau Cetak (preview), and Dokumen Cetak (generated output). `cetak:baca`
+ * is universal across teaching roles (every teaching role may preview reports);
+ * `cetak:buat` (create a template + generate a dokumen_cetak from a TERBIT
+ * E-Raport) is admin + kepala_sekolah. `cetak:ubah` (edit templates) is admin.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -74,7 +79,10 @@ export type IzinSlug =
   | "eraport:baca"
   | "eraport:buat"
   | "eraport:terbit"
-  | "eraport:revisi";
+  | "eraport:revisi"
+  | "cetak:baca"
+  | "cetak:buat"
+  | "cetak:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
