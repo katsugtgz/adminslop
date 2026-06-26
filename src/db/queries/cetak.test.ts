@@ -86,8 +86,8 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     const seed = new pg.Pool({ connectionString: MIG_URL });
     await seed.query(`
       insert into satuan_pendidikan (id, nama, npsn, alamat, logo_url, cetak_paper_size) values
-        ('org_CETAK_a', 'Satuan Pendidikan Cetak A', '20XXXXXA', 'Jl. Cetak A No. 1', 'https://a.example/logo.png', 'a4'),
-        ('org_CETAK_b', 'Satuan Pendidikan Cetak B', '20XXXXXB', 'Jl. Cetak B No. 2', null, 'f4')
+        ('org_CETAK_a', 'Satuan Pendidikan Cetak A', '20XXXXXA', 'Jl. Cetak A No. 1', 'https://a.example/logo.png', 'A4'),
+        ('org_CETAK_b', 'Satuan Pendidikan Cetak B', '20XXXXXB', 'Jl. Cetak B No. 2', null, 'F4')
       on conflict (id) do update set
         nama = excluded.nama,
         npsn = excluded.npsn,

@@ -268,7 +268,7 @@ export async function getKontenCetak(
     npsn: sp?.npsn ?? null,
     alamat: sp?.alamat ?? null,
     logoUrl: sp?.logoUrl ?? null,
-    formatPreferensi: (sp?.cetakPaperSize as FormatCetak) ?? "a4",
+    formatPreferensi: (sp?.cetakPaperSize as FormatCetak) ?? "A4",
     tampilkanLogoDefault: sp?.cetakTampilkanLogo ?? true,
     tampilkanHeaderDefault: sp?.cetakTampilkanHeader ?? true,
     template: template
