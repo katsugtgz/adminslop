@@ -1,0 +1,87 @@
+src/lib/auth/types.ts
+  s_6e0345ab90dd02::t_85683b86746e71 32-36,62-64
+src/app/dashboard/akses/actions.ts
+  s_6e0345ab90dd02::t_b4674521faef63 62-63
+src/app/dashboard/notifikasi/actions.ts
+  s_6e0345ab90dd02::t_baba41bbec65da 1-195
+src/db/queries/kurikulum.test.ts
+  s_f0aa1428ba67d7::t_0034c3a69c21b7 83-93
+src/components/akses/daftar-pengguna.tsx
+  s_6e0345ab90dd02::t_f00a3bbdd4fd80 92-95
+  s_6e0345ab90dd02::t_13dce2da5ce74c 37-38
+src/app/dashboard/notifikasi/actions.test.ts
+  s_6e0345ab90dd02::t_86490bb6058407 1
+  s_6e0345ab90dd02::t_81e640713f02f1 6
+  s_6e0345ab90dd02::t_a2ad04e5086dbc 2-5,7-28,32-164,171-546
+  s_6e0345ab90dd02::t_984979c9adddfd 165-170
+  s_6e0345ab90dd02::t_d4bd9375eafe0e 29-31
+src/components/notifikasi/kontrol-preferensi.tsx
+  s_6e0345ab90dd02::t_136ab48147118d 1-78
+src/components/notifikasi/daftar-notifikasi.tsx
+  s_6e0345ab90dd02::t_ea5cb8b9ea3571 2
+  s_6e0345ab90dd02::t_ecc1e7740b5c2d 33
+  s_6e0345ab90dd02::t_fec150f5876acf 1,3-25,47-103,105,107-127
+  s_6e0345ab90dd02::t_9143b58a6453b7 104,106
+  s_6e0345ab90dd02::t_ef2403f8b5d8de 26-32,34-46
+src/app/dashboard/akses/page.test.tsx
+  s_6e0345ab90dd02::t_8614534db571c0 182
+src/components/dashboard-aktif.test.tsx
+  s_f0aa1428ba67d7::t_b6a9d25ddf557e 130-146
+src/db/migrations/0011_notifikasi.sql
+  s_6e0345ab90dd02::t_85ed3028aa0eee 1-80
+src/db/queries/notifikasi.ts
+  s_6e0345ab90dd02::t_ba965de7c74c42 1-21,23-61,78-141,148-150,153-155,157,162-268
+  s_6e0345ab90dd02::t_89bffc74cb43e1 22
+  s_6e0345ab90dd02::t_58fd982a3dc19a 142-147,151-152,156,158-161
+  s_6e0345ab90dd02::t_05354ec929c78d 62-77
+src/app/dashboard/notifikasi/page.test.tsx
+  s_6e0345ab90dd02::t_e133c2832bb17c 214-215,219-222
+  s_6e0345ab90dd02::t_9fbc100c2fb9ec 1-47,49-213,216-218,223-282
+  s_6e0345ab90dd02::t_b6a05d6502daa4 48
+src/components/akses/daftar-pengguna.test.tsx
+  s_6e0345ab90dd02::t_145a07e1f4a9ad 29
+  s_6e0345ab90dd02::t_a98994345804ee 56
+src/lib/auth/otorisasi.ts
+  s_6e0345ab90dd02::t_94ee85b5cde731 40-43
+  s_6e0345ab90dd02::t_1ca0e16d24de94 64-65,79-80,90-91
+  s_6e0345ab90dd02::t_d565e51933e289 118-120
+src/db/schema.ts
+  s_6e0345ab90dd02::t_943715350141c0 962-1035
+src/db/queries/notifikasi.test.ts
+  s_6e0345ab90dd02::t_fe480254865617 51-52
+  s_6e0345ab90dd02::t_8facfc18b4691f 1-50,53-80,82-473
+  s_6e0345ab90dd02::t_469821771351d5 81
+src/components/notifikasi/badge-notifikasi.tsx
+  s_6e0345ab90dd02::t_a4058cd9b2105a 1-20
+src/db/kurikulum.test.ts
+  s_f0aa1428ba67d7::t_37fe516ba38018 115-125
+src/components/dashboard-aktif.tsx
+  s_f0aa1428ba67d7::t_bb42c5659227db 182-203
+  s_f0aa1428ba67d7::t_f31feabb81b87b 3,91-96
+src/app/dashboard/notifikasi/page.tsx
+  s_6e0345ab90dd02::t_5a244d796d3985 1-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "396cc8b5841781a19e07e65fbb85db025e5db7e8",
+  "prompts": {},
+  "sessions": {
+    "s_6e0345ab90dd02": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdd80c6bffeJJ1SlKG2GmlzhB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f0aa1428ba67d7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdbb5a68ffeVaoYlXBjWPMlIR",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
