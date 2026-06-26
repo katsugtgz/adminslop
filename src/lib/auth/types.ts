@@ -21,6 +21,11 @@ export type RoleSlug =
  * `kurikulum:baca` governs read-only browsing of Kurikulum (curriculum)
  * reference data — universal: every authenticated member may browse it (no
  * write slugs; curriculum is seeded via migration, not user-edited).
+ * `beban_mengajar:*` govern Beban Mengajar (teaching load) records;
+ * `wali_kelas:*` govern Wali Kelas (homeroom teacher) assignments. Read
+ * (`:baca`) is universal across teaching roles — a guru must see their own
+ * teaching load and homeroom context (AC#4); writes (`:buat`/`:ubah`) remain
+ * admin-scoped.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -37,7 +42,13 @@ export type IzinSlug =
   | "rombongan_belajar:buat"
   | "rombongan_belajar:ubah"
   | "rombongan_belajar:kelola_penempatan"
-  | "kurikulum:baca";
+  | "kurikulum:baca"
+  | "beban_mengajar:baca"
+  | "beban_mengajar:buat"
+  | "beban_mengajar:ubah"
+  | "wali_kelas:baca"
+  | "wali_kelas:buat"
+  | "wali_kelas:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

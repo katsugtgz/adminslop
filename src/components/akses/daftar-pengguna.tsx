@@ -25,6 +25,12 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "rombongan_belajar:ubah",
   "rombongan_belajar:kelola_penempatan",
   "kurikulum:baca",
+  "beban_mengajar:baca",
+  "beban_mengajar:buat",
+  "beban_mengajar:ubah",
+  "wali_kelas:baca",
+  "wali_kelas:buat",
+  "wali_kelas:ubah",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -60,6 +66,18 @@ function labelIzin(slug: IzinSlug): string {
       return "Kelola Penempatan Rombongan Belajar";
     case "kurikulum:baca":
       return "Baca Kurikulum";
+    case "beban_mengajar:baca":
+      return "Baca Beban Mengajar";
+    case "beban_mengajar:buat":
+      return "Buat Beban Mengajar";
+    case "beban_mengajar:ubah":
+      return "Ubah Beban Mengajar";
+    case "wali_kelas:baca":
+      return "Baca Wali Kelas";
+    case "wali_kelas:buat":
+      return "Buat Wali Kelas";
+    case "wali_kelas:ubah":
+      return "Ubah Wali Kelas";
   }
 }
 

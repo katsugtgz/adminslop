@@ -112,6 +112,10 @@ describeOrSkip("kurikulum reference tables (#9, T3 — GLOBAL / ADR 0001)", () =
       delete from tujuan_pembelajaran;
       delete from capaian_pembelajaran;
       delete from kurikulum;
+      -- beban_mengajar references mata_pelajaran ON DELETE RESTRICT (#10);
+      -- must clear before mata_pelajaran deletion in parallel test runs.
+      delete from beban_mengajar;
+      delete from wali_kelas;
       delete from mata_pelajaran;
       delete from fase;
     `);

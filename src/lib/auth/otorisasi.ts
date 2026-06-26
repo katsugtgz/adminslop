@@ -25,22 +25,47 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:kelola_penempatan",
     // kurikulum:baca — curriculum reference data is universal (read-only).
     "kurikulum:baca",
+    // Beban Mengajar + Wali Kelas: admin manages teaching load + homeroom
+    // assignments school-wide.
+    "beban_mengajar:baca",
+    "beban_mengajar:buat",
+    "beban_mengajar:ubah",
+    "wali_kelas:baca",
+    "wali_kelas:buat",
+    "wali_kelas:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
   // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
   // hard-delete per CONTEXT.md). Rombongan Belajar (class) data is likewise
   // core teaching data -> baca for every teaching role; Tahun Ajaran
-  // management is admin-only, but kepala_sekolah reads it.
+  // management is admin-only, but kepala_sekolah reads it. Beban Mengajar +
+  // Wali Kelas reads are universal across teaching roles — a guru must see
+  // their own teaching load and homeroom context (AC#4); writes remain
+  // admin-scoped.
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",
     "tahun_ajaran:baca",
     "rombongan_belajar:baca",
     "kurikulum:baca",
+    "beban_mengajar:baca",
+    "wali_kelas:baca",
   ],
-  guru: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
-  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
+  guru: [
+    "peserta_didik:baca",
+    "rombongan_belajar:baca",
+    "kurikulum:baca",
+    "beban_mengajar:baca",
+    "wali_kelas:baca",
+  ],
+  wali_kelas: [
+    "peserta_didik:baca",
+    "rombongan_belajar:baca",
+    "kurikulum:baca",
+    "beban_mengajar:baca",
+    "wali_kelas:baca",
+  ],
   dev: [
     "ptk:baca",
     "ptk:buat",
@@ -57,6 +82,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
     "kurikulum:baca",
+    "beban_mengajar:baca",
+    "beban_mengajar:buat",
+    "beban_mengajar:ubah",
+    "wali_kelas:baca",
+    "wali_kelas:buat",
+    "wali_kelas:ubah",
   ],
 };
 
