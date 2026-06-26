@@ -43,6 +43,14 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Bank Soal + Paket Soal: admin manages the full question-bank + package
+    // assembly surface school-wide.
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -68,6 +76,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Bank Soal + Paket Soal: read-only oversight of the question bank.
+    "bank_soal:baca",
+    "paket_soal:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -86,6 +97,14 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "permintaan_ai:buat",
     "draf_ai:baca",
+    // Bank Soal + Paket Soal: guru authors question items and assembles
+    // packages (AC#1 — guru creates the canonical question bank).
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -99,6 +118,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // (no request, no verify — homeroom oversight, not AI workflow).
     "permintaan_ai:baca",
     "draf_ai:baca",
+    // Bank Soal + Paket Soal: wali_kelas reads only (homeroom oversight).
+    "bank_soal:baca",
+    "paket_soal:baca",
   ],
   dev: [
     "ptk:baca",
@@ -130,6 +152,13 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Bank Soal + Paket Soal: dev mirrors admin (full surface).
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
 };
 

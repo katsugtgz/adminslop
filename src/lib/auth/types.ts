@@ -34,7 +34,12 @@ export type RoleSlug =
  * by teaching staff; `draf_ai:*` govern Draf AI (AI-generated drafts) derived
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
- * kepala_sekolah verifies. Admin manages everything.
+ * kepala_sekolah verifies. Admin manages everything. `bank_soal:*` govern
+ * Bank Soal (individual question items — Butir Soal); `paket_soal:*` govern
+ * Paket Soal (assembled packages). Guru gets all six (guru authors items
+ * and assembles packages); wali_kelas / kepala_sekolah are read-only on
+ * both. AC#2: butir_soal may cite a Draf AI only when its
+ * status_verifikasi='disetujui' (unverified AI cannot be canonical).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -64,7 +69,13 @@ export type IzinSlug =
   | "permintaan_ai:baca"
   | "permintaan_ai:buat"
   | "draf_ai:baca"
-  | "draf_ai:verifikasi";
+  | "draf_ai:verifikasi"
+  | "bank_soal:baca"
+  | "bank_soal:buat"
+  | "bank_soal:ubah"
+  | "paket_soal:baca"
+  | "paket_soal:buat"
+  | "paket_soal:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

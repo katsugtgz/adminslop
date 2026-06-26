@@ -152,3 +152,28 @@ describe("DashboardAktif — Permintaan AI reachability link (#12)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Bank Soal reachability link (#16)", () => {
+  // All member roles receive `bank_soal:baca` by default, so ALL member roles
+  // see the link. The page re-checks server-side (§12) and applies AC#2 DUAL
+  // authz (verification gate) for AI-generated butir soal writes.
+  it("admin sees the 'Bank Soal' link pointing at /dashboard/bank-soal", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Bank Soal/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/bank-soal");
+  });
+
+  it("guru sees the link (can author butir soal and rakit paket)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Bank Soal/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link (read-only oversight)", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Bank Soal/i })
+    ).toBeInTheDocument();
+  });
+});

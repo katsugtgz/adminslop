@@ -38,6 +38,12 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "permintaan_ai:buat",
   "draf_ai:baca",
   "draf_ai:verifikasi",
+  "bank_soal:baca",
+  "bank_soal:buat",
+  "bank_soal:ubah",
+  "paket_soal:baca",
+  "paket_soal:buat",
+  "paket_soal:ubah",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -99,6 +105,18 @@ function labelIzin(slug: IzinSlug): string {
       return "Baca Draf AI";
     case "draf_ai:verifikasi":
       return "Verifikasi Draf AI";
+    case "bank_soal:baca":
+      return "Baca Bank Soal";
+    case "bank_soal:buat":
+      return "Buat Butir Soal";
+    case "bank_soal:ubah":
+      return "Ubah Butir Soal";
+    case "paket_soal:baca":
+      return "Baca Paket Soal";
+    case "paket_soal:buat":
+      return "Buat Paket Soal";
+    case "paket_soal:ubah":
+      return "Ubah Paket Soal";
   }
 }
 

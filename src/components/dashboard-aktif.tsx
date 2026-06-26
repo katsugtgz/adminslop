@@ -7,6 +7,7 @@ import {
   Calendar,
   CheckCircle2,
   ClipboardList,
+  FileQuestion,
   GraduationCap,
   KeyRound,
   Users,
@@ -95,6 +96,14 @@ export async function DashboardAktif({
   const bolehLihatPermintaanAi = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("permintaan_ai:baca");
+
+  // Reachability link to Bank Soal (#16). All member roles receive
+  // `bank_soal:baca` — the question bank is core teaching reference data. The
+  // page re-checks `boleh("bank_soal:baca")` server-side (§12) and applies
+  // AC#2 DUAL authz (verification gate) for AI-generated butir soal writes.
+  const bolehLihatBankSoal = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("bank_soal:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -198,6 +207,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/permintaan-ai">Buka Permintaan AI</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatBankSoal && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <FileQuestion className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Bank Soal</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola Butir Soal dan rakit Paket Soal.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/bank-soal">Buka Bank Soal</Link>
           </Button>
         </div>
       )}

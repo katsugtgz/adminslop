@@ -116,6 +116,11 @@ describeOrSkip("kurikulum reference tables (#9, T3 — GLOBAL / ADR 0001)", () =
       -- must clear before mata_pelajaran deletion in parallel test runs.
       delete from beban_mengajar;
       delete from wali_kelas;
+      -- butir_soal + paket_soal reference mata_pelajaran ON DELETE RESTRICT
+      -- (#16); junction first, then parents, before mata_pelajaran deletion.
+      delete from paket_soal_butir;
+      delete from paket_soal;
+      delete from butir_soal;
       delete from mata_pelajaran;
       delete from fase;
     `);

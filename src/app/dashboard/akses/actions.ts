@@ -63,6 +63,12 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "permintaan_ai:buat",
   "draf_ai:baca",
   "draf_ai:verifikasi",
+  "bank_soal:baca",
+  "bank_soal:buat",
+  "bank_soal:ubah",
+  "paket_soal:baca",
+  "paket_soal:buat",
+  "paket_soal:ubah",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */
