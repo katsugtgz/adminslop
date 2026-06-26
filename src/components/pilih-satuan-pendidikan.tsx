@@ -27,12 +27,16 @@ export function PilihSatuanPendidikan({
       <ul className="flex flex-col gap-2">
         {memberships.map((membership) => (
           <li key={membership.orgId}>
-            <form action={pilihSatuanPendidikanAction}>
+            <form
+              action={pilihSatuanPendidikanAction}
+              aria-label={`Pilih ${membership.orgName} sebagai Satuan Pendidikan aktif`}
+            >
               <input type="hidden" name="orgId" value={membership.orgId} />
               <Button
                 type="submit"
                 variant="outline"
                 className="flex h-auto w-full items-center justify-between py-4"
+                aria-label={`Pilih ${membership.orgName} (Peran: ${membership.roleSlug})`}
               >
                 <span className="flex items-center gap-3 text-left">
                   <span

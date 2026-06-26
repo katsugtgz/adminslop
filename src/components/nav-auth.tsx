@@ -22,8 +22,13 @@ export function NavAuth() {
         <span className="text-sm text-muted-foreground max-[400px]:hidden">
           {user.email}
         </span>
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline" size="sm">
+        <form action={signOutAction} aria-label="Keluar dari sesi">
+          <Button
+            type="submit"
+            variant="outline"
+            size="sm"
+            aria-label={`Keluar (${user.email})`}
+          >
             <LogOut aria-hidden="true" />
             Keluar
           </Button>
@@ -36,6 +41,7 @@ export function NavAuth() {
     <Button
       type="button"
       onClick={() => void refreshAuth({ ensureSignedIn: true })}
+      aria-label="Masuk ke EduAdmin Pro Premium"
     >
       Masuk
     </Button>

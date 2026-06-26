@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   ClipboardList,
   GraduationCap,
+  HelpCircle,
   KeyRound,
   Users,
 } from "lucide-react";
@@ -105,7 +106,7 @@ export async function DashboardAktif({
         >
           <Building2 className="h-6 w-6" />
         </span>
-        <div>
+        <div className="flex-1">
           <p className="text-sm text-muted-foreground">Satuan Pendidikan Aktif</p>
           <h1 className="text-2xl font-bold tracking-tight">
             {membership.orgName}
@@ -115,6 +116,11 @@ export async function DashboardAktif({
             Peran Anda: {membership.roleSlug}
           </p>
         </div>
+        <Button asChild variant="outline" size="icon" aria-label="Pusat Bantuan">
+          <Link href="/dashboard/bantuan">
+            <HelpCircle aria-hidden="true" />
+          </Link>
+        </Button>
       </header>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -136,185 +142,187 @@ export async function DashboardAktif({
         </div>
       </div>
 
-      {bolehLihatBebanMengajar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <Briefcase className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Beban Mengajar</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
-              </p>
+      <nav aria-label="Modul Satuan Pendidikan" className="flex flex-col gap-4">
+        {bolehLihatBebanMengajar && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <Briefcase className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Beban Mengajar</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatPenilaian && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <ClipboardList className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Penilaian</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Komponen Nilai, Penilaian, dan lihat Nilai Akhir.
-              </p>
+        {bolehLihatPenilaian && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <ClipboardList className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Penilaian</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Kelola Komponen Nilai, Penilaian, dan lihat Nilai Akhir.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/penilaian">Buka Penilaian</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/penilaian">Buka Penilaian</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatPermintaanAi && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <Bot className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Permintaan AI</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Buat permintaan AI dan verifikasi draf.
-              </p>
+        {bolehLihatPermintaanAi && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <Bot className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Permintaan AI</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Buat permintaan AI dan verifikasi draf.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/permintaan-ai">Buka Permintaan AI</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/permintaan-ai">Buka Permintaan AI</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatPesertaDidik && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <Users className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Peserta Didik</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola data Peserta Didik, Wali, Kontak Darurat, dan Mutasi.
-              </p>
+        {bolehLihatPesertaDidik && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <Users className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Peserta Didik</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Kelola data Peserta Didik, Wali, Kontak Darurat, dan Mutasi.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/peserta-didik">Buka Peserta Didik</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/peserta-didik">Buka Peserta Didik</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatRombonganBelajar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <GraduationCap className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Rombongan Belajar</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Tingkat, Rombongan Belajar, Penempatan, dan Kenaikan
-                Tingkat.
-              </p>
+        {bolehLihatRombonganBelajar && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <GraduationCap className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Rombongan Belajar</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Kelola Tingkat, Rombongan Belajar, Penempatan, dan Kenaikan
+                  Tingkat.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/rombongan-belajar">Buka Rombongan Belajar</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/rombongan-belajar">Buka Rombongan Belajar</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatTahunAjaran && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <Calendar className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Tahun Ajaran</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Tahun Ajaran dan Semester Aktif untuk Satuan Pendidikan
-                ini.
-              </p>
+        {bolehLihatTahunAjaran && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <Calendar className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Tahun Ajaran</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Kelola Tahun Ajaran dan Semester Aktif untuk Satuan Pendidikan
+                  ini.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/tahun-ajaran">Buka Tahun Ajaran</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/tahun-ajaran">Buka Tahun Ajaran</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatAkses && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <KeyRound className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Manajemen Akses</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola PTK, Pengguna, Izin, dan Pembatasan untuk Satuan
-                Pendidikan ini.
-              </p>
+        {bolehLihatAkses && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <KeyRound className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Manajemen Akses</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Kelola PTK, Pengguna, Izin, dan Pembatasan untuk Satuan
+                  Pendidikan ini.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
-          </Button>
-        </div>
-      )}
+        )}
 
-      {bolehLihatKurikulum && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <BookOpen className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Kurikulum</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Jelajahi Kurikulum Merdeka: Mata Pelajaran, Fase, Capaian, dan
-                Tujuan Pembelajaran.
-              </p>
+        {bolehLihatKurikulum && (
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+                aria-hidden="true"
+              >
+                <BookOpen className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-sm font-medium">Kurikulum</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  Jelajahi Kurikulum Merdeka: Mata Pelajaran, Fase, Capaian, dan
+                  Tujuan Pembelajaran.
+                </p>
+              </div>
             </div>
+            <Button asChild variant="outline">
+              <Link href="/dashboard/kurikulum">Buka Kurikulum</Link>
+            </Button>
           </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/kurikulum">Buka Kurikulum</Link>
-          </Button>
-        </div>
-      )}
+        )}
+      </nav>
     </section>
   );
 }
