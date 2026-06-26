@@ -1,0 +1,155 @@
+src/components/beban-mengajar/form-beban-mengajar-baru.test.tsx
+  s_8d2e4ec0c07861::t_a42f9863b37956 1-107
+src/components/beban-mengajar/konteks-guru.test.tsx
+  s_8d2e4ec0c07861::t_9122094948444a 1-33,38-57
+  s_8d2e4ec0c07861::t_1ca6d616b0a978 34-37
+src/app/dashboard/akses/actions.ts
+  s_0cc0bb1dda00f8::t_a239ad1ed56c2a 53-58
+src/components/akses/daftar-pengguna.tsx
+  s_0cc0bb1dda00f8::t_929666f167bdd2 28-33
+  s_0cc0bb1dda00f8::t_04efdac5b42c10 69-80
+src/db/queries/kurikulum.test.ts
+  s_3b02dd2100e1a4::t_70bbc9922f82f2 83-86
+src/app/dashboard/beban-mengajar/page.test.tsx
+  s_8d2e4ec0c07861::t_958865ad793fa8 1-352
+src/lib/auth/otorisasi.test.ts
+  s_0cc0bb1dda00f8::t_7e1c57d049fe62 341-380
+src/db/schema.ts
+  s_f6408d5157f6c3::t_8c258b5bf0e2f0 720-834
+src/db/queries/wali-kelas.test.ts
+  s_f3921a99e42432::t_96241248c39547 1-199,201-319,322,327-328,333-344,346-352,354-368,371-374,376-380,382-385,387-391,395-396,400,402-403,406-447,449-474,476-509
+  s_f3921a99e42432::t_737dac16670c32 320-321,323-326,329-332,345,353,369-370,375,381,386,392-394,397-399,401,404-405
+  s_9470e59bf88b48::t_c1e7f858685a9d 448
+  s_9470e59bf88b48::t_d72413b4767f96 200
+  s_9470e59bf88b48::t_255eb3f7518720 475
+src/components/beban-mengajar/daftar-beban-mengajar.test.tsx
+  s_8d2e4ec0c07861::t_80da8129b50316 1-34,37,40,43-84
+  s_8d2e4ec0c07861::t_11c5c1566d5a89 35-36,38-39,41-42
+src/db/queries/beban-mengajar.test.ts
+  s_929ec2524f9f41::t_f4270c84789e30 1-460
+src/components/beban-mengajar/daftar-wali-kelas.test.tsx
+  s_8d2e4ec0c07861::t_c652202426c2a4 1-20,23,25,27-63
+  s_8d2e4ec0c07861::t_a5204eff3bdbf8 21-22,24,26
+src/app/dashboard/beban-mengajar/page.tsx
+  s_8d2e4ec0c07861::t_fe5e47e84e5cd9 1-279
+src/lib/auth/types.ts
+  s_0cc0bb1dda00f8::t_9c9e63f1f74b30 24-28,45-51
+src/app/dashboard/akses/page.test.tsx
+  s_0cc0bb1dda00f8::t_2d0e85cf6a6070 182
+src/db/beban-mengajar.test.ts
+  s_9470e59bf88b48::t_c467ff8473956a 168,270,299,345
+  s_9470e59bf88b48::t_dfea9e8748f8c1 407,452,495,540
+  s_f6408d5157f6c3::t_0a6aead81414e3 92-98,107-112,114
+  s_f6408d5157f6c3::t_4681ca31aa96fa 1-91,99-106,113,115-167,169-269,271-298,300-344,346-406,408-451,453-494,496-539,541-556
+src/db/queries/wali-kelas.ts
+  s_f3921a99e42432::t_5d050c3c89187c 1-156
+src/components/dashboard-aktif.tsx
+  s_3b02dd2100e1a4::t_89f98d50574471 74-80
+  s_3b02dd2100e1a4::t_50dc9d2dfb18ff 4
+  s_3b02dd2100e1a4::t_64f3ff8bf7abe9 128-142
+  s_3b02dd2100e1a4::t_bbba541f05a7a3 121
+src/lib/auth/otorisasi.ts
+  s_0cc0bb1dda00f8::t_dc73e241140bbf 28-35,42-45,52-67,85-90
+src/components/akses/daftar-pengguna.test.tsx
+  s_0cc0bb1dda00f8::t_e5dbdfb826a46a 56
+src/components/beban-mengajar/daftar-wali-kelas.tsx
+  s_8d2e4ec0c07861::t_f4cc02120283ea 1-67
+src/db/queries/beban-mengajar.ts
+  s_929ec2524f9f41::t_7c78856381c6ec 64-75,87-98,111-131,142,156-166
+  s_929ec2524f9f41::t_499109cbd44546 18
+  s_929ec2524f9f41::t_4c71f71aa2b58a 1-17,19-63,76-86,99-110,132-141,143-155,167
+src/db/queries/mata-pelajaran.ts
+  s_8d2e4ec0c07861::t_f6bae7fd962e32 1-25
+src/db/kurikulum.test.ts
+  s_3b02dd2100e1a4::t_d206abd35e1d6d 115-118
+src/app/dashboard/beban-mengajar/actions.ts
+  s_1ba69eee21e68d::t_b9e8dac6b2059f 1-349
+src/app/dashboard/beban-mengajar/actions.test.ts
+  s_1ba69eee21e68d::t_f2ae2bb1cbe2a8 89-96
+  s_1ba69eee21e68d::t_a0683d4f653426 88
+  s_1ba69eee21e68d::t_2c2a9a3d44707b 1-87,97-649
+src/components/beban-mengajar/form-beban-mengajar-baru.tsx
+  s_8d2e4ec0c07861::t_3e3bbfb0539e4b 1-142
+src/components/beban-mengajar/daftar-beban-mengajar.tsx
+  s_8d2e4ec0c07861::t_60af926a6dc492 1-79
+src/components/beban-mengajar/konteks-guru.tsx
+  s_8d2e4ec0c07861::t_de300a69ff0b15 1-50
+src/components/beban-mengajar/form-wali-kelas.tsx
+  s_8d2e4ec0c07861::t_96470eca1322a8 1-85
+src/db/migrations/0006_beban_mengajar.sql
+  s_f6408d5157f6c3::t_8e9932ff01bc3a 1-81
+src/components/beban-mengajar/form-wali-kelas.test.tsx
+  s_8d2e4ec0c07861::t_ae688d78c62f42 1-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "070f45fa11559994f1f067e5fdc88d7159b6d4bf",
+  "prompts": {},
+  "sessions": {
+    "s_0cc0bb1dda00f8": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fed394dfffe850Dp9U7WxkVYz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_1ba69eee21e68d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0feb9ca31ffec673oO9njHnVhA",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_3b02dd2100e1a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffc2eb8dffeN75AEPQB0oOFEp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_8d2e4ec0c07861": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0feb3c147ffe6zdcrx6uLXbk6r",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_929ec2524f9f41": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fec84acaffenUyaGUB74teeVH",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_9470e59bf88b48": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fea44325ffeXALe3nfaCicItK",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f3921a99e42432": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fec84ac5ffeJjpFbMtf1NaOFd",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f6408d5157f6c3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fed3fc9affeshiyzaAOfb1AkU",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
