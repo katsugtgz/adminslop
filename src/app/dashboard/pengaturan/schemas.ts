@@ -25,7 +25,7 @@ export const ProfilSatuanPendidikanSchema = z.object({
  */
 export const PengaturanSatuanPendidikanSchema = z.object({
   tahunAjaran: z.string().trim().regex(/^\d{4}\/\d{4}$/),
-  semester: z.enum(["Ganjil", "Genap"]),
+  semester: z.enum(["ganjil", "genap"]),
   zonaWaktu: z.string().min(1).default("Asia/Jakarta"),
   cetakPaperSize: z.enum(["A4", "F4"]).default("A4"),
   cetakTampilkanLogo: z.boolean().default(true),

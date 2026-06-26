@@ -57,10 +57,10 @@ describe("PengaturanSatuanPendidikanSchema (#5)", () => {
   it("accepts minimal valid pengaturan with defaults", () => {
     const parsed = PengaturanSatuanPendidikanSchema.parse({
       tahunAjaran: "2026/2027",
-      semester: "Ganjil",
+      semester: "ganjil",
     });
     expect(parsed.tahunAjaran).toBe("2026/2027");
-    expect(parsed.semester).toBe("Ganjil");
+    expect(parsed.semester).toBe("ganjil");
     expect(parsed.zonaWaktu).toBe("Asia/Jakarta");
     expect(parsed.cetakPaperSize).toBe("A4");
     expect(parsed.cetakTampilkanLogo).toBe(true);
@@ -71,7 +71,7 @@ describe("PengaturanSatuanPendidikanSchema (#5)", () => {
     expect(() =>
       PengaturanSatuanPendidikanSchema.parse({
         tahunAjaran: "2026",
-        semester: "Ganjil",
+        semester: "ganjil",
       }),
     ).toThrow();
   });
@@ -80,7 +80,7 @@ describe("PengaturanSatuanPendidikanSchema (#5)", () => {
     expect(() =>
       PengaturanSatuanPendidikanSchema.parse({
         tahunAjaran: "abcd/efgh",
-        semester: "Ganjil",
+        semester: "ganjil",
       }),
     ).toThrow();
   });
@@ -98,7 +98,7 @@ describe("PengaturanSatuanPendidikanSchema (#5)", () => {
     expect(() =>
       PengaturanSatuanPendidikanSchema.parse({
         tahunAjaran: "2026/2027",
-        semester: "Ganjil",
+        semester: "ganjil",
         cetakPaperSize: "Letter",
       }),
     ).toThrow();

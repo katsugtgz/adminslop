@@ -84,7 +84,7 @@ const profilPayload = (over: Record<string, string> = {}) => ({
 
 const pengaturanPayload = (over: Record<string, string> = {}) => ({
   tahunAjaran: "2024/2025",
-  semester: "Ganjil",
+  semester: "ganjil",
   zonaWaktu: "Asia/Jakarta",
   cetakPaperSize: "A4",
   ...over,
@@ -269,7 +269,7 @@ describe("simpanPengaturanSatuanPendidikanAction (#5)", () => {
       "org_A",
       expect.objectContaining({
         tahunAjaran: "2024/2025",
-        semester: "Ganjil",
+        semester: "ganjil",
         cetakTampilkanLogo: true,
         cetakTampilkanHeader: true,
       }),

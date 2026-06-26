@@ -46,6 +46,14 @@ export async function hapusPtk(db: Db | Tx, id: string): Promise<void> {
   await db.delete(ptk).where(eq(ptk.id, id));
 }
 
+export async function cariPtkById(
+  db: Db | Tx,
+  id: string
+): Promise<Ptk | null> {
+  const rows = await db.select().from(ptk).where(eq(ptk.id, id));
+  return rows[0] ?? null;
+}
+
 // Pengguna ----------------------------------------------------------------
 
 export interface PenggunaDenganPtk extends Pengguna {

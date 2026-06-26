@@ -24,7 +24,7 @@ function fakeRow(
     namaKepala: "Drs. Budi, M.Pd.",
     logoUrl: "https://example.com/logo.png",
     tahunAjaranAktif: "2026/2027",
-    semesterAktif: "Ganjil",
+    semesterAktif: "ganjil",
     zonaWaktu: "Asia/Jakarta",
     cetakPaperSize: "A4",
     cetakTampilkanLogo: true,

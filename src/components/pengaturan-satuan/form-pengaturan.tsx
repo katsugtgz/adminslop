@@ -20,7 +20,12 @@ export interface FormPengaturanProps {
   readOnly?: boolean;
 }
 
-const SEMESTER_OPTIONS = ["Ganjil", "Genap"] as const;
+// Lowercase canonical values (DB CHECK constraint, see 0003_rombongan_belajar.sql);
+// Bahasa labels are capitalized for display.
+const SEMESTER_OPTIONS = [
+  { value: "ganjil", label: "Ganjil" },
+  { value: "genap", label: "Genap" },
+] as const;
 const PAPER_SIZE_OPTIONS = ["A4", "F4"] as const;
 
 export function FormPengaturan({
@@ -53,12 +58,12 @@ export function FormPengaturan({
           id="pengaturan-semester"
           name="semester"
           disabled={readOnly}
-          defaultValue={values.semesterAktif ?? "Ganjil"}
+          defaultValue={values.semesterAktif ?? "ganjil"}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
           {SEMESTER_OPTIONS.map((s) => (
-            <option key={s} value={s}>
-              {s}
+            <option key={s.value} value={s.value}>
+              {s.label}
             </option>
           ))}
         </select>

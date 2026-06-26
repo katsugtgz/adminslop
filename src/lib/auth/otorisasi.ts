@@ -41,14 +41,51 @@ export function canViewPengaturanSatuanPendidikan(
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
-  // peserta_didik:baca granted to every teaching role (students are core
-  // teaching data); buat/ubah remain admin-scoped. No :hapus this slice
-  // (archive, not hard-delete per CONTEXT.md).
-  admin_satuan_pendidikan: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca", "peserta_didik:baca", "peserta_didik:buat", "peserta_didik:ubah"],
-  kepala_sekolah: ["akses:baca", "peserta_didik:baca"],
-  guru: ["peserta_didik:baca"],
-  wali_kelas: ["peserta_didik:baca"],
-  dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca", "peserta_didik:baca", "peserta_didik:buat", "peserta_didik:ubah"],
+  // peserta_didik:baca + rombongan_belajar:baca granted to every teaching role
+  // (students and classes are core teaching data); buat/ubah remain
+  // admin-scoped. No :hapus this slice (archive, not hard-delete per
+  // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
+  // reads it.
+  admin_satuan_pendidikan: [
+    "ptk:baca",
+    "ptk:buat",
+    "ptk:hapus",
+    "akses:kelola",
+    "akses:baca",
+    "peserta_didik:baca",
+    "peserta_didik:buat",
+    "peserta_didik:ubah",
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
+  ],
+  kepala_sekolah: [
+    "akses:baca",
+    "peserta_didik:baca",
+    "tahun_ajaran:baca",
+    "rombongan_belajar:baca",
+  ],
+  guru: ["peserta_didik:baca", "rombongan_belajar:baca"],
+  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca"],
+  dev: [
+    "ptk:baca",
+    "ptk:buat",
+    "ptk:hapus",
+    "akses:kelola",
+    "akses:baca",
+    "peserta_didik:baca",
+    "peserta_didik:buat",
+    "peserta_didik:ubah",
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
+  ],
 };
 
 /** Input to `evaluasiAkses`. The caller has already confirmed membership. */

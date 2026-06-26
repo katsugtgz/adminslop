@@ -221,3 +221,90 @@ describe("evaluasiAkses (#7 T1) — peserta_didik defaults", () => {
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });
 });
+
+describe("evaluasiAkses (#8 T2) — tahun_ajaran + rombongan_belajar defaults", () => {
+  // admin/dev get every new slug (TA management + full class CRUD).
+  it.each<IzinSlug>([
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "tahun_ajaran:baca",
+    "tahun_ajaran:kelola",
+    "rombongan_belajar:baca",
+    "rombongan_belajar:buat",
+    "rombongan_belajar:ubah",
+    "rombongan_belajar:kelola_penempatan",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // Class/rombel data is core teaching data -> teaching roles read by default.
+  it("guru requesting rombongan_belajar:baca -> allow 'peran' (core teaching data)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "rombongan_belajar:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("wali_kelas requesting rombongan_belajar:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("wali_kelas", "rombongan_belajar:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting rombongan_belajar:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "rombongan_belajar:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting tahun_ajaran:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "tahun_ajaran:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  // Writes remain admin-scoped — guru cannot create classes.
+  it("guru requesting rombongan_belajar:buat -> deny 'tidak_ada_izin' (no write default)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "rombongan_belajar:buat"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // TA management is admin-only — kepala_sekolah reads but does not manage.
+  it("kepala_sekolah requesting tahun_ajaran:kelola -> deny 'tidak_ada_izin' (admin-only)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "tahun_ajaran:kelola"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("guru requesting rombongan_belajar:baca WITH pembatasan=['rombongan_belajar:baca'] -> DENY 'pembatasan'", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "guru",
+        diminta: "rombongan_belajar:baca",
+        izinGrants: [],
+        pembatasan: ["rombongan_belajar:baca"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});

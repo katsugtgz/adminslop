@@ -57,7 +57,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
         namaKepala: null,
         logoUrl: null,
         tahunAjaranAktif: "2026/2027",
-        semesterAktif: "Ganjil",
+        semesterAktif: "ganjil",
         zonaWaktu: "Asia/Jakarta",
         cetakPaperSize: "A4",
         cetakTampilkanLogo: true,
@@ -136,7 +136,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
     updateWhere.mockResolvedValueOnce([]);
     const input: PengaturanSatuanPendidikanInput = {
       tahunAjaran: "2026/2027",
-      semester: "Ganjil",
+      semester: "ganjil",
       zonaWaktu: "Asia/Jakarta",
       cetakPaperSize: "F4",
       cetakTampilkanLogo: false,
@@ -148,7 +148,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
     expect(updateFn).toHaveBeenCalledTimes(1);
     expect(updateSet).toHaveBeenCalledWith({
       tahunAjaranAktif: "2026/2027",
-      semesterAktif: "Ganjil",
+      semesterAktif: "ganjil",
       zonaWaktu: "Asia/Jakarta",
       cetakPaperSize: "F4",
       cetakTampilkanLogo: false,

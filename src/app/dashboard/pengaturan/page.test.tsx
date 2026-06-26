@@ -100,7 +100,7 @@ function fakeRow(
     namaKepala: "Drs. Budi",
     logoUrl: null,
     tahunAjaranAktif: "2026/2027",
-    semesterAktif: "Ganjil",
+    semesterAktif: "ganjil",
     zonaWaktu: "Asia/Jakarta",
     cetakPaperSize: "A4",
     cetakTampilkanLogo: true,

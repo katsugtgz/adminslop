@@ -163,7 +163,7 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
   it("updatePengaturanSatuanPendidikan only mutates the row matching tenantId", async () => {
     await updatePengaturanSatuanPendidikan(db, SEED_A.id, {
       tahunAjaran: "2026/2027",
-      semester: "Ganjil",
+      semester: "ganjil",
       zonaWaktu: "Asia/Jakarta",
       cetakPaperSize: "F4",
       cetakTampilkanLogo: false,
@@ -172,7 +172,7 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
 
     const a = await getProfilDanPengaturan(db, SEED_A.id);
     expect(a?.tahunAjaranAktif).toBe("2026/2027");
-    expect(a?.semesterAktif).toBe("Ganjil");
+    expect(a?.semesterAktif).toBe("ganjil");
     expect(a?.zonaWaktu).toBe("Asia/Jakarta");
     expect(a?.cetakPaperSize).toBe("F4");
     expect(a?.cetakTampilkanLogo).toBe(false);

@@ -24,7 +24,7 @@ function fakeRow(
     namaKepala: "Drs. Budi, M.Pd.",
     logoUrl: null,
     tahunAjaranAktif: "2026/2027",
-    semesterAktif: "Ganjil",
+    semesterAktif: "ganjil",
     zonaWaktu: "Asia/Jakarta",
     cetakPaperSize: "A4",
     cetakTampilkanLogo: true,
@@ -70,7 +70,7 @@ describe("FormPengaturan (#5)", () => {
       /Semester Aktif/i,
     ) as HTMLSelectElement;
     const optionValues = Array.from(select.options).map((o) => o.value);
-    expect(optionValues).toEqual(["Ganjil", "Genap"]);
+    expect(optionValues).toEqual(["ganjil", "genap"]);
   });
 
   it("renders cetakPaperSize select with A4/F4 options", () => {
