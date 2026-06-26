@@ -1,0 +1,93 @@
+src/app/dashboard/absensi/page.test.tsx
+  s_b2e0783676f013::t_fe174d72f65dd1 2
+  s_b2e0783676f013::t_ee2ed7f9f68751 315-321
+  s_b2e0783676f013::t_91b88587ef19a3 1,3-314,322-388
+src/db/migrations/0009_absensi_harian.sql
+  s_d305fe4ed7c613::t_255cf3af426045 1-56
+src/components/absensi/rekap-absensi.tsx
+  s_b2e0783676f013::t_29e15042a5ca12 1-80
+src/lib/auth/types.ts
+  s_d305fe4ed7c613::t_9b44405aa3034e 32-35
+  s_d305fe4ed7c613::t_8ff2609cc5c8ba 61-64
+src/components/absensi/types.ts
+  s_b2e0783676f013::t_a73dd5d9b578dc 1-31
+src/app/dashboard/akses/actions.ts
+  s_d305fe4ed7c613::t_7ec6e07406b514 62-64
+src/db/queries/absensi.test.ts
+  s_b2e0783676f013::t_677581b5d6fe19 1-57,61-135,139-591
+  s_c9215bdfaa8e77::t_13fd3c35720e43 136-138
+  s_c9215bdfaa8e77::t_61eef10d703ee6 58-60
+src/app/dashboard/absensi/actions.ts
+  s_b2e0783676f013::t_fde8011370c4ae 1-211
+src/app/dashboard/akses/page.test.tsx
+  s_d305fe4ed7c613::t_d639eb9dccf243 182
+src/components/akses/daftar-pengguna.test.tsx
+  s_d305fe4ed7c613::t_aa35289f08df99 29
+  s_d305fe4ed7c613::t_8dcba1043e7954 56
+src/components/absensi/form-absensi.tsx
+  s_b2e0783676f013::t_970593be8316c8 1-3,5-7,12,18-27,29-33,35,38-54,56-60,62-66,77-123
+  s_b2e0783676f013::t_59fd85e7b2f27f 4,8-11,13-17,28,34,36-37,55,61,67-76
+src/lib/auth/otorisasi.ts
+  s_d305fe4ed7c613::t_c95e27165276be 63-64
+  s_d305fe4ed7c613::t_8a77cb32445b91 119-121
+  s_d305fe4ed7c613::t_8afd91045c6468 91-92
+  s_d305fe4ed7c613::t_bcbb63662999de 40-42
+  s_d305fe4ed7c613::t_2cb6c28e1f5f85 78-81
+src/db/schema.ts
+  s_d305fe4ed7c613::t_fbee2356e9ad2f 962-1032
+src/db/absensi.test.ts
+  s_d305fe4ed7c613::t_8ad2e46f684a32 1-403
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_b2e0783676f013::t_8339ab9bc0ace8 1-67
+src/app/dashboard/absensi/page.tsx
+  s_b2e0783676f013::t_563765694948c6 1-6,8-12,14-26,44-100,109,111-114,116,174-175,177-178,184,186-209,211-271,273-278
+  s_b2e0783676f013::t_1c0eafbdf5ea74 7,13,27-43,101-108,110,115,117-173,176,179-183,185,210,272
+src/components/dashboard-aktif.tsx
+  s_c9215bdfaa8e77::t_a5ebb3b2d1e3fe 7
+  s_c9215bdfaa8e77::t_c48801a6472e05 95-98
+  s_c9215bdfaa8e77::t_8e0c160687998a 91-94
+  s_c9215bdfaa8e77::t_7a906c5bb5d0b3 183-204
+src/components/dashboard-aktif.test.tsx
+  s_c9215bdfaa8e77::t_95adea1ed19b77 130-131,135-140,142-147,149-154,156-157,160-161
+  s_c9215bdfaa8e77::t_7dcfb4758a25db 132-134,141,148,155,158-159
+src/components/akses/daftar-pengguna.tsx
+  s_d305fe4ed7c613::t_edd12eb01bd361 37-39
+  s_d305fe4ed7c613::t_711454562b1a2d 93-98
+src/db/queries/absensi.ts
+  s_b2e0783676f013::t_55e38591e58068 182-184,186-189,192-196
+  s_b2e0783676f013::t_3b6c119a55c83d 1-181,185,190-191,197-250
+src/app/dashboard/absensi/actions.test.ts
+  s_b2e0783676f013::t_cfc529731df1a0 1-541
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "b8282d871ff960f02ce1782f038529db2d77e4ca",
+  "prompts": {},
+  "sessions": {
+    "s_b2e0783676f013": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe15e094ffellhx5BDp2RUyfo",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_c9215bdfaa8e77": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdff4a62ffejmiD9r9CItu393",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_d305fe4ed7c613": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe2da97bffej8bzm0mOMPXo9X",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
