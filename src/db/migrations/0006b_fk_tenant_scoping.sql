@@ -27,10 +27,18 @@
 
 -- 1. Composite UNIQUE (tenant_id, id) on parent tables so a composite FK can
 --    target them. PK(id) alone is globally unique but carries no tenant info.
-alter table ptk               add constraint ptk_tenant_id_unique               unique (tenant_id, id);
-alter table rombongan_belajar add constraint rombongan_belajar_tenant_id_unique unique (tenant_id, id);
-alter table tingkat           add constraint tingkat_tenant_id_unique           unique (tenant_id, id);
-alter table tahun_ajaran      add constraint tahun_ajaran_tenant_id_unique      unique (tenant_id, id);
+--    Uses CREATE UNIQUE INDEX IF NOT EXISTS (not ALTER TABLE ADD CONSTRAINT)
+--    because feat/8's 0003b already created some of these (e.g.
+--    rombongan_belajar_tenant_id_unique) for its own composite FKs; the IF NOT
+--    EXISTS guard makes this idempotent across the stacked migration history.
+create unique index if not exists ptk_tenant_id_unique
+  on ptk (tenant_id, id);
+create unique index if not exists rombongan_belajar_tenant_id_unique
+  on rombongan_belajar (tenant_id, id);
+create unique index if not exists tingkat_tenant_id_unique
+  on tingkat (tenant_id, id);
+create unique index if not exists tahun_ajaran_tenant_id_unique
+  on tahun_ajaran (tenant_id, id);
 
 -- 2. beban_mengajar: replace single-column FKs with composite, tenant-bound
 --    FKs. ON DELETE CASCADE is preserved (matches 0006 semantics).

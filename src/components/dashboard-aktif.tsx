@@ -7,12 +7,17 @@ import {
   CheckCircle2,
   GraduationCap,
   KeyRound,
+  Settings,
   Users,
 } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
-import { dapatMelihatAkses, PERAN_KE_IZIN_DEFAULT } from "@/lib/auth/otorisasi";
+import {
+  canAdminSatuanPendidikan,
+  dapatMelihatAkses,
+  PERAN_KE_IZIN_DEFAULT,
+} from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
 
 import { Button } from "@/components/ui/button";
@@ -38,10 +43,14 @@ export async function DashboardAktif({
     jumlahCatatan = null; // database not configured in this environment
   }
 
-  // Reachability link to the Akses management surface (#6 / T6). Visible when
-  // the peran's defaults include `akses:baca` (admin / kepala_sekolah / dev).
-  // The linked PAGE re-checks `boleh("akses:baca")` server-side; this is
-  // convenience reachability, not authorization (identity doc §12).
+  // Pengaturan nav link (#5): visible only to admin roles. The linked PAGE
+  // re-checks authorization server-side; this is convenience reachability.
+  const bolehAtur = canAdminSatuanPendidikan(membership.roleSlug);
+
+  // Akses management reachability link (#6 / T6). Visible when the peran's
+  // defaults include `akses:baca` (admin / kepala_sekolah / dev). The linked
+  // PAGE re-checks `boleh("akses:baca")` server-side; this is convenience
+  // reachability, not authorization (identity doc §12).
   const bolehLihatAkses = dapatMelihatAkses(membership.roleSlug);
 
   // Reachability link to Peserta Didik (#7). All member roles receive
@@ -99,6 +108,16 @@ export async function DashboardAktif({
         </div>
       </header>
 
+      {bolehAtur && (
+        <Link
+          href="/dashboard/pengaturan"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Settings className="h-4 w-4" aria-hidden="true" />
+          Pengaturan Sekolah
+        </Link>
+      )}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
           <p className="text-sm text-muted-foreground">Data contoh (tenant)</p>
@@ -117,28 +136,6 @@ export async function DashboardAktif({
           </p>
         </div>
       </div>
-
-      {bolehLihatBebanMengajar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
-            <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
-              aria-hidden="true"
-            >
-              <Briefcase className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="text-sm font-medium">Beban Mengajar</p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
-              </p>
-            </div>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
-          </Button>
-        </div>
-      )}
 
       {bolehLihatPesertaDidik && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
@@ -197,8 +194,7 @@ export async function DashboardAktif({
             <div>
               <p className="text-sm font-medium">Tahun Ajaran</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Tahun Ajaran dan Semester Aktif untuk Satuan Pendidikan
-                ini.
+                Kelola Tahun Ajaran aktif dan riwayat.
               </p>
             </div>
           </div>
@@ -227,6 +223,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatBebanMengajar && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Briefcase className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Beban Mengajar</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
           </Button>
         </div>
       )}
