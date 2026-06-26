@@ -25,7 +25,11 @@ export type RoleSlug =
  * `wali_kelas:*` govern Wali Kelas (homeroom teacher) assignments. Read
  * (`:baca`) is universal across teaching roles — a guru must see their own
  * teaching load and homeroom context (AC#4); writes (`:buat`/`:ubah`) remain
- * admin-scoped.
+ * admin-scoped. `penilaian:*` govern Penilaian (assessment/grading) records.
+ * Guru gets all three (AC#1: guru creates penilaian for their own
+ * beban_mengajar — role-level grant; OWNERSHIP is the second gate enforced at
+ * the action layer per AC#4). `baca` is universal across teaching roles;
+ * `buat`/`ubah` are admin + guru scoped.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -48,7 +52,10 @@ export type IzinSlug =
   | "beban_mengajar:ubah"
   | "wali_kelas:baca"
   | "wali_kelas:buat"
-  | "wali_kelas:ubah";
+  | "wali_kelas:ubah"
+  | "penilaian:baca"
+  | "penilaian:buat"
+  | "penilaian:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

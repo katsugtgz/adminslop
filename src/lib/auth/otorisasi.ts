@@ -33,6 +33,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
+    // Penilaian (assessment/grading): admin manages all school-wide.
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -51,6 +55,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    // Penilaian: read oversight of school-wide assessment data.
+    "penilaian:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -58,6 +64,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    // Penilaian: guru creates/edits assessments for their own beban_mengajar
+    // (AC#1). Ownership is the second gate, enforced at the action layer
+    // (AC#4) — boleh() is the first (role-level) gate only.
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -65,6 +77,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    // Penilaian: wali_kelas reads (homeroom oversight); writes are admin/guru.
+    "penilaian:baca",
   ],
   dev: [
     "ptk:baca",
@@ -88,6 +102,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
 };
 
