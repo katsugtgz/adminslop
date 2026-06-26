@@ -94,6 +94,14 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "eraport:buat",
     "eraport:terbit",
     "eraport:revisi",
+    // Bank Soal + Paket Soal: admin manages the full question-bank + package
+    // assembly surface school-wide.
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -119,6 +127,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // E-Raport: kepala_sekolah reads + publishes (terbit) reports.
     "eraport:baca",
     "eraport:terbit",
+    // Bank Soal + Paket Soal: read-only oversight of the question bank.
+    "bank_soal:baca",
+    "paket_soal:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -144,6 +155,14 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // others' drafts. Terbit/revisi remain kepala_sekolah/admin.
     "eraport:baca",
     "eraport:buat",
+    // Bank Soal + Paket Soal: guru authors question items and assembles
+    // packages (AC#1 — guru creates the canonical question bank).
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -162,6 +181,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "notifikasi:baca",
     // E-Raport: wali_kelas reads homeroom reports (oversight only).
     "eraport:baca",
+    // Bank Soal + Paket Soal: wali_kelas reads only (homeroom oversight).
+    "bank_soal:baca",
+    "paket_soal:baca",
   ],
   dev: [
     "ptk:baca",
@@ -208,6 +230,13 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "eraport:buat",
     "eraport:terbit",
     "eraport:revisi",
+    // Bank Soal + Paket Soal: dev mirrors admin (full surface).
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
   ],
 };
 

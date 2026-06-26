@@ -75,6 +75,12 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "eraport:buat",
   "eraport:terbit",
   "eraport:revisi",
+  "bank_soal:baca",
+  "bank_soal:buat",
+  "bank_soal:ubah",
+  "paket_soal:baca",
+  "paket_soal:buat",
+  "paket_soal:ubah",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

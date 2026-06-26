@@ -47,7 +47,9 @@ export type RoleSlug =
  * `notifikasi:*` govern in-app Notifikasi: `baca` reads/manages one's own;
  * `kelola` (admin/dev) creates system-wide notifications. `eraport:*` govern
  * E-Raport: `baca` reads, `buat` drafts (guru), `terbit` publishes
- * (kepala_sekolah/admin), `revisi` re-opens (admin/dev).
+ * (kepala_sekolah/admin), `revisi` re-opens (admin/dev). `bank_soal:*` /
+ * `paket_soal:*` govern the question bank + assembled packages: guru
+ * authors items + packages (AC#1), admin/dev manage school-wide, others read.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -89,7 +91,13 @@ export type IzinSlug =
   | "eraport:baca"
   | "eraport:buat"
   | "eraport:terbit"
-  | "eraport:revisi";
+  | "eraport:revisi"
+  | "bank_soal:baca"
+  | "bank_soal:buat"
+  | "bank_soal:ubah"
+  | "paket_soal:baca"
+  | "paket_soal:buat"
+  | "paket_soal:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
