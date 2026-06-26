@@ -1,0 +1,163 @@
+src/components/akses/daftar-pengguna.test.tsx
+  s_a944d701efba60::t_df65ab4a427095 29
+  s_a944d701efba60::t_824171142937db 56
+src/app/dashboard/akses/page.test.tsx
+  s_a944d701efba60::t_c71c798ef79aa8 182
+src/lib/auth/types.ts
+  s_a944d701efba60::t_3e599aa692c7c1 79
+  s_a944d701efba60::t_9e2b6ba3846ca6 42-46
+  s_a944d701efba60::t_4b4372fac0ecad 39-41
+  s_a944d701efba60::t_26b76811ff03ae 76-78
+src/lib/auth/otorisasi.test.ts
+  s_a944d701efba60::t_fcce68738b320b 541
+  s_a944d701efba60::t_fabf40e3493877 538-540
+src/components/dashboard-aktif.test.tsx
+  s_a944d701efba60::t_daa8e843d3086a 225
+  s_a944d701efba60::t_be8f2de7353db0 222-224
+.gitignore
+  s_a944d701efba60::t_ca78f703acc832 12
+package-lock.json
+  s_a944d701efba60::t_0ef4519c591444 22-23,9978-9986
+package.json
+  s_a944d701efba60::t_0c417b7aead4c7 30-31
+src/app/dashboard/absensi/actions.test.ts
+  s_a944d701efba60::t_6f352d79592864 1-541
+src/app/dashboard/absensi/actions.ts
+  s_a944d701efba60::t_cdeb9aa816c411 1-211
+src/app/dashboard/absensi/page.test.tsx
+  s_a944d701efba60::t_31e13eefcecfa2 1-388
+src/app/dashboard/absensi/page.tsx
+  s_a944d701efba60::t_4cf100dd20547d 1-278
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a944d701efba60::t_017a02bab0507c 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_a944d701efba60::t_7a1c9b0078d974 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_a944d701efba60::t_822ae2ed14f723 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_a944d701efba60::t_98f243772360ed 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_a944d701efba60::t_5ecc3be8158d8d 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_a944d701efba60::t_88a960265b4ff5 1-40
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_a944d701efba60::t_281763553370db 1-623
+src/app/dashboard/permintaan-ai/actions.ts
+  s_a944d701efba60::t_35809e32d3a2f0 1-344
+src/app/dashboard/permintaan-ai/page.test.tsx
+  s_a944d701efba60::t_81c232624af32c 1-332
+src/app/dashboard/permintaan-ai/page.tsx
+  s_a944d701efba60::t_c793b18546d44b 1-125
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_a944d701efba60::t_d07e163ca1252c 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_a944d701efba60::t_e802ab1f475a02 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_a944d701efba60::t_3636122948d243 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_a944d701efba60::t_74c60bc6a9d883 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_a944d701efba60::t_a8ac10e06f46ce 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_a944d701efba60::t_7761be8808288c 74-80,93-95,140
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_a944d701efba60::t_0ea12ff19088b2 1-67
+src/components/absensi/form-absensi.tsx
+  s_a944d701efba60::t_9d9fe0bb49cbf6 1-123
+src/components/absensi/rekap-absensi.tsx
+  s_a944d701efba60::t_f78677caa96617 1-80
+src/components/absensi/types.ts
+  s_a944d701efba60::t_92dfc11cbbf3a7 1-31
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_a944d701efba60::t_84e7fda4b171d5 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_a944d701efba60::t_0fd8c0c45b5d7a 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_a944d701efba60::t_cc83ce03a690e5 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_a944d701efba60::t_f15be2c4a2020f 1-132
+src/components/permintaan-ai/daftar-permintaan.test.tsx
+  s_a944d701efba60::t_e9d4780a01bfc2 1-234
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_a944d701efba60::t_57c257063d35be 1-139
+src/components/permintaan-ai/form-permintaan.test.tsx
+  s_a944d701efba60::t_fe98be5ae52221 1-62
+src/components/permintaan-ai/form-permintaan.tsx
+  s_a944d701efba60::t_edb427de962860 1-92
+src/components/permintaan-ai/kartu-draf.test.tsx
+  s_a944d701efba60::t_66237d45900c76 1-107
+src/components/permintaan-ai/kartu-draf.tsx
+  s_a944d701efba60::t_9befa3b25a35f1 1-106
+src/components/permintaan-ai/kartu-kuota.test.tsx
+  s_a944d701efba60::t_7df46c7a53c086 1-52
+src/components/permintaan-ai/kartu-kuota.tsx
+  s_a944d701efba60::t_d0088a9d427e20 1-43
+src/db/absensi.test.ts
+  s_a944d701efba60::t_2c4d7e76f0edd5 1-403
+src/db/akses.test.ts
+  s_a944d701efba60::t_078bb6dadf3c56 49-52
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_a944d701efba60::t_4b27d59e7d163b 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_fe7fd1f1b51a38 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_bc4e6c5b7ba3e5 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_439f4177601fa1 1-88
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_031e9382db36ba 1-80
+src/db/migrations/0008_permintaan_ai.sql
+  s_a944d701efba60::t_31b012448b308e 1-117
+src/db/migrations/0009_absensi_harian.sql
+  s_a944d701efba60::t_c60b8fb1c49f30 1-56
+src/db/pengaturan.test.ts
+  s_a944d701efba60::t_eaa48c1eea6b60 1-264
+src/db/permintaan-ai.test.ts
+  s_a944d701efba60::t_34cd6a6c0da121 1-579
+src/db/queries/absensi.test.ts
+  s_a944d701efba60::t_f552c911b76d67 1-591
+src/db/queries/absensi.ts
+  s_a944d701efba60::t_1ad4cf49240ccb 1-250
+src/db/queries/akses.test.ts
+  s_a944d701efba60::t_4b8e1ea4e48de4 60-63
+src/db/queries/akses.ts
+  s_a944d701efba60::t_8b142598f5af36 49-56,131-136,143-152
+src/db/queries/draf-ai.test.ts
+  s_a944d701efba60::t_2b4828fe837ceb 1-361
+src/db/queries/draf-ai.ts
+  s_a944d701efba60::t_3dcb8f66fdcfaf 1-119
+src/db/queries/kuota-ai.test.ts
+  s_a944d701efba60::t_00971c7d483714 1-326
+src/db/queries/kuota-ai.ts
+  s_a944d701efba60::t_eee866b3bfb039 1-131
+src/db/queries/kurikulum.test.ts
+  s_a944d701efba60::t_705bcd8b5c86c2 408,410
+src/db/queries/permintaan-ai.test.ts
+  s_a944d701efba60::t_815bd10dfaec6a 1-390
+src/db/queries/permintaan-ai.ts
+  s_a944d701efba60::t_e9ebf43ebc7d72 1-184
+src/db/queries/satuan-pendidikan.test.ts
+  s_a944d701efba60::t_bf493e73ee6c74 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_a944d701efba60::t_baa7c79acf7547 1-85
+src/db/schema.ts
+  s_a944d701efba60::t_38729f55c36be2 15,24-46,91,728,969-1169
+src/lib/auth/membership.ts
+  s_a944d701efba60::t_8af3afe2d6d868 7-30,66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "eb8ba7645bebb2c99e4380327262fd65fe25689f",
+  "prompts": {},
+  "sessions": {
+    "s_a944d701efba60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fc9611bdffejJ73ApKErg3vqn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
