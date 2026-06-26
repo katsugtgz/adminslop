@@ -1,0 +1,92 @@
+src/app/dashboard/bank-soal/actions.ts
+  s_79b5ec9f83a762::t_85666f203704fe 1-333
+src/components/bank-soal/daftar-butir-paket.tsx
+  s_79b5ec9f83a762::t_4b8323e907cb76 1-85
+src/db/queries/bank-soal.ts
+  s_79b5ec9f83a762::t_0913dc1277c780 326
+  s_79b5ec9f83a762::t_805f74b42d0075 1-302,304-307,309-325,327-364
+  s_79b5ec9f83a762::t_b66da9dceff742 303,308
+src/components/bank-soal/daftar-paket-soal.tsx
+  s_79b5ec9f83a762::t_5c375c1e84c0ee 1-58
+src/components/bank-soal/daftar-butir-soal.tsx
+  s_79b5ec9f83a762::t_ee092e34c26e09 1-101
+src/components/akses/daftar-pengguna.test.tsx
+  s_79b5ec9f83a762::t_27a7d6878e47fe 29
+  s_79b5ec9f83a762::t_49ff39734c5876 56
+src/components/bank-soal/form-tambah-butir.tsx
+  s_79b5ec9f83a762::t_64ddcdfa25abef 1-104
+src/app/dashboard/bank-soal/page.tsx
+  s_79b5ec9f83a762::t_1642df98038ea0 1-6,9-87,89-95,97-122,124-275
+  s_79b5ec9f83a762::t_02fd566923cd10 96
+  s_79b5ec9f83a762::t_2024bb43b01d5d 88,123
+  s_79b5ec9f83a762::t_d288163f3d1ab4 7-8
+src/lib/auth/otorisasi.ts
+  s_79b5ec9f83a762::t_7364a837da3cf6 46-53
+  s_79b5ec9f83a762::t_42e92eb52734d3 79-81,100-107,121-123,155-161
+src/components/akses/daftar-pengguna.tsx
+  s_79b5ec9f83a762::t_46e560e77feacc 41-46
+  s_79b5ec9f83a762::t_f2e538e9c0e061 108-119
+src/app/dashboard/bank-soal/actions.test.ts
+  s_79b5ec9f83a762::t_47b498e771edd5 1-604
+src/db/queries/kurikulum.test.ts
+  s_79b5ec9f83a762::t_ba736ce95215cd 87-91
+src/app/dashboard/akses/actions.ts
+  s_79b5ec9f83a762::t_b51da2528b38b3 66-71
+src/db/queries/bank-soal.test.ts
+  s_79b5ec9f83a762::t_201bcb51b653d4 575-580
+  s_79b5ec9f83a762::t_fc8dc9bff8ca08 7
+  s_79b5ec9f83a762::t_468200bdf2b055 218
+  s_79b5ec9f83a762::t_720625639b3cc3 25
+  s_79b5ec9f83a762::t_e9ada7ae026399 1-6,8-24,26-217,219-574,581-709
+src/components/dashboard-aktif.tsx
+  s_164e2bd8c8d2ad::t_23fd5a8d4c6830 100-107
+  s_164e2bd8c8d2ad::t_b8fbd000fd0457 214-235
+  s_164e2bd8c8d2ad::t_5dbd9be9480830 10
+src/components/dashboard-aktif.test.tsx
+  s_164e2bd8c8d2ad::t_49ecf4b26e366f 155-179
+src/components/bank-soal/form-paket-soal.tsx
+  s_79b5ec9f83a762::t_bff1b2e02fac36 1-128
+src/db/migrations/0010_bank_soal.sql
+  s_79b5ec9f83a762::t_800a4a1215e27c 75
+  s_79b5ec9f83a762::t_fbaf2a043f16e8 1-74,76-115
+src/app/dashboard/bank-soal/page.test.tsx
+  s_79b5ec9f83a762::t_31079da5997e10 353-356
+  s_79b5ec9f83a762::t_823672e8de6241 1-324,330-352,357-358
+  s_79b5ec9f83a762::t_b69c64f1ae3b94 325-329
+src/db/schema.ts
+  s_79b5ec9f83a762::t_25f8880dbca5eb 1106-1267
+src/lib/auth/otorisasi.test.ts
+  s_79b5ec9f83a762::t_6fe028762fca9d 541-650
+src/lib/auth/types.ts
+  s_79b5ec9f83a762::t_0c473574e3508b 37-42,72-78
+src/db/kurikulum.test.ts
+  s_79b5ec9f83a762::t_93a49f0a2f001d 119-123
+src/app/dashboard/akses/page.test.tsx
+  s_79b5ec9f83a762::t_2173ded741cafd 182
+src/components/bank-soal/form-butir-soal.tsx
+  s_79b5ec9f83a762::t_5dcc7c33b744e9 1-180
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "4b8ceb800f569b01298aefdd0380d92b80016b34",
+  "prompts": {},
+  "sessions": {
+    "s_164e2bd8c8d2ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdda1b31ffemJ17fZA3362los",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_79b5ec9f83a762": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdfc61b9ffegNHrtf4V3uId9W",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
