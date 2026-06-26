@@ -1,10 +1,15 @@
 import Link from "next/link";
-import { Building2, CheckCircle2, Settings } from "lucide-react";
+import { Building2, CheckCircle2, KeyRound, Settings } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
-import { canAdminSatuanPendidikan } from "@/lib/auth/otorisasi";
+import {
+  canAdminSatuanPendidikan,
+  dapatMelihatAkses,
+} from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
+
+import { Button } from "@/components/ui/button";
 
 /**
  * Active Satuan Pendidikan dashboard surface. Reads tenant-scoped data using a
@@ -27,6 +32,16 @@ export async function DashboardAktif({
     jumlahCatatan = null; // database not configured in this environment
   }
 
+  // Pengaturan nav link (#5): visible only to admin roles. The linked PAGE
+  // re-checks authorization server-side; this is convenience reachability.
+  const bolehAtur = canAdminSatuanPendidikan(membership.roleSlug);
+
+  // Akses management reachability link (#6 / T6). Visible when the peran's
+  // defaults include `akses:baca` (admin / kepala_sekolah / dev). The linked
+  // PAGE re-checks `boleh("akses:baca")` server-side; this is convenience
+  // reachability, not authorization (identity doc §12).
+  const bolehLihatAkses = dapatMelihatAkses(membership.roleSlug);
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -48,7 +63,7 @@ export async function DashboardAktif({
         </div>
       </header>
 
-      {canAdminSatuanPendidikan(membership.roleSlug) && (
+      {bolehAtur && (
         <Link
           href="/dashboard/pengaturan"
           className="inline-flex h-11 items-center gap-2 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -76,6 +91,29 @@ export async function DashboardAktif({
           </p>
         </div>
       </div>
+
+      {bolehLihatAkses && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <KeyRound className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Manajemen Akses</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola PTK, Pengguna, Izin, dan Pembatasan untuk Satuan
+                Pendidikan ini.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

@@ -2,7 +2,31 @@ import { getWorkOS } from "@workos-inc/authkit-nextjs";
 
 import { getDb } from "@/db/client";
 import * as schema from "@/db/schema";
-import type { Membership } from "./types";
+import type { Membership, RoleSlug } from "./types";
+
+/**
+ * Closed vocabulary of recognized tenant_role slugs. Must stay in sync with the
+ * `RoleSlug` union in ./types. Mirrors `PERAN_KE_IZIN_DEFAULT` keys.
+ */
+const KNOWN_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "guru",
+  "wali_kelas",
+  "kepala_sekolah",
+  "dev",
+]);
+
+/**
+ * Runtime-validate a WorkOS `role.slug` (a free-form string at the API
+ * boundary) into our closed `RoleSlug` union. Unrecognized slugs fall back to
+ * `"guru"` — the least-privilege role (empty default izin) — rather than
+ * bypassing the type system via `as RoleSlug`. This is defense-in-depth: an
+ * unknown slug never silently gains admin powers. (Identity doc §6/§13.)
+ */
+function safeRoleSlug(slug: string | undefined | null): RoleSlug {
+  if (slug && KNOWN_ROLES.has(slug)) return slug as RoleSlug;
+  return "guru";
+}
 
 export interface MembershipProvider {
   listForUser(userId: string): Promise<Membership[]>;
@@ -39,7 +63,7 @@ class WorkOSMembershipProvider implements MembershipProvider {
       out.push({
         orgId: membership.organizationId,
         orgName: membership.organizationName,
-        roleSlug: membership.role?.slug ?? "guru",
+        roleSlug: safeRoleSlug(membership.role?.slug),
       });
     }
     return out;
