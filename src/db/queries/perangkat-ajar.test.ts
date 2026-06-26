@@ -94,8 +94,8 @@ describeOrSkip(
     // Shared FK parents in SEED_A (seeded in beforeAll; reused across cases).
     let mpId: string;
     let taAId: string;
-    let taBId: string;
-    let tingkatAId: string;
+    let _taBId: string;
+    let _tingkatAId: string;
 
     beforeAll(async () => {
       // 1. Migrate as superuser (creates tables, RLS policies, grants).
@@ -149,10 +149,10 @@ describeOrSkip(
           .insert(schema.tingkat)
           .values({ nama: `Tingkat PA ${seq()}`, urutan: seq() })
           .returning();
-        tingkatAId = tk.id;
+        _tingkatAId = tk.id;
         return ta.id;
       });
-      taBId = await withTenant(db, SEED_B, async (tx) => {
+      _taBId = await withTenant(db, SEED_B, async (tx) => {
         const [ta] = await tx
           .insert(schema.tahunAjaran)
           .values({ nama: `TA PA B ${seq()}`, aktif: false })
