@@ -474,6 +474,71 @@ describe("evaluasiAkses (#11 T2) — penilaian defaults (dual-gate)", () => {
   });
 });
 
+describe("evaluasiAkses (#12 T2) — permintaan_ai + draf_ai defaults (AC#3 verify gate)", () => {
+  // admin/dev get every new slug (full AI request/draft/verify lifecycle).
+  it.each<IzinSlug>([
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // AC#3 verification gate: guru may REQUEST AI generation (buat) + read
+  // drafts, but CANNOT self-verify.
+  it("guru requesting permintaan_ai:buat -> allow 'peran' (guru can request AI)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "permintaan_ai:buat"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("guru requesting draf_ai:verifikasi -> deny 'tidak_ada_izin' (AC#3: guru cannot self-verify)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "draf_ai:verifikasi"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // kepala_sekolah verifies drafts (AC#3 approval gate).
+  it("kepala_sekolah requesting draf_ai:verifikasi -> allow 'peran' (kepala verifies)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "draf_ai:verifikasi"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("kepala_sekolah requesting draf_ai:verifikasi WITH pembatasan=['draf_ai:verifikasi'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "kepala_sekolah",
+        diminta: "draf_ai:verifikasi",
+        izinGrants: [],
+        pembatasan: ["draf_ai:verifikasi"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
+
 describe("evaluasiAkses (#18) — impor/ekspor peserta_didik defaults", () => {
   // admin/dev get all three: read + manage import, read export.
   it.each<IzinSlug>([

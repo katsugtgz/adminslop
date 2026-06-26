@@ -1,20 +1,27 @@
 import Link from "next/link";
 import {
   BookOpen,
+  Bot,
   Briefcase,
   Building2,
   Calendar,
+  CalendarCheck,
   CheckCircle2,
   ClipboardList,
   GraduationCap,
   KeyRound,
+  Settings,
   Upload,
   Users,
 } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
-import { dapatMelihatAkses, PERAN_KE_IZIN_DEFAULT } from "@/lib/auth/otorisasi";
+import {
+  canAdminSatuanPendidikan,
+  dapatMelihatAkses,
+  PERAN_KE_IZIN_DEFAULT,
+} from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
 
 import { Button } from "@/components/ui/button";
@@ -40,10 +47,14 @@ export async function DashboardAktif({
     jumlahCatatan = null; // database not configured in this environment
   }
 
-  // Reachability link to the Akses management surface (#6 / T6). Visible when
-  // the peran's defaults include `akses:baca` (admin / kepala_sekolah / dev).
-  // The linked PAGE re-checks `boleh("akses:baca")` server-side; this is
-  // convenience reachability, not authorization (identity doc §12).
+  // Pengaturan nav link (#5): visible only to admin roles. The linked PAGE
+  // re-checks authorization server-side; this is convenience reachability.
+  const bolehAtur = canAdminSatuanPendidikan(membership.roleSlug);
+
+  // Akses management reachability link (#6 / T6). Visible when the peran's
+  // defaults include `akses:baca` (admin / kepala_sekolah / dev). The linked
+  // PAGE re-checks `boleh("akses:baca")` server-side; this is convenience
+  // reachability, not authorization (identity doc §12).
   const bolehLihatAkses = dapatMelihatAkses(membership.roleSlug);
 
   // Reachability link to Peserta Didik (#7). All member roles receive
@@ -83,10 +94,26 @@ export async function DashboardAktif({
   // Reachability link to Penilaian (#11). All member roles receive
   // `penilaian:baca` — grades are core data for every role. The page
   // re-checks `boleh("penilaian:baca")` server-side (§12) and applies
-  // AC#4 DUAL authz (ownership check) for write actions.
+  // ownership-scoped gating for writes.
   const bolehLihatPenilaian = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("penilaian:baca");
+
+  // Reachability link to Permintaan AI (#12). All member roles receive
+  // `permintaan_ai:baca` — AI requests are visible to every role. The
+  // page re-checks `boleh("permintaan_ai:baca")` server-side (§12) and
+  // applies AC#3 DUAL authz (verification gate) for draf_ai writes.
+  const bolehLihatPermintaanAi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("permintaan_ai:baca");
+
+  // Reachability link to Absensi (#15). Every member role receives
+  // `absensi:baca` — daily attendance is core teaching data for every role
+  // (kepala_sekolah reads for oversight). The page re-checks
+  // `boleh("absensi:baca")` server-side (§12); writes apply AC#4 ownership.
+  const bolehLihatAbsensi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("absensi:baca");
 
   // Reachability link to Impor/Ekspor Peserta Didik (#18). admin /
   // kepala_sekolah / dev receive `impor_peserta_didik:baca` — bulk data
@@ -117,6 +144,16 @@ export async function DashboardAktif({
         </div>
       </header>
 
+      {bolehAtur && (
+        <Link
+          href="/dashboard/pengaturan"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Settings className="h-4 w-4" aria-hidden="true" />
+          Pengaturan Sekolah
+        </Link>
+      )}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
           <p className="text-sm text-muted-foreground">Data contoh (tenant)</p>
@@ -136,46 +173,46 @@ export async function DashboardAktif({
         </div>
       </div>
 
-      {bolehLihatBebanMengajar && (
+      {bolehLihatAbsensi && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
               aria-hidden="true"
             >
-              <Briefcase className="h-5 w-5" />
+              <CalendarCheck className="h-5 w-5" />
             </span>
             <div>
-              <p className="text-sm font-medium">Beban Mengajar</p>
+              <p className="text-sm font-medium">Absensi Harian</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
+                Catat kehadiran harian Peserta Didik.
               </p>
             </div>
           </div>
           <Button asChild variant="outline">
-            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
+            <Link href="/dashboard/absensi">Buka Absensi Harian</Link>
           </Button>
         </div>
       )}
 
-      {bolehLihatPenilaian && (
+      {bolehLihatPermintaanAi && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
               aria-hidden="true"
             >
-              <ClipboardList className="h-5 w-5" />
+              <Bot className="h-5 w-5" />
             </span>
             <div>
-              <p className="text-sm font-medium">Penilaian</p>
+              <p className="text-sm font-medium">Permintaan AI</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Komponen Nilai, Penilaian, dan lihat Nilai Akhir.
+                Buat permintaan AI dan verifikasi draf.
               </p>
             </div>
           </div>
           <Button asChild variant="outline">
-            <Link href="/dashboard/penilaian">Buka Penilaian</Link>
+            <Link href="/dashboard/permintaan-ai">Buka Permintaan AI</Link>
           </Button>
         </div>
       )}
@@ -261,8 +298,7 @@ export async function DashboardAktif({
             <div>
               <p className="text-sm font-medium">Tahun Ajaran</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                Kelola Tahun Ajaran dan Semester Aktif untuk Satuan Pendidikan
-                ini.
+                Kelola Tahun Ajaran aktif dan riwayat.
               </p>
             </div>
           </div>
@@ -291,6 +327,50 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatBebanMengajar && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Briefcase className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Beban Mengajar</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatPenilaian && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <ClipboardList className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Penilaian</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola Komponen Nilai, Penilaian, dan lihat Nilai Akhir.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/penilaian">Buka Penilaian</Link>
           </Button>
         </div>
       )}
