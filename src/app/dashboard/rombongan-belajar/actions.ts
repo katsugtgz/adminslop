@@ -44,7 +44,7 @@ import {
   cariAtauBuatRombonganBelajar,
   cariRombonganBelajarById,
 } from "@/db/queries/rombongan-belajar";
-import { getTahunAjaranAktif, getSemesterAktif } from "@/db/queries/tahun-ajaran";
+import { getTahunAjaranAktif, getSemesterAktif, cariTahunAjaranById } from "@/db/queries/tahun-ajaran";
 import { buatTingkat, cariTingkatBerikutnya, cariTingkatById } from "@/db/queries/tingkat";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 
@@ -193,6 +193,20 @@ export async function tempatkanPesertaDidikAction(
     if (!semester) {
       throw new Error("Belum ada semester aktif.");
     }
+    // SECURITY (cubic P1): the rombel id is client-supplied. RLS rejects a
+    // cross-tenant id (cariRombonganBelajarById returns null), but a rombel
+    // from a DIFFERENT Tahun Ajaran of THIS tenant would pass RLS and create a
+    // placement inconsistent with the active context. Verify both existence
+    // and that the rombel belongs to the active TA before placing.
+    const rombel = await cariRombonganBelajarById(tx, rombonganBelajarId);
+    if (!rombel) {
+      throw new Error("Rombongan Belajar tidak ditemukan.");
+    }
+    if (rombel.tahunAjaranId !== ta.id) {
+      throw new Error(
+        "Rombongan Belajar bukan dari Tahun Ajaran aktif."
+      );
+    }
     await tambahPenempatan(tx, {
       pesertaDidikId,
       rombonganBelajarId,
@@ -264,6 +278,16 @@ export async function kenaikanTingkatAction(
     const semester = await getSemesterAktif(tx);
     if (!semester) {
       throw new Error("Belum ada semester aktif.");
+    }
+    // SECURITY (cubic P1): tahunAjaranBaruId is client-supplied. Verify it
+    // exists in THIS tenant (RLS-scoped) before using it — otherwise a
+    // cross-tenant id surfaces as an opaque FK error, and a tampered id could
+    // create placements pointing outside the tenant's Tahun Ajaran set.
+    const taBaru = await cariTahunAjaranById(tx, tahunAjaranBaruId);
+    if (!taBaru) {
+      throw new Error(
+        "Tahun Ajaran baru tidak ditemukan di Satuan Pendidikan aktif."
+      );
     }
     const penempatan = await getPenempatanByKonteks(
       tx,
@@ -367,6 +391,14 @@ export async function tinggalTingkatAction(
     const semester = await getSemesterAktif(tx);
     if (!semester) {
       throw new Error("Belum ada semester aktif.");
+    }
+    // SECURITY (cubic P1): mirror of kenaikanTingkat — verify the client-
+    // supplied tahunAjaranBaruId exists in THIS tenant before using it.
+    const taBaru = await cariTahunAjaranById(tx, tahunAjaranBaruId);
+    if (!taBaru) {
+      throw new Error(
+        "Tahun Ajaran baru tidak ditemukan di Satuan Pendidikan aktif."
+      );
     }
     const penempatan = await getPenempatanByKonteks(
       tx,

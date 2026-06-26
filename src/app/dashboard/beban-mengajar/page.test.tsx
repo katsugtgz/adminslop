@@ -168,6 +168,8 @@ const PTK_BUDI: Ptk = {
   nip: null,
   jenis: "pendidik",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const MAPEL_MTK: MataPelajaran = { id: "mapel_1", kode: "MTK", nama: "Matematika" };
