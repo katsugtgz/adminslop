@@ -1096,3 +1096,74 @@ export type DrafAi = typeof drafAi.$inferSelect;
 export type DrafAiInsert = typeof drafAi.$inferInsert;
 export type KuotaAi = typeof kuotaAi.$inferSelect;
 export type KuotaAiInsert = typeof kuotaAi.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// ATTENDANCE DATA LAYER — absensi_harian.
+//
+// Tenant-scoped daily attendance: one record per peserta_didik per tanggal per
+// rombongan_belajar. Defined after peserta_didik + rombongan_belajar so the FK
+// references resolve without TDZ. Both FKs are ON DELETE CASCADE: deleting a
+// student removes their attendance; deleting a class removes its attendance.
+// `tenant_id` from the session GUC, never client-supplied (RLS WITH CHECK).
+//
+// AC#3 (correctable): QR (`metode_input='qr'`) ASSISTS but never locks — a
+// QR-captured row may always be UPDATEd (e.g. scanned Hadir then corrected to
+// Izin). `sumberQr` records the QR session token; NULL for manual entry.
+// ---------------------------------------------------------------------------
+
+/**
+ * Absensi Harian — daily attendance record. One row per peserta_didik per
+ * tanggal per rombongan_belajar (UNIQUE tenant+peserta_didik+tanggal).
+ *
+ * `statusKehadiran` is Hadir/Izin/Sakit/Alpa (AC#2). `metodeInput` is
+ * manual/qr; `sumberQr` carries the QR session token when qr (NULL for manual).
+ * AC#3: a QR-sourced row is still CORRECTABLE via UPDATE — `sumberQr` presence
+ * does NOT lock the record. `dibuatOleh` is the Guru userId. Cascades on delete
+ * of peserta_didik or rombongan_belajar.
+ */
+export const absensiHarian = pgTable(
+  "absensi_harian",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .default(sql`current_setting('app.tenant_id', true)`)
+      .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+    pesertaDidikId: uuid("peserta_didik_id")
+      .notNull()
+      .references(() => pesertaDidik.id, { onDelete: "cascade" }),
+    rombonganBelajarId: uuid("rombongan_belajar_id")
+      .notNull()
+      .references(() => rombonganBelajar.id, { onDelete: "cascade" }),
+    tanggal: date("tanggal").notNull(),
+    statusKehadiran: text("status_kehadiran").notNull(),
+    metodeInput: text("metode_input").notNull().default("manual"),
+    catatan: text("catatan"),
+    sumberQr: text("sumber_qr"),
+    dibuatOleh: text("dibuat_oleh").notNull(),
+    dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    diperbaruiPada: timestamp("diperbarui_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    check(
+      "absensi_harian_status_kehadiran_check",
+      sql`${t.statusKehadiran} in ('hadir', 'izin', 'sakit', 'alpa')`
+    ),
+    check(
+      "absensi_harian_metode_input_check",
+      sql`${t.metodeInput} in ('manual', 'qr')`
+    ),
+    unique("absensi_harian_tenant_pd_tanggal_unique").on(
+      t.tenantId,
+      t.pesertaDidikId,
+      t.tanggal
+    ),
+  ]
+);
+
+export type AbsensiHarian = typeof absensiHarian.$inferSelect;
+export type AbsensiHarianInsert = typeof absensiHarian.$inferInsert;

@@ -78,6 +78,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -93,6 +96,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Absensi: read oversight of school-wide daily attendance.
+    "absensi:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -108,6 +113,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "permintaan_ai:buat",
     "draf_ai:baca",
+    // Absensi: guru marks daily attendance for their classes.
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -120,6 +129,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // (no request, no verify — homeroom oversight, not AI workflow).
     "permintaan_ai:baca",
     "draf_ai:baca",
+    // Absensi: wali_kelas reads (homeroom oversight); writes are admin/guru.
+    "absensi:baca",
   ],
   dev: [
     "ptk:baca",
@@ -151,6 +162,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
 };
 

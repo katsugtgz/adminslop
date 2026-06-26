@@ -5,6 +5,7 @@ import {
   Briefcase,
   Building2,
   Calendar,
+  CalendarCheck,
   CheckCircle2,
   ClipboardList,
   GraduationCap,
@@ -105,6 +106,14 @@ export async function DashboardAktif({
     membership.roleSlug
   ].includes("permintaan_ai:baca");
 
+  // Reachability link to Absensi (#15). Every member role receives
+  // `absensi:baca` — daily attendance is core teaching data for every role
+  // (kepala_sekolah reads for oversight). The page re-checks
+  // `boleh("absensi:baca")` server-side (§12); writes apply AC#4 ownership.
+  const bolehLihatAbsensi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("absensi:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -154,6 +163,28 @@ export async function DashboardAktif({
           </p>
         </div>
       </div>
+
+      {bolehLihatAbsensi && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <CalendarCheck className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Absensi Harian</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Catat kehadiran harian Peserta Didik.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/absensi">Buka Absensi Harian</Link>
+          </Button>
+        </div>
+      )}
 
       {bolehLihatPermintaanAi && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">

@@ -36,6 +36,10 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
+ * `absensi:*` govern Absensi Harian (daily attendance) records. Guru gets all
+ * three (marks attendance for their classes); admin/dev manage school-wide;
+ * `baca` is universal across teaching roles (oversight), `buat`/`ubah` are
+ * admin + guru scoped.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -65,7 +69,10 @@ export type IzinSlug =
   | "permintaan_ai:baca"
   | "permintaan_ai:buat"
   | "draf_ai:baca"
-  | "draf_ai:verifikasi";
+  | "draf_ai:verifikasi"
+  | "absensi:baca"
+  | "absensi:buat"
+  | "absensi:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
