@@ -1,0 +1,21 @@
+src/db/queries/perangkat-ajar.test.ts
+  s_eb7b354a17e9bd::t_1d021cb264ddce 97-98
+  s_eb7b354a17e9bd::t_132d95d8072329 152
+  s_eb7b354a17e9bd::t_631380b80f2d7f 155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0c7f5e83886f9f356950edff86387284fbfe31e2",
+  "prompts": {},
+  "sessions": {
+    "s_eb7b354a17e9bd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fbee29fdffeNhqwYFldh2qFsR",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
