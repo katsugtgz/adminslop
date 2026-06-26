@@ -7,11 +7,23 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 // --- hoisted mocks ---------------------------------------------------------
 // Mirrors src/app/dashboard/akses/actions.test.ts + penilaian/actions.test.ts:
 // hoist all mocks, mock the modules to wire them in, then import the actions
-// under test. Absensi has no ownership-chain resolution (it's rombel-scoped,
-// not beban-scoped), so the mock surface is simpler than penilaian — just the
-// two repo functions (catatAbsensi / ubahAbsensi) + the authz + DB plumbing.
+// under test.
+//
+// OWNERSHIP CHAIN (C3): absensi is now rombel-ownership-gated via
+// assertPemilikRombongan (in @/lib/auth/kepemilikan), which resolves
+// beban_mengajar / wali_kelas rows by (rombonganBelajarId, ptkId) via
+// `tx.select().from(table)` + a JS `.find`. We therefore mock `withTenant` to
+// run each callback with a `fakeTx` whose `select().from(table)` returns a
+// per-table fixture array keyed by the REAL schema table object (re-exported
+// through the `@/db/client` mock via importOriginal). Populating the Map per
+// test lets us prove the ownership decision end-to-end (allow + deny).
 
 const mocks = vi.hoisted(() => {
+  // Per-table fixture rows, keyed by the real dbSchema table object reference.
+  const tableRows = new Map<unknown, unknown[]>();
+  const fakeTxLocal = {
+    select: () => ({ from: (table: unknown) => tableRows.get(table) ?? [] }),
+  };
   return {
     getAksesSaya: vi.fn(),
     getDb: vi.fn(() => ({ db: { __db: true } })),
@@ -20,12 +32,14 @@ const mocks = vi.hoisted(() => {
         _db: unknown,
         _tenantId: unknown,
         fn: (tx: unknown) => Promise<unknown>
-      ) => fn({ __tx: true })
+      ) => fn(fakeTxLocal)
     ),
     catatAudit: vi.fn(async () => undefined),
     catatAbsensi: vi.fn(async () => ({ id: "absensi_new" })),
     ubahAbsensi: vi.fn(async () => ({ id: "absensi_1" })),
     revalidatePath: vi.fn(),
+    fakeTx: fakeTxLocal,
+    tableRows,
   };
 });
 
@@ -37,24 +51,32 @@ const {
   catatAbsensi,
   ubahAbsensi,
   revalidatePath,
+  fakeTx: fakeTxRef,
+  tableRows,
 } = mocks;
-
-const fakeTx = { __tx: true };
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
 }));
-vi.mock("@/db/client", () => ({
-  getDb: mocks.getDb,
-  withTenant: mocks.withTenant,
-  catatAudit: mocks.catatAudit,
-}));
+// Preserve the REAL dbSchema (table object refs) so the action's ownership
+// resolvers (in @/lib/auth/kepemilikan) and this test's fixture Map share
+// identical keys.
+vi.mock("@/db/client", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/db/client")>();
+  return {
+    getDb: mocks.getDb,
+    withTenant: mocks.withTenant,
+    catatAudit: mocks.catatAudit,
+    dbSchema: actual.dbSchema,
+  };
+});
 vi.mock("@/db/queries/absensi", () => ({
   catatAbsensi: mocks.catatAbsensi,
   ubahAbsensi: mocks.ubahAbsensi,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
+import { dbSchema } from "@/db/client";
 import { catatAbsensiAction, ubahAbsensiAction } from "./actions";
 
 // --- helpers ---------------------------------------------------------------
@@ -73,15 +95,17 @@ const DB = expect.anything();
 /**
  * Build an "active" AksesSaya mock whose `boleh()` mirrors the REAL
  * evaluasiAkses precedence (pembatasan > izin > peran default). Mirrors the
- * helper in penilaian/actions.test.ts (no ptkId thread — absensi is not
- * ownership-gated).
+ * helper in penilaian/actions.test.ts. `ptkId` threads the C3 ownership
+ * identity — defaults to "ptk_A" (the owner of fixture rombel_1); null = guru
+ * not linked to a PTK.
  */
 function aksesAktif(
   roleSlug: RoleSlug,
-  opts?: { izin?: IzinSlug[]; pembatasan?: IzinSlug[] }
+  opts?: { izin?: IzinSlug[]; pembatasan?: IzinSlug[]; ptkId?: string | null }
 ): Extract<AksesSaya, { status: "active" }> {
   const izin = opts?.izin ?? [];
   const pembatasan = opts?.pembatasan ?? [];
+  const ptkId = opts?.ptkId ?? "ptk_A";
   const defaults: Record<RoleSlug, IzinSlug[]> = {
     admin_satuan_pendidikan: [
       "akses:kelola",
@@ -119,7 +143,7 @@ function aksesAktif(
       tenantId: "org_A",
       userId: "workos_u_1",
       peranAkses: roleSlug,
-      ptkId: null,
+      ptkId,
       nama: "Guru A",
       dibuatPada: new Date("2026-01-01T00:00:00Z"),
     },
@@ -127,6 +151,20 @@ function aksesAktif(
     pembatasan,
     boleh,
   };
+}
+
+/** Populate the fakeTx fixture rows for the C3 ownership lookup (cleared first). */
+function aturFixtures(opts: {
+  beban?: unknown[];
+  wali?: unknown[];
+  rombel?: unknown[];
+  absensi?: unknown[];
+}): void {
+  tableRows.clear();
+  if (opts.beban) tableRows.set(dbSchema.bebanMengajar, opts.beban);
+  if (opts.wali) tableRows.set(dbSchema.waliKelas, opts.wali);
+  if (opts.rombel) tableRows.set(dbSchema.rombonganBelajar, opts.rombel);
+  if (opts.absensi) tableRows.set(dbSchema.absensiHarian, opts.absensi);
 }
 
 beforeEach(() => {
@@ -139,10 +177,16 @@ beforeEach(() => {
   revalidatePath.mockReset();
   // restore default implementations cleared by mockReset
   getDb.mockImplementation(() => ({ db: { __db: true } }));
-  withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTx));
+  withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTxRef));
   catatAbsensi.mockResolvedValue({ id: "absensi_new" });
   ubahAbsensi.mockResolvedValue({ id: "absensi_1" });
   catatAudit.mockResolvedValue(undefined);
+  // Default C3 ownership fixtures: guru ptk_A owns rombel_1 via beban_mengajar,
+  // and absensi_1 lives under rombel_1. Cleared per test; deny tests override.
+  aturFixtures({
+    beban: [{ rombonganBelajarId: "rombel_1", ptkId: "ptk_A" }],
+    absensi: [{ id: "absensi_1", rombonganBelajarId: "rombel_1" }],
+  });
 });
 
 // ===========================================================================
@@ -166,7 +210,7 @@ describe("A. guru success — absensi:buat/ubah via peran default", () => {
       })
     );
 
-    expect(catatAbsensi).toHaveBeenCalledWith(fakeTx, {
+    expect(catatAbsensi).toHaveBeenCalledWith(fakeTxRef, {
       pesertaDidikId: "pd_1",
       rombonganBelajarId: "rombel_1",
       tanggal: "2026-04-01",
@@ -206,7 +250,7 @@ describe("A. guru success — absensi:buat/ubah via peran default", () => {
       })
     );
 
-    expect(catatAbsensi).toHaveBeenCalledWith(fakeTx, {
+    expect(catatAbsensi).toHaveBeenCalledWith(fakeTxRef, {
       pesertaDidikId: "pd_1",
       rombonganBelajarId: "rombel_1",
       tanggal: "2026-04-01",
@@ -230,7 +274,7 @@ describe("A. guru success — absensi:buat/ubah via peran default", () => {
       })
     );
 
-    expect(ubahAbsensi).toHaveBeenCalledWith(fakeTx, "absensi_1", {
+    expect(ubahAbsensi).toHaveBeenCalledWith(fakeTxRef, "absensi_1", {
       statusKehadiran: "izin",
       catatan: "Sakit demam",
     });
@@ -536,6 +580,97 @@ describe("G. dev role — mirrors admin (peran default carries absensi:buat/ubah
       formData({ id: "absensi_1", statusKehadiran: "izin" })
     );
     expect(ubahAbsensi).toHaveBeenCalledTimes(1);
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ===========================================================================
+// H. AC#4 DENY (C3) — guru does NOT own the Rombongan Belajar. Role gate
+// passes (guru has absensi:buat/ubah), but ownership fails. The action MUST
+// throw BEFORE the repo write. Mirrors penilaian/actions.test.ts block D.
+// ===========================================================================
+
+describe("H. C3 DENY — guru does NOT own the Rombongan Belajar", () => {
+  beforeEach(() => {
+    // guru ptk_A; rombel_1 is owned by a DIFFERENT guru (ptk_B). absensi_1
+    // still lives under rombel_1 (for the ubah chain).
+    getAksesSaya.mockResolvedValue(aksesAktif("guru", { ptkId: "ptk_A" }));
+    aturFixtures({
+      beban: [{ rombonganBelajarId: "rombel_1", ptkId: "ptk_B" }],
+      absensi: [{ id: "absensi_1", rombonganBelajarId: "rombel_1" }],
+    });
+  });
+
+  it("21. catatAbsensiAction (rombel owned by ptk_B) -> throws /Rombongan Belajar/i; catatAbsensi NOT called", async () => {
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+        })
+      )
+    ).rejects.toThrow(/Rombongan Belajar/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("22. ubahAbsensiAction (absensi_1 -> rombel owned by ptk_B) -> throws /Rombongan Belajar/i; ubahAbsensi NOT called", async () => {
+    await expect(
+      ubahAbsensiAction(
+        formData({ id: "absensi_1", statusKehadiran: "izin" })
+      )
+    ).rejects.toThrow(/Rombongan Belajar/i);
+    expect(ubahAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("23. admin still BYPASSES when the rombel is owned by nobody (bypass, not satisfaction)", async () => {
+    // No beban / wali row links ANY ptk to rombel_1 — an admin succeeds anyway
+    // (akses:kelola short-circuits ownership). Proves the deny above is an
+    // ownership decision, not a missing-data artifact.
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    aturFixtures({
+      absensi: [{ id: "absensi_1", rombonganBelajarId: "rombel_1" }],
+    });
+    await catatAbsensiAction(
+      formData({
+        pesertaDidikId: "pd_1",
+        rombonganBelajarId: "rombel_1",
+        tanggal: "2026-04-01",
+        statusKehadiran: "hadir",
+      })
+    );
+    expect(catatAbsensi).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ===========================================================================
+// I. wali_kelas-link ownership success — the (b) branch of
+// assertPemilikRombongan. A guru with NO beban_mengajar but a wali_kelas row
+// for the rombel is still the owner and may record attendance.
+// ===========================================================================
+
+describe("I. C3 ownership via wali_kelas (beban absent)", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru", { ptkId: "ptk_A" }));
+    // No beban_mengajar for rombel_2, but a wali_kelas row links ptk_A to it.
+    aturFixtures({
+      wali: [{ rombonganBelajarId: "rombel_2", ptkId: "ptk_A" }],
+    });
+  });
+
+  it("24. catatAbsensiAction (rombel_2 owned via wali_kelas) -> catatAbsensi called", async () => {
+    await catatAbsensiAction(
+      formData({
+        pesertaDidikId: "pd_1",
+        rombonganBelajarId: "rombel_2",
+        tanggal: "2026-04-01",
+        statusKehadiran: "hadir",
+      })
+    );
+    expect(catatAbsensi).toHaveBeenCalledTimes(1);
     expect(catatAudit).toHaveBeenCalledTimes(1);
   });
 });

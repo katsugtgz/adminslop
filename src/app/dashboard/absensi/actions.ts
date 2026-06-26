@@ -27,6 +27,10 @@ import { catatAudit, getDb, withTenant } from "@/db/client";
 import { catatAbsensi, ubahAbsensi } from "@/db/queries/absensi";
 import type { MetodeInput, StatusKehadiran } from "@/db/queries/absensi";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import {
+  assertPemilikRombongan,
+  rombonganBelajarIdDariAbsensi,
+} from "@/lib/auth/kepemilikan";
 
 const REVALIDATE_TARGET = "/dashboard/absensi";
 
@@ -119,6 +123,9 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
   // 3. Execute under tenant scope + audit. orgId from membership ONLY.
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // C3 gate 2: ownership of the target Rombongan Belajar (admin bypasses;
+    // guru must own the rombel via beban_mengajar / wali_kelas).
+    await assertPemilikRombongan(tx, akses, async () => rombonganBelajarId);
     const row = await catatAbsensi(tx, {
       pesertaDidikId,
       rombonganBelajarId,
@@ -198,6 +205,11 @@ export async function ubahAbsensiAction(formData: FormData): Promise<void> {
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // C3 gate 2: ownership — resolve absensi(id) -> rombongan_belajar, then
+    // confirm the active guru owns that rombel (admin bypasses).
+    await assertPemilikRombongan(tx, akses, () =>
+      rombonganBelajarIdDariAbsensi(tx, id)
+    );
     const row = await ubahAbsensi(tx, id, perubahan);
     await catatAudit(tx, {
       aktor: akses.userId,
