@@ -1,0 +1,64 @@
+src/app/globals.css
+  s_3e582722207867::t_fd2f424cc4e66d 123-158
+  s_3e582722207867::t_5bb7cafbb32a4f 18,25
+src/components/bantuan-kontekstual.test.tsx
+  s_3e582722207867::t_9dc0da0e817813 1-54
+src/app/layout.a11y.test.tsx
+  s_3e582722207867::t_49823e866ed74e 1-62
+src/test/setup.ts
+  s_3e582722207867::t_ad384ed8b13191 2-50
+src/app/globals.css.print.test.ts
+  s_3e582722207867::t_3a62052b688a65 1-23,25,34-39
+  s_3e582722207867::t_7f19d0e677eb70 24,26-33
+docs/POST-MVP.md
+  s_3e582722207867::t_e3e7da7086e503 1-91
+src/components/bantuan-kontekstual.tsx
+  s_3e582722207867::t_e5ce8b41c32f29 48
+  s_3e582722207867::t_8a05cab8e13c9a 1-47,49-69
+src/components/tur-awal.tsx
+  s_3e582722207867::t_2cb5ccb465ff10 1-177
+src/app/dashboard/bantuan/page.tsx
+  s_3e582722207867::t_25f2ca8819d30a 1-13
+src/components/pusat-bantuan.tsx
+  s_3e582722207867::t_de9523e90c9e3b 1-78
+src/app/bantuan/page.tsx
+  s_3e582722207867::t_863ca4a57eba57 3,11
+src/db/queries/permintaan-ai.test.ts
+  s_3e582722207867::t_d2e45eee64af2d 6
+src/app/layout.tsx
+  s_3e582722207867::t_0bef9d0e4510c0 36
+src/components/pembatasan-akses.tsx
+  s_3e582722207867::t_5809a286ccfbbc 20,29
+src/db/queries/kuota-ai.test.ts
+  s_3e582722207867::t_f42ba44f6e44e5 167
+src/components/nav-auth.tsx
+  s_3e582722207867::t_94ed1a133488d3 25-31,44
+src/components/ui/button.tsx
+  s_3e582722207867::t_fc656ea41655f0 29-37
+src/components/dashboard-aktif.tsx
+  s_3e582722207867::t_76356db99f9f97 11
+  s_3e582722207867::t_aa426d3eb89bfe 109,119-123,145-160,162-164,166,168-182,184-186,188,190-204,206-208,210,212-226,228-230,232,234-249,251-253,255,257-272,274-276,278,280-295,297-299,301,303-318,320-322,324-325
+src/app/dashboard/bantuan/page.test.tsx
+  s_3e582722207867::t_4680b782acc5e9 1-57
+src/components/pilih-satuan-pendidikan.tsx
+  s_3e582722207867::t_9622446e887df5 30-33,39
+src/components/tur-awal.test.tsx
+  s_3e582722207867::t_1348ef874c62e9 15-19
+  s_3e582722207867::t_7ce61f943b844d 1-14,20-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "2c0b356790c294b8a7ba1020c6bf77412ede5e9a",
+  "prompts": {},
+  "sessions": {
+    "s_3e582722207867": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd6bbfc9ffe0HC1yehCsehvDK",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
