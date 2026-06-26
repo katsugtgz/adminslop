@@ -1,7 +1,8 @@
 /**
- * tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors WorkOS
- * OrganizationMembership `role.slug`. Never `superuser` (§13 of the identity
- * doc — no global superuser).
+ * App-side tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors the
+ * WorkOS OrganizationMembership `role.slug`. Never `superuser` (per
+ * docs/architecture/identity-and-access.md §13 — no global superuser). `dev`
+ * is a local-only admin-equivalent shim enabled by DEV_MEMBERSHIP_ALL.
  */
 export type RoleSlug =
   | "admin_satuan_pendidikan"
@@ -35,12 +36,18 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
- * `eraport:*` govern the E-Raport document lifecycle (Draf -> Terbit ->
- * Revisi). `eraport:baca` is universal across teaching roles (a guru must see
- * report drafts for their students — AC#4). `eraport:buat` (create a draft
- * from Nilai Akhir) is admin + guru; `eraport:terbit` (publish/lock) is admin
- * + kepala_sekolah; `eraport:revisi` (append a change record) is admin only
- * (kepala_sekolah reads but does not request revisions).
+ * `absensi:*` govern Absensi Harian (daily attendance) records. Guru gets all
+ * three (marks attendance for their classes); admin/dev manage school-wide;
+ * `baca` is universal across teaching roles (oversight), `buat`/`ubah` are
+ * admin + guru scoped. `impor_peserta_didik:*` / `ekspor_peserta_didik:baca`
+ * govern CSV bulk import/export of Peserta Didik: `baca` reads the tool
+ * surface, `kelola` performs the import write; export is read-only. Admin/dev
+ * get all three; kepala_sekolah gets `impor:baca` + `ekspor:baca` (oversight);
+ * guru/wali_kelas get none (bulk import/export is admin-scoped).
+ * `notifikasi:*` govern in-app Notifikasi: `baca` reads/manages one's own;
+ * `kelola` (admin/dev) creates system-wide notifications. `eraport:*` govern
+ * E-Raport: `baca` reads, `buat` drafts (guru), `terbit` publishes
+ * (kepala_sekolah/admin), `revisi` re-opens (admin/dev).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -71,6 +78,14 @@ export type IzinSlug =
   | "permintaan_ai:buat"
   | "draf_ai:baca"
   | "draf_ai:verifikasi"
+  | "absensi:baca"
+  | "absensi:buat"
+  | "absensi:ubah"
+  | "impor_peserta_didik:baca"
+  | "impor_peserta_didik:kelola"
+  | "ekspor_peserta_didik:baca"
+  | "notifikasi:baca"
+  | "notifikasi:kelola"
   | "eraport:baca"
   | "eraport:buat"
   | "eraport:terbit"
