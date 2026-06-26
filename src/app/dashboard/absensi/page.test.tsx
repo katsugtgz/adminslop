@@ -370,6 +370,7 @@ describe("AbsensiPage — active period + drill-down (#15 / T7 / T6)", () => {
         dibuatOleh: "user_1",
         dibuatPada: new Date("2026-04-15T00:00:00Z"),
         diperbaruiPada: new Date("2026-04-15T00:00:00Z"),
+        versi: 1,
       },
     ]);
     await renderPage({

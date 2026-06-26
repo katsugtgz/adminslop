@@ -56,7 +56,8 @@ export type RoleSlug =
  * `baca` reads history, `kelola` (admin/dev) performs archive/restore.
  * `cetak:*` govern the print/export surface (#14): `baca` previews, `buat`
  * generates dokumen_cetak (admin/dev/kepala_sekolah), `ubah` edits templates
- * (admin/dev).
+ * (admin/dev). `offline:baca` (#21) lets every member read their own pending
+ * offline drafts (Absensi/Nilai) for limited offline mode.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -112,7 +113,8 @@ export type IzinSlug =
   | "arsip:kelola"
   | "cetak:baca"
   | "cetak:buat"
-  | "cetak:ubah";
+  | "cetak:ubah"
+  | "offline:baca";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

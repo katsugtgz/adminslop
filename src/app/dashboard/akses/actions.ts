@@ -89,6 +89,7 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "cetak:baca",
   "cetak:buat",
   "cetak:ubah",
+  "offline:baca",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

@@ -64,6 +64,7 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "cetak:baca",
   "cetak:buat",
   "cetak:ubah",
+  "offline:baca",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -177,6 +178,8 @@ function labelIzin(slug: IzinSlug): string {
       return "Buat Cetak";
     case "cetak:ubah":
       return "Ubah Cetak";
+    case "offline:baca":
+      return "Baca Mode Offline";
   }
 }
 

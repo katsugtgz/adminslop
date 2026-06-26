@@ -114,6 +114,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "cetak:baca",
     "cetak:buat",
     "cetak:ubah",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -149,6 +151,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Cetak: kepala_sekolah reads + generates dokumen_cetak (cetak:buat).
     "cetak:baca",
     "cetak:buat",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -190,6 +194,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:ubah",
     // Cetak: guru previews reports (homeroom/teaching oversight).
     "cetak:baca",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -215,6 +221,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:baca",
     // Cetak: wali_kelas previews homeroom reports (read-only oversight).
     "cetak:baca",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   dev: [
     "ptk:baca",
@@ -279,6 +287,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "cetak:baca",
     "cetak:buat",
     "cetak:ubah",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
 };
 
