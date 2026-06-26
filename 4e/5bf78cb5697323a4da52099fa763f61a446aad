@@ -1,0 +1,71 @@
+src/lib/auth/otorisasi.test.ts
+  s_bb266aebf2edcb::t_5d0b93cca7063f 476-549
+src/lib/auth/types.ts
+  s_bb266aebf2edcb::t_68c008a1c67ce6 32-37
+  s_bb266aebf2edcb::t_e2123999d63747 63-66
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_bb266aebf2edcb::t_70a03c9e49f10e 1-110
+src/app/dashboard/akses/actions.ts
+  s_bb266aebf2edcb::t_4b139e6786b2b3 62-64
+src/components/dashboard-aktif.test.tsx
+  s_1d21bdb2ee6bb7::t_802d1299cc90bb 130-161
+src/lib/impor/validasi-peserta-didik.test.ts
+  s_bb266aebf2edcb::t_3bc3da8f354d8c 1-273
+src/components/akses/daftar-pengguna.tsx
+  s_bb266aebf2edcb::t_c9aef405c1aa47 93-98
+  s_bb266aebf2edcb::t_49f4cb203ede6e 37-39
+src/components/dashboard-aktif.tsx
+  s_1d21bdb2ee6bb7::t_04932eb20fbfc4 205-228
+  s_1d21bdb2ee6bb7::t_9857b225ac82ac 11
+  s_1d21bdb2ee6bb7::t_770f6429f98aac 91-98
+src/app/dashboard/akses/page.test.tsx
+  s_bb266aebf2edcb::t_bd8b1be19deb14 182
+src/lib/impor/validasi-peserta-didik.ts
+  s_bb266aebf2edcb::t_f0c9b247cdd707 1-21
+  s_bb266aebf2edcb::t_8abc6e28a301ac 22-193
+src/lib/impor/parse-csv.ts
+  s_bb266aebf2edcb::t_e1be1b5469d6b5 40-42,53-65
+  s_1d21bdb2ee6bb7::t_1a156db3b6fbb6 10
+  s_bb266aebf2edcb::t_1f9b57f5e3cba4 1-9,11-39,43-52,66-183
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_bb266aebf2edcb::t_d6aca39015949a 1-161
+src/components/akses/daftar-pengguna.test.tsx
+  s_bb266aebf2edcb::t_cf1013a07c65e1 29
+  s_bb266aebf2edcb::t_0b32c9858631f3 56
+src/app/dashboard/impor-peserta-didik/page.test.tsx
+  s_bb266aebf2edcb::t_a0b08e13087794 1-224
+src/lib/impor/parse-csv.test.ts
+  s_bb266aebf2edcb::t_5af2641f40c1cd 122,127-131
+  s_bb266aebf2edcb::t_322cd639310f4a 1-121,123-126,132-148
+src/lib/auth/otorisasi.ts
+  s_bb266aebf2edcb::t_404dd0488d7da0 40-43
+  s_bb266aebf2edcb::t_0f955d31d4cfe4 64-66
+  s_bb266aebf2edcb::t_693b639b0c4c7a 115-118
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_bb266aebf2edcb::t_e654d3e3fcc2da 24-46
+  s_bb266aebf2edcb::t_6870b44fff5fe9 1-23,47-436
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "4e5bf78cb5697323a4da52099fa763f61a446aad",
+  "prompts": {},
+  "sessions": {
+    "s_1d21bdb2ee6bb7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe15e083ffeLpVyzqVH0jvVWr",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_bb266aebf2edcb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe2c4910ffe3HpBGXvqrhWFC2",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
