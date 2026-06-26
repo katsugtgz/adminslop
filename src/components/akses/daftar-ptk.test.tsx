@@ -12,6 +12,8 @@ const ptks: Ptk[] = [
     nip: "123",
     jenis: "pendidik",
     dibuatPada: new Date("2026-01-01T00:00:00Z"),
+    arsipPada: null,
+    arsipOleh: null,
   },
   {
     id: "ptk_2",
@@ -20,6 +22,8 @@ const ptks: Ptk[] = [
     nip: null,
     jenis: "tenaga_kependidikan",
     dibuatPada: new Date("2026-01-02T00:00:00Z"),
+    arsipPada: null,
+    arsipOleh: null,
   },
 ];
 

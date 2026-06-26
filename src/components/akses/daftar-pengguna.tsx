@@ -38,10 +38,29 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "permintaan_ai:buat",
   "draf_ai:baca",
   "draf_ai:verifikasi",
+  "absensi:baca",
+  "absensi:buat",
+  "absensi:ubah",
+  "impor_peserta_didik:baca",
+  "impor_peserta_didik:kelola",
+  "ekspor_peserta_didik:baca",
+  "notifikasi:baca",
+  "notifikasi:kelola",
   "eraport:baca",
   "eraport:buat",
   "eraport:terbit",
   "eraport:revisi",
+  "bank_soal:baca",
+  "bank_soal:buat",
+  "bank_soal:ubah",
+  "paket_soal:baca",
+  "paket_soal:buat",
+  "paket_soal:ubah",
+  "perangkat_ajar:baca",
+  "perangkat_ajar:buat",
+  "perangkat_ajar:ubah",
+  "arsip:baca",
+  "arsip:kelola",
   "cetak:baca",
   "cetak:buat",
   "cetak:ubah",
@@ -106,6 +125,22 @@ function labelIzin(slug: IzinSlug): string {
       return "Baca Draf AI";
     case "draf_ai:verifikasi":
       return "Verifikasi Draf AI";
+    case "absensi:baca":
+      return "Baca Absensi";
+    case "absensi:buat":
+      return "Buat Absensi";
+    case "absensi:ubah":
+      return "Ubah Absensi";
+    case "impor_peserta_didik:baca":
+      return "Baca Impor Peserta Didik";
+    case "impor_peserta_didik:kelola":
+      return "Kelola Impor Peserta Didik";
+    case "ekspor_peserta_didik:baca":
+      return "Baca Ekspor Peserta Didik";
+    case "notifikasi:baca":
+      return "Baca Notifikasi";
+    case "notifikasi:kelola":
+      return "Kelola Notifikasi";
     case "eraport:baca":
       return "Baca E-Raport";
     case "eraport:buat":
@@ -114,6 +149,28 @@ function labelIzin(slug: IzinSlug): string {
       return "Terbitkan E-Raport";
     case "eraport:revisi":
       return "Catat Revisi E-Raport";
+    case "bank_soal:baca":
+      return "Baca Bank Soal";
+    case "bank_soal:buat":
+      return "Buat Butir Soal";
+    case "bank_soal:ubah":
+      return "Ubah Butir Soal";
+    case "paket_soal:baca":
+      return "Baca Paket Soal";
+    case "paket_soal:buat":
+      return "Buat Paket Soal";
+    case "paket_soal:ubah":
+      return "Ubah Paket Soal";
+    case "perangkat_ajar:baca":
+      return "Baca Perangkat Ajar";
+    case "perangkat_ajar:buat":
+      return "Buat Perangkat Ajar";
+    case "perangkat_ajar:ubah":
+      return "Ubah Perangkat Ajar";
+    case "arsip:baca":
+      return "Baca Arsip";
+    case "arsip:kelola":
+      return "Kelola Arsip";
     case "cetak:baca":
       return "Baca Cetak";
     case "cetak:buat":

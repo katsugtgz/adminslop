@@ -108,6 +108,8 @@ const PTK_BUDI: Ptk = {
   nip: "123",
   jenis: "pendidik",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const PENGGUNA_SATU: PenggunaDenganPtk = {
@@ -179,7 +181,7 @@ describe("AksesPage — render by akses context (#6 / T6)", () => {
       screen.getByRole("button", { name: /Tambah PTK/i })
     ).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Hapus/i })).toHaveLength(1);
-    expect(screen.getAllByRole("checkbox")).toHaveLength(70);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(108);
     expect(mocks.listPtk).toHaveBeenCalledTimes(1);
     expect(mocks.loadAksesPengguna).toHaveBeenCalledTimes(1);
   });

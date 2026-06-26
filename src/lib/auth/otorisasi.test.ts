@@ -539,6 +539,80 @@ describe("evaluasiAkses (#12 T2) — permintaan_ai + draf_ai defaults (AC#3 veri
   });
 });
 
+describe("evaluasiAkses (#18) — impor/ekspor peserta_didik defaults", () => {
+  // admin/dev get all three: read + manage import, read export.
+  it.each<IzinSlug>([
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // kepala_sekolah reads (oversight) — impor:baca + ekspor:baca; NOT kelola.
+  it("kepala_sekolah requesting impor_peserta_didik:baca -> allow 'peran' (oversight)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "impor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting ekspor_peserta_didik:baca -> allow 'peran' (oversight)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "ekspor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting impor_peserta_didik:kelola -> deny 'tidak_ada_izin' (admin-only write)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "impor_peserta_didik:kelola"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // guru / wali_kelas get NONE of the three (import/export is admin-scoped).
+  it("guru requesting impor_peserta_didik:baca -> deny 'tidak_ada_izin' (no default)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "impor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  it("wali_kelas requesting ekspor_peserta_didik:baca -> deny 'tidak_ada_izin' (no default)", () => {
+    expect(
+      evaluasiAkses(defaults("wali_kelas", "ekspor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("admin requesting ekspor_peserta_didik:baca WITH pembatasan -> DENY 'pembatasan'", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "admin_satuan_pendidikan",
+        diminta: "ekspor_peserta_didik:baca",
+        izinGrants: [],
+        pembatasan: ["ekspor_peserta_didik:baca"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
+
 describe("evaluasiAkses (#13 T2) — eraport defaults (lifecycle Draf->Terbit->Revisi)", () => {
   // admin/dev get every eraport slug (full document lifecycle).
   it.each<IzinSlug>([
@@ -637,6 +711,116 @@ describe("evaluasiAkses (#13 T2) — eraport defaults (lifecycle Draf->Terbit->R
         diminta: "eraport:revisi",
         izinGrants: [],
         pembatasan: ["eraport:revisi"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
+
+describe("evaluasiAkses (#16 T2) — bank_soal + paket_soal defaults", () => {
+  // admin/dev get every new slug (full question-bank + package CRUD).
+  it.each<IzinSlug>([
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // AC#1 — guru authors question items and assembles packages (all six).
+  it.each<IzinSlug>([
+    "bank_soal:baca",
+    "bank_soal:buat",
+    "bank_soal:ubah",
+    "paket_soal:baca",
+    "paket_soal:buat",
+    "paket_soal:ubah",
+  ])(
+    "guru requesting '%s' -> allow 'peran' (guru authors + assembles)",
+    (slug) => {
+      expect(evaluasiAkses(defaults("guru", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // wali_kelas / kepala_sekolah are read-only on both surfaces.
+  it.each<[RoleSlug, IzinSlug]>([
+    ["wali_kelas", "bank_soal:baca"],
+    ["wali_kelas", "paket_soal:baca"],
+    ["kepala_sekolah", "bank_soal:baca"],
+    ["kepala_sekolah", "paket_soal:baca"],
+  ])(
+    "%s requesting '%s' -> allow 'peran' (read-only oversight)",
+    (role, slug) => {
+      expect(evaluasiAkses(defaults(role, slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  it.each<[RoleSlug, IzinSlug]>([
+    ["wali_kelas", "bank_soal:buat"],
+    ["wali_kelas", "paket_soal:buat"],
+    ["kepala_sekolah", "bank_soal:buat"],
+    ["kepala_sekolah", "paket_soal:buat"],
+    ["wali_kelas", "bank_soal:ubah"],
+    ["kepala_sekolah", "paket_soal:ubah"],
+  ])(
+    "%s requesting '%s' -> deny 'tidak_ada_izin' (read-only — no writes)",
+    (role, slug) => {
+      expect(evaluasiAkses(defaults(role, slug))).toEqual({
+        diizinkan: false,
+        sumber: "tidak_ada_izin",
+      });
+    }
+  );
+
+  // pembatasan still wins (no superuser).
+  it("guru requesting bank_soal:buat WITH pembatasan=['bank_soal:buat'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "guru",
+        diminta: "bank_soal:buat",
+        izinGrants: [],
+        pembatasan: ["bank_soal:buat"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+
+  it("admin requesting paket_soal:ubah WITH pembatasan=['paket_soal:ubah'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "admin_satuan_pendidikan",
+        diminta: "paket_soal:ubah",
+        izinGrants: [],
+        pembatasan: ["paket_soal:ubah"],
       })
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });

@@ -1,7 +1,8 @@
 /**
- * tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors WorkOS
- * OrganizationMembership `role.slug`. Never `superuser` (§13 of the identity
- * doc — no global superuser).
+ * App-side tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors the
+ * WorkOS OrganizationMembership `role.slug`. Never `superuser` (per
+ * docs/architecture/identity-and-access.md §13 — no global superuser). `dev`
+ * is a local-only admin-equivalent shim enabled by DEV_MEMBERSHIP_ALL.
  */
 export type RoleSlug =
   | "admin_satuan_pendidikan"
@@ -35,17 +36,27 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
- * `eraport:*` govern the E-Raport document lifecycle (Draf -> Terbit ->
- * Revisi). `eraport:baca` is universal across teaching roles (a guru must see
- * report drafts for their students — AC#4). `eraport:buat` (create a draft
- * from Nilai Akhir) is admin + guru; `eraport:terbit` (publish/lock) is admin
- * + kepala_sekolah; `eraport:revisi` (append a change record) is admin only
- * (kepala_sekolah reads but does not request revisions).
- * `cetak:*` govern the print/export surface (#14): Template Cetak config,
- * Pratinjau Cetak (preview), and Dokumen Cetak (generated output). `cetak:baca`
- * is universal across teaching roles (every teaching role may preview reports);
- * `cetak:buat` (create a template + generate a dokumen_cetak from a TERBIT
- * E-Raport) is admin + kepala_sekolah. `cetak:ubah` (edit templates) is admin.
+ * `absensi:*` govern Absensi Harian (daily attendance) records. Guru gets all
+ * three (marks attendance for their classes); admin/dev manage school-wide;
+ * `baca` is universal across teaching roles (oversight), `buat`/`ubah` are
+ * admin + guru scoped. `impor_peserta_didik:*` / `ekspor_peserta_didik:baca`
+ * govern CSV bulk import/export of Peserta Didik: `baca` reads the tool
+ * surface, `kelola` performs the import write; export is read-only. Admin/dev
+ * get all three; kepala_sekolah gets `impor:baca` + `ekspor:baca` (oversight);
+ * guru/wali_kelas get none (bulk import/export is admin-scoped).
+ * `notifikasi:*` govern in-app Notifikasi: `baca` reads/manages one's own;
+ * `kelola` (admin/dev) creates system-wide notifications. `eraport:*` govern
+ * E-Raport: `baca` reads, `buat` drafts (guru), `terbit` publishes
+ * (kepala_sekolah/admin), `revisi` re-opens (admin/dev). `bank_soal:*` /
+ * `paket_soal:*` govern the question bank + assembled packages: guru
+ * authors items + packages (AC#1), admin/dev manage school-wide, others read.
+ * `perangkat_ajar:*` govern teaching documents (Silabus/RPP/ModulAjar/...):
+ * guru creates + edits + verifies AI-assisted content (AC#3), admin/dev manage,
+ * others read. `arsip:*` govern the archive/recovery/retention surface:
+ * `baca` reads history, `kelola` (admin/dev) performs archive/restore.
+ * `cetak:*` govern the print/export surface (#14): `baca` previews, `buat`
+ * generates dokumen_cetak (admin/dev/kepala_sekolah), `ubah` edits templates
+ * (admin/dev).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -76,10 +87,29 @@ export type IzinSlug =
   | "permintaan_ai:buat"
   | "draf_ai:baca"
   | "draf_ai:verifikasi"
+  | "absensi:baca"
+  | "absensi:buat"
+  | "absensi:ubah"
+  | "impor_peserta_didik:baca"
+  | "impor_peserta_didik:kelola"
+  | "ekspor_peserta_didik:baca"
+  | "notifikasi:baca"
+  | "notifikasi:kelola"
   | "eraport:baca"
   | "eraport:buat"
   | "eraport:terbit"
   | "eraport:revisi"
+  | "bank_soal:baca"
+  | "bank_soal:buat"
+  | "bank_soal:ubah"
+  | "paket_soal:baca"
+  | "paket_soal:buat"
+  | "paket_soal:ubah"
+  | "perangkat_ajar:baca"
+  | "perangkat_ajar:buat"
+  | "perangkat_ajar:ubah"
+  | "arsip:baca"
+  | "arsip:kelola"
   | "cetak:baca"
   | "cetak:buat"
   | "cetak:ubah";
