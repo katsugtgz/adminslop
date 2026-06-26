@@ -29,7 +29,12 @@ export type RoleSlug =
  * Guru gets all three (AC#1: guru creates penilaian for their own
  * beban_mengajar — role-level grant; OWNERSHIP is the second gate enforced at
  * the action layer per AC#4). `baca` is universal across teaching roles;
- * `buat`/`ubah` are admin + guru scoped.
+ * `buat`/`ubah` are admin + guru scoped. `impor_peserta_didik:*` /
+ * `ekspor_peserta_didik:baca` govern CSV bulk import/export of Peserta Didik:
+ * `baca` reads the tool surface, `kelola` performs the import write; export is
+ * read-only. Admin/dev get all three; kepala_sekolah gets `impor:baca` +
+ * `ekspor:baca` (oversight); guru/wali_kelas get none (bulk import/export is
+ * admin-scoped).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -55,7 +60,10 @@ export type IzinSlug =
   | "wali_kelas:ubah"
   | "penilaian:baca"
   | "penilaian:buat"
-  | "penilaian:ubah";
+  | "penilaian:ubah"
+  | "impor_peserta_didik:baca"
+  | "impor_peserta_didik:kelola"
+  | "ekspor_peserta_didik:baca";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

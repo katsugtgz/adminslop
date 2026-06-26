@@ -37,6 +37,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -57,6 +61,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     // Penilaian: read oversight of school-wide assessment data.
     "penilaian:baca",
+    // Impor/Ekspor Peserta Didik: read oversight of bulk data movement.
+    "impor_peserta_didik:baca",
+    "ekspor_peserta_didik:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -105,6 +112,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
   ],
 };
 
