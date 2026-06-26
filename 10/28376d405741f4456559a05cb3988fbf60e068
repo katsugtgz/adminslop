@@ -1,0 +1,35 @@
+src/app/dashboard/pengaturan/page.test.tsx
+  s_daaea494012b38::t_61ed8754fbfe81 120
+  s_daaea494012b38::t_fcca69d18fe22c 220-240
+  s_daaea494012b38::t_7acfb5aad22ac8 162,188
+  s_daaea494012b38::t_f6b9640b4155ea 26-29
+  s_daaea494012b38::t_53039cd1b0626e 11-13
+  s_daaea494012b38::t_546ad925bb5ae9 211
+src/app/dashboard/pengaturan/page.tsx
+  s_daaea494012b38::t_e1f88f7a301e67 9-12
+  s_daaea494012b38::t_463f1c476e3704 58-61
+src/app/dashboard/pengaturan/schemas.ts
+  s_daaea494012b38::t_2584f9fab177b0 9
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_daaea494012b38::t_1a32c75ffc7882 60,65-66
+src/components/pengaturan-satuan/form-profil.tsx
+  s_daaea494012b38::t_d17ce5718d8feb 67
+src/app/dashboard/pengaturan/actions.ts
+  s_daaea494012b38::t_a8136974933af3 43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "1028376d405741f4456559a05cb3988fbf60e068",
+  "prompts": {},
+  "sessions": {
+    "s_daaea494012b38": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd383341ffez6FcQGTDnguuyL",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
