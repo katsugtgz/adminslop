@@ -57,6 +57,14 @@ const mocks = vi.hoisted(() => {
       tenantId: "org_A",
       status: "pindah",
     })),
+    // existence check (P1-5); defaults to "found".
+    cariPesertaDidikById: vi.fn(
+      async (): Promise<{ id: string; tenantId: string; nama: string } | null> => ({
+        id: "pd_1",
+        tenantId: "org_A",
+        nama: "Budi",
+      })
+    ),
     // kontak repo
     tambahWali: vi.fn(async () => ({
       id: "wali_new",
@@ -93,6 +101,7 @@ const {
   buatPesertaDidik,
   ubahPesertaDidik,
   ubahStatus,
+  cariPesertaDidikById,
   tambahWali,
   hapusWali,
   tambahKontakDarurat,
@@ -114,6 +123,7 @@ vi.mock("@/db/queries/peserta-didik", () => ({
   buatPesertaDidik: mocks.buatPesertaDidik,
   ubahPesertaDidik: mocks.ubahPesertaDidik,
   ubahStatus: mocks.ubahStatus,
+  cariPesertaDidikById: mocks.cariPesertaDidikById,
 }));
 vi.mock("@/db/queries/kontak-peserta-didik", () => ({
   tambahWali: mocks.tambahWali,
@@ -202,6 +212,7 @@ beforeEach(() => {
   buatPesertaDidik.mockReset();
   ubahPesertaDidik.mockReset();
   ubahStatus.mockReset();
+  cariPesertaDidikById.mockReset();
   tambahWali.mockReset();
   hapusWali.mockReset();
   tambahKontakDarurat.mockReset();
@@ -240,6 +251,11 @@ beforeEach(() => {
     id: "pd_1",
     tenantId: "org_A",
     status: "pindah",
+  });
+  cariPesertaDidikById.mockResolvedValue({
+    id: "pd_1",
+    tenantId: "org_A",
+    nama: "Budi",
   });
   tambahWali.mockResolvedValue({
     id: "wali_new",
@@ -796,5 +812,34 @@ describe("H. catatMutasi composition + arah mapping", () => {
     ).rejects.toThrow(/Arah mutasi tidak valid/i);
     expect(tambahMutasi).not.toHaveBeenCalled();
     expect(ubahStatus).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// I. P1-5 — tenant-scoped existence check. A missing or cross-tenant id must
+// produce a clear error BEFORE any write/audit runs. RLS makes cariPesertaDidikById
+// return null for a cross-tenant id; the action must throw on that null.
+// ===========================================================================
+
+describe("I. P1-5 existence check — missing/cross-tenant id rejected pre-write", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    cariPesertaDidikById.mockResolvedValue(null);
+  });
+
+  it("27. ubahStatus + unknown id -> /tidak ditemukan/i; ubahStatus + audit NOT called", async () => {
+    await expect(
+      ubahStatusPesertaDidikAction(formData({ id: "pd_X", status: "lulus" }))
+    ).rejects.toThrow(/tidak ditemukan/i);
+    expect(ubahStatus).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("28. tambahWali + unknown pesertaDidikId -> /tidak ditemukan/i; tambahWali NOT called", async () => {
+    await expect(
+      tambahWaliAction(formData({ pesertaDidikId: "pd_X", nama: "Ayah" }))
+    ).rejects.toThrow(/tidak ditemukan/i);
+    expect(tambahWali).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
   });
 });
