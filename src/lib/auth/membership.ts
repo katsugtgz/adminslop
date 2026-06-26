@@ -9,6 +9,23 @@ export interface MembershipProvider {
 }
 
 /**
+ * WorkOS `role.slug` is a free-form string at the API boundary. Reject unknown
+ * values and fall back to the least-privileged role ("guru") — never trust.
+ */
+const KNOWN_ROLES = new Set<RoleSlug>([
+  "admin_satuan_pendidikan",
+  "guru",
+  "wali_kelas",
+  "kepala_sekolah",
+  "dev",
+]);
+
+function safeRoleSlug(slug: string | undefined): RoleSlug {
+  if (slug && KNOWN_ROLES.has(slug as RoleSlug)) return slug as RoleSlug;
+  return "guru";
+}
+
+/**
  * Pick the membership source. Production resolves Keanggotaan from WorkOS
  * (OrganizationMembership). The dev shim (DEV_MEMBERSHIP_ALL=true) treats the
  * signed-in Pengguna as a member of every seeded Satuan Pendidikan so the
@@ -39,10 +56,7 @@ class WorkOSMembershipProvider implements MembershipProvider {
       out.push({
         orgId: membership.organizationId,
         orgName: membership.organizationName,
-        // WorkOS `role.slug` is a free-form string at the API boundary; cast
-        // to our closed RoleSlug union here so the rest of the codebase gets
-        // compile-time safety. Unknown slugs become "guru" below.
-        roleSlug: (membership.role?.slug ?? "guru") as RoleSlug,
+        roleSlug: safeRoleSlug(membership.role?.slug),
       });
     }
     return out;
