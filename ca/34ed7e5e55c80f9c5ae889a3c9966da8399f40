@@ -1,0 +1,130 @@
+src/components/akses/daftar-pengguna.test.tsx
+  s_811380ccae7f78::t_aa35742ca500a5 1-46,48,50-123
+  s_811380ccae7f78::t_8613d3919c6ed3 47,49
+src/lib/auth/otorisasi.ts
+  s_9ede64d158e39e::t_7cd5c7f3e90cc5 1-2,36-78,88-92
+  s_9ede64d158e39e::t_902647684df02b 79-84
+  s_9ede64d158e39e::t_60f802491e712f 85-87
+  s_9ede64d158e39e::t_3d50814fcfcb7a 93-102
+src/components/akses/daftar-ptk.tsx
+  s_811380ccae7f78::t_5f12188db2c12f 1-63
+src/components/dashboard-aktif.tsx
+  s_811380ccae7f78::t_9eace0d24d4eb9 1,12
+  s_811380ccae7f78::t_952a0eecab4bfe 43-44
+  s_811380ccae7f78::t_0f5c2d76ddf9aa 94-116
+src/components/akses/form-ptk-baru.tsx
+  s_811380ccae7f78::t_1fd415e48267b3 1-74
+src/db/migrations/0001_akses_ptk.sql
+  s_8455136c8a1423::t_5193938210f6ea 1-108
+src/components/dashboard-aktif.test.tsx
+  s_811380ccae7f78::t_158760e7c844b0 2-25,64-92
+src/app/dashboard/akses/actions.ts
+  s_5871af8b1665a4::t_8f161cde578879 1-244
+src/components/akses/daftar-pengguna.tsx
+  s_811380ccae7f78::t_edfebcc65fc072 1-271
+src/db/schema.ts
+  s_8455136c8a1423::t_1eebcb331fd4ec 3,9-10
+  s_8455136c8a1423::t_427aa5e2f56b64 88-221
+src/lib/auth/otorisasi.test.ts
+  s_9ede64d158e39e::t_86b905319b8826 1,9,53-83
+  s_9ede64d158e39e::t_3e6606d7fc5451 84-96
+  s_9ede64d158e39e::t_fbe51e85c66b84 97-120
+  s_9ede64d158e39e::t_e08098efa5323e 121-157
+  s_9ede64d158e39e::t_8147d55bcc844e 158-163,165-175,177-180
+  s_9ede64d158e39e::t_44c24e1e2ed360 181-204
+src/components/akses/daftar-ptk.test.tsx
+  s_811380ccae7f78::t_6937cc6402485a 1-54
+src/lib/auth/types.ts
+  s_9ede64d158e39e::t_77c8f5038c2b86 1,6-25,32
+src/lib/auth/membership.ts
+  s_9ede64d158e39e::t_b041ff1ef3ae4d 5
+  s_9ede64d158e39e::t_ee5d97f214d02f 42-45
+src/db/akses.test.ts
+  s_8455136c8a1423::t_5955cdf0f1e5f8 1-314
+eslint.config.mjs
+  s_3b02dd2100e1a4::t_7a191b6a1ac075 14-27
+src/app/dashboard/akses/page.tsx
+  s_811380ccae7f78::t_61af7fc5222aa3 1-43,47-121
+  s_811380ccae7f78::t_cf9dac9594c637 44-46
+src/db/queries/akses.ts
+  s_cc00676b71fedc::t_e5b370cbcd4d16 1-223
+src/app/dashboard/akses/page.test.tsx
+  s_811380ccae7f78::t_89307c11814418 1-25,32-227
+  s_811380ccae7f78::t_7f18210b81fdca 26-31
+src/db/queries/akses.test.ts
+  s_cc00676b71fedc::t_a267cc04b69b94 1-344
+src/components/akses/form-ptk-baru.test.tsx
+  s_811380ccae7f78::t_f561ec9d85e064 1-39
+src/lib/auth/akses-saya.test.ts
+  s_2d1c0018402956::t_b289f2ffa8bd6e 1-31,33-301
+  s_2d1c0018402956::t_1827bb963a4576 32
+src/app/dashboard/akses/actions.test.ts
+  s_5871af8b1665a4::t_330098e22c14f6 1-2,5-22,34-98,104-159,161-201,205-210,212-246,256-261,271-277,286-292,301-318,327-338,379-386,408-419,441-448,468-475,485-492,507
+  s_5871af8b1665a4::t_41c1dfbf228ca7 3-4,23-33,99-103,160,202-204,211,247-255,262-270,278-285,293-300,319-326,339-378,387-407,420-440,449-467,476-484,493-506
+src/lib/auth/akses-saya.ts
+  s_2d1c0018402956::t_34936df7f50c3c 1-115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "ca34ed7e5e55c80f9c5ae889a3c9966da8399f40",
+  "prompts": {},
+  "sessions": {
+    "s_2d1c0018402956": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff7f86e0ffeihMI1NLc7lkAe4",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_3b02dd2100e1a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ffc2eb8dffeN75AEPQB0oOFEp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_5871af8b1665a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff762b2affeLCGwwZJ3kfp4nV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_811380ccae7f78": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff6e61d2ffeeRyufnYn9pKbKi",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_8455136c8a1423": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff8c6f54ffez3stAIbhfCk2fI",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_9ede64d158e39e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff8c6fa3ffe2hjoVTB0K0yltd",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_cc00676b71fedc": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ff83341effe0LFjIEVX9hl2ml",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
