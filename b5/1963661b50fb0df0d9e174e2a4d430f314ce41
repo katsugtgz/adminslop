@@ -1,0 +1,96 @@
+src/db/queries/kuota-ai.test.ts
+  s_f0e80bbfe90080::t_a19cff08497949 167
+src/components/beban-mengajar/form-wali-kelas.test.tsx
+  s_8a9547028624b7::t_d62f4de6ef7dce 17-18
+src/components/arsip/daftar-arsip.tsx
+  s_8a9547028624b7::t_90ead5a7dc1a72 1-67
+src/components/penilaian/daftar-penilaian.test.tsx
+  s_8a9547028624b7::t_bafff3edc0e768 16-17,27-28
+src/app/dashboard/arsip/page.tsx
+  s_8a9547028624b7::t_56c32d2e87fca9 1-113
+src/components/arsip/daftar-riwayat-perubahan.tsx
+  s_8a9547028624b7::t_1028cc5e1943b4 1-50
+src/components/beban-mengajar/form-beban-mengajar-baru.test.tsx
+  s_8a9547028624b7::t_7041c44b1b9aeb 19-20
+src/components/dashboard-aktif.tsx
+  s_f0e80bbfe90080::t_e8e6d5b641166e 305-323
+  s_f0e80bbfe90080::t_09a6cd5576a29b 100-107
+  s_f0e80bbfe90080::t_6043b02b35163d 3
+src/app/dashboard/arsip/page.test.tsx
+  s_8a9547028624b7::t_3e88e334e31b9f 48-57
+  s_8a9547028624b7::t_47d2b418f89ce8 1-47,58-259
+src/app/dashboard/arsip/actions.ts
+  s_8a9547028624b7::t_dbb3b135a3a8c8 1-173
+src/app/dashboard/akses/page.test.tsx
+  s_8a9547028624b7::t_5ba2d8fe02e1ed 111-112
+  s_8a9547028624b7::t_1f7b731f293b80 184
+src/components/akses/daftar-pengguna.tsx
+  s_8a9547028624b7::t_a6d45363324635 41-42
+  s_8a9547028624b7::t_953bcb5ec054a9 104-107
+src/components/akses/daftar-pengguna.test.tsx
+  s_8a9547028624b7::t_1fe344577079d1 15-16
+  s_8a9547028624b7::t_421da47c29f2b4 58
+src/db/queries/arsip.ts
+  s_8a9547028624b7::t_5e4c5904cdf98e 20
+  s_8a9547028624b7::t_1a9adf20078ea0 1-19,21-378
+src/components/dashboard-aktif.test.tsx
+  s_f0e80bbfe90080::t_2b62d6163c0f9d 155-170
+src/db/queries/arsip.test.ts
+  s_8a9547028624b7::t_168dfe92fc9dbd 1-441
+src/app/dashboard/penilaian/page.test.tsx
+  s_8a9547028624b7::t_bd8ad5e1aef669 210-211
+  s_8a9547028624b7::t_eebb1fb0ec4b44 175-176
+  s_8a9547028624b7::t_bca56cc540d434 231-232
+src/app/dashboard/akses/actions.ts
+  s_8a9547028624b7::t_e6b8b680c36be6 66-67
+src/lib/auth/types.ts
+  s_8a9547028624b7::t_b28857bf5da536 38-42,72-74
+src/app/dashboard/beban-mengajar/page.test.tsx
+  s_8a9547028624b7::t_06d3919e1f2e2a 171-172
+src/db/migrations/0013_arsip.sql
+  s_8a9547028624b7::t_60f410852bcb58 1-107
+src/components/akses/daftar-ptk.test.tsx
+  s_8a9547028624b7::t_999befba29fdce 15-16,25-26
+src/app/dashboard/arsip/actions.test.ts
+  s_8a9547028624b7::t_96cbf4f972db2f 1-418
+src/db/queries/permintaan-ai.test.ts
+  s_f0e80bbfe90080::t_a7c29ec302d114 6
+src/db/schema.ts
+  s_8a9547028624b7::t_8e6dde17c8fd44 915-916
+  s_8a9547028624b7::t_3b8d9dd28cf530 776-777
+  s_8a9547028624b7::t_03ae6482370b23 1116-1153
+  s_8a9547028624b7::t_90d3f83e1b2931 111-114
+  s_8a9547028624b7::t_cb5dcdf0b9c759 824-825
+src/lib/auth/otorisasi.ts
+  s_8a9547028624b7::t_6c560bf28e4c8f 74-75
+  s_8a9547028624b7::t_bdd4fd85e63677 138-140
+  s_8a9547028624b7::t_047ef61fc16daf 46-48
+src/components/arsip/form-retensi.tsx
+  s_8a9547028624b7::t_deb065037f07ee 1-2
+src/components/arsip/daftar-retensi.tsx
+  s_8a9547028624b7::t_7bc25694f7775f 1-132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "b51963661b50fb0df0d9e174e2a4d430f314ce41",
+  "prompts": {},
+  "sessions": {
+    "s_8a9547028624b7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdb261d1ffegT1tQ0AetUvg30",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_f0e80bbfe90080": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd920922ffe5NuYSqGSFLuKL2",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
