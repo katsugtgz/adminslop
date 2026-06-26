@@ -59,6 +59,9 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "penilaian:baca",
   "penilaian:buat",
   "penilaian:ubah",
+  "absensi:baca",
+  "absensi:buat",
+  "absensi:ubah",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

@@ -37,6 +37,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -57,6 +60,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     // Penilaian: read oversight of school-wide assessment data.
     "penilaian:baca",
+    // Absensi: read oversight of school-wide daily attendance.
+    "absensi:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -70,6 +75,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Absensi: guru marks daily attendance for their classes.
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -79,6 +88,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     // Penilaian: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "penilaian:baca",
+    // Absensi: wali_kelas reads (homeroom oversight); writes are admin/guru.
+    "absensi:baca",
   ],
   dev: [
     "ptk:baca",
@@ -105,6 +116,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
   ],
 };
 

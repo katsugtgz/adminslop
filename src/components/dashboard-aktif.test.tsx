@@ -127,3 +127,35 @@ describe("DashboardAktif — Kurikulum reachability link (#9)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Absensi reachability link (#15)", () => {
+  // Every member role receives `absensi:baca` (daily attendance is core
+  // teaching data; kepala_sekolah reads for oversight), so ALL member roles
+  // see the link.
+  it("admin sees the 'Absensi Harian' link pointing at /dashboard/absensi", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Absensi Harian/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/absensi");
+  });
+
+  it("guru sees the link (marks daily attendance for their classes)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Absensi Harian/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (homeroom oversight)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Absensi Harian/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link (school-wide oversight)", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Absensi Harian/i })
+    ).toBeInTheDocument();
+  });
+});
