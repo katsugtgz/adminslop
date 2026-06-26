@@ -1,0 +1,162 @@
+src/app/dashboard/akses/page.test.tsx
+  s_a944d701efba60::t_b8881c0e273da7 182
+src/components/dashboard-aktif.test.tsx
+  s_a944d701efba60::t_463e5c0afc0293 274
+  s_a944d701efba60::t_f26cf60b57078f 271-273
+src/components/akses/daftar-pengguna.test.tsx
+  s_a944d701efba60::t_450a7ea941de2e 29
+  s_a944d701efba60::t_6d921b18701245 56
+src/lib/auth/types.ts
+  s_a944d701efba60::t_147552300d39d7 48-50
+  s_a944d701efba60::t_5e2aca1358f803 88
+  s_a944d701efba60::t_7c12dcc1c09ac1 45-47
+  s_a944d701efba60::t_8c34a1ed0e8bd9 85-87
+src/lib/auth/otorisasi.test.ts
+  s_a944d701efba60::t_9f1e4ce03035d4 615
+  s_a944d701efba60::t_a140dc1c9464cc 612-614
+src/db/schema.ts
+  s_a944d701efba60::t_a685e41b61f3df 1244
+  s_a944d701efba60::t_cf98d0e4047c49 1241-1243
+.gitignore
+  s_a944d701efba60::t_60079080a750c0 12
+package-lock.json
+  s_a944d701efba60::t_715b920efc4d31 22-23,9978-9986
+package.json
+  s_a944d701efba60::t_9919a457ca7560 30-31
+src/app/dashboard/absensi/actions.test.ts
+  s_a944d701efba60::t_4c0045ac3743e0 1-541
+src/app/dashboard/absensi/actions.ts
+  s_a944d701efba60::t_5294edab9ad8af 1-211
+src/app/dashboard/absensi/page.test.tsx
+  s_a944d701efba60::t_97337feb544e22 1-388
+src/app/dashboard/absensi/page.tsx
+  s_a944d701efba60::t_56c4342035d1c1 1-278
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_a944d701efba60::t_1ecb226b8fe871 1-436
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_a944d701efba60::t_59a40f37f1fd06 1-110
+src/app/dashboard/impor-peserta-didik/page.test.tsx
+  s_a944d701efba60::t_89b135e3b182c9 1-224
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_a944d701efba60::t_63ec12a070415c 1-161
+src/app/dashboard/notifikasi/actions.test.ts
+  s_a944d701efba60::t_0a12ca13b9ee9d 1-546
+src/app/dashboard/notifikasi/actions.ts
+  s_a944d701efba60::t_5622bd8040dea1 1-195
+src/app/dashboard/notifikasi/page.test.tsx
+  s_a944d701efba60::t_a8a745b7666a4b 1-282
+src/app/dashboard/notifikasi/page.tsx
+  s_a944d701efba60::t_7b265c3a8bb70b 1-116
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a944d701efba60::t_3c9756ca8fed60 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_a944d701efba60::t_d3fd69a5907143 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_a944d701efba60::t_fe78d9c056b124 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_a944d701efba60::t_5636558643f16a 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_a944d701efba60::t_fdae90d3683098 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_a944d701efba60::t_177f6a0023d0c3 1-40
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_a944d701efba60::t_595b29cbbfc468 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_a944d701efba60::t_9b6fe099677a86 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_a944d701efba60::t_652fc2f9823da4 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_a944d701efba60::t_46ea214f0bc779 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_a944d701efba60::t_0c4fd282ee2320 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_a944d701efba60::t_be57ca69dee2e1 74-80,93-95,140
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_a944d701efba60::t_5bf893ae603fda 1-67
+src/components/absensi/form-absensi.tsx
+  s_a944d701efba60::t_9efc2cb40ab9c5 1-123
+src/components/absensi/rekap-absensi.tsx
+  s_a944d701efba60::t_4ba68586b2cdb0 1-80
+src/components/absensi/types.ts
+  s_a944d701efba60::t_9c84846130eca8 1-31
+src/components/notifikasi/badge-notifikasi.tsx
+  s_a944d701efba60::t_80270e042925b9 1-20
+src/components/notifikasi/daftar-notifikasi.tsx
+  s_a944d701efba60::t_8e9e85f5385281 1-127
+src/components/notifikasi/kontrol-preferensi.tsx
+  s_a944d701efba60::t_1ff926371b7272 1-78
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_a944d701efba60::t_836ebfe4a5c61f 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_a944d701efba60::t_f0472d9de4a411 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_a944d701efba60::t_f413d92cafc49f 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_a944d701efba60::t_ef025ee82a36da 1-132
+src/db/absensi.test.ts
+  s_a944d701efba60::t_bd92f883778c06 1-403
+src/db/akses.test.ts
+  s_a944d701efba60::t_1cabd2503b00f1 49-52
+src/db/kurikulum.test.ts
+  s_a944d701efba60::t_c3550867fdde74 115-125
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_a944d701efba60::t_823bc8e3e2431e 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_7865f197ad5232 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_f1f094da88c690 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_d49b2e987458ad 1-88
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_fa575b411552dd 1-80
+src/db/migrations/0009_absensi_harian.sql
+  s_a944d701efba60::t_3851b6da787309 1-56
+src/db/migrations/0011_notifikasi.sql
+  s_a944d701efba60::t_540817f200bc17 1-80
+src/db/pengaturan.test.ts
+  s_a944d701efba60::t_9cbcbf06b1c79a 1-264
+src/db/queries/absensi.test.ts
+  s_a944d701efba60::t_ca447a788620cd 1-591
+src/db/queries/absensi.ts
+  s_a944d701efba60::t_f91b900e80b74d 1-250
+src/db/queries/akses.test.ts
+  s_a944d701efba60::t_1b2a17d3a81016 60-63
+src/db/queries/akses.ts
+  s_a944d701efba60::t_51e899b2101605 49-56,131-136,143-152
+src/db/queries/kurikulum.test.ts
+  s_a944d701efba60::t_ed5a712790cbbb 83-93
+src/db/queries/notifikasi.test.ts
+  s_a944d701efba60::t_d07e54c3ccef94 1-473
+src/db/queries/notifikasi.ts
+  s_a944d701efba60::t_f6296d87f80b3d 1-268
+src/db/queries/satuan-pendidikan.test.ts
+  s_a944d701efba60::t_fea6df6d0fec25 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_a944d701efba60::t_f8b802fbd968c2 1-85
+src/lib/auth/membership.ts
+  s_a944d701efba60::t_e778a85ba3420d 7-30,66
+src/lib/impor/parse-csv.test.ts
+  s_a944d701efba60::t_3aab16942af8c8 1-148
+src/lib/impor/parse-csv.ts
+  s_a944d701efba60::t_3beba646faf989 1-183
+src/lib/impor/validasi-peserta-didik.test.ts
+  s_a944d701efba60::t_dcb58f7cc41bba 1-273
+src/lib/impor/validasi-peserta-didik.ts
+  s_a944d701efba60::t_f9e260665191e4 1-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "b176ab387c2a4e5ee2bf7107a122d9d945d1298e",
+  "prompts": {},
+  "sessions": {
+    "s_a944d701efba60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fc9611bdffejJ73ApKErg3vqn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
