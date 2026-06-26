@@ -69,6 +69,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -78,6 +81,7 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    "penilaian:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -85,6 +89,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -92,6 +99,7 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
+    "penilaian:baca",
   ],
   dev: [
     "ptk:baca",
@@ -115,6 +123,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
   ],
 };
 

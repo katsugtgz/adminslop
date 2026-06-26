@@ -39,7 +39,10 @@ export type IzinSlug =
   | "beban_mengajar:ubah"
   | "wali_kelas:baca"
   | "wali_kelas:buat"
-  | "wali_kelas:ubah";
+  | "wali_kelas:ubah"
+  | "penilaian:baca"
+  | "penilaian:buat"
+  | "penilaian:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

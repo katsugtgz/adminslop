@@ -378,3 +378,98 @@ describe("evaluasiAkses (#10 T2) — beban_mengajar + wali_kelas defaults", () =
     ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
   });
 });
+
+describe("evaluasiAkses (#11 T2) — penilaian defaults (dual-gate)", () => {
+  // admin/dev get every penilaian slug (school-wide assessment management).
+  it.each<IzinSlug>([
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "penilaian:baca",
+    "penilaian:buat",
+    "penilaian:ubah",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // AC#1 + AC#4 DUAL GATE: guru passes boleh() (gate 1, role-level) for all
+  // three penilaian slugs. Ownership of the beban_mengajar is the SECOND gate,
+  // enforced at the action layer — NOT here. evaluasiAkses only answers the
+  // role-level question.
+  it("guru requesting penilaian:buat -> allow 'peran' (gate 1; ownership is action-layer gate per AC#4)", () => {
+    expect(evaluasiAkses(defaults("guru", "penilaian:buat"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting penilaian:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("guru", "penilaian:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting penilaian:ubah -> allow 'peran' (gate 1; ownership is action-layer gate per AC#4)", () => {
+    expect(evaluasiAkses(defaults("guru", "penilaian:ubah"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  // wali_kelas reads (homeroom oversight); writes are admin/guru only.
+  it("wali_kelas requesting penilaian:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "penilaian:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("wali_kelas requesting penilaian:buat -> deny 'tidak_ada_izin' (only baca default)", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "penilaian:buat"))).toEqual({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+  });
+
+  // kepala_sekolah reads oversight; writes are admin/guru only.
+  it("kepala_sekolah requesting penilaian:baca -> allow 'peran'", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "penilaian:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting penilaian:buat -> deny 'tidak_ada_izin' (only baca default)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "penilaian:buat"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("guru requesting penilaian:buat WITH pembatasan=['penilaian:buat'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "guru",
+        diminta: "penilaian:buat",
+        izinGrants: [],
+        pembatasan: ["penilaian:buat"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
