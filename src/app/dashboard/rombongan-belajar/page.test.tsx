@@ -76,23 +76,27 @@ function aksesAktif(
 ): Extract<AksesSaya, { status: "active" }> {
   const izin = opts?.izin ?? [];
   const pembatasan = opts?.pembatasan ?? [];
-  // Mirrors PERAN_KE_IZIN_DEFAULT for the rombongan_belajar:* slugs.
+  // Mirrors PERAN_KE_IZIN_DEFAULT for the rombongan_belajar:* + peserta_didik:baca
+  // slugs. peserta_didik:baca is granted to every role by default (students are
+  // core teaching data) — the roster gate only fires for an explicit pembatasan.
   const defaults: Record<RoleSlug, IzinSlug[]> = {
     admin_satuan_pendidikan: [
       "rombongan_belajar:baca",
       "rombongan_belajar:buat",
       "rombongan_belajar:ubah",
       "rombongan_belajar:kelola_penempatan",
+      "peserta_didik:baca",
     ],
     dev: [
       "rombongan_belajar:baca",
       "rombongan_belajar:buat",
       "rombongan_belajar:ubah",
       "rombongan_belajar:kelola_penempatan",
+      "peserta_didik:baca",
     ],
-    kepala_sekolah: ["rombongan_belajar:baca"],
-    guru: ["rombongan_belajar:baca"],
-    wali_kelas: ["rombongan_belajar:baca"],
+    kepala_sekolah: ["rombongan_belajar:baca", "peserta_didik:baca"],
+    guru: ["rombongan_belajar:baca", "peserta_didik:baca"],
+    wali_kelas: ["rombongan_belajar:baca", "peserta_didik:baca"],
   };
   const boleh = (diminta: IzinSlug): KeputusanAkses => {
     if (pembatasan.includes(diminta))
@@ -296,5 +300,28 @@ describe("RombonganBelajarPage — render by akses context (#8 / T11)", () => {
     expect(
       screen.getByText(/Belum ada Rombongan Belajar/i)
     ).toBeInTheDocument();
+  });
+
+  it("active + admin WITH pembatasan[peserta_didik:baca] -> roster NOT loaded, placement/progression controls hidden (cubic P1)", async () => {
+    // The roster is gated by its OWN slug. An admin restricted from
+    // peserta_didik:baca sees no student data and no placement / progression
+    // controls, even though they still hold rombongan_belajar:kelola_penempatan.
+    mocks.getAksesSaya.mockResolvedValue(
+      aksesAktif("admin_satuan_pendidikan", {
+        pembatasan: ["peserta_didik:baca"],
+      })
+    );
+    await renderPage();
+
+    expect(mocks.listPesertaDidik).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole("button", { name: /Tempatkan Peserta Didik/i })
+    ).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: /Kenaikan Tingkat/i })
+    ).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: /Tinggal Tingkat/i })
+    ).toBeNull();
   });
 });

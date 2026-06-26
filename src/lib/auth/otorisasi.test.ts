@@ -473,3 +473,142 @@ describe("evaluasiAkses (#11 T2) — penilaian defaults (dual-gate)", () => {
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });
 });
+
+describe("evaluasiAkses (#12 T2) — permintaan_ai + draf_ai defaults (AC#3 verify gate)", () => {
+  // admin/dev get every new slug (full AI request/draft/verify lifecycle).
+  it.each<IzinSlug>([
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // AC#3 verification gate: guru may REQUEST AI generation (buat) + read
+  // drafts, but CANNOT self-verify.
+  it("guru requesting permintaan_ai:buat -> allow 'peran' (guru can request AI)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "permintaan_ai:buat"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("guru requesting draf_ai:verifikasi -> deny 'tidak_ada_izin' (AC#3: guru cannot self-verify)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "draf_ai:verifikasi"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // kepala_sekolah verifies drafts (AC#3 approval gate).
+  it("kepala_sekolah requesting draf_ai:verifikasi -> allow 'peran' (kepala verifies)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "draf_ai:verifikasi"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("kepala_sekolah requesting draf_ai:verifikasi WITH pembatasan=['draf_ai:verifikasi'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "kepala_sekolah",
+        diminta: "draf_ai:verifikasi",
+        izinGrants: [],
+        pembatasan: ["draf_ai:verifikasi"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
+
+describe("evaluasiAkses (#18) — impor/ekspor peserta_didik defaults", () => {
+  // admin/dev get all three: read + manage import, read export.
+  it.each<IzinSlug>([
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // kepala_sekolah reads (oversight) — impor:baca + ekspor:baca; NOT kelola.
+  it("kepala_sekolah requesting impor_peserta_didik:baca -> allow 'peran' (oversight)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "impor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting ekspor_peserta_didik:baca -> allow 'peran' (oversight)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "ekspor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("kepala_sekolah requesting impor_peserta_didik:kelola -> deny 'tidak_ada_izin' (admin-only write)", () => {
+    expect(
+      evaluasiAkses(defaults("kepala_sekolah", "impor_peserta_didik:kelola"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // guru / wali_kelas get NONE of the three (import/export is admin-scoped).
+  it("guru requesting impor_peserta_didik:baca -> deny 'tidak_ada_izin' (no default)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "impor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  it("wali_kelas requesting ekspor_peserta_didik:baca -> deny 'tidak_ada_izin' (no default)", () => {
+    expect(
+      evaluasiAkses(defaults("wali_kelas", "ekspor_peserta_didik:baca"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("admin requesting ekspor_peserta_didik:baca WITH pembatasan -> DENY 'pembatasan'", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "admin_satuan_pendidikan",
+        diminta: "ekspor_peserta_didik:baca",
+        izinGrants: [],
+        pembatasan: ["ekspor_peserta_didik:baca"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});

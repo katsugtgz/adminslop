@@ -1,7 +1,8 @@
 /**
- * tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors WorkOS
- * OrganizationMembership `role.slug`. Never `superuser` (§13 of the identity
- * doc — no global superuser).
+ * App-side tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors the
+ * WorkOS OrganizationMembership `role.slug`. Never `superuser` (per
+ * docs/architecture/identity-and-access.md §13 — no global superuser). `dev`
+ * is a local-only admin-equivalent shim enabled by DEV_MEMBERSHIP_ALL.
  */
 export type RoleSlug =
   | "admin_satuan_pendidikan"
@@ -29,11 +30,22 @@ export type RoleSlug =
  * Guru gets all three (AC#1: guru creates penilaian for their own
  * beban_mengajar — role-level grant; OWNERSHIP is the second gate enforced at
  * the action layer per AC#4). `baca` is universal across teaching roles;
- * `buat`/`ubah` are admin + guru scoped. `notifikasi:*` govern in-app
- * notifications/reminders (#20): `notifikasi:baca` is universal — every role
- * reads/manages their OWN notifications (self-ownership enforced at the action
- * layer); `notifikasi:kelola` is admin/dev only (system-level notification
- * management, e.g. creating reminders on behalf of users).
+ * `buat`/`ubah` are admin + guru scoped.
+ * `permintaan_ai:*` govern Permintaan AI (AI-generation requests) submitted
+ * by teaching staff; `draf_ai:*` govern Draf AI (AI-generated drafts) derived
+ * from those requests. Verification (`draf_ai:verifikasi`) is the approval
+ * gate (AC#3): guru may request + read drafts but NOT self-verify;
+ * kepala_sekolah verifies. Admin manages everything.
+ * `absensi:*` govern Absensi Harian (daily attendance) records. Guru gets all
+ * three (marks attendance for their classes); admin/dev manage school-wide;
+ * `baca` is universal across teaching roles (oversight), `buat`/`ubah` are
+ * admin + guru scoped. `impor_peserta_didik:*` / `ekspor_peserta_didik:baca`
+ * govern CSV bulk import/export of Peserta Didik: `baca` reads the tool
+ * surface, `kelola` performs the import write; export is read-only. Admin/dev
+ * get all three; kepala_sekolah gets `impor:baca` + `ekspor:baca` (oversight);
+ * guru/wali_kelas get none (bulk import/export is admin-scoped).
+ * `notifikasi:*` govern in-app Notifikasi: `baca` reads/manages one's own;
+ * `kelola` (admin/dev) creates system-wide notifications.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -60,6 +72,16 @@ export type IzinSlug =
   | "penilaian:baca"
   | "penilaian:buat"
   | "penilaian:ubah"
+  | "permintaan_ai:baca"
+  | "permintaan_ai:buat"
+  | "draf_ai:baca"
+  | "draf_ai:verifikasi"
+  | "absensi:baca"
+  | "absensi:buat"
+  | "absensi:ubah"
+  | "impor_peserta_didik:baca"
+  | "impor_peserta_didik:kelola"
+  | "ekspor_peserta_didik:baca"
   | "notifikasi:baca"
   | "notifikasi:kelola";
 

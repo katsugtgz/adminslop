@@ -34,6 +34,16 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "penilaian:baca",
   "penilaian:buat",
   "penilaian:ubah",
+  "permintaan_ai:baca",
+  "permintaan_ai:buat",
+  "draf_ai:baca",
+  "draf_ai:verifikasi",
+  "absensi:baca",
+  "absensi:buat",
+  "absensi:ubah",
+  "impor_peserta_didik:baca",
+  "impor_peserta_didik:kelola",
+  "ekspor_peserta_didik:baca",
   "notifikasi:baca",
   "notifikasi:kelola",
 ];
@@ -89,6 +99,26 @@ function labelIzin(slug: IzinSlug): string {
       return "Buat Penilaian";
     case "penilaian:ubah":
       return "Ubah Penilaian";
+    case "permintaan_ai:baca":
+      return "Baca Permintaan AI";
+    case "permintaan_ai:buat":
+      return "Buat Permintaan AI";
+    case "draf_ai:baca":
+      return "Baca Draf AI";
+    case "draf_ai:verifikasi":
+      return "Verifikasi Draf AI";
+    case "absensi:baca":
+      return "Baca Absensi";
+    case "absensi:buat":
+      return "Buat Absensi";
+    case "absensi:ubah":
+      return "Ubah Absensi";
+    case "impor_peserta_didik:baca":
+      return "Baca Impor Peserta Didik";
+    case "impor_peserta_didik:kelola":
+      return "Kelola Impor Peserta Didik";
+    case "ekspor_peserta_didik:baca":
+      return "Baca Ekspor Peserta Didik";
     case "notifikasi:baca":
       return "Baca Notifikasi";
     case "notifikasi:kelola":
