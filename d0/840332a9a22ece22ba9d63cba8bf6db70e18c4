@@ -1,0 +1,177 @@
+src/db/schema.ts
+  s_a944d701efba60::t_6ac278fd57a7da 1170
+  s_a944d701efba60::t_177ee9b94b18ea 1167-1169
+src/lib/auth/types.ts
+  s_a944d701efba60::t_69a276273f4534 47-48
+  s_a944d701efba60::t_b52ae64414deba 84
+  s_a944d701efba60::t_8513e0325dff08 44-46
+  s_a944d701efba60::t_74275916108d76 81-83
+src/components/dashboard-aktif.test.tsx
+  s_a944d701efba60::t_ba0840f9dbd2e3 257
+  s_a944d701efba60::t_d1d248052ff00b 254-256
+src/app/dashboard/akses/page.test.tsx
+  s_a944d701efba60::t_aee8dffffe2026 182
+src/components/akses/daftar-pengguna.test.tsx
+  s_a944d701efba60::t_c566308539d574 29
+  s_a944d701efba60::t_c741bada9ddfdd 56
+.gitignore
+  s_a944d701efba60::t_743d14d628bff8 12
+package-lock.json
+  s_a944d701efba60::t_c91954b66c91b4 22-23,9978-9986
+package.json
+  s_a944d701efba60::t_c8fbb1f0e5b159 30-31
+src/app/dashboard/absensi/actions.test.ts
+  s_a944d701efba60::t_20679dda10154e 1-541
+src/app/dashboard/absensi/actions.ts
+  s_a944d701efba60::t_30a715ad4a7c52 1-211
+src/app/dashboard/absensi/page.test.tsx
+  s_a944d701efba60::t_a79c85a4b86956 1-388
+src/app/dashboard/absensi/page.tsx
+  s_a944d701efba60::t_634126415f9af6 1-278
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_a944d701efba60::t_943a3a1ac0d33f 1-436
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_a944d701efba60::t_78d2cff5d85176 1-110
+src/app/dashboard/impor-peserta-didik/page.test.tsx
+  s_a944d701efba60::t_c5462442dbefb9 1-224
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_a944d701efba60::t_98993bcff77808 1-161
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a944d701efba60::t_4f765636bf44b7 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_a944d701efba60::t_465e911a864e18 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_a944d701efba60::t_d35527ee9c90dc 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_a944d701efba60::t_1fc552770f6edd 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_a944d701efba60::t_f8041b3b014d61 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_a944d701efba60::t_ce49aad88f19c5 1-40
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_a944d701efba60::t_bf7a2c3ebc25f9 1-623
+src/app/dashboard/permintaan-ai/actions.ts
+  s_a944d701efba60::t_1c67d21fc0ca39 1-344
+src/app/dashboard/permintaan-ai/page.test.tsx
+  s_a944d701efba60::t_934ac8112d9059 1-332
+src/app/dashboard/permintaan-ai/page.tsx
+  s_a944d701efba60::t_e4e529cffe2e59 1-125
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_a944d701efba60::t_8bbb672d4cfa3b 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_a944d701efba60::t_25c870ee9e66a3 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_a944d701efba60::t_35914622416fcc 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_a944d701efba60::t_03af7a4ea0c3a1 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_a944d701efba60::t_f9f64e6a8c365d 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_a944d701efba60::t_16ef9a6d70373c 74-80,93-95,140
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_a944d701efba60::t_b8174cfeb43f62 1-67
+src/components/absensi/form-absensi.tsx
+  s_a944d701efba60::t_096f5e10b01f07 1-123
+src/components/absensi/rekap-absensi.tsx
+  s_a944d701efba60::t_9ec802c8573343 1-80
+src/components/absensi/types.ts
+  s_a944d701efba60::t_8ba8dbcd7ff338 1-31
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_a944d701efba60::t_ec1085a10fe9e1 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_a944d701efba60::t_9df3375afbd022 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_a944d701efba60::t_1fda892f02165f 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_a944d701efba60::t_054adcf49167f9 1-132
+src/components/permintaan-ai/daftar-permintaan.test.tsx
+  s_a944d701efba60::t_e10c46a1db45c5 1-234
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_a944d701efba60::t_5ac365901a192b 1-139
+src/components/permintaan-ai/form-permintaan.test.tsx
+  s_a944d701efba60::t_fa858384c0d2c0 1-62
+src/components/permintaan-ai/form-permintaan.tsx
+  s_a944d701efba60::t_0a61b9a62efb9c 1-92
+src/components/permintaan-ai/kartu-draf.test.tsx
+  s_a944d701efba60::t_f810f2cde7eec2 1-107
+src/components/permintaan-ai/kartu-draf.tsx
+  s_a944d701efba60::t_cf8d2f740cdaf5 1-106
+src/components/permintaan-ai/kartu-kuota.test.tsx
+  s_a944d701efba60::t_6f10b75849a6fc 1-52
+src/components/permintaan-ai/kartu-kuota.tsx
+  s_a944d701efba60::t_140baa68d09897 1-43
+src/db/absensi.test.ts
+  s_a944d701efba60::t_93d566e1cbb57e 1-403
+src/db/akses.test.ts
+  s_a944d701efba60::t_3fb90ba9227520 49-52
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_a944d701efba60::t_7f9dbba09cf906 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_7408ed19b72460 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_f0ce024b3793f6 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_991fffb02c470d 1-88
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_e7840ac5fef455 1-80
+src/db/migrations/0008_permintaan_ai.sql
+  s_a944d701efba60::t_6e2c1e821a7298 1-117
+src/db/migrations/0009_absensi_harian.sql
+  s_a944d701efba60::t_be039886826a1b 1-56
+src/db/pengaturan.test.ts
+  s_a944d701efba60::t_267647f2e8ca22 1-264
+src/db/permintaan-ai.test.ts
+  s_a944d701efba60::t_7bebe72531bd56 1-579
+src/db/queries/absensi.test.ts
+  s_a944d701efba60::t_d220e3d7a0547f 1-591
+src/db/queries/absensi.ts
+  s_a944d701efba60::t_fd6df74acfec02 1-250
+src/db/queries/akses.test.ts
+  s_a944d701efba60::t_74c6b61a510c47 60-63
+src/db/queries/akses.ts
+  s_a944d701efba60::t_baa972c5f617c3 49-56,131-136,143-152
+src/db/queries/draf-ai.test.ts
+  s_a944d701efba60::t_88bc222dcebe5c 1-361
+src/db/queries/draf-ai.ts
+  s_a944d701efba60::t_f7d93f5614c950 1-119
+src/db/queries/kuota-ai.test.ts
+  s_a944d701efba60::t_9438cc91e3ec2a 1-326
+src/db/queries/kuota-ai.ts
+  s_a944d701efba60::t_74ae246be630f7 1-131
+src/db/queries/permintaan-ai.test.ts
+  s_a944d701efba60::t_5ded059cf7e210 1-390
+src/db/queries/permintaan-ai.ts
+  s_a944d701efba60::t_7ff46a73d9b333 1-184
+src/db/queries/satuan-pendidikan.test.ts
+  s_a944d701efba60::t_523af394bd9400 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_a944d701efba60::t_914758d32c1589 1-85
+src/lib/auth/membership.ts
+  s_a944d701efba60::t_97a794ae60bf4e 7-30,66
+src/lib/auth/otorisasi.test.ts
+  s_a944d701efba60::t_880286542d8857 476-614
+src/lib/impor/parse-csv.test.ts
+  s_a944d701efba60::t_19859a1479f3ff 1-148
+src/lib/impor/parse-csv.ts
+  s_a944d701efba60::t_a513ab4e769486 1-183
+src/lib/impor/validasi-peserta-didik.test.ts
+  s_a944d701efba60::t_6578411ae2c21b 1-273
+src/lib/impor/validasi-peserta-didik.ts
+  s_a944d701efba60::t_9acfb11e2c873d 1-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "d0840332a9a22ece22ba9d63cba8bf6db70e18c4",
+  "prompts": {},
+  "sessions": {
+    "s_a944d701efba60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fc9611bdffejJ73ApKErg3vqn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
