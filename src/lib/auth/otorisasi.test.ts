@@ -473,3 +473,33 @@ describe("evaluasiAkses (#11 T2) — penilaian defaults (dual-gate)", () => {
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });
 });
+
+describe("evaluasiAkses (#21 T2) — offline:baca universal default", () => {
+  // Mode Offline (#21): every authenticated member may see their own pending
+  // drafts, so ALL roles get `offline:baca` by default. The surface is a
+  // client shell over localStorage; no tenant data leak is possible.
+  it.each<RoleSlug>([
+    "admin_satuan_pendidikan",
+    "dev",
+    "kepala_sekolah",
+    "guru",
+    "wali_kelas",
+  ])("'%s' requesting offline:baca -> allow, sumber 'peran'", (roleSlug) => {
+    expect(evaluasiAkses(defaults(roleSlug, "offline:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  // pembatasan still wins even for the universal offline:baca (no superuser).
+  it("admin requesting offline:baca WITH pembatasan=['offline:baca'] -> DENY 'pembatasan'", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "admin_satuan_pendidikan",
+        diminta: "offline:baca",
+        izinGrants: [],
+        pembatasan: ["offline:baca"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});

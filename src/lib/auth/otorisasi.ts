@@ -40,6 +40,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -62,6 +64,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     // Absensi: read oversight of school-wide daily attendance.
     "absensi:baca",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -79,6 +83,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -90,6 +96,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     // Absensi: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "absensi:baca",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
   dev: [
     "ptk:baca",
@@ -119,6 +127,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
+    // offline:baca (#21) — every member sees their own pending drafts.
+    "offline:baca",
   ],
 };
 

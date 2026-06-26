@@ -37,6 +37,7 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "absensi:baca",
   "absensi:buat",
   "absensi:ubah",
+  "offline:baca",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -96,6 +97,8 @@ function labelIzin(slug: IzinSlug): string {
       return "Buat Absensi";
     case "absensi:ubah":
       return "Ubah Absensi";
+    case "offline:baca":
+      return "Baca Mode Offline";
   }
 }
 

@@ -7,6 +7,7 @@ import {
   CalendarCheck,
   CheckCircle2,
   ClipboardList,
+  CloudOff,
   GraduationCap,
   KeyRound,
   Users,
@@ -18,6 +19,7 @@ import { dapatMelihatAkses, PERAN_KE_IZIN_DEFAULT } from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
 
 import { Button } from "@/components/ui/button";
+import { IndikatorOffline } from "@/components/offline/indikator-offline";
 
 /**
  * Active Satuan Pendidikan dashboard surface. Reads tenant-scoped data using a
@@ -96,6 +98,13 @@ export async function DashboardAktif({
     membership.roleSlug
   ].includes("absensi:baca");
 
+  // Reachability link to Sinkronisasi Data (#21 Mode Offline). Every member
+  // role receives `offline:baca` — each user may see their own pending drafts.
+  // The page is a client shell over localStorage; no server data is loaded.
+  const bolehLihatSinkronisasi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("offline:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -114,6 +123,9 @@ export async function DashboardAktif({
             <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden="true" />
             Peran Anda: {membership.roleSlug}
           </p>
+          <div className="mt-2">
+            <IndikatorOffline />
+          </div>
         </div>
       </header>
 
@@ -198,6 +210,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/absensi">Buka Absensi Harian</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatSinkronisasi && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <CloudOff className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Sinkronisasi Data (Mode Offline)</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Lihat draf tertunda dan sinkronkan saat tersambung kembali.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/sinkronisasi">Buka Sinkronisasi Data</Link>
           </Button>
         </div>
       )}

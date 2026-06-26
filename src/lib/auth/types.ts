@@ -32,7 +32,9 @@ export type RoleSlug =
  * `buat`/`ubah` are admin + guru scoped. `absensi:*` govern Absensi Harian
  * (daily attendance) records. Guru gets all three (marks attendance for their
  * classes); admin/dev manage school-wide; `baca` is universal across teaching
- * roles (oversight), `buat`/`ubah` are admin + guru scoped.
+ * roles (oversight), `buat`/`ubah` are admin + guru scoped. `offline:baca`
+ * governs the Mode Offline surface (#21) — every authenticated member may see
+ * their own pending drafts, so it is granted to ALL roles by default.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -61,7 +63,8 @@ export type IzinSlug =
   | "penilaian:ubah"
   | "absensi:baca"
   | "absensi:buat"
-  | "absensi:ubah";
+  | "absensi:ubah"
+  | "offline:baca";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
