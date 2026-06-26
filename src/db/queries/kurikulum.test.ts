@@ -80,10 +80,6 @@ describeOrSkip("kurikulum repository (#9, T5 — GLOBAL drill-down queries)", ()
       delete from tujuan_pembelajaran;
       delete from capaian_pembelajaran;
       delete from kurikulum;
-      -- beban_mengajar references mata_pelajaran ON DELETE RESTRICT (#10);
-      -- must clear before mata_pelajaran deletion in parallel test runs.
-      delete from beban_mengajar;
-      delete from wali_kelas;
       delete from mata_pelajaran;
       delete from fase;
     `);
@@ -408,12 +404,10 @@ describeOrSkip("kurikulum repository (#9, T5 — GLOBAL drill-down queries)", ()
   // Smoke: the read path works through the migrator client too (Db | Tx union
   // accepts either) — guards against accidental client-type coupling.
   itOrSkip("queries accept the migrator client (Db | Tx union)", async () => {
-    // GLOBAL tables have no RLS — parallel db test files share the same rows,
-    // so exact counts are unstable under parallel execution. Assert >= seeded.
     const all = await q.listKurikulum(migDb);
-    expect(all.length).toBeGreaterThanOrEqual(2);
+    expect(all).toHaveLength(2);
     const mapel = await q.listMataPelajaranByKurikulum(migDb, K1);
-    expect(mapel.length).toBeGreaterThanOrEqual(2);
+    expect(mapel).toHaveLength(2);
     void schema; // keep schema import live for parity with sibling test files.
   });
 });

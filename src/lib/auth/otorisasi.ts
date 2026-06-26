@@ -1,5 +1,38 @@
 import type { IzinSlug, RoleSlug } from "./types";
 
+// ─── #5: Profil/Pengaturan Satuan Pendidikan predicates ──────────────────────
+
+const ADMIN_WRITE_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+]);
+
+const MEMBER_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+  "guru",
+  "kepala_sekolah",
+]);
+
+/**
+ * Write predicate for Profil/Pengaturan Satuan Pendidikan. Type guard so
+ * callers narrow to `RoleSlug` when guarding an admin action.
+ */
+export function canAdminSatuanPendidikan(
+  roleSlug: string | undefined,
+): roleSlug is RoleSlug {
+  return !!roleSlug && ADMIN_WRITE_ROLES.has(roleSlug);
+}
+
+/** Read predicate — any active member may view their Satuan Pendidikan profil/pengaturan. */
+export function canViewPengaturanSatuanPendidikan(
+  roleSlug: string | undefined,
+): boolean {
+  return !!roleSlug && MEMBER_ROLES.has(roleSlug);
+}
+
+// ─── #6: Akses (Peran/Izin/Pembatasan) evaluator ─────────────────────────────
+
 /**
  * Baked-in peran (role) → default Izin map. Read-only constant. The starting
  * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
@@ -8,6 +41,12 @@ import type { IzinSlug, RoleSlug } from "./types";
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+  // peserta_didik:baca + rombongan_belajar:baca granted to every teaching role
+  // (students and classes are core teaching data); buat/ubah remain
+  // admin-scoped. No :hapus this slice (archive, not hard-delete per
+  // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
+  // reads it. kurikulum:baca is universal — curriculum reference data is
+  // read-only for all roles.
   admin_satuan_pendidikan: [
     "ptk:baca",
     "ptk:buat",
@@ -23,33 +62,26 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
-    // kurikulum:baca — curriculum reference data is universal (read-only).
     "kurikulum:baca",
-    // Beban Mengajar + Wali Kelas: admin manages teaching load + homeroom
-    // assignments school-wide.
     "beban_mengajar:baca",
     "beban_mengajar:buat",
     "beban_mengajar:ubah",
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
-    // Penilaian (assessment/grading): admin manages all school-wide.
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI + Draf AI: admin manages the full AI request/draft/verify
+    // lifecycle school-wide.
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
   ],
-  // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
-  // core teaching data, so every teaching role reads by default. Writes
-  // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
-  // hard-delete per CONTEXT.md). Rombongan Belajar (class) data is likewise
-  // core teaching data -> baca for every teaching role; Tahun Ajaran
-  // management is admin-only, but kepala_sekolah reads it. Beban Mengajar +
-  // Wali Kelas reads are universal across teaching roles — a guru must see
-  // their own teaching load and homeroom context (AC#4); writes remain
-  // admin-scoped.
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",
@@ -58,8 +90,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: read oversight of school-wide assessment data.
     "penilaian:baca",
+    // Permintaan AI + Draf AI: kepala_sekolah reads requests + drafts and
+    // VERIFIES drafts (AC#3 approval gate).
+    "permintaan_ai:baca",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
     // Absensi: read oversight of school-wide daily attendance.
     "absensi:baca",
   ],
@@ -69,12 +105,14 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: guru creates/edits assessments for their own beban_mengajar
-    // (AC#1). Ownership is the second gate, enforced at the action layer
-    // (AC#4) — boleh() is the first (role-level) gate only.
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI: guru may REQUEST AI generation + read drafts (AC#3), but
+    // NOT verify — draf_ai:verifikasi is kepala_sekolah/admin only.
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
     // Absensi: guru marks daily attendance for their classes.
     "absensi:baca",
     "absensi:buat",
@@ -86,8 +124,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "penilaian:baca",
+    // Permintaan AI + Draf AI: wali_kelas reads requests + drafts only
+    // (no request, no verify — homeroom oversight, not AI workflow).
+    "permintaan_ai:baca",
+    "draf_ai:baca",
     // Absensi: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "absensi:baca",
   ],
@@ -116,6 +157,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI + Draf AI: dev mirrors admin (full lifecycle).
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
