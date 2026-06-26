@@ -1,0 +1,24 @@
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_b86d2d5c1bb257::t_5acbd7418cf2e1 1-52
+src/lib/auth/membership.ts
+  s_b86d2d5c1bb257::t_a569cded705a50 66
+  s_b86d2d5c1bb257::t_2a16de03f8d523 7-30
+src/db/queries/akses.ts
+  s_b86d2d5c1bb257::t_b5c7e1d81ea4b9 123-128,135-144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "bc69cd5542cc60f074e8185799add53fb0f41277",
+  "prompts": {},
+  "sessions": {
+    "s_b86d2d5c1bb257": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd330284ffe42vjuh51tWulVN",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
