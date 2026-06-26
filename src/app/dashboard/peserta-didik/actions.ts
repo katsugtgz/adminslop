@@ -23,7 +23,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { catatAudit, getDb, withTenant } from "@/db/client";
+import { catatAudit, getDb, withTenant, type Tx } from "@/db/client";
 import {
   hapusKontakDarurat,
   hapusWali,
@@ -33,6 +33,7 @@ import {
 import { tambahMutasi } from "@/db/queries/mutasi-peserta-didik";
 import {
   buatPesertaDidik,
+  cariPesertaDidikById,
   ubahPesertaDidik,
   ubahStatus,
   type JenisKelamin,
@@ -72,6 +73,20 @@ function trimField(formData: FormData, key: string): string {
  */
 function isParseableDate(value: string): boolean {
   return value.length > 0 && !Number.isNaN(Date.parse(value));
+}
+
+/**
+ * Tenant-scoped existence guard (cubic P1-5). RLS already filters cross-tenant
+ * rows, but resolving the id explicitly inside `withTenant` turns a missing or
+ * cross-tenant id into a clear error BEFORE any write/audit runs — otherwise a
+ * bad `pesertaDidikId` would surface as an opaque FK violation or a silent
+ * repo-layer throw. Throws when the row is absent under the active tenant.
+ */
+async function assertPesertaAda(tx: Tx, id: string): Promise<void> {
+  const existing = await cariPesertaDidikById(tx, id);
+  if (!existing) {
+    throw new Error("Peserta Didik tidak ditemukan.");
+  }
 }
 
 // 1. simpanPesertaDidikBaruAction --------------------------------------------
@@ -204,6 +219,7 @@ export async function ubahPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    await assertPesertaAda(tx, id);
     await ubahPesertaDidik(tx, id, input);
     await catatAudit(tx, {
       aktor: akses.userId,
@@ -248,6 +264,7 @@ export async function ubahStatusPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    await assertPesertaAda(tx, id);
     await ubahStatus(tx, id, {
       status,
       catatan: catatan ?? undefined,
@@ -316,6 +333,7 @@ export async function catatMutasiPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    await assertPesertaAda(tx, id);
     // 1. Record the transfer row (mutasi repo).
     await tambahMutasi(tx, {
       pesertaDidikId: id,
@@ -371,6 +389,7 @@ export async function tambahWaliAction(formData: FormData): Promise<void> {
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    await assertPesertaAda(tx, pesertaDidikId);
     await tambahWali(tx, {
       pesertaDidikId,
       nama,
@@ -449,6 +468,7 @@ export async function tambahKontakDaruratAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    await assertPesertaAda(tx, pesertaDidikId);
     await tambahKontakDarurat(tx, {
       pesertaDidikId,
       nama,

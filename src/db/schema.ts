@@ -20,25 +20,29 @@ import { sql } from "drizzle-orm";
  * Pendidikan). Owned here for FK integrity only — lifecycle stays in WorkOS.
  * NOT tenant-scoped (it IS the tenant boundary), so it carries no RLS.
  */
-export const satuanPendidikan = pgTable(
-  "satuan_pendidikan",
-  {
-    id: text("id").primaryKey(),
-    nama: text("nama").notNull(),
-    // Active semester on the tenant boundary (nullable until chosen).
-    // Spelling: 'ganjil' (odd) / 'genap' (even) — 'genap' has ONE 'p'.
-    semesterAktif: text("semester_aktif"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-  },
-  (t) => [
-    check(
-      "satuan_pendidikan_semester_aktif_check",
-      sql`${t.semesterAktif} in ('ganjil', 'genap')`
-    ),
-  ]
-);
+export const satuanPendidikan = pgTable("satuan_pendidikan", {
+  id: text("id").primaryKey(),
+  nama: text("nama").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  // Profil (issue #5)
+  npsn: text("npsn"),
+  jenjang: text("jenjang"),
+  alamat: text("alamat"),
+  namaKepala: text("nama_kepala"),
+  logoUrl: text("logo_url"),
+  // Pengaturan (issue #5)
+  tahunAjaranAktif: text("tahun_ajaran_aktif"),
+  semesterAktif: text("semester_aktif"),
+  zonaWaktu: text("zona_waktu").notNull().default("Asia/Jakarta"),
+  // Preferensi Cetak (issue #5)
+  cetakPaperSize: text("cetak_paper_size").notNull().default("A4"),
+  cetakTampilkanLogo: boolean("cetak_tampilkan_logo").notNull().default(true),
+  cetakTampilkanHeader: boolean("cetak_tampilkan_header")
+    .notNull()
+    .default(true),
+});
 
 /**
  * Smoke tenant-scoped record (#3). Throwaway artifact that proves the RLS
@@ -83,6 +87,7 @@ export const catatanAudit = pgTable("catatan_audit", {
 export type ContohCatatan = typeof contohCatatan.$inferSelect;
 export type CatatanAudit = typeof catatanAudit.$inferSelect;
 export type CatatanAuditInsert = typeof catatanAudit.$inferInsert;
+export type SatuanPendidikan = typeof satuanPendidikan.$inferSelect;
 
 /**
  * PTK — catatan personel (pendidik / tenaga kependidikan).
@@ -718,6 +723,7 @@ export type AlurTujuanPembelajaran =
   typeof alurTujuanPembelajaran.$inferSelect;
 export type AlurTujuanPembelajaranInsert =
   typeof alurTujuanPembelajaran.$inferInsert;
+
 
 // ---------------------------------------------------------------------------
 // TEACHER CONTEXT — teaching load + class guardian assignment.
