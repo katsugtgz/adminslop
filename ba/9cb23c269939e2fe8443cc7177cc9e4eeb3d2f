@@ -1,0 +1,85 @@
+src/app/dashboard/akses/actions.ts
+  s_ee03f286a69906::t_e0283121a955aa 70-72
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/page.tsx
+  s_ee03f286a69906::t_4f32b4e847f78b 1-69
+src/db/queries/cetak.test.ts
+  s_ee03f286a69906::t_80a5e030821323 1-419
+src/app/dashboard/cetak/page.test.tsx
+  s_ee03f286a69906::t_56a36410ace011 1-242
+src/lib/auth/types.ts
+  s_ee03f286a69906::t_fdf4c227b5d5e7 44-48
+  s_ee03f286a69906::t_f0a90cbd22a36d 82-85
+src/db/queries/cetak.ts
+  s_ee03f286a69906::t_42cedb3f07b474 1-265,267-277,279-282
+  s_ee03f286a69906::t_79d1075ae01331 266
+  s_ee03f286a69906::t_a41f4429dd728a 278
+src/app/dashboard/cetak/actions.ts
+  s_ee03f286a69906::t_cdf7357fbd75dc 1-166
+src/app/dashboard/cetak/page.tsx
+  s_ee03f286a69906::t_afc549c6e39c15 1-155
+src/components/dashboard-aktif.test.tsx
+  s_113d24820e3ce1::t_d9c1b1fbe9c47a 180-204
+src/app/dashboard/cetak/actions.test.ts
+  s_ee03f286a69906::t_90855eb878291d 1-414
+src/components/cetak/kontrol-cetak.tsx
+  s_ee03f286a69906::t_887e9592637d51 1-152
+src/components/akses/daftar-pengguna.tsx
+  s_ee03f286a69906::t_ff9753e6e6d422 45-47
+  s_ee03f286a69906::t_df59d76d2b4b8d 117-122
+src/db/migrations/0012_template_cetak.sql
+  s_ee03f286a69906::t_d5def9db9a44e9 1-135
+src/components/cetak/daftar-template.tsx
+  s_ee03f286a69906::t_6911b9167c3bdf 1-73
+src/components/dashboard-aktif.tsx
+  s_113d24820e3ce1::t_ab691cd06a4690 262
+  s_113d24820e3ce1::t_1e45080615d420 109-116
+  s_113d24820e3ce1::t_28b13233cecd54 13
+  s_113d24820e3ce1::t_c157c9801ac0c1 245-261,263-266
+src/db/schema.ts
+  s_ee03f286a69906::t_6d54a1555e17f6 32-42,52-54
+  s_ee03f286a69906::t_6140fc955d03ef 1225-1313
+src/components/cetak/form-template.tsx
+  s_ee03f286a69906::t_a78c49c505e932 1-119
+src/app/dashboard/akses/page.test.tsx
+  s_ee03f286a69906::t_f81f817e86484e 182
+src/lib/auth/otorisasi.ts
+  s_ee03f286a69906::t_623a40bc070be9 164-167
+  s_ee03f286a69906::t_6ad38aee11f05e 109-110
+  s_ee03f286a69906::t_b921bf8939d83e 126-127
+  s_ee03f286a69906::t_3aa5efcb61a14f 84-86
+  s_ee03f286a69906::t_74668b1f1e14c3 51-55
+src/components/cetak/pratinjau-eraport.tsx
+  s_ee03f286a69906::t_cf24b2c30ff079 1-152
+src/components/akses/daftar-pengguna.test.tsx
+  s_ee03f286a69906::t_62f4c9eb1a76d4 56
+  s_ee03f286a69906::t_8f96ed24286a31 29
+src/components/cetak/pratinjau.test.tsx
+  s_ee03f286a69906::t_4ceb119a0b591e 119
+  s_ee03f286a69906::t_90cc96478483b1 118
+  s_ee03f286a69906::t_d280c0123fc609 69
+  s_ee03f286a69906::t_454dd8646d4774 1-68,70-117,120-121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "ba9cb23c269939e2fe8443cc7177cc9e4eeb3d2f",
+  "prompts": {},
+  "sessions": {
+    "s_113d24820e3ce1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd920929ffeIZdipaMa7NBNyZ",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_ee03f286a69906": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdb261d8ffev1J4fvKz0X53N6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
