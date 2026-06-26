@@ -1,7 +1,9 @@
-import { Building2, CheckCircle2 } from "lucide-react";
+import Link from "next/link";
+import { Building2, CheckCircle2, Settings } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import * as schema from "@/db/schema";
+import { canAdminSatuanPendidikan } from "@/lib/auth/otorisasi";
 import type { Membership } from "@/lib/auth/server";
 
 /**
@@ -45,6 +47,16 @@ export async function DashboardAktif({
           </p>
         </div>
       </header>
+
+      {canAdminSatuanPendidikan(membership.roleSlug) && (
+        <Link
+          href="/dashboard/pengaturan"
+          className="inline-flex h-11 items-center gap-2 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Settings className="h-4 w-4" aria-hidden="true" />
+          Pengaturan Sekolah
+        </Link>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
