@@ -127,3 +127,28 @@ describe("DashboardAktif — Kurikulum reachability link (#9)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Permintaan AI reachability link (#12)", () => {
+  // All member roles receive `permintaan_ai:baca` by default, so ALL member
+  // roles see the link. The page re-checks server-side (§12) and applies
+  // AC#3 DUAL authz (verification gate) for draf_ai writes.
+  it("admin sees the 'Permintaan AI' link pointing at /dashboard/permintaan-ai", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Permintaan AI/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/permintaan-ai");
+  });
+
+  it("guru sees the link (can create AI requests)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Permintaan AI/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (read-only access)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Permintaan AI/i })
+    ).toBeInTheDocument();
+  });
+});

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   BookOpen,
+  Bot,
   Briefcase,
   Building2,
   Calendar,
@@ -87,6 +88,14 @@ export async function DashboardAktif({
     membership.roleSlug
   ].includes("penilaian:baca");
 
+  // Reachability link to Permintaan AI (#12). All member roles receive
+  // `permintaan_ai:baca` — AI requests are visible to every role. The
+  // page re-checks `boleh("permintaan_ai:baca")` server-side (§12) and
+  // applies AC#3 DUAL authz (verification gate) for draf_ai writes.
+  const bolehLihatPermintaanAi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("permintaan_ai:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -167,6 +176,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/penilaian">Buka Penilaian</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatPermintaanAi && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Bot className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Permintaan AI</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Buat permintaan AI dan verifikasi draf.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/permintaan-ai">Buka Permintaan AI</Link>
           </Button>
         </div>
       )}

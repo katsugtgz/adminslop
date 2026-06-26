@@ -30,6 +30,11 @@ export type RoleSlug =
  * beban_mengajar — role-level grant; OWNERSHIP is the second gate enforced at
  * the action layer per AC#4). `baca` is universal across teaching roles;
  * `buat`/`ubah` are admin + guru scoped.
+ * `permintaan_ai:*` govern Permintaan AI (AI-generation requests) submitted
+ * by teaching staff; `draf_ai:*` govern Draf AI (AI-generated drafts) derived
+ * from those requests. Verification (`draf_ai:verifikasi`) is the approval
+ * gate (AC#3): guru may request + read drafts but NOT self-verify;
+ * kepala_sekolah verifies. Admin manages everything.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -55,7 +60,11 @@ export type IzinSlug =
   | "wali_kelas:ubah"
   | "penilaian:baca"
   | "penilaian:buat"
-  | "penilaian:ubah";
+  | "penilaian:ubah"
+  | "permintaan_ai:baca"
+  | "permintaan_ai:buat"
+  | "draf_ai:baca"
+  | "draf_ai:verifikasi";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
