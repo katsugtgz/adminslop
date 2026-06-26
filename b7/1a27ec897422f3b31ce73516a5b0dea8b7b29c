@@ -1,0 +1,41 @@
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_58bd3f4219cad3::t_992c076640f0e5 215
+  s_58bd3f4219cad3::t_acc1295e861295 255-259
+  s_58bd3f4219cad3::t_ad565c0cb588bb 817-845
+  s_58bd3f4219cad3::t_c60984a11e00bf 104
+  s_58bd3f4219cad3::t_4a73ef4ff7dba2 61-67
+  s_58bd3f4219cad3::t_1873b7ff950722 60
+  s_58bd3f4219cad3::t_8a8b8e46ee044c 126
+src/app/dashboard/peserta-didik/actions.ts
+  s_58bd3f4219cad3::t_7626960fe0c8b9 471
+  s_58bd3f4219cad3::t_09297fb0aaa70d 78-91
+  s_58bd3f4219cad3::t_da5bbacf4c9e01 267
+  s_58bd3f4219cad3::t_9166d8bc9a2ba0 392
+  s_58bd3f4219cad3::t_98624148e6577e 222
+  s_58bd3f4219cad3::t_80ce2d898bc02b 336
+  s_58bd3f4219cad3::t_464a901f299a95 26
+  s_58bd3f4219cad3::t_20bf68d345f4a2 36
+src/lib/auth/membership.ts
+  s_58bd3f4219cad3::t_e10bf3f313628f 62
+  s_58bd3f4219cad3::t_e0f9408fb105d7 17-26,28-30
+  s_58bd3f4219cad3::t_df260fa6e2873a 12-16
+  s_58bd3f4219cad3::t_e88882c0ec53f4 27
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_58bd3f4219cad3::t_88347705ba9ff6 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "b71a27ec897422f3b31ce73516a5b0dea8b7b29c",
+  "prompts": {},
+  "sessions": {
+    "s_58bd3f4219cad3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd1f92d8ffePhd9ZIFW2Yd0Mp",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
