@@ -54,6 +54,9 @@ export type RoleSlug =
  * guru creates + edits + verifies AI-assisted content (AC#3), admin/dev manage,
  * others read. `arsip:*` govern the archive/recovery/retention surface:
  * `baca` reads history, `kelola` (admin/dev) performs archive/restore.
+ * `cetak:*` govern the print/export surface (#14): `baca` previews, `buat`
+ * generates dokumen_cetak (admin/dev/kepala_sekolah), `ubah` edits templates
+ * (admin/dev).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -106,7 +109,10 @@ export type IzinSlug =
   | "perangkat_ajar:buat"
   | "perangkat_ajar:ubah"
   | "arsip:baca"
-  | "arsip:kelola";
+  | "arsip:kelola"
+  | "cetak:baca"
+  | "cetak:buat"
+  | "cetak:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

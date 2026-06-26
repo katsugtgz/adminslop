@@ -362,3 +362,28 @@ describe("DashboardAktif — Arsip reachability link (#19)", () => {
     expect(screen.queryByRole("link", { name: /Arsip Data/i })).toBeNull();
   });
 });
+
+describe("DashboardAktif — Cetak reachability link (#14)", () => {
+  // All member roles receive `cetak:baca` by default, so ALL member roles see
+  // the link. The page re-checks server-side (§12); writes (Template /
+  // preferensi) apply AC#2 DUAL authz (admin / kepala_sekolah / dev only).
+  it("admin sees the 'Cetak' link pointing at /dashboard/cetak", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Buka Cetak/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/cetak");
+  });
+
+  it("guru sees the link (read-only Pratinjau Cetak)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Buka Cetak/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (read-only oversight)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Buka Cetak/i })
+    ).toBeInTheDocument();
+  });
+});

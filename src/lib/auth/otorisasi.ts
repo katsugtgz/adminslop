@@ -109,6 +109,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Arsip (#19): admin manages archive/recovery/retention school-wide.
     "arsip:baca",
     "arsip:kelola",
+    // Cetak: admin manages the full print/export surface (#14) — templates,
+    // preview, dokumen generation.
+    "cetak:baca",
+    "cetak:buat",
+    "cetak:ubah",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -141,6 +146,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:baca",
     // Arsip (#19): kepala_sekolah reads archive/retention/history (oversight).
     "arsip:baca",
+    // Cetak: kepala_sekolah reads + generates dokumen_cetak (cetak:buat).
+    "cetak:baca",
+    "cetak:buat",
   ],
   guru: [
     "peserta_didik:baca",
@@ -180,6 +188,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:baca",
     "perangkat_ajar:buat",
     "perangkat_ajar:ubah",
+    // Cetak: guru previews reports (homeroom/teaching oversight).
+    "cetak:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -203,6 +213,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:baca",
     // Perangkat Ajar: wali_kelas reads only (homeroom oversight).
     "perangkat_ajar:baca",
+    // Cetak: wali_kelas previews homeroom reports (read-only oversight).
+    "cetak:baca",
   ],
   dev: [
     "ptk:baca",
@@ -263,6 +275,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Arsip (#19): dev mirrors admin.
     "arsip:baca",
     "arsip:kelola",
+    // Cetak: dev mirrors admin (full print/export surface).
+    "cetak:baca",
+    "cetak:buat",
+    "cetak:ubah",
   ],
 };
 

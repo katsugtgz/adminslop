@@ -1,0 +1,73 @@
+import type { TemplateCetak } from "@/db/schema";
+
+function formatTanggal(d: Date): string {
+  return new Intl.DateTimeFormat("id-ID", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(d);
+}
+
+/** Compact, human-readable summary of a template's pengaturan blob. */
+function ringkasanPengaturan(p: unknown): string {
+  if (typeof p !== "object" || p === null) return "—";
+  const o = p as Record<string, unknown>;
+  const parts: string[] = [];
+  if ("marginMm" in o) parts.push(`Margin ${o.marginMm}mm`);
+  if ("fontSize" in o) parts.push(`Font ${o.fontSize}`);
+  if ("showLogo" in o)
+    parts.push(o.showLogo ? "Logo" : "Tanpa Logo");
+  if ("showHeader" in o)
+    parts.push(o.showHeader ? "Header" : "Tanpa Header");
+  return parts.length > 0 ? parts.join(" · ") : "Default";
+}
+
+/**
+ * Visible list of Template Cetak for the active Satuan Pendidikan. Each row
+ * shows the nama, jenis, default badge, pengaturan summary, and dibuatPada.
+ * Read-only display — mutations go through server actions (the page gates the
+ * create form by `boleh("cetak:buat")`).
+ */
+export function DaftarTemplateCetak({
+  templates,
+}: {
+  templates: readonly TemplateCetak[];
+}) {
+  if (templates.length === 0) {
+    return (
+      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        Belum ada Template Cetak.
+      </p>
+    );
+  }
+
+  return (
+    <ul className="flex flex-col gap-3">
+      {templates.map((t) => (
+        <li
+          key={t.id}
+          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+        >
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-semibold">{t.nama}</span>
+            {t.isDefault ? (
+              <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                Default
+              </span>
+            ) : null}
+            <span className="text-xs text-muted-foreground">
+              Jenis: {t.jenis}
+            </span>
+          </span>
+          <span className="flex flex-col items-end gap-0.5">
+            <span className="text-xs text-muted-foreground">
+              {ringkasanPengaturan(t.pengaturan)}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Dibuat {formatTanggal(t.dibuatPada)}
+            </span>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}

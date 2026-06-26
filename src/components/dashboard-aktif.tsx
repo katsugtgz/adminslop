@@ -14,6 +14,7 @@ import {
   FileQuestion,
   FileText,
   GraduationCap,
+  Printer,
   HelpCircle,
   KeyRound,
   Settings,
@@ -168,6 +169,13 @@ export async function DashboardAktif({
     "arsip:baca",
   );
 
+  // Reachability link to Cetak (#14). All member roles receive `cetak:baca` —
+  // report preview/print is visible to every role; template + dokumen writes
+  // are admin/dev/kepala_sekolah scoped. The page re-checks server-side (§12).
+  const bolehLihatCetak = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("cetak:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -224,6 +232,28 @@ export async function DashboardAktif({
       </div>
 
       <nav aria-label="Modul Satuan Pendidikan" className="flex flex-col gap-4">
+      {bolehLihatCetak && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Printer className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Cetak E-Raport</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Pratinjau dan cetak E-Raport dengan Template Cetak.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/cetak">Buka Cetak</Link>
+          </Button>
+        </div>
+      )}
+
       {bolehLihatAbsensi && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
