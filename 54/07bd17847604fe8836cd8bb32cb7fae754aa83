@@ -1,0 +1,19 @@
+src/db/migrations/0015_fk_tenant_scoping.sql
+  s_fa676a3c636353::t_8a984accf9787c 1-497
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "5407bd17847604fe8836cd8bb32cb7fae754aa83",
+  "prompts": {},
+  "sessions": {
+    "s_fa676a3c636353": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fb8d2a76ffeaj0pgytZXKNyQV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
