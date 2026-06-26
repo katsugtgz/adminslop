@@ -43,6 +43,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Arsip (#19): admin manages archive/recovery/retention school-wide.
+    "arsip:baca",
+    "arsip:kelola",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -68,6 +71,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Arsip (#19): kepala_sekolah reads archive/retention/history (oversight).
+    "arsip:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -130,6 +135,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Arsip (#19): dev mirrors admin.
+    "arsip:baca",
+    "arsip:kelola",
   ],
 };
 

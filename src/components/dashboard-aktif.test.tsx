@@ -152,3 +152,19 @@ describe("DashboardAktif — Permintaan AI reachability link (#12)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Arsip reachability link (#19)", () => {
+  // admin / kepala_sekolah / dev receive `arsip:baca` (archive/recovery/
+  // retention/history is admin/oversight scope). guru / wali_kelas do NOT —
+  // the page re-checks `boleh("arsip:baca")` server-side (§12).
+  it("admin sees the 'Arsip Data' link pointing at /dashboard/arsip", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Arsip Data/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/arsip");
+  });
+
+  it("guru does NOT see the link (not core teaching data)", async () => {
+    await renderAktif("guru");
+    expect(screen.queryByRole("link", { name: /Arsip Data/i })).toBeNull();
+  });
+});

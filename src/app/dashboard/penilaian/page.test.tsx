@@ -172,6 +172,8 @@ const PTK_BUDI: Ptk = {
   nip: null,
   jenis: "pendidik",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const MAPEL_MTK: MataPelajaran = {
@@ -205,6 +207,8 @@ const BEBAN_1: BebanMengajar = {
   tahunAjaranId: "ta_2025",
   semester: "ganjil",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const KOMPONEN_UTS: KomponenNilai = {
@@ -224,6 +228,8 @@ const PENILAIAN_TUGAS1: Penilaian = {
   tanggal: "2026-01-10",
   dibuatOleh: null,
   dibuatPada: new Date("2026-01-10T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const PD_ANDI: PesertaDidik = {

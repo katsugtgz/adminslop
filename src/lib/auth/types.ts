@@ -35,6 +35,11 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
+ * `arsip:*` govern the Arsip Data (archive/recovery/retention) surface (#19).
+ * `arsip:baca` reads archived records + retention policy + change history;
+ * `arsip:kelola` writes (archive, recover, set retention). Defaults: admin/dev
+ * hold both; kepala_sekolah reads (oversight); guru/wali_kelas get NEITHER
+ * (no archive access — archive is an admin accountability surface, not teaching).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -64,7 +69,9 @@ export type IzinSlug =
   | "permintaan_ai:baca"
   | "permintaan_ai:buat"
   | "draf_ai:baca"
-  | "draf_ai:verifikasi";
+  | "draf_ai:verifikasi"
+  | "arsip:baca"
+  | "arsip:kelola";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

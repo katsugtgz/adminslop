@@ -12,6 +12,8 @@ const ptk: Ptk = {
   nip: "123",
   jenis: "pendidik",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  arsipPada: null,
+  arsipOleh: null,
 };
 
 const pengguna: PenggunaDenganPtk = {
@@ -53,7 +55,7 @@ describe("DaftarPengguna (#6 / T6)", () => {
       screen.getByRole("form", { name: "Tautan PTK" })
     ).toBeInTheDocument();
 
-    expect(screen.getAllByRole("checkbox")).toHaveLength(56);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(60);
 
     // defaultChecked reflects aksesMap
     expect(
