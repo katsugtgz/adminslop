@@ -17,7 +17,7 @@ export function PembatasanAkses() {
         <ShieldAlert className="h-6 w-6" />
       </span>
       <h1 className="text-xl font-bold tracking-tight">Pembatasan Akses</h1>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground" role="alert" aria-live="assertive">
         Anda belum terdaftar sebagai anggota Satuan Pendidikan mana pun. Hubungi
         Admin Satuan Pendidikan Anda agar diberi Keanggotaan sebelum dapat
         mengelola data sekolah.
@@ -26,7 +26,7 @@ export function PembatasanAkses() {
         <Ban className="h-3.5 w-3.5" aria-hidden="true" />
         Akses ditolak demi menjaga keamanan data antar Satuan Pendidikan.
       </p>
-      <form action={signOutAction}>
+      <form action={signOutAction} aria-label="Keluar dari sesi">
         <Button type="submit" variant="outline">
           Keluar
         </Button>

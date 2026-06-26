@@ -1,0 +1,101 @@
+import { Archive } from "lucide-react";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import type { ButirSoal } from "@/db/schema";
+import type { JenisButirSoal } from "@/db/queries/bank-soal";
+
+import { LABEL_JENIS_BUTIR, type ServerAksi } from "./form-butir-soal";
+
+const LABEL_STATUS: Record<string, string> = {
+  aktif: "Aktif",
+  arsip: "Arsip",
+};
+
+const BADGE_STATUS: Record<string, string> = {
+  aktif: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  arsip: "bg-muted text-muted-foreground",
+};
+
+/**
+ * List of Butir Soal visible in the active tenant. Each row shows the
+ * pertanyaan, jenis (Bahasa label), status badge, and drill-down link to
+ * the detail/assemble view. The "Arsipkan" form renders only when
+ * `bolehUbah` (visibility only — the action re-checks server-side).
+ */
+export function DaftarButirSoal({
+  butir,
+  bolehUbah,
+  arsipkanAction,
+  baseHref,
+}: {
+  butir: readonly ButirSoal[];
+  bolehUbah: boolean;
+  arsipkanAction: ServerAksi;
+  /** Prefix for the per-row drill-down link (searchParams-based routing). */
+  baseHref: string;
+}) {
+  if (butir.length === 0) {
+    return (
+      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        Belum ada Butir Soal.
+      </p>
+    );
+  }
+
+  return (
+    <ul className="flex flex-col gap-3">
+      {butir.map((b) => {
+        const jenis = b.jenis as JenisButirSoal;
+        return (
+          <li
+            key={b.id}
+            className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          >
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex flex-col gap-1">
+                <span className="text-sm font-semibold">{b.pertanyaan}</span>
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs text-muted-foreground">
+                    {LABEL_JENIS_BUTIR[jenis]}
+                  </span>
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STATUS[b.status]}`}
+                  >
+                    {LABEL_STATUS[b.status]}
+                  </span>
+                  {b.drafAiId ? (
+                    <span className="text-xs text-muted-foreground">
+                      · Draf AI
+                    </span>
+                  ) : null}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`${baseHref}&butirId=${b.id}`}
+                  className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  Lihat detail
+                </Link>
+                {bolehUbah ? (
+                  <form action={arsipkanAction}>
+                    <input type="hidden" name="id" value={b.id} />
+                    <Button type="submit" size="sm" variant="outline">
+                      <Archive className="h-4 w-4" aria-hidden="true" />
+                      Arsipkan
+                    </Button>
+                  </form>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="text-xs text-muted-foreground">
+              Kunci: <span className="font-mono">{b.kunciJawaban}</span>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
