@@ -39,7 +39,11 @@ export type RoleSlug =
  * `absensi:*` govern Absensi Harian (daily attendance) records. Guru gets all
  * three (marks attendance for their classes); admin/dev manage school-wide;
  * `baca` is universal across teaching roles (oversight), `buat`/`ubah` are
- * admin + guru scoped.
+ * admin + guru scoped. `impor_peserta_didik:*` / `ekspor_peserta_didik:baca`
+ * govern CSV bulk import/export of Peserta Didik: `baca` reads the tool
+ * surface, `kelola` performs the import write; export is read-only. Admin/dev
+ * get all three; kepala_sekolah gets `impor:baca` + `ekspor:baca` (oversight);
+ * guru/wali_kelas get none (bulk import/export is admin-scoped).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -72,7 +76,10 @@ export type IzinSlug =
   | "draf_ai:verifikasi"
   | "absensi:baca"
   | "absensi:buat"
-  | "absensi:ubah";
+  | "absensi:ubah"
+  | "impor_peserta_didik:baca"
+  | "impor_peserta_didik:kelola"
+  | "ekspor_peserta_didik:baca";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

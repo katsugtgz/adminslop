@@ -66,6 +66,9 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "absensi:baca",
   "absensi:buat",
   "absensi:ubah",
+  "impor_peserta_didik:baca",
+  "impor_peserta_didik:kelola",
+  "ekspor_peserta_didik:baca",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

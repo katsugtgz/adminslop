@@ -222,3 +222,35 @@ describe("DashboardAktif — Absensi reachability link (#15)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Impor/Ekspor Peserta Didik reachability link (#18)", () => {
+  // admin / kepala_sekolah / dev receive `impor_peserta_didik:baca` (bulk
+  // data movement is admin-only with kepala_sekolah read oversight). guru
+  // and wali_kelas do NOT — students' bulk import/export is admin-scoped.
+  it("admin sees the 'Impor/Ekspor' link pointing at /dashboard/impor-peserta-didik", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Impor\/Ekspor/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/impor-peserta-didik");
+  });
+
+  it("kepala_sekolah sees the link (read oversight)", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Impor\/Ekspor/i })
+    ).toBeInTheDocument();
+  });
+
+  it("guru does NOT see the link", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.queryByRole("link", { name: /Impor\/Ekspor/i })
+    ).toBeNull();
+  });
+
+  it("wali_kelas does NOT see the link", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.queryByRole("link", { name: /Impor\/Ekspor/i })
+    ).toBeNull();
+  });
+});

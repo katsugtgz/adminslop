@@ -11,6 +11,7 @@ import {
   GraduationCap,
   KeyRound,
   Settings,
+  Upload,
   Users,
 } from "lucide-react";
 
@@ -113,6 +114,14 @@ export async function DashboardAktif({
   const bolehLihatAbsensi = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("absensi:baca");
+
+  // Reachability link to Impor/Ekspor Peserta Didik (#18). admin /
+  // kepala_sekolah / dev receive `impor_peserta_didik:baca` — bulk data
+  // movement is admin-only with kepala_sekolah read oversight. The page
+  // re-checks `boleh("impor_peserta_didik:baca")` server-side (§12).
+  const bolehLihatImporPesertaDidik = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("impor_peserta_didik:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -226,6 +235,30 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/peserta-didik">Buka Peserta Didik</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatImporPesertaDidik && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Upload className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Impor/Ekspor Peserta Didik</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Impor dan ekspor data Peserta Didik.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/impor-peserta-didik">
+              Buka Impor/Ekspor
+            </Link>
           </Button>
         </div>
       )}

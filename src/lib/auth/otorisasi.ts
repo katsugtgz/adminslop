@@ -81,6 +81,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -98,6 +102,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "draf_ai:verifikasi",
     // Absensi: read oversight of school-wide daily attendance.
     "absensi:baca",
+    // Impor/Ekspor Peserta Didik: read oversight of bulk data movement.
+    "impor_peserta_didik:baca",
+    "ekspor_peserta_didik:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -165,6 +172,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     "absensi:buat",
     "absensi:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
   ],
 };
 
