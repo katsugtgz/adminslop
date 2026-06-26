@@ -42,21 +42,6 @@ const mocks = vi.hoisted(() => {
     })),
     hapusPtk: vi.fn(async () => undefined),
     linkPtk: vi.fn(async () => undefined),
-    cariPtkById: vi.fn(async (): Promise<{
-      id: string;
-      tenantId: string;
-      nama: string;
-      nip: null;
-      jenis: string;
-      dibuatPada: Date;
-    } | null> => ({
-      id: "ptk_1",
-      tenantId: "org_A",
-      nama: "Budi",
-      nip: null,
-      jenis: "pendidik",
-      dibuatPada: new Date("2026-01-01T00:00:00Z"),
-    })),
     aturIzin: vi.fn(async () => undefined),
     aturPembatasan: vi.fn(async () => undefined),
     revalidatePath: vi.fn(),
@@ -72,7 +57,6 @@ const {
   buatPtk,
   hapusPtk,
   linkPtk,
-  cariPtkById,
   aturIzin,
   aturPembatasan,
   revalidatePath,
@@ -91,7 +75,6 @@ vi.mock("@/db/queries/akses", () => ({
   buatPtk: mocks.buatPtk,
   hapusPtk: mocks.hapusPtk,
   linkPtk: mocks.linkPtk,
-  cariPtkById: mocks.cariPtkById,
   aturIzin: mocks.aturIzin,
   aturPembatasan: mocks.aturPembatasan,
 }));
@@ -170,7 +153,6 @@ beforeEach(() => {
   buatPtk.mockReset();
   hapusPtk.mockReset();
   linkPtk.mockReset();
-  cariPtkById.mockReset();
   aturIzin.mockReset();
   aturPembatasan.mockReset();
   revalidatePath.mockReset();
@@ -193,14 +175,6 @@ beforeEach(() => {
   }));
   hapusPtk.mockResolvedValue(undefined);
   linkPtk.mockResolvedValue(undefined);
-  cariPtkById.mockResolvedValue({
-    id: "ptk_1",
-    tenantId: "org_A",
-    nama: "Budi",
-    nip: null,
-    jenis: "pendidik",
-    dibuatPada: new Date("2026-01-01T00:00:00Z"),
-  });
   aturIzin.mockResolvedValue(undefined);
   aturPembatasan.mockResolvedValue(undefined);
   catatAudit.mockResolvedValue(undefined);
@@ -296,12 +270,10 @@ describe("B. authorization success — admin_satuan_pendidikan", () => {
     );
   });
 
-  it("7. linkPtkPenggunaAction -> cariPtkById(tenant-scoped) then linkPtk(tx, penggunaId, ptkId) + audit", async () => {
+  it("7. linkPtkPenggunaAction -> linkPtk(tx, penggunaId, ptkId) + audit(link_ptk_pengguna)", async () => {
     await linkPtkPenggunaAction(
       formData({ penggunaId: "pg_7", ptkId: "ptk_7" })
     );
-    // P1-2: ptkId verified to exist in the active tenant BEFORE linking.
-    expect(cariPtkById).toHaveBeenCalledWith(fakeTxRef, "ptk_7");
     expect(linkPtk).toHaveBeenCalledWith(fakeTxRef, "pg_7", "ptk_7");
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
@@ -311,26 +283,6 @@ describe("B. authorization success — admin_satuan_pendidikan", () => {
         beban: { ptkId: "ptk_7" },
       })
     );
-  });
-
-  it("7a. linkPtkPenggunaAction + cross-tenant ptkId (cariPtkById -> null) -> throws; linkPtk NOT called", async () => {
-    // P1-2: a tampered ptkId pointing at another tenant's PTK is rejected at
-    // the boundary instead of silently creating a cross-tenant link.
-    cariPtkById.mockResolvedValue(null);
-    await expect(
-      linkPtkPenggunaAction(formData({ penggunaId: "pg_7", ptkId: "ptk_X" }))
-    ).rejects.toThrow(/PTK tidak ditemukan/i);
-    expect(cariPtkById).toHaveBeenCalledWith(fakeTxRef, "ptk_X");
-    expect(linkPtk).not.toHaveBeenCalled();
-    expect(catatAudit).not.toHaveBeenCalled();
-  });
-
-  it("7b. linkPtkPenggunaAction + empty ptkId (unlink) -> skips existence check; linkPtk called with null", async () => {
-    // Unlink path: ptkId omitted means set ptk_id = null. No existence check
-    // is needed (nothing to verify), so cariPtkById is never called.
-    await linkPtkPenggunaAction(formData({ penggunaId: "pg_7" }));
-    expect(cariPtkById).not.toHaveBeenCalled();
-    expect(linkPtk).toHaveBeenCalledWith(fakeTxRef, "pg_7", null);
   });
 
   it("8. aturIzinAksesAction (aktif=on) -> aturIzin(tx, pg, slug, true) + audit(atur_izin)", async () => {

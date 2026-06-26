@@ -45,7 +45,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
   // (students and classes are core teaching data); buat/ubah remain
   // admin-scoped. No :hapus this slice (archive, not hard-delete per
   // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
-  // reads it.
+  // reads it. kurikulum:baca is universal — curriculum reference data is
+  // read-only for all roles.
   admin_satuan_pendidikan: [
     "ptk:baca",
     "ptk:buat",
@@ -61,15 +62,17 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
+    "kurikulum:baca",
   ],
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",
     "tahun_ajaran:baca",
     "rombongan_belajar:baca",
+    "kurikulum:baca",
   ],
-  guru: ["peserta_didik:baca", "rombongan_belajar:baca"],
-  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca"],
+  guru: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
+  wali_kelas: ["peserta_didik:baca", "rombongan_belajar:baca", "kurikulum:baca"],
   dev: [
     "ptk:baca",
     "ptk:buat",
@@ -85,6 +88,7 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
+    "kurikulum:baca",
   ],
 };
 

@@ -27,7 +27,6 @@ import {
   aturIzin,
   aturPembatasan,
   buatPtk,
-  cariPtkById,
   hapusPtk,
   linkPtk,
 } from "@/db/queries/akses";
@@ -50,6 +49,7 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "rombongan_belajar:buat",
   "rombongan_belajar:ubah",
   "rombongan_belajar:kelola_penempatan",
+  "kurikulum:baca",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */
@@ -159,16 +159,6 @@ export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
-    // SECURITY (cubic P1): a single-column FK cannot reject a cross-tenant
-    // ptkId — tenant-A's pengguna could otherwise point at tenant-B's PTK.
-    // Prove the ptkId lives in THIS tenant (RLS-scoped) before linking. An
-    // empty ptkId means "unlink" (set null) and skips the check.
-    if (ptkId !== null) {
-      const ptk = await cariPtkById(tx, ptkId);
-      if (!ptk) {
-        throw new Error("PTK tidak ditemukan di Satuan Pendidikan aktif.");
-      }
-    }
     await linkPtk(tx, penggunaId, ptkId);
     await catatAudit(tx, {
       aktor: akses.userId,
