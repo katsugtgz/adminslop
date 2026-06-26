@@ -1,0 +1,19 @@
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_4f9c29e6471aaa::t_b851b3ff6ccf1d 1-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "332e6ff259ac0fd0a399f3ea32e85936785df107",
+  "prompts": {},
+  "sessions": {
+    "s_4f9c29e6471aaa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd1f91afffepN73I0J712IzzP",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
