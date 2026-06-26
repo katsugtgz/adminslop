@@ -1,5 +1,38 @@
 import type { IzinSlug, RoleSlug } from "./types";
 
+// ─── #5: Profil/Pengaturan Satuan Pendidikan predicates ──────────────────────
+
+const ADMIN_WRITE_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+]);
+
+const MEMBER_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+  "guru",
+  "kepala_sekolah",
+]);
+
+/**
+ * Write predicate for Profil/Pengaturan Satuan Pendidikan. Type guard so
+ * callers narrow to `RoleSlug` when guarding an admin action.
+ */
+export function canAdminSatuanPendidikan(
+  roleSlug: string | undefined,
+): roleSlug is RoleSlug {
+  return !!roleSlug && ADMIN_WRITE_ROLES.has(roleSlug);
+}
+
+/** Read predicate — any active member may view their Satuan Pendidikan profil/pengaturan. */
+export function canViewPengaturanSatuanPendidikan(
+  roleSlug: string | undefined,
+): boolean {
+  return !!roleSlug && MEMBER_ROLES.has(roleSlug);
+}
+
+// ─── #6: Akses (Peran/Izin/Pembatasan) evaluator ─────────────────────────────
+
 /**
  * Baked-in peran (role) → default Izin map. Read-only constant. The starting
  * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
@@ -8,6 +41,12 @@ import type { IzinSlug, RoleSlug } from "./types";
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+  // peserta_didik:baca + rombongan_belajar:baca granted to every teaching role
+  // (students and classes are core teaching data); buat/ubah remain
+  // admin-scoped. No :hapus this slice (archive, not hard-delete per
+  // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
+  // reads it. kurikulum:baca is universal — curriculum reference data is
+  // read-only for all roles.
   admin_satuan_pendidikan: [
     "ptk:baca",
     "ptk:buat",
@@ -23,15 +62,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
-    // kurikulum:baca — curriculum reference data is universal (read-only).
     "kurikulum:baca",
   ],
-  // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
-  // core teaching data, so every teaching role reads by default. Writes
-  // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
-  // hard-delete per CONTEXT.md). Rombongan Belajar (class) data is likewise
-  // core teaching data -> baca for every teaching role; Tahun Ajaran
-  // management is admin-only, but kepala_sekolah reads it.
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",

@@ -71,6 +71,13 @@ export default async function Page() {
   const bolehKelola = akses.boleh(
     "rombongan_belajar:kelola_penempatan"
   ).diizinkan;
+  // SECURITY (cubic P1): the student roster is gated by its OWN slug,
+  // peserta_didik:baca — not by rombongan_belajar:baca. An admin with a
+  // pembatasan on peserta_didik:baca must NOT see any student data here, even
+  // though they still hold rombongan_belajar:kelola_penempatan. When denied,
+  // the roster is never loaded (no leak) and the placement / progression
+  // controls — which need the roster — are hidden too.
+  const bolehBacaPeserta = akses.boleh("peserta_didik:baca").diizinkan;
 
   const { db } = getDb();
 
@@ -83,7 +90,9 @@ export default async function Page() {
           listTingkat(tx),
           listRombonganBelajar(tx),
           getTahunAjaranAktif(tx),
-          listPesertaDidik(tx),
+          // Roster only when peserta_didik:baca is held; otherwise skip the
+          // query entirely so no student row crosses the boundary.
+          bolehBacaPeserta ? listPesertaDidik(tx) : Promise.resolve([]),
         ]);
       return {
         tingkat: daftarTingkat,
@@ -128,6 +137,7 @@ export default async function Page() {
       </div>
 
       {bolehKelola &&
+        bolehBacaPeserta &&
         (taAktif ? (
           <div className="flex flex-col gap-6">
             <FormTempatkanPesertaDidik

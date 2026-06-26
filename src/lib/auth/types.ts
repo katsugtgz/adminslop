@@ -1,7 +1,8 @@
 /**
- * tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors WorkOS
- * OrganizationMembership `role.slug`. Never `superuser` (§13 of the identity
- * doc — no global superuser).
+ * App-side tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors the
+ * WorkOS OrganizationMembership `role.slug`. Never `superuser` (per
+ * docs/architecture/identity-and-access.md §13 — no global superuser). `dev`
+ * is a local-only admin-equivalent shim enabled by DEV_MEMBERSHIP_ALL.
  */
 export type RoleSlug =
   | "admin_satuan_pendidikan"
@@ -15,12 +16,7 @@ export type RoleSlug =
  * `ptk:*` govern PTK (Tenaga Kependidikan) data; `akses:*` govern the Akses
  * (role/permission administration) surface; `peserta_didik:*` govern Peserta
  * Didik (student) data. No `peserta_didik:hapus` — archive, not hard-delete
- * (per CONTEXT.md). `tahun_ajaran:*` govern Tahun Ajaran (academic year)
- * records; `rombongan_belajar:*` govern Rombongan Belajar (class/homeroom)
- * records including `kelola_penempatan` (placement/progression management).
- * `kurikulum:baca` governs read-only browsing of Kurikulum (curriculum)
- * reference data — universal: every authenticated member may browse it (no
- * write slugs; curriculum is seeded via migration, not user-edited).
+ * (per CONTEXT.md).
  */
 export type IzinSlug =
   | "ptk:baca"
