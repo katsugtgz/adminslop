@@ -113,6 +113,10 @@ export const ptk = pgTable(
     dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    // AC#1 (#19): soft-delete timestamp. NULL = active. "Delete" = archive only.
+    // AC#2: arsip_oleh records the userId who archived (accountability).
+    arsipPada: timestamp("arsip_pada", { withTimezone: true }),
+    arsipOleh: text("arsip_oleh"),
   },
   (t) => [
     check(
@@ -775,6 +779,8 @@ export const bebanMengajar = pgTable(
     dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    arsipPada: timestamp("arsip_pada", { withTimezone: true }),
+    arsipOleh: text("arsip_oleh"),
   },
   (t) => [
     check(
@@ -821,6 +827,8 @@ export const waliKelas = pgTable(
     dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    arsipPada: timestamp("arsip_pada", { withTimezone: true }),
+    arsipOleh: text("arsip_oleh"),
   },
   (t) => [
     check(
@@ -910,6 +918,8 @@ export const penilaian = pgTable(
     dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    arsipPada: timestamp("arsip_pada", { withTimezone: true }),
+    arsipOleh: text("arsip_oleh"),
   },
   (t) => [
     unique("penilaian_tenant_komponen_nama_unique").on(
@@ -1582,3 +1592,41 @@ export const perangkatAjar = pgTable(
 
 export type PerangkatAjar = typeof perangkatAjar.$inferSelect;
 export type PerangkatAjarInsert = typeof perangkatAjar.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// ARCHIVE / RETENTION DATA LAYER (#19).
+//
+// retensi_data stores per-tenant per-table retention policy (AC#3). The
+// arsip_pada/arsip_oleh columns on ptk/penilaian/beban_mengajar/wali_kelas
+// (added above) implement the soft-delete mechanism (AC#1/AC#2). This table
+// holds the policy that governs how long archived rows live before true
+// purging (the purge itself is deferred — MVP only records the policy).
+// ---------------------------------------------------------------------------
+
+/**
+ * Retensi Data — per-tenant per-table retention policy (AC#3). `periodeBulan`
+ * defaults to 84 (7 years) to match typical Indonesian school record
+ * retention. UNIQUE per (tenant, tabel). `tabel` is validated against a strict
+ * whitelist in the action layer — never interpolated raw into SQL (AC#5).
+ * `tenant_id` from the session GUC, never client-supplied (RLS WITH CHECK).
+ */
+export const retensiData = pgTable(
+  "retensi_data",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .default(sql`current_setting('app.tenant_id', true)`)
+      .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+    tabel: text("tabel").notNull(),
+    periodeBulan: integer("periode_bulan").notNull().default(84),
+    keterangan: text("keterangan"),
+  },
+  (t) => [
+    check("retensi_data_periode_bulan_check", sql`${t.periodeBulan} > 0`),
+    unique("retensi_data_tenant_tabel_unique").on(t.tenantId, t.tabel),
+  ]
+);
+
+export type RetensiData = typeof retensiData.$inferSelect;
+export type RetensiDataInsert = typeof retensiData.$inferInsert;

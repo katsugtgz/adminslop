@@ -13,6 +13,8 @@ const penilaian: Penilaian[] = [
     tanggal: "2026-01-10",
     dibuatOleh: null,
     dibuatPada: new Date("2026-01-10T00:00:00Z"),
+    arsipPada: null,
+    arsipOleh: null,
   },
   {
     id: "pen_2",
@@ -22,6 +24,8 @@ const penilaian: Penilaian[] = [
     tanggal: "2026-02-10",
     dibuatOleh: null,
     dibuatPada: new Date("2026-02-10T00:00:00Z"),
+    arsipPada: null,
+    arsipOleh: null,
   },
 ];
 

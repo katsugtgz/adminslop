@@ -106,6 +106,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:baca",
     "perangkat_ajar:buat",
     "perangkat_ajar:ubah",
+    // Arsip (#19): admin manages archive/recovery/retention school-wide.
+    "arsip:baca",
+    "arsip:kelola",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -136,6 +139,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:baca",
     // Perangkat Ajar: kepala_sekolah reads teaching documents (oversight).
     "perangkat_ajar:baca",
+    // Arsip (#19): kepala_sekolah reads archive/retention/history (oversight).
+    "arsip:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -255,6 +260,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "perangkat_ajar:baca",
     "perangkat_ajar:buat",
     "perangkat_ajar:ubah",
+    // Arsip (#19): dev mirrors admin.
+    "arsip:baca",
+    "arsip:kelola",
   ],
 };
 

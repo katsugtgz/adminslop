@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  Archive,
   Bell,
   BookMarked,
   BookOpen,
@@ -157,6 +158,14 @@ export async function DashboardAktif({
   const bolehLihatPerangkatAjar = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("perangkat_ajar:baca");
+
+  // Reachability link to Arsip (#19). admin / kepala_sekolah / dev receive
+  // `arsip:baca` — archive/recovery/retention/history is admin/oversight
+  // scope, NOT core teaching data. guru / wali_kelas do NOT see it. The page
+  // re-checks `boleh("arsip:baca")` server-side (§12).
+  const bolehLihatArsip = PERAN_KE_IZIN_DEFAULT[membership.roleSlug].includes(
+    "arsip:baca",
+  );
 
   return (
     <section className="flex flex-col gap-6">
@@ -495,6 +504,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/penilaian">Buka Penilaian</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatArsip && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Archive className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Arsip Data</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola arsip, pemulihan data, retensi, dan riwayat perubahan.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/arsip">Buka Arsip Data</Link>
           </Button>
         </div>
       )}

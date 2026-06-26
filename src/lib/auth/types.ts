@@ -52,7 +52,8 @@ export type RoleSlug =
  * authors items + packages (AC#1), admin/dev manage school-wide, others read.
  * `perangkat_ajar:*` govern teaching documents (Silabus/RPP/ModulAjar/...):
  * guru creates + edits + verifies AI-assisted content (AC#3), admin/dev manage,
- * others read.
+ * others read. `arsip:*` govern the archive/recovery/retention surface:
+ * `baca` reads history, `kelola` (admin/dev) performs archive/restore.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -103,7 +104,9 @@ export type IzinSlug =
   | "paket_soal:ubah"
   | "perangkat_ajar:baca"
   | "perangkat_ajar:buat"
-  | "perangkat_ajar:ubah";
+  | "perangkat_ajar:ubah"
+  | "arsip:baca"
+  | "arsip:kelola";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
