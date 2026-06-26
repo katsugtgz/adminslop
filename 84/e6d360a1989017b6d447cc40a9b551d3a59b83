@@ -1,0 +1,282 @@
+src/lib/auth/types.ts
+  s_a944d701efba60::t_281ec3d81d47e9 112
+  s_a944d701efba60::t_84a549c3c8ed6d 57-59
+  s_a944d701efba60::t_41ad4d09811949 54-56
+  s_a944d701efba60::t_453e3a113e2bb3 109-111
+src/components/dashboard-aktif.test.tsx
+  s_a944d701efba60::t_c96dd430e64fc6 365
+  s_a944d701efba60::t_e4a635784a865b 362-364
+src/components/dashboard-aktif.tsx
+  s_a944d701efba60::t_5dec5cf51469ef 235,242,245,247,252
+  s_a944d701efba60::t_fa871913dc6c29 172-174
+  s_a944d701efba60::t_a26a0104dfedae 169-171
+  s_a944d701efba60::t_0d0ee532769489 234
+src/db/schema.ts
+  s_a944d701efba60::t_bea8db642e326c 1633
+  s_a944d701efba60::t_26d32e8ff8049b 1630-1632
+src/components/akses/daftar-pengguna.test.tsx
+  s_a944d701efba60::t_e0b9bc85552a9b 31
+  s_a944d701efba60::t_6cafb3781278b5 58
+src/app/dashboard/akses/page.test.tsx
+  s_a944d701efba60::t_cc347e87ce89e6 184
+.gitignore
+  s_a944d701efba60::t_51a9ac13413da8 12
+docs/POST-MVP.md
+  s_a944d701efba60::t_ac023f68f4c48a 1-91
+package-lock.json
+  s_a944d701efba60::t_b76449c1634ee6 22-23,9978-9986
+package.json
+  s_a944d701efba60::t_22586e2c864da9 30-31
+src/app/bantuan/page.tsx
+  s_a944d701efba60::t_872fe3abd2e6e8 3,11
+src/app/dashboard/absensi/actions.test.ts
+  s_a944d701efba60::t_dfe37bbab1b577 1-541
+src/app/dashboard/absensi/actions.ts
+  s_a944d701efba60::t_5e8e517f118da9 1-211
+src/app/dashboard/absensi/page.test.tsx
+  s_a944d701efba60::t_c558b343a259bc 1-388
+src/app/dashboard/absensi/page.tsx
+  s_a944d701efba60::t_f16b9f7f9b5def 1-278
+src/app/dashboard/arsip/actions.test.ts
+  s_a944d701efba60::t_74b45a9a21d2cc 1-418
+src/app/dashboard/arsip/actions.ts
+  s_a944d701efba60::t_c8564386d49252 1-173
+src/app/dashboard/arsip/page.test.tsx
+  s_a944d701efba60::t_22ace03a8e13ce 1-259
+src/app/dashboard/arsip/page.tsx
+  s_a944d701efba60::t_5e8fc99edf39c4 1-113
+src/app/dashboard/bank-soal/actions.test.ts
+  s_a944d701efba60::t_aa9ed7b21a5ae2 1-604
+src/app/dashboard/bank-soal/actions.ts
+  s_a944d701efba60::t_a98ec8daa540ff 1-333
+src/app/dashboard/bank-soal/page.test.tsx
+  s_a944d701efba60::t_9014a51de1cd70 1-358
+src/app/dashboard/bank-soal/page.tsx
+  s_a944d701efba60::t_58f5775bdb9cae 1-275
+src/app/dashboard/bantuan/page.test.tsx
+  s_a944d701efba60::t_52df59cdd723c2 1-57
+src/app/dashboard/bantuan/page.tsx
+  s_a944d701efba60::t_c9cc007e24359f 1-13
+src/app/dashboard/beban-mengajar/page.test.tsx
+  s_a944d701efba60::t_b93fa02fce299d 171-172
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_a944d701efba60::t_04c8f5949dc122 1-436
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_a944d701efba60::t_8faf6031da78b7 1-110
+src/app/dashboard/impor-peserta-didik/page.test.tsx
+  s_a944d701efba60::t_d463ddd1463415 1-224
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_a944d701efba60::t_7b21fdb62fda80 1-161
+src/app/dashboard/notifikasi/actions.test.ts
+  s_a944d701efba60::t_d6a1880ec4e333 1-546
+src/app/dashboard/notifikasi/actions.ts
+  s_a944d701efba60::t_f57845f0974e16 1-195
+src/app/dashboard/notifikasi/page.test.tsx
+  s_a944d701efba60::t_2493487387f0f4 1-282
+src/app/dashboard/notifikasi/page.tsx
+  s_a944d701efba60::t_f47f6e00235183 1-116
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a944d701efba60::t_8c66635488e9de 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_a944d701efba60::t_5cae581197ef0b 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_a944d701efba60::t_f2246ffc3a5ff7 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_a944d701efba60::t_caab504135bf34 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_a944d701efba60::t_6325bb664676f4 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_a944d701efba60::t_2b10ba85addda4 1-40
+src/app/dashboard/penilaian/page.test.tsx
+  s_a944d701efba60::t_2e8b4231f70ce6 175-176,210-211,231-232
+src/app/dashboard/perangkat-ajar/actions.test.ts
+  s_a944d701efba60::t_7b9f7cb91f28c3 1-583
+src/app/dashboard/perangkat-ajar/actions.ts
+  s_a944d701efba60::t_abbdae2d2a18ad 1-265
+src/app/dashboard/perangkat-ajar/page.test.tsx
+  s_a944d701efba60::t_a79ead408ce2d5 1-272
+src/app/dashboard/perangkat-ajar/page.tsx
+  s_a944d701efba60::t_7ad50f381be345 1-153
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_a944d701efba60::t_962fe7889f28cb 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_a944d701efba60::t_8d63f586769812 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_a944d701efba60::t_8d7e3251b7604a 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_a944d701efba60::t_1315d019aae80e 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_a944d701efba60::t_6d062fca4089da 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_a944d701efba60::t_9c22aeb7ff6d78 74-80,93-95,140
+src/app/globals.css
+  s_a944d701efba60::t_102f3354f97214 18,25,123-158
+src/app/globals.css.print.test.ts
+  s_a944d701efba60::t_24479ff4f3a319 1-39
+src/app/layout.a11y.test.tsx
+  s_a944d701efba60::t_5c4ae3a56946f9 1-62
+src/app/layout.tsx
+  s_a944d701efba60::t_80f303e5637f31 36
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_a944d701efba60::t_338642ab8b1f3d 1-67
+src/components/absensi/form-absensi.tsx
+  s_a944d701efba60::t_6c91c21b6ca306 1-123
+src/components/absensi/rekap-absensi.tsx
+  s_a944d701efba60::t_b0732e70b28856 1-80
+src/components/absensi/types.ts
+  s_a944d701efba60::t_815f2200675063 1-31
+src/components/akses/daftar-ptk.test.tsx
+  s_a944d701efba60::t_0faea057d30fa6 15-16,25-26
+src/components/arsip/daftar-arsip.tsx
+  s_a944d701efba60::t_4cd5f33e3633d8 1-67
+src/components/arsip/daftar-retensi.tsx
+  s_a944d701efba60::t_8b3c03d011d894 1-132
+src/components/arsip/daftar-riwayat-perubahan.tsx
+  s_a944d701efba60::t_f16f54b6a94b9e 1-50
+src/components/arsip/form-retensi.tsx
+  s_a944d701efba60::t_03bafb5a379b1d 1-2
+src/components/bank-soal/daftar-butir-paket.tsx
+  s_a944d701efba60::t_4cbaaa4a768dbb 1-85
+src/components/bank-soal/daftar-butir-soal.tsx
+  s_a944d701efba60::t_282d25c95a06ae 1-101
+src/components/bank-soal/daftar-paket-soal.tsx
+  s_a944d701efba60::t_e37d9f94f06314 1-58
+src/components/bank-soal/form-butir-soal.tsx
+  s_a944d701efba60::t_f414a4dd52eda1 1-180
+src/components/bank-soal/form-paket-soal.tsx
+  s_a944d701efba60::t_bf10f27e94bb17 1-128
+src/components/bank-soal/form-tambah-butir.tsx
+  s_a944d701efba60::t_f21eac41330ab0 1-104
+src/components/bantuan-kontekstual.test.tsx
+  s_a944d701efba60::t_3c81734161ea9d 1-54
+src/components/bantuan-kontekstual.tsx
+  s_a944d701efba60::t_cd2001982c46a6 1-69
+src/components/beban-mengajar/form-beban-mengajar-baru.test.tsx
+  s_a944d701efba60::t_2d606c2aef96e0 19-20
+src/components/beban-mengajar/form-wali-kelas.test.tsx
+  s_a944d701efba60::t_f64ef7d41eca97 17-18
+src/components/nav-auth.tsx
+  s_a944d701efba60::t_f8c7981c95b4ae 25-31,44
+src/components/notifikasi/badge-notifikasi.tsx
+  s_a944d701efba60::t_f8bc97bfaef606 1-20
+src/components/notifikasi/daftar-notifikasi.tsx
+  s_a944d701efba60::t_1f3baf6cdf5df6 1-127
+src/components/notifikasi/kontrol-preferensi.tsx
+  s_a944d701efba60::t_61e10447fe9bd6 1-78
+src/components/pembatasan-akses.tsx
+  s_a944d701efba60::t_242e873eef0145 20,29
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_a944d701efba60::t_8d8089a09f111c 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_a944d701efba60::t_a76727c499446c 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_a944d701efba60::t_caba2b7c409cad 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_a944d701efba60::t_b1d151facff821 1-132
+src/components/penilaian/daftar-penilaian.test.tsx
+  s_a944d701efba60::t_8c399f8062b944 16-17,27-28
+src/components/perangkat-ajar/daftar-perangkat-ajar.tsx
+  s_a944d701efba60::t_e4f22d7bc784bc 1-59
+src/components/perangkat-ajar/form-perangkat-ajar.tsx
+  s_a944d701efba60::t_54930ad92c2794 1-172
+src/components/perangkat-ajar/kontrol-verifikasi-ai.tsx
+  s_a944d701efba60::t_0e48f04475322e 1-86
+src/components/pilih-satuan-pendidikan.tsx
+  s_a944d701efba60::t_f1e3bdb545dd84 30-33,39
+src/components/pusat-bantuan.tsx
+  s_a944d701efba60::t_962fdb273376cf 1-78
+src/components/tur-awal.test.tsx
+  s_a944d701efba60::t_ca789a520a3c1b 1-118
+src/components/tur-awal.tsx
+  s_a944d701efba60::t_48e379d8798991 1-177
+src/components/ui/button.tsx
+  s_a944d701efba60::t_7fd981aeac16f8 29-37
+src/db/absensi.test.ts
+  s_a944d701efba60::t_0315cd96bcd4ef 1-403
+src/db/akses.test.ts
+  s_a944d701efba60::t_171312b71409eb 49-52
+src/db/kurikulum.test.ts
+  s_a944d701efba60::t_b4ef04ea13ea50 115-125
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_a944d701efba60::t_11265ac57dbc92 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_e8e107e5ea2ebd 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_738a462c9c1346 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_2463501a1597ea 1-88
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_cfd1f65e969943 1-80
+src/db/migrations/0009_absensi_harian.sql
+  s_a944d701efba60::t_054b3856d04ecd 1-56
+src/db/migrations/0010_bank_soal.sql
+  s_a944d701efba60::t_f49a427bf4a4e1 1-115
+src/db/migrations/0011_notifikasi.sql
+  s_a944d701efba60::t_04c6a00111577e 1-80
+src/db/migrations/0011_perangkat_ajar.sql
+  s_a944d701efba60::t_7f8b1f204a2009 1-62
+src/db/migrations/0013_arsip.sql
+  s_a944d701efba60::t_350980b84557f4 1-107
+src/db/pengaturan.test.ts
+  s_a944d701efba60::t_f18734feec0d4b 1-264
+src/db/queries/absensi.test.ts
+  s_a944d701efba60::t_c6445067a663fd 1-591
+src/db/queries/absensi.ts
+  s_a944d701efba60::t_39d7325bc2f557 1-250
+src/db/queries/akses.test.ts
+  s_a944d701efba60::t_ec9cf4c715595f 60-63
+src/db/queries/akses.ts
+  s_a944d701efba60::t_ae043b606fd63b 49-56,131-136,143-152
+src/db/queries/arsip.test.ts
+  s_a944d701efba60::t_cc901fba69d17c 1-441
+src/db/queries/arsip.ts
+  s_a944d701efba60::t_e996e63b64c3e1 1-378
+src/db/queries/bank-soal.test.ts
+  s_a944d701efba60::t_9f2f1836e1fe32 1-709
+src/db/queries/bank-soal.ts
+  s_a944d701efba60::t_bfde67be9cae5c 1-364
+src/db/queries/kurikulum.test.ts
+  s_a944d701efba60::t_a50dbcca631333 83-93
+src/db/queries/notifikasi.test.ts
+  s_a944d701efba60::t_dffbc0941e17ac 1-473
+src/db/queries/notifikasi.ts
+  s_a944d701efba60::t_e20ca271374a14 1-268
+src/db/queries/perangkat-ajar.test.ts
+  s_a944d701efba60::t_054f414f6c620e 1-545
+src/db/queries/perangkat-ajar.ts
+  s_a944d701efba60::t_30619e77292fae 1-216
+src/db/queries/satuan-pendidikan.test.ts
+  s_a944d701efba60::t_4f07476f95f1ab 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_a944d701efba60::t_8d01707fcd3ab3 1-85
+src/lib/auth/membership.ts
+  s_a944d701efba60::t_99e9ee01de9ae5 7-30,66
+src/lib/auth/otorisasi.test.ts
+  s_a944d701efba60::t_74ffaddbaa7b95 542-615,718-827
+src/lib/impor/parse-csv.test.ts
+  s_a944d701efba60::t_19eafa573c5f82 1-148
+src/lib/impor/parse-csv.ts
+  s_a944d701efba60::t_d339a4a0973efb 1-183
+src/lib/impor/validasi-peserta-didik.test.ts
+  s_a944d701efba60::t_40e8e81c127291 1-273
+src/lib/impor/validasi-peserta-didik.ts
+  s_a944d701efba60::t_94cb57f91f8385 1-193
+src/test/setup.ts
+  s_a944d701efba60::t_fb0e1df4b7580f 2-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "84e6d360a1989017b6d447cc40a9b551d3a59b83",
+  "prompts": {},
+  "sessions": {
+    "s_a944d701efba60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fc9611bdffejJ73ApKErg3vqn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
