@@ -1,0 +1,77 @@
+src/components/perangkat-ajar/kontrol-verifikasi-ai.tsx
+  s_928bc6c985af71::t_a02ab278654ed1 1-86
+src/db/schema.ts
+  s_928bc6c985af71::t_cc8519e29b0a7d 1106-1180
+src/app/dashboard/perangkat-ajar/page.test.tsx
+  s_928bc6c985af71::t_4d506078f08e29 1-272
+src/components/dashboard-aktif.test.tsx
+  s_9034b42057567d::t_f4a86c8906e92f 155-179
+src/db/migrations/0011_perangkat_ajar.sql
+  s_928bc6c985af71::t_0f0304468c3a9d 1-62
+src/app/dashboard/perangkat-ajar/actions.test.ts
+  s_928bc6c985af71::t_d7bc64c593eec0 1-36,48-583
+  s_928bc6c985af71::t_14ad5cb891c310 37-47
+src/db/queries/perangkat-ajar.test.ts
+  s_928bc6c985af71::t_28937c2872df64 1-352,354-539,541-545
+  s_928bc6c985af71::t_4a53773b896399 540
+  s_928bc6c985af71::t_8dd5250e857b62 353
+src/app/dashboard/akses/page.test.tsx
+  s_928bc6c985af71::t_0b9d3a4a61b93f 182
+src/lib/auth/otorisasi.ts
+  s_928bc6c985af71::t_20672ba1a9f36f 75-76
+  s_928bc6c985af71::t_6e23d0b1dd6c92 95-100
+  s_928bc6c985af71::t_339dc452b7ec92 46-49
+  s_928bc6c985af71::t_38bb9e6e192c43 114-115
+  s_928bc6c985af71::t_48fa27ac9437e3 147-150
+src/app/dashboard/perangkat-ajar/actions.ts
+  s_928bc6c985af71::t_40c5f20f78bba6 1-180,183,185-186,188-194,196-265
+  s_928bc6c985af71::t_4e65f0b6159097 181-182,184,187,195
+src/components/dashboard-aktif.tsx
+  s_9034b42057567d::t_16fc4920e75c5a 100-107
+  s_9034b42057567d::t_3a9d96e8951dd0 3
+  s_9034b42057567d::t_3abad29f0b5f77 214-236
+src/db/queries/perangkat-ajar.ts
+  s_928bc6c985af71::t_e3fafec0c6f9f4 1-216
+src/lib/auth/types.ts
+  s_928bc6c985af71::t_99dd2498b591e2 38-42,72-75
+src/components/perangkat-ajar/form-perangkat-ajar.tsx
+  s_928bc6c985af71::t_fa3cb6d841a24b 1-172
+src/components/akses/daftar-pengguna.tsx
+  s_928bc6c985af71::t_8d22159b4e812e 41-43
+  s_928bc6c985af71::t_e13d9405f7ab29 105-110
+src/components/akses/daftar-pengguna.test.tsx
+  s_928bc6c985af71::t_36ec8cef2ecb44 56
+  s_928bc6c985af71::t_2745e6724ec2d1 29
+src/components/perangkat-ajar/daftar-perangkat-ajar.tsx
+  s_928bc6c985af71::t_dbe4adc1a509f0 2
+  s_928bc6c985af71::t_6e4da97cd8c7ab 1,3-48,50-59
+  s_928bc6c985af71::t_46f37cfda162bc 49
+src/app/dashboard/perangkat-ajar/page.tsx
+  s_928bc6c985af71::t_6536a40355841d 1-153
+src/app/dashboard/akses/actions.ts
+  s_928bc6c985af71::t_2eecdfb49e9a34 66-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "afe6a2134e5afd497daad250ff59f552f14f113c",
+  "prompts": {},
+  "sessions": {
+    "s_9034b42057567d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdbb5a71ffezReJDwZD0OAKv1",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_928bc6c985af71": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdd80ca1ffeW9LwcyFatPJ0FZ",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
