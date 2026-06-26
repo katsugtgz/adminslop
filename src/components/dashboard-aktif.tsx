@@ -14,6 +14,7 @@ import {
   FileQuestion,
   FileText,
   GraduationCap,
+  HelpCircle,
   KeyRound,
   Settings,
   Upload,
@@ -176,7 +177,7 @@ export async function DashboardAktif({
         >
           <Building2 className="h-6 w-6" />
         </span>
-        <div>
+        <div className="flex-1">
           <p className="text-sm text-muted-foreground">Satuan Pendidikan Aktif</p>
           <h1 className="text-2xl font-bold tracking-tight">
             {membership.orgName}
@@ -186,6 +187,11 @@ export async function DashboardAktif({
             Peran Anda: {membership.roleSlug}
           </p>
         </div>
+        <Button asChild variant="outline" size="icon" aria-label="Pusat Bantuan">
+          <Link href="/dashboard/bantuan">
+            <HelpCircle aria-hidden="true" />
+          </Link>
+        </Button>
       </header>
 
       {bolehAtur && (
@@ -217,6 +223,7 @@ export async function DashboardAktif({
         </div>
       </div>
 
+      <nav aria-label="Modul Satuan Pendidikan" className="flex flex-col gap-4">
       {bolehLihatAbsensi && (
         <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
@@ -552,6 +559,7 @@ export async function DashboardAktif({
           </Button>
         </div>
       )}
+      </nav>
     </section>
   );
 }

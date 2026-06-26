@@ -26,6 +26,15 @@ const buttonVariants = cva(
         icon: "h-11 w-11",
       },
     },
+    compoundVariants: [
+      // Mobile-first A11Y: every interactive variant gets a 44x44 CSS-pixel
+      // tap target (WCAG 2.5.8 AAA / Apple HIG). `link` is exempt because it
+      // renders as inline text.
+      {
+        variant: ["default", "destructive", "outline", "secondary", "ghost"],
+        className: "min-h-11 min-w-11",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
