@@ -1,0 +1,81 @@
+src/components/eraport/form-revisi.tsx
+  s_7130993932ee24::t_586f2ea3560dd8 1-60
+src/components/eraport/detail-eraport.tsx
+  s_50a48aed68cc07::t_546b4063499613 1-2
+  s_7130993932ee24::t_a327bc5b68055e 3-105
+src/lib/auth/types.ts
+  s_7130993932ee24::t_990ba6c24ecd14 38-43,73-77
+src/db/migrations/0009_eraport.sql
+  s_7130993932ee24::t_b1e86ec0513268 1-93
+src/app/dashboard/akses/page.test.tsx
+  s_7130993932ee24::t_da5fc98ad36e93 182
+src/db/queries/eraport.ts
+  s_7130993932ee24::t_766488ca43ad30 1-262
+src/components/eraport/form-draf.tsx
+  s_7130993932ee24::t_da65f33a3454a1 1-104
+src/components/akses/daftar-pengguna.test.tsx
+  s_7130993932ee24::t_ee6866ab3aba8f 56
+src/db/queries/kuota-ai.test.ts
+  s_50a48aed68cc07::t_2ad0c3b6f5a447 167
+src/lib/auth/otorisasi.ts
+  s_7130993932ee24::t_5cd0f5ac842b76 46-50
+  s_7130993932ee24::t_f0e88bbfdeaf04 147-151
+  s_7130993932ee24::t_a86cfdad53ccdf 76-78,97-100,114-115
+src/lib/auth/otorisasi.test.ts
+  s_7130993932ee24::t_42edf72c24b49e 541-643
+src/app/dashboard/akses/actions.ts
+  s_7130993932ee24::t_fdc25747ec4aa3 66-69
+src/app/dashboard/eraport/actions.ts
+  s_7130993932ee24::t_dbfdeb53201189 1-230
+src/components/eraport/daftar-eraport.tsx
+  s_7130993932ee24::t_5ef2c91ca7f8c1 1-130
+src/db/queries/permintaan-ai.test.ts
+  s_50a48aed68cc07::t_722bf69346fa42 6
+src/components/dashboard-aktif.test.tsx
+  s_50a48aed68cc07::t_c2ecd058dd6584 155-179
+src/db/schema.ts
+  s_7130993932ee24::t_d909e59f77d10e 1106-1209
+src/app/dashboard/eraport/actions.test.ts
+  s_7130993932ee24::t_54dbff59e2226d 1-20,25-27,29,38-290,295-577
+  s_7130993932ee24::t_77fbc5c7dd7929 24,28,30-37
+  s_7130993932ee24::t_ceb71c358e933a 291-294
+  s_7130993932ee24::t_8c9163dc4497da 21-23
+src/components/akses/daftar-pengguna.tsx
+  s_7130993932ee24::t_b77ac105f30745 106-113
+  s_7130993932ee24::t_6182848b6fe5d3 41-44
+src/app/dashboard/eraport/page.test.tsx
+  s_7130993932ee24::t_4d24afbc50c8cc 1-253
+src/app/dashboard/eraport/page.tsx
+  s_7130993932ee24::t_e7f717af66f529 1-131
+src/components/dashboard-aktif.tsx
+  s_50a48aed68cc07::t_a05da764785502 10
+  s_50a48aed68cc07::t_6219990a34621f 214-235
+  s_50a48aed68cc07::t_91cbe93c5e00f2 100-107
+src/db/queries/eraport.test.ts
+  s_7130993932ee24::t_fad90be6ebf917 94-95
+  s_7130993932ee24::t_a0d6bae274b291 1-93,96-513
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "f790c983ba1b93d63566d66e23b661b50d46c145",
+  "prompts": {},
+  "sessions": {
+    "s_50a48aed68cc07": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdda1b3fffeSrcmdQ6S0L16PN",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_7130993932ee24": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fdfc61c3ffehCwoxqjA7BvOm8",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
