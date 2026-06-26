@@ -3,9 +3,8 @@ import path from "node:path";
 import pg from "pg";
 import { beforeAll, describe, expect, it } from "vitest";
 
-import { createDb, withTenant, type Db, type Tx } from "../client";
+import { createDb, withTenant, type Db } from "../client";
 import { runMigrations } from "../migrate";
-import * as schema from "../schema";
 
 import {
   batalkanPermintaanAi,

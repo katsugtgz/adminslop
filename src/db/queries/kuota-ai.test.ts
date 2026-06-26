@@ -164,7 +164,7 @@ describeOrSkip(
     //    recomputes tersisa. Caller (action layer) is responsible for the
     //    `tersisa > 0` gate BEFORE calling — this fn does not enforce it.
     itOrSkip("tambahPemakaianKuota increments terpakai and decrements tersisa", async () => {
-      const { taId, after1, after2, after3 } = await withTenant(
+      const { taId, after3 } = await withTenant(
         db,
         SEED_A,
         async (tx) => {
