@@ -40,7 +40,7 @@ export async function simpanProfilSatuanPendidikanAction(
 
   const parsed = ProfilSatuanPendidikanSchema.safeParse({
     nama: String(formData.get("nama") ?? ""),
-    npsn: String(formData.get("npsn") ?? ""),
+    npsn: formData.get("npsn")?.toString().trim() || undefined,
     jenjang: String(formData.get("jenjang") ?? ""),
     alamat: String(formData.get("alamat") ?? ""),
     namaKepala: String(formData.get("namaKepala") ?? ""),

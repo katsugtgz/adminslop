@@ -57,12 +57,13 @@ describe("FormProfil (#5)", () => {
     expect(screen.getByLabelText(/URL Logo/i)).toBeInTheDocument();
   });
 
-  it("renders jenjang select with five options SD/SMP/SMA/SMK/MA", () => {
+  it("renders jenjang select with placeholder + five options SD/SMP/SMA/SMK/MA", () => {
     render(<FormProfil values={fakeRow()} />);
     const select = screen.getByLabelText(/^Jenjang$/) as HTMLSelectElement;
     expect(select).toBeInTheDocument();
     const optionValues = Array.from(select.options).map((o) => o.value);
-    expect(optionValues).toEqual(["SD", "SMP", "SMA", "SMK", "MA"]);
+    expect(optionValues).toEqual(["", "SD", "SMP", "SMA", "SMK", "MA"]);
+    expect(select.options[0].disabled).toBe(true);
   });
 
   it("npsn input is numeric inputMode with maxLength 8", () => {

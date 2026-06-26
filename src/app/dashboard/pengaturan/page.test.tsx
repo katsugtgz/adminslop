@@ -8,6 +8,9 @@ const { getActiveTenantContext } = vi.hoisted(() => ({
 const { canAdminSatuanPendidikan } = vi.hoisted(() => ({
   canAdminSatuanPendidikan: vi.fn(),
 }));
+const { canViewPengaturanSatuanPendidikan } = vi.hoisted(() => ({
+  canViewPengaturanSatuanPendidikan: vi.fn(),
+}));
 const { getProfilDanPengaturan } = vi.hoisted(() => ({
   getProfilDanPengaturan: vi.fn(),
 }));
@@ -20,7 +23,10 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("next/headers", () => ({ cookies: vi.fn() }));
 
 vi.mock("@/lib/auth/server", () => ({ getActiveTenantContext }));
-vi.mock("@/lib/auth/otorisasi", () => ({ canAdminSatuanPendidikan }));
+vi.mock("@/lib/auth/otorisasi", () => ({
+  canAdminSatuanPendidikan,
+  canViewPengaturanSatuanPendidikan,
+}));
 
 vi.mock("@/db/client", () => ({
   getDb: vi.fn(() => ({ db: {}, pool: {} })),
@@ -111,6 +117,7 @@ async function renderPage() {
 beforeEach(() => {
   getActiveTenantContext.mockReset();
   canAdminSatuanPendidikan.mockReset();
+  canViewPengaturanSatuanPendidikan.mockReset();
   getProfilDanPengaturan.mockReset();
   formProfilCalls.length = 0;
   formPengaturanCalls.length = 0;
@@ -152,6 +159,7 @@ describe("PengaturanPage (#5)", () => {
       },
     });
     canAdminSatuanPendidikan.mockReturnValue(true);
+    canViewPengaturanSatuanPendidikan.mockReturnValue(true);
     getProfilDanPengaturan.mockResolvedValue(fakeRow());
     await renderPage();
 
@@ -177,6 +185,7 @@ describe("PengaturanPage (#5)", () => {
       },
     });
     canAdminSatuanPendidikan.mockReturnValue(false);
+    canViewPengaturanSatuanPendidikan.mockReturnValue(true);
     getProfilDanPengaturan.mockResolvedValue(fakeRow());
     await renderPage();
 
@@ -199,6 +208,7 @@ describe("PengaturanPage (#5)", () => {
       },
     });
     canAdminSatuanPendidikan.mockReturnValue(true);
+    canViewPengaturanSatuanPendidikan.mockReturnValue(true);
     getProfilDanPengaturan.mockResolvedValue(null);
     await renderPage();
 
@@ -206,5 +216,26 @@ describe("PengaturanPage (#5)", () => {
       screen.getByText(/Data Satuan Pendidikan belum tersedia/i),
     ).toBeInTheDocument();
     expect(screen.queryByTestId("form-profil")).not.toBeInTheDocument();
+  });
+
+  it("active + unknown role -> renders Pembatasan Akses (deny)", async () => {
+    getActiveTenantContext.mockResolvedValue({
+      status: "active",
+      membership: {
+        orgId: "org_A",
+        orgName: "SMP Negeri 1 Contoh",
+        roleSlug: "unknown_role",
+      },
+    });
+    canAdminSatuanPendidikan.mockReturnValue(false);
+    canViewPengaturanSatuanPendidikan.mockReturnValue(false);
+    getProfilDanPengaturan.mockResolvedValue(fakeRow());
+    await renderPage();
+
+    expect(
+      screen.getByRole("heading", { name: /Pembatasan Akses/i }),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("form-profil")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("form-pengaturan")).not.toBeInTheDocument();
   });
 });

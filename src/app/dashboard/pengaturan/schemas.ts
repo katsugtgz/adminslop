@@ -6,7 +6,7 @@ import { z } from "zod";
  */
 export const ProfilSatuanPendidikanSchema = z.object({
   nama: z.string().trim().min(1),
-  npsn: z.string().trim().regex(/^\d+$/).max(8).optional(),
+  npsn: z.string().trim().regex(/^\d{8}$/).max(8).optional(),
   jenjang: z.enum(["SD", "SMP", "SMA", "SMK", "MA"]),
   alamat: z.string().trim().optional(),
   namaKepala: z.string().trim().optional(),

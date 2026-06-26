@@ -6,7 +6,10 @@ import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { Button } from "@/components/ui/button";
 import { getDb, withTenant } from "@/db/client";
 import { getProfilDanPengaturan } from "@/db/queries/satuan-pendidikan";
-import { canAdminSatuanPendidikan } from "@/lib/auth/otorisasi";
+import {
+  canAdminSatuanPendidikan,
+  canViewPengaturanSatuanPendidikan,
+} from "@/lib/auth/otorisasi";
 import { getActiveTenantContext } from "@/lib/auth/server";
 
 export const dynamic = "force-dynamic";
@@ -50,6 +53,10 @@ export default async function PengaturanPage() {
         </p>
       </section>
     );
+  }
+
+  if (!canViewPengaturanSatuanPendidikan(membership.roleSlug)) {
+    return <PembatasanAkses />;
   }
 
   const readOnly = !canAdminSatuanPendidikan(membership.roleSlug);

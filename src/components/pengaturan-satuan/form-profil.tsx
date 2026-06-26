@@ -64,6 +64,7 @@ export function FormProfil({ values, readOnly = false }: FormProfilProps) {
           defaultValue={values.jenjang ?? ""}
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
+          <option value="" disabled>Pilih Jenjang</option>
           {JENJANG_OPTIONS.map((j) => (
             <option key={j} value={j}>
               {j}
