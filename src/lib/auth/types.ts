@@ -35,6 +35,11 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
+ * `perangkat_ajar:*` govern Perangkat Ajar (teaching documents: Modul Ajar,
+ * RPP, Silabus, Prota, Promes). Admin/dev/guru get all three (guru creates
+ * and reviews AI-assisted content per jenis); wali_kelas/kepala_sekolah read
+ * only. `:ubah` also covers the AC#3 Verifikasi Dokumen AI gate on AI-assisted
+ * perangkat ajar (menunggu -> disetujui|ditolak).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -64,7 +69,10 @@ export type IzinSlug =
   | "permintaan_ai:baca"
   | "permintaan_ai:buat"
   | "draf_ai:baca"
-  | "draf_ai:verifikasi";
+  | "draf_ai:verifikasi"
+  | "perangkat_ajar:baca"
+  | "perangkat_ajar:buat"
+  | "perangkat_ajar:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

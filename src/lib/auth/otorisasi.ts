@@ -43,6 +43,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Perangkat Ajar: admin manages all teaching documents school-wide.
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -68,6 +72,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Perangkat Ajar: kepala_sekolah reads teaching documents (oversight).
+    "perangkat_ajar:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -86,6 +92,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "permintaan_ai:buat",
     "draf_ai:baca",
+    // Perangkat Ajar: guru creates + edits teaching documents per jenis, and
+    // verifies AI-assisted content (AC#3 Verifikasi Dokumen AI — the human in
+    // the loop on the FINAL document).
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -99,6 +111,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // (no request, no verify — homeroom oversight, not AI workflow).
     "permintaan_ai:baca",
     "draf_ai:baca",
+    // Perangkat Ajar: wali_kelas reads only (homeroom oversight).
+    "perangkat_ajar:baca",
   ],
   dev: [
     "ptk:baca",
@@ -130,6 +144,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Perangkat Ajar: dev mirrors admin.
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
 };
 
