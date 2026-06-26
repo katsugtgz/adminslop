@@ -1,0 +1,45 @@
+src/app/dashboard/absensi/actions.test.ts
+  s_ba7e4833857afa::t_c9520c4d28a7d0 98-100,104,108,146,156-167
+  s_ba7e4833857afa::t_8e362156d1ab5b 586-676
+  s_ba7e4833857afa::t_9f652970abb027 253
+  s_ba7e4833857afa::t_4851ddd82a1449 10-19,22-26,35,41-42,54-55,61-72,79
+  s_ba7e4833857afa::t_d373e801dc3e4f 213
+  s_ba7e4833857afa::t_8c3968646fbdf2 180,184-189
+  s_ba7e4833857afa::t_8a512c39dac707 277
+  s_ba7e4833857afa::t_f292b295a0fb20 168-169
+src/app/dashboard/absensi/actions.ts
+  s_ba7e4833857afa::t_a06b94e2bcd3d6 30-33
+  s_ba7e4833857afa::t_4fb8cc1743d4ed 208-212
+  s_ba7e4833857afa::t_d4bf37714f75c7 126-128
+src/app/api/sinkronisasi/route.ts
+  s_ba7e4833857afa::t_4af1e7e258af07 178-182,186,192-194
+  s_ba7e4833857afa::t_3be56f749a8458 14
+  s_ba7e4833857afa::t_fa0dd4713d755d 86-90,94,100-106
+  s_ba7e4833857afa::t_2cc7d4224de533 301-331,341-369
+  s_ba7e4833857afa::t_0db19c1bcee08a 7-13
+src/app/dashboard/penilaian/actions.ts
+  s_ba7e4833857afa::t_825a05556aa873 45,49-55,60-62
+src/lib/offline/schemas.ts
+  s_ba7e4833857afa::t_5c3ba9a0410db1 1-58
+src/lib/auth/kepemilikan.ts
+  s_ba7e4833857afa::t_291a016972b068 4
+  s_ba7e4833857afa::t_03c1e52613c17b 1-3,5-260
+src/app/api/sinkronisasi/route.test.ts
+  s_ba7e4833857afa::t_c694c536afd8cc 1-328
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f12ae8693f87e9346d1627211921dd5ea699ba06",
+  "prompts": {},
+  "sessions": {
+    "s_ba7e4833857afa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9d8f91dffep34tJDDTX4LaWo",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
