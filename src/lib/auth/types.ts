@@ -1,7 +1,8 @@
 /**
- * tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors WorkOS
- * OrganizationMembership `role.slug`. Never `superuser` (§13 of the identity
- * doc — no global superuser).
+ * App-side tenant_role slugs for a Keanggotaan Satuan Pendidikan. Mirrors the
+ * WorkOS OrganizationMembership `role.slug`. Never `superuser` (per
+ * docs/architecture/identity-and-access.md §13 — no global superuser). `dev`
+ * is a local-only admin-equivalent shim enabled by DEV_MEMBERSHIP_ALL.
  */
 export type RoleSlug =
   | "admin_satuan_pendidikan"
