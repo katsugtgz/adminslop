@@ -1,0 +1,52 @@
+src/app/dashboard/akses/actions.ts
+  s_100135a09e89ed::t_dd2d57504bba10 169
+  s_100135a09e89ed::t_2eef4346f4bc78 30
+  s_100135a09e89ed::t_9aa170437343cc 162-168,170-171
+src/db/queries/akses.ts
+  s_100135a09e89ed::t_0e9500ec72a1bf 49-63
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_100135a09e89ed::t_69ab1da9c5b8de 47
+  s_100135a09e89ed::t_5e2ec1e12fd5c1 196-209
+  s_100135a09e89ed::t_190e5d6b22937b 395-402
+  s_100135a09e89ed::t_77d8ce0792b6b5 282-291
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_100135a09e89ed::t_f4138534345e3c 74-80,93-95
+  s_100135a09e89ed::t_22351f2a8e7c18 140
+src/app/dashboard/akses/actions.test.ts
+  s_100135a09e89ed::t_8d09cb0204ceeb 53-59
+  s_100135a09e89ed::t_031e32a2f465e4 94
+  s_100135a09e89ed::t_57aee477aee6bb 173,196-203
+  s_100135a09e89ed::t_4ffe584549022a 299,303-304,316-333
+  s_100135a09e89ed::t_5cc98b42c91e37 75
+  s_100135a09e89ed::t_17c855bd9a44b9 45-52
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_100135a09e89ed::t_7bd59d1d4c31ee 857-934
+  s_100135a09e89ed::t_1950b4391ba180 135
+  s_100135a09e89ed::t_01159414b758e0 110-112
+  s_100135a09e89ed::t_5ad5dbddfe670e 255
+  s_100135a09e89ed::t_58e352945a4c4b 22-28
+  s_100135a09e89ed::t_9beabd1954e506 165
+  s_100135a09e89ed::t_9844dc3541c35a 99-101
+  s_100135a09e89ed::t_0e9036ef1ecd84 335-341
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_100135a09e89ed::t_637916968397cc 79-81,88,95,97-99
+  s_100135a09e89ed::t_2eb0d40800b3e2 304-326
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_100135a09e89ed::t_f5e2f6049bd77e 1-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "608422bff182436d18589feca6c9c556047cc58e",
+  "prompts": {},
+  "sessions": {
+    "s_100135a09e89ed": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fd1f9251ffeJ02FKeyeSpP7GB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
