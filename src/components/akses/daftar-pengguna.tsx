@@ -34,6 +34,8 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "penilaian:baca",
   "penilaian:buat",
   "penilaian:ubah",
+  "notifikasi:baca",
+  "notifikasi:kelola",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -87,6 +89,10 @@ function labelIzin(slug: IzinSlug): string {
       return "Buat Penilaian";
     case "penilaian:ubah":
       return "Ubah Penilaian";
+    case "notifikasi:baca":
+      return "Baca Notifikasi";
+    case "notifikasi:kelola":
+      return "Kelola Notifikasi";
   }
 }
 

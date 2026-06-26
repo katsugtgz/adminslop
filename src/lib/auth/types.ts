@@ -29,7 +29,11 @@ export type RoleSlug =
  * Guru gets all three (AC#1: guru creates penilaian for their own
  * beban_mengajar — role-level grant; OWNERSHIP is the second gate enforced at
  * the action layer per AC#4). `baca` is universal across teaching roles;
- * `buat`/`ubah` are admin + guru scoped.
+ * `buat`/`ubah` are admin + guru scoped. `notifikasi:*` govern in-app
+ * notifications/reminders (#20): `notifikasi:baca` is universal — every role
+ * reads/manages their OWN notifications (self-ownership enforced at the action
+ * layer); `notifikasi:kelola` is admin/dev only (system-level notification
+ * management, e.g. creating reminders on behalf of users).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -55,7 +59,9 @@ export type IzinSlug =
   | "wali_kelas:ubah"
   | "penilaian:baca"
   | "penilaian:buat"
-  | "penilaian:ubah";
+  | "penilaian:ubah"
+  | "notifikasi:baca"
+  | "notifikasi:kelola";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

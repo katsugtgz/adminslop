@@ -37,6 +37,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Notifikasi (#20): everyone reads/manages their own; admin manages
+    // system-wide notification creation (kelola).
+    "notifikasi:baca",
+    "notifikasi:kelola",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -57,6 +61,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     // Penilaian: read oversight of school-wide assessment data.
     "penilaian:baca",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -70,6 +76,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -79,6 +87,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "wali_kelas:baca",
     // Penilaian: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "penilaian:baca",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
   ],
   dev: [
     "ptk:baca",
@@ -105,6 +115,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Notifikasi (#20): dev mirrors admin (system-wide notification management).
+    "notifikasi:baca",
+    "notifikasi:kelola",
   ],
 };
 

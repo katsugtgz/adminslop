@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  Bell,
   BookOpen,
   Briefcase,
   Building2,
@@ -87,6 +88,13 @@ export async function DashboardAktif({
     membership.roleSlug
   ].includes("penilaian:baca");
 
+  // Reachability link to Notifikasi (#20). Every member role receives
+  // `notifikasi:baca` by default — each user manages their own in-app inbox.
+  // The page re-checks `boleh("notifikasi:baca")` server-side (§12).
+  const bolehLihatNotifikasi = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("notifikasi:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -167,6 +175,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/penilaian">Buka Penilaian</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatNotifikasi && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Bell className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Notifikasi</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Lihat pengingat tugas tertunda dan kelola preferensi notifikasi.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/notifikasi">Buka Notifikasi</Link>
           </Button>
         </div>
       )}

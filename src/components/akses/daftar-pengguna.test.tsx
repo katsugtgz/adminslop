@@ -26,7 +26,7 @@ const pengguna: PenggunaDenganPtk = {
 };
 
 describe("DaftarPengguna (#6 / T6)", () => {
-  it("bolehKelola=true renders link form + 24 izin + 24 pembatasan checkboxes reflecting aksesMap", () => {
+  it("bolehKelola=true renders link form + 26 izin + 26 pembatasan checkboxes reflecting aksesMap", () => {
     const aksesMap = new Map([
       ["pg_1", { izin: ["ptk:baca"], pembatasan: ["akses:kelola"] }],
     ]);
@@ -53,7 +53,7 @@ describe("DaftarPengguna (#6 / T6)", () => {
       screen.getByRole("form", { name: "Tautan PTK" })
     ).toBeInTheDocument();
 
-    expect(screen.getAllByRole("checkbox")).toHaveLength(48);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(52);
 
     // defaultChecked reflects aksesMap
     expect(
