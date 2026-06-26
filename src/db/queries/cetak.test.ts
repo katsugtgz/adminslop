@@ -296,7 +296,7 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     expect(konten!.npsn).toBe("20XXXXXA");
     expect(konten!.logoUrl).toBe("https://a.example/logo.png");
     // Preferensi.
-    expect(konten!.formatPreferensi).toBe("a4");
+    expect(konten!.formatPreferensi).toBe("A4");
     // Default template resolved.
     expect(konten!.template).not.toBeNull();
     expect(konten!.template!.id).toBe(templateId);
@@ -327,7 +327,7 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     );
     expect(konten).not.toBeNull();
     expect(konten!.template).toBeNull();
-    expect(konten!.formatPreferensi).toBe("f4");
+    expect(konten!.formatPreferensi).toBe("F4");
   });
 
   // 7. RLS isolation: SEED_B cannot see/mutate SEED_A's template or dokumen.
