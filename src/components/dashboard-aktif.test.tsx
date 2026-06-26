@@ -321,3 +321,28 @@ describe("DashboardAktif — Bank Soal reachability link (#16)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — Perangkat Ajar reachability link (#17)", () => {
+  // All member roles receive `perangkat_ajar:baca` by default, so ALL member
+  // roles see the link. The page re-checks server-side (§12) and applies
+  // AC#3 DUAL authz (verification gate) for dokumen_ai content.
+  it("admin sees the 'Perangkat Ajar' link pointing at /dashboard/perangkat-ajar", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Perangkat Ajar/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/perangkat-ajar");
+  });
+
+  it("guru sees the link (can create teaching documents)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Perangkat Ajar/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (read-only oversight)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Perangkat Ajar/i })
+    ).toBeInTheDocument();
+  });
+});

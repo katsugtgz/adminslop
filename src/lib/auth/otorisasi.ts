@@ -102,6 +102,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:baca",
     "paket_soal:buat",
     "paket_soal:ubah",
+    // Perangkat Ajar: admin manages all teaching documents school-wide.
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -130,6 +134,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Bank Soal + Paket Soal: read-only oversight of the question bank.
     "bank_soal:baca",
     "paket_soal:baca",
+    // Perangkat Ajar: kepala_sekolah reads teaching documents (oversight).
+    "perangkat_ajar:baca",
   ],
   guru: [
     "peserta_didik:baca",
@@ -163,6 +169,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:baca",
     "paket_soal:buat",
     "paket_soal:ubah",
+    // Perangkat Ajar: guru creates + edits teaching documents per jenis, and
+    // verifies AI-assisted content (AC#3 Verifikasi Dokumen AI — the human in
+    // the loop on the FINAL document).
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -184,6 +196,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Bank Soal + Paket Soal: wali_kelas reads only (homeroom oversight).
     "bank_soal:baca",
     "paket_soal:baca",
+    // Perangkat Ajar: wali_kelas reads only (homeroom oversight).
+    "perangkat_ajar:baca",
   ],
   dev: [
     "ptk:baca",
@@ -237,6 +251,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:baca",
     "paket_soal:buat",
     "paket_soal:ubah",
+    // Perangkat Ajar: dev mirrors admin.
+    "perangkat_ajar:baca",
+    "perangkat_ajar:buat",
+    "perangkat_ajar:ubah",
   ],
 };
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   Bell,
+  BookMarked,
   BookOpen,
   Bot,
   Briefcase,
@@ -148,6 +149,14 @@ export async function DashboardAktif({
   const bolehLihatBankSoal = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("bank_soal:baca");
+
+  // Reachability link to Perangkat Ajar (#17). All member roles receive
+  // `perangkat_ajar:baca` — teaching documents are core data for every role.
+  // The page re-checks `boleh("perangkat_ajar:baca")` server-side (§12) and
+  // applies AC#3 DUAL authz (verification gate) for dokumen_ai content.
+  const bolehLihatPerangkatAjar = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("perangkat_ajar:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -305,6 +314,29 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/bank-soal">Buka Bank Soal</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatPerangkatAjar && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <BookMarked className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Perangkat Ajar</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Buat dan kelola Modul Ajar, RPP, Silabus, dan dokumen ajar
+                lainnya.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/perangkat-ajar">Buka Perangkat Ajar</Link>
           </Button>
         </div>
       )}

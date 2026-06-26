@@ -50,6 +50,9 @@ export type RoleSlug =
  * (kepala_sekolah/admin), `revisi` re-opens (admin/dev). `bank_soal:*` /
  * `paket_soal:*` govern the question bank + assembled packages: guru
  * authors items + packages (AC#1), admin/dev manage school-wide, others read.
+ * `perangkat_ajar:*` govern teaching documents (Silabus/RPP/ModulAjar/...):
+ * guru creates + edits + verifies AI-assisted content (AC#3), admin/dev manage,
+ * others read.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -97,7 +100,10 @@ export type IzinSlug =
   | "bank_soal:ubah"
   | "paket_soal:baca"
   | "paket_soal:buat"
-  | "paket_soal:ubah";
+  | "paket_soal:ubah"
+  | "perangkat_ajar:baca"
+  | "perangkat_ajar:buat"
+  | "perangkat_ajar:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {
