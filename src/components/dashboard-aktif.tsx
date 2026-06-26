@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   BookOpen,
+  Briefcase,
   Building2,
   Calendar,
   CheckCircle2,
@@ -78,6 +79,13 @@ export async function DashboardAktif({
   const bolehLihatKurikulum = PERAN_KE_IZIN_DEFAULT[
     membership.roleSlug
   ].includes("kurikulum:baca");
+
+  // Reachability link to Beban Mengajar (#10). All member roles receive
+  // `beban_mengajar:baca` — teaching load is core data for every role. The
+  // page re-checks `boleh("beban_mengajar:baca")` server-side (§12).
+  const bolehLihatBebanMengajar = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("beban_mengajar:baca");
 
   return (
     <section className="flex flex-col gap-6">
@@ -215,6 +223,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/akses">Buka Manajemen Akses</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatBebanMengajar && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <Briefcase className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">Beban Mengajar</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Lihat Beban Mengajar dan Wali Kelas untuk periode aktif.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/beban-mengajar">Buka Beban Mengajar</Link>
           </Button>
         </div>
       )}

@@ -33,7 +33,13 @@ export type IzinSlug =
   | "rombongan_belajar:buat"
   | "rombongan_belajar:ubah"
   | "rombongan_belajar:kelola_penempatan"
-  | "kurikulum:baca";
+  | "kurikulum:baca"
+  | "beban_mengajar:baca"
+  | "beban_mengajar:buat"
+  | "beban_mengajar:ubah"
+  | "wali_kelas:baca"
+  | "wali_kelas:buat"
+  | "wali_kelas:ubah";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

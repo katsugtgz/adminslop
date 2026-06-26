@@ -53,7 +53,7 @@ describe("DaftarPengguna (#6 / T6)", () => {
       screen.getByRole("form", { name: "Tautan PTK" })
     ).toBeInTheDocument();
 
-    expect(screen.getAllByRole("checkbox")).toHaveLength(30);
+    expect(screen.getAllByRole("checkbox")).toHaveLength(42);
 
     // defaultChecked reflects aksesMap
     expect(

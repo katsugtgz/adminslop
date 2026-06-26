@@ -338,3 +338,43 @@ describe("evaluasiAkses (#9 T2) — kurikulum:baca universal default", () => {
     ).toEqual({ diizinkan: true, sumber: "peran" });
   });
 });
+
+describe("evaluasiAkses (#10 T2) — beban_mengajar + wali_kelas defaults", () => {
+  // admin/dev get every new slug (full teaching-load + homeroom CRUD).
+  it.each<IzinSlug>([
+    "beban_mengajar:baca",
+    "beban_mengajar:buat",
+    "beban_mengajar:ubah",
+    "wali_kelas:baca",
+    "wali_kelas:buat",
+    "wali_kelas:ubah",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  // Teaching roles read their own teaching load + homeroom context (AC#4).
+  it("guru requesting beban_mengajar:baca -> allow 'peran' (own teaching load — AC#4)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "beban_mengajar:baca"))
+    ).toEqual({ diizinkan: true, sumber: "peran" });
+  });
+
+  it("guru requesting wali_kelas:baca -> allow 'peran' (homeroom context — AC#4)", () => {
+    expect(evaluasiAkses(defaults("guru", "wali_kelas:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  // Writes remain admin-scoped — guru cannot create teaching-load records.
+  it("guru requesting beban_mengajar:buat -> deny 'tidak_ada_izin' (no write default)", () => {
+    expect(
+      evaluasiAkses(defaults("guru", "beban_mengajar:buat"))
+    ).toEqual({ diizinkan: false, sumber: "tidak_ada_izin" });
+  });
+});
