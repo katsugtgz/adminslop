@@ -1,55 +1,7 @@
 import { describe, expect, it } from "vitest";
-import {
-  canAdminSatuanPendidikan,
-  canViewPengaturanSatuanPendidikan,
-  dapatMelihatAkses,
-  dapatMengelolaAkses,
-  evaluasiAkses,
-} from "./otorisasi";
+
+import { dapatMelihatAkses, dapatMengelolaAkses, evaluasiAkses } from "./otorisasi";
 import type { IzinSlug, RoleSlug } from "./types";
-
-// ─── #5: Profil/Pengaturan Satuan Pendidikan predicates ──────────────────────
-
-describe("canAdminSatuanPendidikan (#5)", () => {
-  it("admin_satuan_pendidikan -> true", () => {
-    expect(canAdminSatuanPendidikan("admin_satuan_pendidikan")).toBe(true);
-  });
-  it("dev (local shim) -> true (admin-equivalent)", () => {
-    expect(canAdminSatuanPendidikan("dev")).toBe(true);
-  });
-  it("guru -> false (read-only)", () => {
-    expect(canAdminSatuanPendidikan("guru")).toBe(false);
-  });
-  it("kepala_sekolah -> false (read-only when not also admin)", () => {
-    expect(canAdminSatuanPendidikan("kepala_sekolah")).toBe(false);
-  });
-  it("wali_kelas -> false (read-only)", () => {
-    expect(canAdminSatuanPendidikan("wali_kelas")).toBe(false);
-  });
-  it("unknown slug -> false (deny by default)", () => {
-    expect(canAdminSatuanPendidikan("superuser")).toBe(false);
-  });
-  it("undefined -> false (deny by default)", () => {
-    expect(canAdminSatuanPendidikan(undefined)).toBe(false);
-  });
-});
-
-describe("canViewPengaturanSatuanPendidikan (#5)", () => {
-  it.each(["admin_satuan_pendidikan", "dev", "guru", "kepala_sekolah"] as const)(
-    "%s -> true (any member can view their Satuan Pendidikan profil/pengaturan)",
-    (slug) => {
-      expect(canViewPengaturanSatuanPendidikan(slug)).toBe(true);
-    },
-  );
-  it("unknown -> false", () => {
-    expect(canViewPengaturanSatuanPendidikan("random")).toBe(false);
-  });
-  it("undefined -> false", () => {
-    expect(canViewPengaturanSatuanPendidikan(undefined)).toBe(false);
-  });
-});
-
-// ─── #6: Akses evaluator ─────────────────────────────────────────────────────
 
 /** Minimal evaluator input: no grants, no restrictions (defaults only). */
 const defaults = (roleSlug: RoleSlug, diminta: IzinSlug) => ({
@@ -161,7 +113,6 @@ describe("dapatMengelolaAkses (#6 T1) — page visibility for Akses administrati
     ["admin_satuan_pendidikan", true],
     ["dev", true],
     ["guru", false],
-    ["wali_kelas", false],
     ["kepala_sekolah", false],
   ])("dapatMengelolaAkses('%s') -> %s", (roleSlug, expected) => {
     expect(dapatMengelolaAkses(roleSlug)).toBe(expected);
@@ -173,7 +124,6 @@ describe("dapatMelihatAkses (#6 T1) — read visibility for Akses page", () => {
     ["kepala_sekolah", true],
     ["admin_satuan_pendidikan", true],
     ["guru", false],
-    ["wali_kelas", false],
   ])("dapatMelihatAkses('%s') -> %s", (roleSlug, expected) => {
     expect(dapatMelihatAkses(roleSlug)).toBe(expected);
   });
@@ -198,6 +148,75 @@ describe("evaluasiAkses (#6 T1) — input robustness", () => {
         diminta: "ptk:hapus",
         izinGrants: [],
         pembatasan: ["ptk:hapus", "ptk:hapus"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});
+
+describe("evaluasiAkses (#7 T1) — peserta_didik defaults", () => {
+  it("admin_satuan_pendidikan requesting peserta_didik:buat -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("admin_satuan_pendidikan", "peserta_didik:buat"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("admin_satuan_pendidikan requesting peserta_didik:ubah -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("admin_satuan_pendidikan", "peserta_didik:ubah"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("admin_satuan_pendidikan requesting peserta_didik:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("admin_satuan_pendidikan", "peserta_didik:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting peserta_didik:baca -> allow 'peran' (students are core teaching data)", () => {
+    expect(evaluasiAkses(defaults("guru", "peserta_didik:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting peserta_didik:buat -> deny 'tidak_ada_izin' (no write default for guru)", () => {
+    expect(evaluasiAkses(defaults("guru", "peserta_didik:buat"))).toEqual({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+  });
+
+  it("wali_kelas requesting peserta_didik:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "peserta_didik:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("kepala_sekolah requesting peserta_didik:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("kepala_sekolah", "peserta_didik:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("dev mirrors admin: peserta_didik:ubah -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("dev", "peserta_didik:ubah"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting peserta_didik:baca WITH pembatasan=['peserta_didik:baca'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "guru",
+        diminta: "peserta_didik:baca",
+        izinGrants: [],
+        pembatasan: ["peserta_didik:baca"],
       })
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });

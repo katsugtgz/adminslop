@@ -41,11 +41,14 @@ export function canViewPengaturanSatuanPendidikan(
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
-  admin_satuan_pendidikan: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
-  kepala_sekolah: ["akses:baca"],
-  guru: [],
-  wali_kelas: [],
-  dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
+  // peserta_didik:baca granted to every teaching role (students are core
+  // teaching data); buat/ubah remain admin-scoped. No :hapus this slice
+  // (archive, not hard-delete per CONTEXT.md).
+  admin_satuan_pendidikan: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca", "peserta_didik:baca", "peserta_didik:buat", "peserta_didik:ubah"],
+  kepala_sekolah: ["akses:baca", "peserta_didik:baca"],
+  guru: ["peserta_didik:baca"],
+  wali_kelas: ["peserta_didik:baca"],
+  dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca", "peserta_didik:baca", "peserta_didik:buat", "peserta_didik:ubah"],
 };
 
 /** Input to `evaluasiAkses`. The caller has already confirmed membership. */

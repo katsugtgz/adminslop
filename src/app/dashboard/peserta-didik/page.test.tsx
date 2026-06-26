@@ -4,8 +4,7 @@ import { render, screen } from "@testing-library/react";
 import type { AksesSaya } from "@/lib/auth/akses-saya";
 import type { KeputusanAkses } from "@/lib/auth/otorisasi";
 import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
-import type { PenggunaDenganPtk } from "@/db/queries/akses";
-import type { Ptk } from "@/db/schema";
+import type { PesertaDidik } from "@/db/schema";
 
 // --- hoisted mocks ---------------------------------------------------------
 
@@ -21,14 +20,7 @@ const mocks = vi.hoisted(() => {
         fn: (tx: unknown) => Promise<unknown>
       ) => fn(fakeTx)
     ),
-    listPtk: vi.fn(async () => [] as Ptk[]),
-    listPengguna: vi.fn(async () => [] as PenggunaDenganPtk[]),
-    loadAksesPengguna: vi.fn(
-      async (): Promise<{ izin: string[]; pembatasan: string[] }> => ({
-        izin: [],
-        pembatasan: [],
-      })
-    ),
+    listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
     fakeTx,
   };
 });
@@ -47,11 +39,10 @@ vi.mock("@/lib/auth/akses-saya", () => ({
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
   withTenant: mocks.withTenant,
+  catatAudit: vi.fn(),
 }));
-vi.mock("@/db/queries/akses", () => ({
-  listPtk: mocks.listPtk,
-  listPengguna: mocks.listPengguna,
-  loadAksesPengguna: mocks.loadAksesPengguna,
+vi.mock("@/db/queries/peserta-didik", () => ({
+  listPesertaDidik: mocks.listPesertaDidik,
 }));
 
 import Page from "./page";
@@ -60,7 +51,8 @@ import Page from "./page";
 
 /**
  * Build an "active" AksesSaya whose `boleh()` mirrors the REAL evaluasiAkses
- * precedence (pembatasan > izin > peran default).
+ * precedence (pembatasan > izin > peran default), scoped to the peserta_didik
+ * izin vocabulary.
  */
 function aksesAktif(
   roleSlug: RoleSlug,
@@ -68,18 +60,17 @@ function aksesAktif(
 ): Extract<AksesSaya, { status: "active" }> {
   const izin = opts?.izin ?? [];
   const pembatasan = opts?.pembatasan ?? [];
+  // Mirrors PERAN_KE_IZIN_DEFAULT for the peserta_didik:* slugs.
   const defaults: Record<RoleSlug, IzinSlug[]> = {
     admin_satuan_pendidikan: [
-      "ptk:baca",
-      "ptk:buat",
-      "ptk:hapus",
-      "akses:kelola",
-      "akses:baca",
+      "peserta_didik:baca",
+      "peserta_didik:buat",
+      "peserta_didik:ubah",
     ],
-    dev: ["ptk:baca", "ptk:buat", "ptk:hapus", "akses:kelola", "akses:baca"],
-    kepala_sekolah: ["akses:baca"],
-    guru: [],
-    wali_kelas: [],
+    dev: ["peserta_didik:baca", "peserta_didik:buat", "peserta_didik:ubah"],
+    kepala_sekolah: ["peserta_didik:baca"],
+    guru: ["peserta_didik:baca"],
+    wali_kelas: ["peserta_didik:baca"],
   };
   const boleh = (diminta: IzinSlug): KeputusanAkses => {
     if (pembatasan.includes(diminta))
@@ -101,24 +92,17 @@ function aksesAktif(
   };
 }
 
-const PTK_BUDI: Ptk = {
-  id: "ptk_1",
+const PD_BUDI: PesertaDidik = {
+  id: "pd_1",
   tenantId: "org_A",
-  nama: "Budi",
-  nip: "123",
-  jenis: "pendidik",
+  nama: "Budi Santoso",
+  nisn: "12345678",
+  nis: "NIS-001",
+  tanggalLahir: "2010-05-15",
+  jenisKelamin: "L",
+  status: "aktif",
   dibuatPada: new Date("2026-01-01T00:00:00Z"),
-};
-
-const PENGGUNA_SATU: PenggunaDenganPtk = {
-  id: "pg_1",
-  tenantId: "org_A",
-  userId: "workos_u_1",
-  peranAkses: "guru",
-  ptkId: "ptk_1",
-  nama: "Pengguna Satu",
-  dibuatPada: new Date("2026-01-01T00:00:00Z"),
-  ptk: PTK_BUDI,
+  diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
 };
 
 async function renderPage() {
@@ -130,23 +114,16 @@ beforeEach(() => {
   mocks.getAksesSaya.mockReset();
   mocks.getDb.mockReset();
   mocks.withTenant.mockReset();
-  mocks.listPtk.mockReset();
-  mocks.listPengguna.mockReset();
-  mocks.loadAksesPengguna.mockReset();
+  mocks.listPesertaDidik.mockReset();
   // restore default implementations
   mocks.getDb.mockImplementation(() => ({ db: { __db: true } }));
   mocks.withTenant.mockImplementation(
     async (_db, _tenantId, fn) => fn(mocks.fakeTx)
   );
-  mocks.listPtk.mockResolvedValue([PTK_BUDI]);
-  mocks.listPengguna.mockResolvedValue([PENGGUNA_SATU]);
-  mocks.loadAksesPengguna.mockResolvedValue({
-    izin: ["ptk:baca"],
-    pembatasan: [],
-  });
+  mocks.listPesertaDidik.mockResolvedValue([PD_BUDI]);
 });
 
-describe("AksesPage — render by akses context (#6 / T6)", () => {
+describe("PesertaDidikPage — render by akses context (#7 / T7)", () => {
   it("denied -> Pembatasan Akses", async () => {
     mocks.getAksesSaya.mockResolvedValue({ status: "denied" } as AksesSaya);
     await renderPage();
@@ -168,59 +145,55 @@ describe("AksesPage — render by akses context (#6 / T6)", () => {
     ).toBeInTheDocument();
   });
 
-  it("active + admin -> full management (Tambah PTK, Hapus, izin + pembatasan checkboxes)", async () => {
-    mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
-    await renderPage();
-
-    expect(
-      screen.getByRole("heading", { name: "Manajemen Akses" })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Tambah PTK/i })
-    ).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: /Hapus/i })).toHaveLength(1);
-    expect(screen.getAllByRole("checkbox")).toHaveLength(16);
-    expect(mocks.listPtk).toHaveBeenCalledTimes(1);
-    expect(mocks.loadAksesPengguna).toHaveBeenCalledTimes(1);
-  });
-
-  it("active + kepala_sekolah -> read-only lists (no forms, no checkboxes)", async () => {
-    mocks.getAksesSaya.mockResolvedValue(aksesAktif("kepala_sekolah"));
-    await renderPage();
-
-    // lists ARE shown
-    expect(screen.getByText("Budi")).toBeInTheDocument();
-    expect(screen.getByText("Pengguna Satu")).toBeInTheDocument();
-    // no management surface
-    expect(
-      screen.queryByRole("button", { name: /Tambah PTK/i })
-    ).toBeNull();
-    expect(screen.queryByRole("button", { name: /Hapus/i })).toBeNull();
-    expect(screen.queryByRole("checkbox")).toBeNull();
-    // read-only viewers never load the per-pengguna akses matrix
-    expect(mocks.loadAksesPengguna).not.toHaveBeenCalled();
-  });
-
-  it("active + guru (no akses:baca) -> Pembatasan Akses, no PTK data leaks", async () => {
+  it("active + guru (baca only) -> read-only list (no Tambah / Ubah Status)", async () => {
     mocks.getAksesSaya.mockResolvedValue(aksesAktif("guru"));
     await renderPage();
 
+    // list shown
     expect(
-      screen.getByRole("heading", { name: /Pembatasan Akses/i })
+      screen.getByRole("heading", { name: "Peserta Didik" })
     ).toBeInTheDocument();
-    // listPtk is NEVER called (page bails before getDb)
-    expect(mocks.listPtk).not.toHaveBeenCalled();
-    expect(mocks.withTenant).not.toHaveBeenCalled();
-    expect(screen.queryByText("Budi")).toBeNull();
+    expect(screen.getByText("Budi Santoso")).toBeInTheDocument();
+    // read-only: no create form, no status form
+    expect(
+      screen.queryByRole("button", { name: /Tambah Peserta Didik/i })
+    ).toBeNull();
+    expect(
+      screen.queryByRole("button", { name: /Ubah Status/i })
+    ).toBeNull();
   });
 
-  it("active + admin with empty lists -> empty states", async () => {
+  it("active + admin -> list + 'Tambah Peserta Didik' form + status form fields", async () => {
     mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
-    mocks.listPtk.mockResolvedValue([]);
-    mocks.listPengguna.mockResolvedValue([]);
     await renderPage();
 
-    expect(screen.getByText(/Belum ada PTK/i)).toBeInTheDocument();
-    expect(screen.getByText(/Belum ada Pengguna/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Peserta Didik" })
+    ).toBeInTheDocument();
+    expect(screen.getByText("Budi Santoso")).toBeInTheDocument();
+
+    // create form fields present
+    expect(screen.getByLabelText("Nama")).toBeInTheDocument();
+    expect(screen.getByLabelText("NISN")).toBeInTheDocument();
+    expect(screen.getByLabelText("NIS")).toBeInTheDocument();
+    expect(screen.getByLabelText("Tanggal Lahir")).toBeInTheDocument();
+    expect(screen.getByLabelText("Jenis Kelamin")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Tambah Peserta Didik/i })
+    ).toBeInTheDocument();
+
+    // status form present (per-row)
+    expect(
+      screen.getByRole("button", { name: /Ubah Status/i })
+    ).toBeInTheDocument();
+    expect(mocks.listPesertaDidik).toHaveBeenCalledTimes(1);
+  });
+
+  it("active + admin + empty list -> 'Belum ada Peserta Didik.' empty state", async () => {
+    mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    mocks.listPesertaDidik.mockResolvedValue([]);
+    await renderPage();
+
+    expect(screen.getByText(/Belum ada Peserta Didik/i)).toBeInTheDocument();
   });
 });
