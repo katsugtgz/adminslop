@@ -1,0 +1,140 @@
+src/db/migrations/0008_permintaan_ai.sql
+  s_dc78de61241e74::t_bc07d4f9abb7a9 1-117
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_ec1926229b6810::t_68ed263b7df6bd 1-139
+src/db/queries/draf-ai.test.ts
+  s_404ff53ff5edc1::t_76ad5334bc7c3c 1-3,5-361
+  s_404ff53ff5edc1::t_1aa346f71d2d81 4
+src/db/schema.ts
+  s_dc78de61241e74::t_9cc1e4841ef1a3 1003
+  s_dc78de61241e74::t_ab0eb87c3328cf 963-998,1000-1002,1004-1105
+  s_dc78de61241e74::t_e3caaf59d76fe3 999
+  s_dc78de61241e74::t_d72675ea081fb0 15
+src/app/dashboard/permintaan-ai/actions.ts
+  s_a160b3f93311f4::t_62aa20187fd6bd 1-344
+src/components/permintaan-ai/kartu-draf.tsx
+  s_ec1926229b6810::t_c3ec5efe876066 1-49,52-59,61,63-78,80-106
+  s_ec1926229b6810::t_22d9299890d489 50-51,60,62
+  s_ec1926229b6810::t_f24fcd001f84e8 79
+src/db/queries/draf-ai.ts
+  s_404ff53ff5edc1::t_c5a243f8102538 1-119
+src/components/permintaan-ai/kartu-draf.test.tsx
+  s_ec1926229b6810::t_d695fba445c78a 46
+  s_ec1926229b6810::t_03ad112a327cdb 55-59,61-67
+  s_ec1926229b6810::t_710342a581de1a 1-45,47-54,60,68-107
+src/app/dashboard/akses/page.test.tsx
+  s_0e7975422f285c::t_d04dec6d1a8b17 182
+src/components/akses/daftar-pengguna.test.tsx
+  s_0e7975422f285c::t_35d7f6622fd578 56
+  s_0e7975422f285c::t_c1b9b36dd7fe03 29
+src/app/dashboard/permintaan-ai/page.tsx
+  s_ec1926229b6810::t_21c48cbd1f9808 1-125
+src/components/permintaan-ai/form-permintaan.tsx
+  s_ec1926229b6810::t_f17c50d947c9db 1-92
+src/db/queries/permintaan-ai.ts
+  s_404ff53ff5edc1::t_4d14744070459e 1-184
+src/db/queries/kuota-ai.ts
+  s_404ff53ff5edc1::t_b412d2316f9b86 1-131
+src/db/permintaan-ai.test.ts
+  s_dc78de61241e74::t_74abcd782eeb0e 1-579
+src/lib/auth/types.ts
+  s_0e7975422f285c::t_83abe770c48457 33-37
+  s_0e7975422f285c::t_a89a8c404f73ec 63-67
+src/components/akses/daftar-pengguna.tsx
+  s_0e7975422f285c::t_9405d43a0f4318 37-40
+  s_0e7975422f285c::t_d9c8a95ae7866e 94-101
+src/db/queries/kuota-ai.test.ts
+  s_404ff53ff5edc1::t_811eab3918cd5c 1-125,156,159,162-326
+  s_404ff53ff5edc1::t_bf3e3cb15f5fe6 126-155,157-158,160
+  s_404ff53ff5edc1::t_50aca25af79dce 161
+src/components/permintaan-ai/kartu-kuota.test.tsx
+  s_ec1926229b6810::t_df42832bd10e99 1-52
+src/components/permintaan-ai/daftar-permintaan.test.tsx
+  s_ec1926229b6810::t_e7175d4c8159be 1-234
+src/components/permintaan-ai/kartu-kuota.tsx
+  s_ec1926229b6810::t_5a35ed67ebc524 1-43
+src/app/dashboard/permintaan-ai/page.test.tsx
+  s_ec1926229b6810::t_09b120fd9e68de 1-22,26-332
+  s_ec1926229b6810::t_5616e7af7cf180 23-25
+src/components/dashboard-aktif.tsx
+  s_0517cbd981edda::t_a647c84b3d80c2 4
+  s_0517cbd981edda::t_ab1b2d47677554 91-98
+  s_0517cbd981edda::t_114ce06bec748d 183-204
+src/lib/auth/otorisasi.ts
+  s_0e7975422f285c::t_308cccb7ce04e5 40-45
+  s_0e7975422f285c::t_e4d43932c4f094 98-101
+  s_0e7975422f285c::t_fc7d9137cf29ad 128-132
+  s_0e7975422f285c::t_a954d74ade6271 84-88
+  s_0e7975422f285c::t_0189d766764d0a 66-70
+src/lib/auth/otorisasi.test.ts
+  s_0e7975422f285c::t_8fb5f78f94de84 476-540
+src/db/queries/permintaan-ai.test.ts
+  s_404ff53ff5edc1::t_d4753132783486 1-390
+src/app/dashboard/akses/actions.ts
+  s_0e7975422f285c::t_3f53550227d99d 62-65
+src/components/permintaan-ai/form-permintaan.test.tsx
+  s_ec1926229b6810::t_7f6d1cd74ad3e1 1-62
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_a160b3f93311f4::t_785153606714d3 33
+  s_a160b3f93311f4::t_cd88372a41f242 1-32,34-293,297-301,306-322,329-330,335-623
+  s_a160b3f93311f4::t_af16b3aa85d28a 323-328,331-334
+  s_a160b3f93311f4::t_51e488d9fd03dc 294-296,302-305
+src/components/dashboard-aktif.test.tsx
+  s_0517cbd981edda::t_a609a53ce64ec5 130-154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "94ea90161f114e2dba738d48ab2d95aa222e1e1a",
+  "prompts": {},
+  "sessions": {
+    "s_0517cbd981edda": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe15e0ddffeI9uK4jQGqzSeLI",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_0e7975422f285c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe5f5a88ffeXo5OEFWSTNE4T2",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_404ff53ff5edc1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe538b37ffeF3zYyDvIQcx0Jg",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_a160b3f93311f4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe4564ffffeSpsFKrr2zTMvZ5",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_dc78de61241e74": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe5f5a90ffepylvKkvYhP5UJd",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    },
+    "s_ec1926229b6810": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fe37f67effeYY7eCGVT93IMaP",
+        "model": "glm-5.2"
+      },
+      "human_author": "Muhammad Naufal Mahdi <053792227@ecampus.ut.ac.id>"
+    }
+  }
+}
