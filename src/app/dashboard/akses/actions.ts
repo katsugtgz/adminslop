@@ -69,6 +69,8 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "impor_peserta_didik:baca",
   "impor_peserta_didik:kelola",
   "ekspor_peserta_didik:baca",
+  "notifikasi:baca",
+  "notifikasi:kelola",
 ];
 
 /** True iff `slug` is one of the IzinSlug literals. */

@@ -44,6 +44,8 @@ export type RoleSlug =
  * surface, `kelola` performs the import write; export is read-only. Admin/dev
  * get all three; kepala_sekolah gets `impor:baca` + `ekspor:baca` (oversight);
  * guru/wali_kelas get none (bulk import/export is admin-scoped).
+ * `notifikasi:*` govern in-app Notifikasi: `baca` reads/manages one's own;
+ * `kelola` (admin/dev) creates system-wide notifications.
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -79,7 +81,9 @@ export type IzinSlug =
   | "absensi:ubah"
   | "impor_peserta_didik:baca"
   | "impor_peserta_didik:kelola"
-  | "ekspor_peserta_didik:baca";
+  | "ekspor_peserta_didik:baca"
+  | "notifikasi:baca"
+  | "notifikasi:kelola";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

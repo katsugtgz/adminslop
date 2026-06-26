@@ -254,3 +254,20 @@ describe("DashboardAktif — Impor/Ekspor Peserta Didik reachability link (#18)"
     ).toBeNull();
   });
 });
+
+describe("DashboardAktif — Notifikasi reachability link (#20)", () => {
+  // Every member role receives `notifikasi:baca` by default (each user manages
+  // their own in-app inbox), so ALL member roles see the link.
+  it("admin sees the 'Notifikasi' link pointing at /dashboard/notifikasi", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Notifikasi/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/notifikasi");
+  });
+
+  it("guru sees the link (personal inbox is universal)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Notifikasi/i })
+    ).toBeInTheDocument();
+  });
+});

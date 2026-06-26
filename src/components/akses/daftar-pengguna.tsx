@@ -44,6 +44,8 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "impor_peserta_didik:baca",
   "impor_peserta_didik:kelola",
   "ekspor_peserta_didik:baca",
+  "notifikasi:baca",
+  "notifikasi:kelola",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -117,6 +119,10 @@ function labelIzin(slug: IzinSlug): string {
       return "Kelola Impor Peserta Didik";
     case "ekspor_peserta_didik:baca":
       return "Baca Ekspor Peserta Didik";
+    case "notifikasi:baca":
+      return "Baca Notifikasi";
+    case "notifikasi:kelola":
+      return "Kelola Notifikasi";
   }
 }
 
