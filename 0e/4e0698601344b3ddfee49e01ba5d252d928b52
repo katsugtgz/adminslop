@@ -1,0 +1,78 @@
+src/components/dashboard-aktif.tsx
+  s_abcc0627eeb6c9::t_df2f53c0e28f21 181
+  s_abcc0627eeb6c9::t_83ccb199fe7fd6 8
+src/lib/auth/otorisasi.ts
+  s_abcc0627eeb6c9::t_dadc8448573193 44-48
+src/app/dashboard/pengaturan/schemas.ts
+  s_abcc0627eeb6c9::t_07707891b59694 28
+  s_abcc0627eeb6c9::t_d0fcf4fd9f4290 25-27
+  s_abcc0627eeb6c9::t_d6301504373bbe 29-31
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_abcc0627eeb6c9::t_beaa2567e89e99 61-66
+  s_abcc0627eeb6c9::t_583d0641543618 23-28
+  s_abcc0627eeb6c9::t_be5450a0b963a2 20-22
+  s_abcc0627eeb6c9::t_b47dc3d6479107 29-31,58-60
+  s_abcc0627eeb6c9::t_ae8ccdca95e2c3 67-69
+.gitignore
+  s_abcc0627eeb6c9::t_024c1472bcf876 12
+package-lock.json
+  s_abcc0627eeb6c9::t_a378e242c7c506 22-23,9978-9986
+package.json
+  s_abcc0627eeb6c9::t_549f34735df446 30-31
+src/app/dashboard/pengaturan/actions.test.ts
+  s_abcc0627eeb6c9::t_a13b6c9ef4aa65 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_abcc0627eeb6c9::t_cf7b91fac97a6f 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_abcc0627eeb6c9::t_927ffdea1970a0 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_abcc0627eeb6c9::t_72b8a816ab9b20 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_abcc0627eeb6c9::t_1e0747d1695494 1-106
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_abcc0627eeb6c9::t_325f11bbf0b1a7 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_abcc0627eeb6c9::t_1f0e77a62d2d41 26,36,78-91,222,267,336,392,471
+src/components/dashboard-aktif.test.tsx
+  s_abcc0627eeb6c9::t_64ef8cb3962b01 1,27-29,31-33,35,37-40,43-44,46-47,50,53-54,57-58,60,65-66,68-69,72,75,82-89
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_abcc0627eeb6c9::t_16fa0eaecfb09e 1-163
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_abcc0627eeb6c9::t_4ab1923e35f543 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_abcc0627eeb6c9::t_6dd56be431af12 1-132
+src/db/akses.test.ts
+  s_abcc0627eeb6c9::t_feb0caeacbfcc7 49-52
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_abcc0627eeb6c9::t_b74e915d0a3f7f 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_abcc0627eeb6c9::t_9850441ef763ee 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_abcc0627eeb6c9::t_e9d5f32d2d898e 1-56
+src/db/pengaturan.test.ts
+  s_abcc0627eeb6c9::t_5ac548179c07a4 1-264
+src/db/queries/akses.test.ts
+  s_abcc0627eeb6c9::t_05c74d93a62786 60-63
+src/db/queries/satuan-pendidikan.test.ts
+  s_abcc0627eeb6c9::t_5e24c261f12a60 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_abcc0627eeb6c9::t_084282af61eae3 1-85
+src/lib/auth/membership.ts
+  s_abcc0627eeb6c9::t_1a004a2309b9e2 7-30,66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0e4e0698601344b3ddfee49e01ba5d252d928b52",
+  "prompts": {},
+  "sessions": {
+    "s_abcc0627eeb6c9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fcf5c742ffenPil9e9r9OfHuz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
