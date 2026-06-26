@@ -72,6 +72,12 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI + Draf AI: admin manages the full AI request/draft/verify
+    // lifecycle school-wide.
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -82,6 +88,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "beban_mengajar:baca",
     "wali_kelas:baca",
     "penilaian:baca",
+    // Permintaan AI + Draf AI: kepala_sekolah reads requests + drafts and
+    // VERIFIES drafts (AC#3 approval gate).
+    "permintaan_ai:baca",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
   ],
   guru: [
     "peserta_didik:baca",
@@ -92,6 +103,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI: guru may REQUEST AI generation + read drafts (AC#3), but
+    // NOT verify — draf_ai:verifikasi is kepala_sekolah/admin only.
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -100,6 +116,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "beban_mengajar:baca",
     "wali_kelas:baca",
     "penilaian:baca",
+    // Permintaan AI + Draf AI: wali_kelas reads requests + drafts only
+    // (no request, no verify — homeroom oversight, not AI workflow).
+    "permintaan_ai:baca",
+    "draf_ai:baca",
   ],
   dev: [
     "ptk:baca",
@@ -126,6 +146,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
+    // Permintaan AI + Draf AI: dev mirrors admin (full lifecycle).
+    "permintaan_ai:baca",
+    "permintaan_ai:buat",
+    "draf_ai:baca",
+    "draf_ai:verifikasi",
   ],
 };
 

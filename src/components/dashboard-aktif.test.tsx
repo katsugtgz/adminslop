@@ -90,3 +90,103 @@ describe("DashboardAktif — Akses reachability link (#6 / T6)", () => {
     ).toBeNull();
   });
 });
+
+describe("DashboardAktif — Rombongan Belajar reachability link (#8)", () => {
+  it("admin sees the 'Rombongan Belajar' link pointing at /dashboard/rombongan-belajar", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Rombongan Belajar/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/rombongan-belajar");
+  });
+
+  it("guru sees the link (core teaching data)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Rombongan Belajar/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Rombongan Belajar/i })
+    ).toBeInTheDocument();
+  });
+});
+
+describe("DashboardAktif — Tahun Ajaran reachability link (#8)", () => {
+  it("admin sees the 'Tahun Ajaran' link pointing at /dashboard/tahun-ajaran", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Tahun Ajaran/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/tahun-ajaran");
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Tahun Ajaran/i })
+    ).toBeInTheDocument();
+  });
+
+  it("guru does NOT see the link", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.queryByRole("link", { name: /Tahun Ajaran/i })
+    ).toBeNull();
+  });
+});
+
+describe("DashboardAktif — Kurikulum reachability link (#9)", () => {
+  // Every member role receives `kurikulum:baca` by default (curriculum is
+  // universal read-only reference data), so ALL member roles see the link.
+  it("admin sees the 'Kurikulum' link pointing at /dashboard/kurikulum", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Kurikulum/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/kurikulum");
+  });
+
+  it("guru sees the link (core teaching reference)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+
+  it("kepala_sekolah sees the link", async () => {
+    await renderAktif("kepala_sekolah");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Kurikulum/i })
+    ).toBeInTheDocument();
+  });
+});
+
+describe("DashboardAktif — Permintaan AI reachability link (#12)", () => {
+  // All member roles receive `permintaan_ai:baca` by default, so ALL member
+  // roles see the link. The page re-checks server-side (§12) and applies
+  // AC#3 DUAL authz (verification gate) for draf_ai writes.
+  it("admin sees the 'Permintaan AI' link pointing at /dashboard/permintaan-ai", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /Permintaan AI/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/permintaan-ai");
+  });
+
+  it("guru sees the link (can create AI requests)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /Permintaan AI/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (read-only access)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /Permintaan AI/i })
+    ).toBeInTheDocument();
+  });
+});
