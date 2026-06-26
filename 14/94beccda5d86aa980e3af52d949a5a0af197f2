@@ -1,0 +1,84 @@
+src/lib/auth/otorisasi.ts
+  s_abcc0627eeb6c9::t_66f9d3279812d4 48-49
+  s_abcc0627eeb6c9::t_10c1e77e6afc34 45-47
+.gitignore
+  s_abcc0627eeb6c9::t_d4dd5c18ad18ef 12
+package-lock.json
+  s_abcc0627eeb6c9::t_516231d362d031 22-23,9978-9986
+package.json
+  s_abcc0627eeb6c9::t_55481ed1efbbd2 30-31
+src/app/dashboard/pengaturan/actions.test.ts
+  s_abcc0627eeb6c9::t_e9826bc4a4c738 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_abcc0627eeb6c9::t_51c17405717f47 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_abcc0627eeb6c9::t_55990a289bcf1b 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_abcc0627eeb6c9::t_fcbcec44038555 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_abcc0627eeb6c9::t_dec7705db07c21 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_abcc0627eeb6c9::t_9c256016c80e46 1-40
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_abcc0627eeb6c9::t_50de192f349feb 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_abcc0627eeb6c9::t_06a0db153996c2 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_abcc0627eeb6c9::t_beee88570df1fc 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_abcc0627eeb6c9::t_b055cacd36ed65 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_abcc0627eeb6c9::t_309f006125090a 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_abcc0627eeb6c9::t_feb6f5e242a62b 74-80,93-95,140
+src/components/dashboard-aktif.test.tsx
+  s_abcc0627eeb6c9::t_759b86182a1854 1,27-29,31-33,35,37-40,43-44,46-47,50,53-54,57-58,60,65-66,68-69,72,75,82,86,89-90
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_abcc0627eeb6c9::t_9022c7651211ff 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_abcc0627eeb6c9::t_b6879bf957f604 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_abcc0627eeb6c9::t_34195cb4a24e08 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_abcc0627eeb6c9::t_f3dce54a0f846c 1-132
+src/db/akses.test.ts
+  s_abcc0627eeb6c9::t_0033cca69cd1a7 49-52
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_abcc0627eeb6c9::t_d912b87a2a1cec 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_abcc0627eeb6c9::t_e7d427460120c3 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_abcc0627eeb6c9::t_2cb03af69aef90 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_abcc0627eeb6c9::t_be37f961491a92 1-88
+src/db/pengaturan.test.ts
+  s_abcc0627eeb6c9::t_a8607ef404f29a 1-264
+src/db/queries/akses.test.ts
+  s_abcc0627eeb6c9::t_40125209029595 60-63
+src/db/queries/akses.ts
+  s_abcc0627eeb6c9::t_2da5d7e4836ac0 49-56,131-136,143-152
+src/db/queries/satuan-pendidikan.test.ts
+  s_abcc0627eeb6c9::t_33e0b848b90507 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_abcc0627eeb6c9::t_fba222ad5c1ed1 1-85
+src/db/schema.ts
+  s_abcc0627eeb6c9::t_92b4bf5ec1c796 22-44,89
+src/lib/auth/membership.ts
+  s_abcc0627eeb6c9::t_0fcee4569c8e84 8-9,11,19-27,31-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "1494beccda5d86aa980e3af52d949a5a0af197f2",
+  "prompts": {},
+  "sessions": {
+    "s_abcc0627eeb6c9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fcf5c742ffenPil9e9r9OfHuz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
