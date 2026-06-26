@@ -9,6 +9,7 @@ import {
   CalendarCheck,
   CheckCircle2,
   ClipboardList,
+  FileText,
   GraduationCap,
   KeyRound,
   Settings,
@@ -131,6 +132,14 @@ export async function DashboardAktif({
     membership.roleSlug
   ].includes("notifikasi:baca");
 
+  // Reachability link to E-Raport (#13). All member roles receive
+  // `eraport:baca` — report drafts/terbit/revisi are visible to every role.
+  // The page re-checks `boleh("eraport:baca")` server-side (§12) and applies
+  // AC#2/AC#3 DUAL authz (no double-terbit, revisi append-only) for writes.
+  const bolehLihatEraport = PERAN_KE_IZIN_DEFAULT[
+    membership.roleSlug
+  ].includes("eraport:baca");
+
   return (
     <section className="flex flex-col gap-6">
       <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
@@ -243,6 +252,28 @@ export async function DashboardAktif({
           </div>
           <Button asChild variant="outline">
             <Link href="/dashboard/notifikasi">Buka Notifikasi</Link>
+          </Button>
+        </div>
+      )}
+
+      {bolehLihatEraport && (
+        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <span
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <FileText className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium">E-Raport</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Kelola Draf, Terbit, dan Revisi E-Raport.
+              </p>
+            </div>
+          </div>
+          <Button asChild variant="outline">
+            <Link href="/dashboard/eraport">Buka E-Raport</Link>
           </Button>
         </div>
       )}

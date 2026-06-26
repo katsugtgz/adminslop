@@ -89,6 +89,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // system-wide notification creation (kelola).
     "notifikasi:baca",
     "notifikasi:kelola",
+    // E-Raport: admin manages the full document lifecycle school-wide.
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
   ],
   kepala_sekolah: [
     "akses:baca",
@@ -111,6 +116,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "ekspor_peserta_didik:baca",
     // Notifikasi (#20): everyone reads/manages their own in-app notifications.
     "notifikasi:baca",
+    // E-Raport: kepala_sekolah reads + publishes (terbit) reports.
+    "eraport:baca",
+    "eraport:terbit",
   ],
   guru: [
     "peserta_didik:baca",
@@ -132,6 +140,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:ubah",
     // Notifikasi (#20): everyone reads/manages their own in-app notifications.
     "notifikasi:baca",
+    // E-Raport: guru creates report drafts from Nilai Akhir (AC#1); reads
+    // others' drafts. Terbit/revisi remain kepala_sekolah/admin.
+    "eraport:baca",
+    "eraport:buat",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -148,6 +160,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "absensi:baca",
     // Notifikasi (#20): everyone reads/manages their own in-app notifications.
     "notifikasi:baca",
+    // E-Raport: wali_kelas reads homeroom reports (oversight only).
+    "eraport:baca",
   ],
   dev: [
     "ptk:baca",
@@ -189,6 +203,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // Notifikasi (#20): dev mirrors admin (system-wide notification management).
     "notifikasi:baca",
     "notifikasi:kelola",
+    // E-Raport: dev mirrors admin (full lifecycle).
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
   ],
 };
 

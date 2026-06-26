@@ -612,3 +612,106 @@ describe("evaluasiAkses (#18) — impor/ekspor peserta_didik defaults", () => {
     ).toEqual({ diizinkan: false, sumber: "pembatasan" });
   });
 });
+
+describe("evaluasiAkses (#13 T2) — eraport defaults (lifecycle Draf->Terbit->Revisi)", () => {
+  // admin/dev get every eraport slug (full document lifecycle).
+  it.each<IzinSlug>([
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
+  ])(
+    "admin_satuan_pendidikan requesting '%s' (no grants/restrictions) -> allow, sumber 'peran'",
+    (slug) => {
+      expect(
+        evaluasiAkses(defaults("admin_satuan_pendidikan", slug))
+      ).toEqual({ diizinkan: true, sumber: "peran" });
+    }
+  );
+
+  it.each<IzinSlug>([
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
+  ])(
+    "dev mirrors admin: requesting '%s' -> allow, sumber 'peran'",
+    (slug) => {
+      expect(evaluasiAkses(defaults("dev", slug))).toEqual({
+        diizinkan: true,
+        sumber: "peran",
+      });
+    }
+  );
+
+  // guru creates drafts from Nilai Akhir (AC#1) + reads; no terbit/revisi.
+  it("guru requesting eraport:buat -> allow 'peran' (guru creates report drafts)", () => {
+    expect(evaluasiAkses(defaults("guru", "eraport:buat"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting eraport:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("guru", "eraport:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("guru requesting eraport:terbit -> deny 'tidak_ada_izin' (guru cannot publish)", () => {
+    expect(evaluasiAkses(defaults("guru", "eraport:terbit"))).toEqual({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+  });
+
+  // kepala_sekolah publishes (terbit) reports; no buat/revisi.
+  it("kepala_sekolah requesting eraport:terbit -> allow 'peran' (kepala publishes)", () => {
+    expect(evaluasiAkses(defaults("kepala_sekolah", "eraport:terbit"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("kepala_sekolah requesting eraport:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("kepala_sekolah", "eraport:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("kepala_sekolah requesting eraport:buat -> deny 'tidak_ada_izin' (no create default)", () => {
+    expect(evaluasiAkses(defaults("kepala_sekolah", "eraport:buat"))).toEqual({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+  });
+
+  // wali_kelas reads homeroom reports only.
+  it("wali_kelas requesting eraport:baca -> allow 'peran'", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "eraport:baca"))).toEqual({
+      diizinkan: true,
+      sumber: "peran",
+    });
+  });
+
+  it("wali_kelas requesting eraport:buat -> deny 'tidak_ada_izin' (read only)", () => {
+    expect(evaluasiAkses(defaults("wali_kelas", "eraport:buat"))).toEqual({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+  });
+
+  // pembatasan still wins (no superuser).
+  it("admin requesting eraport:revisi WITH pembatasan=['eraport:revisi'] -> DENY 'pembatasan' (no superuser)", () => {
+    expect(
+      evaluasiAkses({
+        roleSlug: "admin_satuan_pendidikan",
+        diminta: "eraport:revisi",
+        izinGrants: [],
+        pembatasan: ["eraport:revisi"],
+      })
+    ).toEqual({ diizinkan: false, sumber: "pembatasan" });
+  });
+});

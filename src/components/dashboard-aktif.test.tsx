@@ -271,3 +271,28 @@ describe("DashboardAktif — Notifikasi reachability link (#20)", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("DashboardAktif — E-Raport reachability link (#13)", () => {
+  // All member roles receive `eraport:baca` by default, so ALL member roles
+  // see the link. The page re-checks server-side (§12) and applies AC#2/AC#3
+  // DUAL authz (no double-terbit, revisi append-only) for writes.
+  it("admin sees the 'E-Raport' link pointing at /dashboard/eraport", async () => {
+    await renderAktif("admin_satuan_pendidikan");
+    const link = screen.getByRole("link", { name: /E-Raport/i });
+    expect(link.getAttribute("href")).toBe("/dashboard/eraport");
+  });
+
+  it("guru sees the link (can create report drafts)", async () => {
+    await renderAktif("guru");
+    expect(
+      screen.getByRole("link", { name: /E-Raport/i })
+    ).toBeInTheDocument();
+  });
+
+  it("wali_kelas sees the link (read-only oversight)", async () => {
+    await renderAktif("wali_kelas");
+    expect(
+      screen.getByRole("link", { name: /E-Raport/i })
+    ).toBeInTheDocument();
+  });
+});
