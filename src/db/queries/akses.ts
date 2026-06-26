@@ -46,6 +46,21 @@ export async function hapusPtk(db: Db | Tx, id: string): Promise<void> {
   await db.delete(ptk).where(eq(ptk.id, id));
 }
 
+/**
+ * Find a PTK by id within the current tenant (RLS-scoped). Returns null when
+ * absent (including when the id exists only in another tenant). Used by the
+ * action layer to prove a formData-supplied ptkId belongs to the active
+ * tenant BEFORE linking it — a single-column FK cannot reject a cross-tenant
+ * id, so this existence check is the boundary (cubic P1).
+ */
+export async function cariPtkById(
+  db: Db | Tx,
+  id: string
+): Promise<Ptk | null> {
+  const rows = await db.select().from(ptk).where(eq(ptk.id, id));
+  return rows[0] ?? null;
+}
+
 // Pengguna ----------------------------------------------------------------
 
 export interface PenggunaDenganPtk extends Pengguna {
