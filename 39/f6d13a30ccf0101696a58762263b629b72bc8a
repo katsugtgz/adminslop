@@ -1,0 +1,141 @@
+src/components/dashboard-aktif.test.tsx
+  s_a944d701efba60::t_ad9f101bd0a1c4 193
+  s_a944d701efba60::t_c29b413370b158 190-192
+src/components/dashboard-aktif.tsx
+  s_a944d701efba60::t_1529edf237899d 167,174,177,179,184
+src/components/akses/daftar-pengguna.test.tsx
+  s_a944d701efba60::t_dd16fd4dd0089f 56
+  s_a944d701efba60::t_8a6d042508aeca 29
+src/app/dashboard/akses/page.test.tsx
+  s_a944d701efba60::t_9dd4ad6e23483d 182
+src/lib/auth/types.ts
+  s_a944d701efba60::t_7588baec602c1c 39-42
+  s_a944d701efba60::t_0f9de877c6167e 72
+  s_a944d701efba60::t_577b5a450feaff 36-38
+  s_a944d701efba60::t_5b74f4a360ea5a 69-71
+src/db/schema.ts
+  s_a944d701efba60::t_fea4da055c7bd4 1099
+  s_a944d701efba60::t_864b473525ca43 1096-1098
+.gitignore
+  s_a944d701efba60::t_6d98212a2bb14e 12
+package-lock.json
+  s_a944d701efba60::t_aa92046cfbf16d 22-23,9978-9986
+package.json
+  s_a944d701efba60::t_b4ac0e0e047c04 30-31
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a944d701efba60::t_4bd4b34f63c506 1-310
+src/app/dashboard/pengaturan/actions.ts
+  s_a944d701efba60::t_686a45504af1bb 1-117
+src/app/dashboard/pengaturan/page.test.tsx
+  s_a944d701efba60::t_bbe69ea074e319 1-241
+src/app/dashboard/pengaturan/page.tsx
+  s_a944d701efba60::t_1671bbad1bd170 1-86
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_a944d701efba60::t_480b717ee50b27 1-106
+src/app/dashboard/pengaturan/schemas.ts
+  s_a944d701efba60::t_e8ce1aebf2a1cb 1-40
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_a944d701efba60::t_90c80a2581a385 1-623
+src/app/dashboard/permintaan-ai/actions.ts
+  s_a944d701efba60::t_24695926455b76 1-344
+src/app/dashboard/permintaan-ai/page.test.tsx
+  s_a944d701efba60::t_5a180315fd44d5 1-332
+src/app/dashboard/permintaan-ai/page.tsx
+  s_a944d701efba60::t_9b66a03fc116b1 1-125
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_a944d701efba60::t_68672a8b73a0e7 60-67,104,126,215,255-259,817-845
+src/app/dashboard/peserta-didik/actions.ts
+  s_a944d701efba60::t_bffaedd7e1fc33 26,36,78-91,222,267,336,392,471
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_a944d701efba60::t_4782677b91160e 22-28,99-101,110-112,135,165,255,335-341,857-934
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_a944d701efba60::t_abccc257558e42 47,196-209,282-291,395-402
+src/app/dashboard/rombongan-belajar/page.test.tsx
+  s_a944d701efba60::t_34033af12bb5e7 79-81,88,95,97-99,304-326
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_a944d701efba60::t_ebc49ae7c3331c 74-80,93-95,140
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_a944d701efba60::t_04b3af867fc794 1-163
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_a944d701efba60::t_99e4487d724dec 1-151
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_a944d701efba60::t_0ca405e9f34d33 1-128
+src/components/pengaturan-satuan/form-profil.tsx
+  s_a944d701efba60::t_23785740b1705c 1-132
+src/components/permintaan-ai/daftar-permintaan.test.tsx
+  s_a944d701efba60::t_9eda51d676dd61 1-234
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_a944d701efba60::t_e4a9a39d11d014 1-139
+src/components/permintaan-ai/form-permintaan.test.tsx
+  s_a944d701efba60::t_be72e91c630d96 1-62
+src/components/permintaan-ai/form-permintaan.tsx
+  s_a944d701efba60::t_d8fda65ecc531e 1-92
+src/components/permintaan-ai/kartu-draf.test.tsx
+  s_a944d701efba60::t_9b3bae60725ffd 1-107
+src/components/permintaan-ai/kartu-draf.tsx
+  s_a944d701efba60::t_681b0be3301dfd 1-106
+src/components/permintaan-ai/kartu-kuota.test.tsx
+  s_a944d701efba60::t_3cf59d96c6f708 1-52
+src/components/permintaan-ai/kartu-kuota.tsx
+  s_a944d701efba60::t_6bd44cabba42ff 1-43
+src/db/akses.test.ts
+  s_a944d701efba60::t_c29b36ac0f74b3 49-52
+src/db/migrations/0001_profil_pengaturan_satuan.sql
+  s_a944d701efba60::t_d94266d05a2a34 1-42
+src/db/migrations/0001b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_3c520a7638a14c 1-52
+src/db/migrations/0002b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_04ae4c25ddc15e 1-56
+src/db/migrations/0003b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_15f9d59ecb844f 1-88
+src/db/migrations/0006b_fk_tenant_scoping.sql
+  s_a944d701efba60::t_8129aaf52e9566 1-80
+src/db/migrations/0008_permintaan_ai.sql
+  s_a944d701efba60::t_7a020b3b334508 1-117
+src/db/pengaturan.test.ts
+  s_a944d701efba60::t_307e4be437fbcc 1-264
+src/db/permintaan-ai.test.ts
+  s_a944d701efba60::t_c5a8eea199406c 1-579
+src/db/queries/akses.test.ts
+  s_a944d701efba60::t_aeff8764e97d70 60-63
+src/db/queries/akses.ts
+  s_a944d701efba60::t_e5afc422c20cad 49-56,131-136,143-152
+src/db/queries/draf-ai.test.ts
+  s_a944d701efba60::t_066bff4345ccea 1-361
+src/db/queries/draf-ai.ts
+  s_a944d701efba60::t_2c829f6f48acf2 1-119
+src/db/queries/kuota-ai.test.ts
+  s_a944d701efba60::t_12a7d7aee9e426 1-326
+src/db/queries/kuota-ai.ts
+  s_a944d701efba60::t_3c794aa3f6b092 1-131
+src/db/queries/kurikulum.test.ts
+  s_a944d701efba60::t_3846a168d05cb5 408,410
+src/db/queries/permintaan-ai.test.ts
+  s_a944d701efba60::t_5f565a976b2d77 1-390
+src/db/queries/permintaan-ai.ts
+  s_a944d701efba60::t_dde657a1632646 1-184
+src/db/queries/satuan-pendidikan.test.ts
+  s_a944d701efba60::t_89765e612333bf 1-159
+src/db/queries/satuan-pendidikan.ts
+  s_a944d701efba60::t_d661efc47e04f1 1-85
+src/lib/auth/membership.ts
+  s_a944d701efba60::t_191b5b8a3073d7 7-30,66
+src/lib/auth/otorisasi.test.ts
+  s_a944d701efba60::t_d2ce9fbe4c8871 476-540
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "39f6d13a30ccf0101696a58762263b629b72bc8a",
+  "prompts": {},
+  "sessions": {
+    "s_a944d701efba60": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fc9611bdffejJ73ApKErg3vqn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
