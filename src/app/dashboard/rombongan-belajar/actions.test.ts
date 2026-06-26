@@ -19,6 +19,13 @@ const mocks = vi.hoisted(() => {
     aktif: true,
     dibuatPada: new Date("2026-01-01T00:00:00Z"),
   };
+  const TA_BARU = {
+    id: "ta_2",
+    tenantId: "org_A",
+    nama: "2026/2027",
+    aktif: false,
+    dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  };
   const SEMESTER_AKTIF = "ganjil" as const;
   const PENEMPATAN = {
     id: "pen_1",
@@ -89,7 +96,9 @@ const mocks = vi.hoisted(() => {
       async (): Promise<typeof NEXT_TINGKAT | null> => NEXT_TINGKAT
     ),
     buatRombonganBelajar: vi.fn(async () => NEXT_ROMBEL),
-    cariRombonganBelajarById: vi.fn(async () => ROMBEL),
+    cariRombonganBelajarById: vi.fn(
+      async (): Promise<typeof ROMBEL | null> => ROMBEL
+    ),
     cariAtauBuatRombonganBelajar: vi.fn(async () => NEXT_ROMBEL),
     tambahPenempatan: vi.fn(async () => ({})),
     getPenempatanByKonteks: vi.fn(
@@ -97,6 +106,9 @@ const mocks = vi.hoisted(() => {
     ),
     getTahunAjaranAktif: vi.fn(
       async (): Promise<typeof TA_AKTIF | null> => TA_AKTIF
+    ),
+    cariTahunAjaranById: vi.fn(
+      async (): Promise<typeof TA_BARU | null> => TA_BARU
     ),
     getSemesterAktif: vi.fn(
       async (): Promise<typeof SEMESTER_AKTIF | null> => SEMESTER_AKTIF
@@ -120,6 +132,7 @@ const {
   tambahPenempatan,
   getPenempatanByKonteks,
   getTahunAjaranAktif,
+  cariTahunAjaranById,
   getSemesterAktif,
   revalidatePath,
   fakeTx: fakeTxRef,
@@ -149,6 +162,7 @@ vi.mock("@/db/queries/penempatan-rombongan-belajar", () => ({
 }));
 vi.mock("@/db/queries/tahun-ajaran", () => ({
   getTahunAjaranAktif: mocks.getTahunAjaranAktif,
+  cariTahunAjaranById: mocks.cariTahunAjaranById,
   getSemesterAktif: mocks.getSemesterAktif,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
@@ -238,6 +252,7 @@ beforeEach(() => {
   tambahPenempatan.mockReset();
   getPenempatanByKonteks.mockReset();
   getTahunAjaranAktif.mockReset();
+  cariTahunAjaranById.mockReset();
   getSemesterAktif.mockReset();
   revalidatePath.mockReset();
   // restore default implementations cleared by mockReset
@@ -315,6 +330,13 @@ beforeEach(() => {
     tenantId: "org_A",
     nama: "2025/2026",
     aktif: true,
+    dibuatPada: new Date("2026-01-01T00:00:00Z"),
+  });
+  cariTahunAjaranById.mockResolvedValue({
+    id: "ta_2",
+    tenantId: "org_A",
+    nama: "2026/2027",
+    aktif: false,
     dibuatPada: new Date("2026-01-01T00:00:00Z"),
   });
   getSemesterAktif.mockResolvedValue("ganjil");
@@ -830,5 +852,83 @@ describe("J. non-active akses context", () => {
       )
     ).rejects.toThrow(/belum dipilih/i);
     expect(withTenant).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// K. cubic P1 — tenant-scoped existence checks. Client-supplied FK ids are
+// validated against the active tenant / active context BEFORE any write.
+// ===========================================================================
+
+describe("K. cubic P1 tenant-scoped existence checks (admin)", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+  });
+
+  // --- P1-3: tempatkanPesertaDidikAction must verify the rombel belongs to
+  // the active Tahun Ajaran ---------------------------------------------
+
+  it("26. tempatkanPesertaDidikAction + cross-tenant rombel (cariRombonganBelajarById -> null) -> throws /tidak ditemukan/i; tambahPenempatan NOT called", async () => {
+    // RLS makes a cross-tenant rombel id invisible -> null -> hard reject.
+    cariRombonganBelajarById.mockResolvedValue(null);
+    await expect(
+      tempatkanPesertaDidikAction(
+        formData({ pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_X" })
+      )
+    ).rejects.toThrow(/Rombongan Belajar tidak ditemukan/i);
+    expect(cariRombonganBelajarById).toHaveBeenCalledWith(fakeTxRef, "rombel_X");
+    expect(tambahPenempatan).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("27. tempatkanPesertaDidikAction + rombel from a DIFFERENT TA -> throws /bukan dari Tahun Ajaran aktif/i; tambahPenempatan NOT called", async () => {
+    // Same-tenant rombel but belongs to a non-active TA — would otherwise
+    // create a placement inconsistent with the active context.
+    cariRombonganBelajarById.mockResolvedValue({
+      id: "rombel_old",
+      tenantId: "org_A",
+      nama: "Kelas 1A",
+      tingkatId: "tingkat_1",
+      tahunAjaranId: "ta_999", // NOT the active TA (ta_1)
+      dibuatPada: new Date("2026-01-02T00:00:00Z"),
+    });
+    await expect(
+      tempatkanPesertaDidikAction(
+        formData({ pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_old" })
+      )
+    ).rejects.toThrow(/bukan dari Tahun Ajaran aktif/i);
+    expect(tambahPenempatan).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  // --- P1-4: kenaikanTingkat / tinggalTingkat must verify tahunAjaranBaruId
+  // exists in the active tenant -----------------------------------------
+
+  it("28. kenaikanTingkatAction + cross-tenant tahunAjaranBaruId (cariTahunAjaranById -> null) -> throws /tidak ditemukan/i; chain NOT called", async () => {
+    cariTahunAjaranById.mockResolvedValue(null);
+    await expect(
+      kenaikanTingkatAction(
+        formData({ pesertaDidikId: "pd_1", tahunAjaranBaruId: "ta_X" })
+      )
+    ).rejects.toThrow(/Tahun Ajaran baru tidak ditemukan/i);
+    expect(cariTahunAjaranById).toHaveBeenCalledWith(fakeTxRef, "ta_X");
+    expect(getPenempatanByKonteks).not.toHaveBeenCalled();
+    expect(cariAtauBuatRombonganBelajar).not.toHaveBeenCalled();
+    expect(tambahPenempatan).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("29. tinggalTingkatAction + cross-tenant tahunAjaranBaruId (cariTahunAjaranById -> null) -> throws /tidak ditemukan/i; chain NOT called", async () => {
+    cariTahunAjaranById.mockResolvedValue(null);
+    await expect(
+      tinggalTingkatAction(
+        formData({ pesertaDidikId: "pd_1", tahunAjaranBaruId: "ta_X" })
+      )
+    ).rejects.toThrow(/Tahun Ajaran baru tidak ditemukan/i);
+    expect(cariTahunAjaranById).toHaveBeenCalledWith(fakeTxRef, "ta_X");
+    expect(getPenempatanByKonteks).not.toHaveBeenCalled();
+    expect(cariAtauBuatRombonganBelajar).not.toHaveBeenCalled();
+    expect(tambahPenempatan).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
   });
 });
