@@ -35,6 +35,12 @@ export type RoleSlug =
  * from those requests. Verification (`draf_ai:verifikasi`) is the approval
  * gate (AC#3): guru may request + read drafts but NOT self-verify;
  * kepala_sekolah verifies. Admin manages everything.
+ * `eraport:*` govern the E-Raport document lifecycle (Draf -> Terbit ->
+ * Revisi). `eraport:baca` is universal across teaching roles (a guru must see
+ * report drafts for their students — AC#4). `eraport:buat` (create a draft
+ * from Nilai Akhir) is admin + guru; `eraport:terbit` (publish/lock) is admin
+ * + kepala_sekolah; `eraport:revisi` (append a change record) is admin only
+ * (kepala_sekolah reads but does not request revisions).
  */
 export type IzinSlug =
   | "ptk:baca"
@@ -64,7 +70,11 @@ export type IzinSlug =
   | "permintaan_ai:baca"
   | "permintaan_ai:buat"
   | "draf_ai:baca"
-  | "draf_ai:verifikasi";
+  | "draf_ai:verifikasi"
+  | "eraport:baca"
+  | "eraport:buat"
+  | "eraport:terbit"
+  | "eraport:revisi";
 
 /** A Keanggotaan Satuan Pendidikan (mirrors a WorkOS OrganizationMembership). */
 export interface Membership {

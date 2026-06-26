@@ -38,6 +38,10 @@ const DAFTAR_IZIN: readonly IzinSlug[] = [
   "permintaan_ai:buat",
   "draf_ai:baca",
   "draf_ai:verifikasi",
+  "eraport:baca",
+  "eraport:buat",
+  "eraport:terbit",
+  "eraport:revisi",
 ];
 
 /** Bahasa label for an IzinSlug. */
@@ -99,6 +103,14 @@ function labelIzin(slug: IzinSlug): string {
       return "Baca Draf AI";
     case "draf_ai:verifikasi":
       return "Verifikasi Draf AI";
+    case "eraport:baca":
+      return "Baca E-Raport";
+    case "eraport:buat":
+      return "Buat Draf E-Raport";
+    case "eraport:terbit":
+      return "Terbitkan E-Raport";
+    case "eraport:revisi":
+      return "Catat Revisi E-Raport";
   }
 }
 

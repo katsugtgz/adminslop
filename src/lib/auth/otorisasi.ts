@@ -43,6 +43,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // E-Raport: admin manages the full document lifecycle school-wide.
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
   ],
   // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
   // core teaching data, so every teaching role reads by default. Writes
@@ -68,6 +73,9 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // E-Raport: kepala_sekolah reads + publishes (terbit) reports.
+    "eraport:baca",
+    "eraport:terbit",
   ],
   guru: [
     "peserta_didik:baca",
@@ -86,6 +94,10 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "permintaan_ai:buat",
     "draf_ai:baca",
+    // E-Raport: guru creates report drafts from Nilai Akhir (AC#1); reads
+    // others' drafts. Terbit/revisi remain kepala_sekolah/admin.
+    "eraport:baca",
+    "eraport:buat",
   ],
   wali_kelas: [
     "peserta_didik:baca",
@@ -99,6 +111,8 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // (no request, no verify — homeroom oversight, not AI workflow).
     "permintaan_ai:baca",
     "draf_ai:baca",
+    // E-Raport: wali_kelas reads homeroom reports (oversight only).
+    "eraport:baca",
   ],
   dev: [
     "ptk:baca",
@@ -130,6 +144,11 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // E-Raport: dev mirrors admin (full lifecycle).
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
   ],
 };
 
