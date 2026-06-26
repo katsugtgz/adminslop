@@ -1,0 +1,19 @@
+.gitignore
+  s_abcc0627eeb6c9::t_bb701c2e199733 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "47556515ba131d15ac6e38a33d2fa80bfb90fca0",
+  "prompts": {},
+  "sessions": {
+    "s_abcc0627eeb6c9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0fcf5c742ffenPil9e9r9OfHuz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
