@@ -1,5 +1,38 @@
 import type { IzinSlug, RoleSlug } from "./types";
 
+// ─── #5: Profil/Pengaturan Satuan Pendidikan predicates ──────────────────────
+
+const ADMIN_WRITE_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+]);
+
+const MEMBER_ROLES: ReadonlySet<string> = new Set([
+  "admin_satuan_pendidikan",
+  "dev",
+  "guru",
+  "kepala_sekolah",
+]);
+
+/**
+ * Write predicate for Profil/Pengaturan Satuan Pendidikan. Type guard so
+ * callers narrow to `RoleSlug` when guarding an admin action.
+ */
+export function canAdminSatuanPendidikan(
+  roleSlug: string | undefined,
+): roleSlug is RoleSlug {
+  return !!roleSlug && ADMIN_WRITE_ROLES.has(roleSlug);
+}
+
+/** Read predicate — any active member may view their Satuan Pendidikan profil/pengaturan. */
+export function canViewPengaturanSatuanPendidikan(
+  roleSlug: string | undefined,
+): boolean {
+  return !!roleSlug && MEMBER_ROLES.has(roleSlug);
+}
+
+// ─── #6: Akses (Peran/Izin/Pembatasan) evaluator ─────────────────────────────
+
 /**
  * Baked-in peran (role) → default Izin map. Read-only constant. The starting
  * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
@@ -8,6 +41,12 @@ import type { IzinSlug, RoleSlug } from "./types";
  * identity doc).
  */
 export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+  // peserta_didik:baca + rombongan_belajar:baca granted to every teaching role
+  // (students and classes are core teaching data); buat/ubah remain
+  // admin-scoped. No :hapus this slice (archive, not hard-delete per
+  // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
+  // reads it. kurikulum:baca is universal — curriculum reference data is
+  // read-only for all roles.
   admin_satuan_pendidikan: [
     "ptk:baca",
     "ptk:buat",
@@ -23,17 +62,13 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "rombongan_belajar:buat",
     "rombongan_belajar:ubah",
     "rombongan_belajar:kelola_penempatan",
-    // kurikulum:baca — curriculum reference data is universal (read-only).
     "kurikulum:baca",
-    // Beban Mengajar + Wali Kelas: admin manages teaching load + homeroom
-    // assignments school-wide.
     "beban_mengajar:baca",
     "beban_mengajar:buat",
     "beban_mengajar:ubah",
     "wali_kelas:baca",
     "wali_kelas:buat",
     "wali_kelas:ubah",
-    // Penilaian (assessment/grading): admin manages all school-wide.
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
@@ -43,6 +78,22 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+    // Notifikasi (#20): everyone reads/manages their own; admin manages
+    // system-wide notification creation (kelola).
+    "notifikasi:baca",
+    "notifikasi:kelola",
+    // E-Raport: admin manages the full document lifecycle school-wide.
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
     // Bank Soal + Paket Soal: admin manages the full question-bank + package
     // assembly surface school-wide.
     "bank_soal:baca",
@@ -52,15 +103,6 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "paket_soal:buat",
     "paket_soal:ubah",
   ],
-  // kepala_sekolah/guru/wali_kelas get peserta_didik:baca only — students are
-  // core teaching data, so every teaching role reads by default. Writes
-  // (buat/ubah) remain admin-scoped. No :hapus this slice (archive, not
-  // hard-delete per CONTEXT.md). Rombongan Belajar (class) data is likewise
-  // core teaching data -> baca for every teaching role; Tahun Ajaran
-  // management is admin-only, but kepala_sekolah reads it. Beban Mengajar +
-  // Wali Kelas reads are universal across teaching roles — a guru must see
-  // their own teaching load and homeroom context (AC#4); writes remain
-  // admin-scoped.
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",
@@ -69,13 +111,22 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: read oversight of school-wide assessment data.
     "penilaian:baca",
     // Permintaan AI + Draf AI: kepala_sekolah reads requests + drafts and
     // VERIFIES drafts (AC#3 approval gate).
     "permintaan_ai:baca",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    // Absensi: read oversight of school-wide daily attendance.
+    "absensi:baca",
+    // Impor/Ekspor Peserta Didik: read oversight of bulk data movement.
+    "impor_peserta_didik:baca",
+    "ekspor_peserta_didik:baca",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
+    // E-Raport: kepala_sekolah reads + publishes (terbit) reports.
+    "eraport:baca",
+    "eraport:terbit",
     // Bank Soal + Paket Soal: read-only oversight of the question bank.
     "bank_soal:baca",
     "paket_soal:baca",
@@ -86,9 +137,6 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: guru creates/edits assessments for their own beban_mengajar
-    // (AC#1). Ownership is the second gate, enforced at the action layer
-    // (AC#4) — boleh() is the first (role-level) gate only.
     "penilaian:baca",
     "penilaian:buat",
     "penilaian:ubah",
@@ -97,6 +145,16 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:baca",
     "permintaan_ai:buat",
     "draf_ai:baca",
+    // Absensi: guru marks daily attendance for their classes.
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
+    // E-Raport: guru creates report drafts from Nilai Akhir (AC#1); reads
+    // others' drafts. Terbit/revisi remain kepala_sekolah/admin.
+    "eraport:baca",
+    "eraport:buat",
     // Bank Soal + Paket Soal: guru authors question items and assembles
     // packages (AC#1 — guru creates the canonical question bank).
     "bank_soal:baca",
@@ -112,12 +170,17 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "kurikulum:baca",
     "beban_mengajar:baca",
     "wali_kelas:baca",
-    // Penilaian: wali_kelas reads (homeroom oversight); writes are admin/guru.
     "penilaian:baca",
     // Permintaan AI + Draf AI: wali_kelas reads requests + drafts only
     // (no request, no verify — homeroom oversight, not AI workflow).
     "permintaan_ai:baca",
     "draf_ai:baca",
+    // Absensi: wali_kelas reads (homeroom oversight); writes are admin/guru.
+    "absensi:baca",
+    // Notifikasi (#20): everyone reads/manages their own in-app notifications.
+    "notifikasi:baca",
+    // E-Raport: wali_kelas reads homeroom reports (oversight only).
+    "eraport:baca",
     // Bank Soal + Paket Soal: wali_kelas reads only (homeroom oversight).
     "bank_soal:baca",
     "paket_soal:baca",
@@ -152,6 +215,21 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     "permintaan_ai:buat",
     "draf_ai:baca",
     "draf_ai:verifikasi",
+    "absensi:baca",
+    "absensi:buat",
+    "absensi:ubah",
+    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+    "impor_peserta_didik:baca",
+    "impor_peserta_didik:kelola",
+    "ekspor_peserta_didik:baca",
+    // Notifikasi (#20): dev mirrors admin (system-wide notification management).
+    "notifikasi:baca",
+    "notifikasi:kelola",
+    // E-Raport: dev mirrors admin (full lifecycle).
+    "eraport:baca",
+    "eraport:buat",
+    "eraport:terbit",
+    "eraport:revisi",
     // Bank Soal + Paket Soal: dev mirrors admin (full surface).
     "bank_soal:baca",
     "bank_soal:buat",

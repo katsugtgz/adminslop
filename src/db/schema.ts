@@ -21,25 +21,29 @@ import { sql } from "drizzle-orm";
  * Pendidikan). Owned here for FK integrity only — lifecycle stays in WorkOS.
  * NOT tenant-scoped (it IS the tenant boundary), so it carries no RLS.
  */
-export const satuanPendidikan = pgTable(
-  "satuan_pendidikan",
-  {
-    id: text("id").primaryKey(),
-    nama: text("nama").notNull(),
-    // Active semester on the tenant boundary (nullable until chosen).
-    // Spelling: 'ganjil' (odd) / 'genap' (even) — 'genap' has ONE 'p'.
-    semesterAktif: text("semester_aktif"),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .defaultNow()
-      .notNull(),
-  },
-  (t) => [
-    check(
-      "satuan_pendidikan_semester_aktif_check",
-      sql`${t.semesterAktif} in ('ganjil', 'genap')`
-    ),
-  ]
-);
+export const satuanPendidikan = pgTable("satuan_pendidikan", {
+  id: text("id").primaryKey(),
+  nama: text("nama").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  // Profil (issue #5)
+  npsn: text("npsn"),
+  jenjang: text("jenjang"),
+  alamat: text("alamat"),
+  namaKepala: text("nama_kepala"),
+  logoUrl: text("logo_url"),
+  // Pengaturan (issue #5)
+  tahunAjaranAktif: text("tahun_ajaran_aktif"),
+  semesterAktif: text("semester_aktif"),
+  zonaWaktu: text("zona_waktu").notNull().default("Asia/Jakarta"),
+  // Preferensi Cetak (issue #5)
+  cetakPaperSize: text("cetak_paper_size").notNull().default("A4"),
+  cetakTampilkanLogo: boolean("cetak_tampilkan_logo").notNull().default(true),
+  cetakTampilkanHeader: boolean("cetak_tampilkan_header")
+    .notNull()
+    .default(true),
+});
 
 /**
  * Smoke tenant-scoped record (#3). Throwaway artifact that proves the RLS
@@ -84,6 +88,7 @@ export const catatanAudit = pgTable("catatan_audit", {
 export type ContohCatatan = typeof contohCatatan.$inferSelect;
 export type CatatanAudit = typeof catatanAudit.$inferSelect;
 export type CatatanAuditInsert = typeof catatanAudit.$inferInsert;
+export type SatuanPendidikan = typeof satuanPendidikan.$inferSelect;
 
 /**
  * PTK — catatan personel (pendidik / tenaga kependidikan).
@@ -720,6 +725,7 @@ export type AlurTujuanPembelajaran =
 export type AlurTujuanPembelajaranInsert =
   typeof alurTujuanPembelajaran.$inferInsert;
 
+
 // ---------------------------------------------------------------------------
 // TEACHER CONTEXT — teaching load + class guardian assignment.
 //
@@ -962,19 +968,6 @@ export type NilaiPesertaDidik = typeof nilaiPesertaDidik.$inferSelect;
 export type NilaiPesertaDidikInsert = typeof nilaiPesertaDidik.$inferInsert;
 
 // ---------------------------------------------------------------------------
-// AI WORKFLOW DATA LAYER — permintaan_ai -> draf_ai (1:1) + kuota_ai budget.
-//
-// Tenant-scoped tables for the AI assistance workflow. permintaan_ai is the
-// request lifecycle (state machine: dibuat->diproses->selesai|gagal|
-// dibatalkan); draf_ai is the AI output with a verification gate
-// (menunggu->disetujui|ditolak); kuota_ai is the per-tenant per-period budget.
-// Defined after tahun_ajaran so the kuota_ai FK resolves without TDZ.
-//
-// DOMAIN DISTINCTION (CONTEXT.md): "Permintaan AI" is the process request,
-// "Draf AI" is draft output that MUST be reviewed, and the final Dokumen AI
-// still requires Verifikasi Dokumen AI. `tenant_id` from the session GUC,
-// never client-supplied (RLS WITH CHECK).
-// ---------------------------------------------------------------------------
 
 /**
  * Permintaan AI — AI request lifecycle (state machine).
@@ -1103,6 +1096,255 @@ export type DrafAi = typeof drafAi.$inferSelect;
 export type DrafAiInsert = typeof drafAi.$inferInsert;
 export type KuotaAi = typeof kuotaAi.$inferSelect;
 export type KuotaAiInsert = typeof kuotaAi.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// ATTENDANCE DATA LAYER — absensi_harian.
+//
+// Tenant-scoped daily attendance: one record per peserta_didik per tanggal per
+// rombongan_belajar. Defined after peserta_didik + rombongan_belajar so the FK
+// references resolve without TDZ. Both FKs are ON DELETE CASCADE: deleting a
+// student removes their attendance; deleting a class removes its attendance.
+// `tenant_id` from the session GUC, never client-supplied (RLS WITH CHECK).
+//
+// AC#3 (correctable): QR (`metode_input='qr'`) ASSISTS but never locks — a
+// QR-captured row may always be UPDATEd (e.g. scanned Hadir then corrected to
+// Izin). `sumberQr` records the QR session token; NULL for manual entry.
+// ---------------------------------------------------------------------------
+
+/**
+ * Absensi Harian — daily attendance record. One row per peserta_didik per
+ * tanggal per rombongan_belajar (UNIQUE tenant+peserta_didik+tanggal).
+ *
+ * `statusKehadiran` is Hadir/Izin/Sakit/Alpa (AC#2). `metodeInput` is
+ * manual/qr; `sumberQr` carries the QR session token when qr (NULL for manual).
+ * AC#3: a QR-sourced row is still CORRECTABLE via UPDATE — `sumberQr` presence
+ * does NOT lock the record. `dibuatOleh` is the Guru userId. Cascades on delete
+ * of peserta_didik or rombongan_belajar.
+ */
+export const absensiHarian = pgTable(
+  "absensi_harian",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .default(sql`current_setting('app.tenant_id', true)`)
+      .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+    pesertaDidikId: uuid("peserta_didik_id")
+      .notNull()
+      .references(() => pesertaDidik.id, { onDelete: "cascade" }),
+    rombonganBelajarId: uuid("rombongan_belajar_id")
+      .notNull()
+      .references(() => rombonganBelajar.id, { onDelete: "cascade" }),
+    tanggal: date("tanggal").notNull(),
+    statusKehadiran: text("status_kehadiran").notNull(),
+    metodeInput: text("metode_input").notNull().default("manual"),
+    catatan: text("catatan"),
+    sumberQr: text("sumber_qr"),
+    dibuatOleh: text("dibuat_oleh").notNull(),
+    dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    diperbaruiPada: timestamp("diperbarui_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    check(
+      "absensi_harian_status_kehadiran_check",
+      sql`${t.statusKehadiran} in ('hadir', 'izin', 'sakit', 'alpa')`
+    ),
+    check(
+      "absensi_harian_metode_input_check",
+      sql`${t.metodeInput} in ('manual', 'qr')`
+    ),
+    unique("absensi_harian_tenant_pd_tanggal_unique").on(
+      t.tenantId,
+      t.pesertaDidikId,
+      t.tanggal
+    ),
+  ]
+);
+
+export type AbsensiHarian = typeof absensiHarian.$inferSelect;
+export type AbsensiHarianInsert = typeof absensiHarian.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// NOTIFIKASI — in-app notifications & reminders for Tugas Tertunda (#20 MVP).
+//
+// MVP scope: in-app ONLY. No WhatsApp, email, SMS, or parent-facing delivery
+// (AC#5: no external sends). Tenant-scoped (RLS via app.tenant_id GUC) AND
+// recipient-scoped (pengguna_id) — a Pengguna sees/manages ONLY their own rows
+// (self-ownership enforced at the action layer; AC#3/#5 of #20).
+// ---------------------------------------------------------------------------
+
+/**
+ * Notifikasi — in-app notification addressed to ONE Pengguna (recipient). `tipe`
+ * categorizes the reminder (tugas_nilai | tugas_absensi | tugas_eraport | umum);
+ * `konteks` carries optional deep-link context ({bebanId, penilaianId, ...}).
+ * `dibaca` tracks the read/unread badge state. `tenant_id` from the session GUC,
+ * never client-supplied (see migration default + RLS WITH CHECK). Cascades on
+ * pengguna delete.
+ */
+export const notifikasi = pgTable("notifikasi", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: text("tenant_id")
+    .notNull()
+    .default(sql`current_setting('app.tenant_id', true)`)
+    .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+  penggunaId: uuid("pengguna_id")
+    .notNull()
+    .references(() => pengguna.id, { onDelete: "cascade" }),
+  tipe: text("tipe").notNull(),
+  judul: text("judul").notNull(),
+  pesan: text("pesan").notNull(),
+  dibaca: boolean("dibaca").notNull().default(false),
+  konteks: jsonb("konteks"),
+  dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+/**
+ * Preferensi Notifikasi — per-Pengguna per-tipe on/off toggle (self-service).
+ * UNIQUE (tenant, pengguna, tipe) so upsert is safe. Convention: a MISSING row
+ * for a tipe is treated as `aktif` (on) — the repo returns a default view when
+ * no row exists. `tenant_id` from the session GUC, never client-supplied.
+ * Cascades on pengguna delete.
+ */
+export const preferensiNotifikasi = pgTable(
+  "preferensi_notifikasi",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .default(sql`current_setting('app.tenant_id', true)`)
+      .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+    penggunaId: uuid("pengguna_id")
+      .notNull()
+      .references(() => pengguna.id, { onDelete: "cascade" }),
+    tipe: text("tipe").notNull(),
+    aktif: boolean("aktif").notNull().default(true),
+    dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    unique("preferensi_notifikasi_tenant_pengguna_tipe_unique").on(
+      t.tenantId,
+      t.penggunaId,
+      t.tipe
+    ),
+  ]
+);
+
+export type Notifikasi = typeof notifikasi.$inferSelect;
+export type NotifikasiInsert = typeof notifikasi.$inferInsert;
+export type PreferensiNotifikasi = typeof preferensiNotifikasi.$inferSelect;
+export type PreferensiNotifikasiInsert = typeof preferensiNotifikasi.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// E-RAPORT DOCUMENT LAYER — draf_eraport (lifecycle) + revisi_eraport (append-
+// only history).
+//
+// Tenant-scoped tables for the E-Raport document lifecycle (Draf -> Terbit ->
+// Revisi). draf_eraport is the report document per (peserta_didik, tahun_
+// ajaran, semester); konten is a jsonb snapshot of the Nilai Akhir (#11)
+// derivation plus report data. draf_ai_id optionally links a verified Draf AI
+// (#12) used as AI-assisted narrative (AC#4 — must be disetujui, enforced in
+// the repo layer). revisi_eraport is APPEND-ONLY (AC#3 accountability): a
+// revision appends a new row and flips the parent status to 'revisi'. Defined
+// after peserta_didik / tahun_ajaran / draf_ai so every FK resolves without
+// TDZ. `tenant_id` from the session GUC, never client-supplied (RLS WITH CHECK).
+// ---------------------------------------------------------------------------
+
+/**
+ * Draf E-Raport — the report document per (peserta_didik, tahun_ajaran,
+ * semester) with a lifecycle state machine.
+ *
+ * AC#1: konten is a jsonb SNAPSHOT of the Nilai Akhir (#11) derivation + report
+ * data at creation. AC#2: terbit is a protected, irreversible-ish transition
+ * (the repo refuses a second terbit). AC#4: `drafAiId` optionally links a
+ * verified (disetujui) Draf AI — the repo rejects menunggu/ditolak drafts.
+ * UNIQUE on (tenant, peserta_didik, tahun_ajaran, semester) — one report per
+ * student per period. Cascades on delete of peserta_didik / tahun_ajaran.
+ * `tenant_id` is sourced from the session GUC `app.tenant_id`, never client-
+ * supplied (see migration default + RLS WITH CHECK).
+ */
+export const drafEraport = pgTable(
+  "draf_eraport",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: text("tenant_id")
+      .notNull()
+      .default(sql`current_setting('app.tenant_id', true)`)
+      .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+    pesertaDidikId: uuid("peserta_didik_id")
+      .notNull()
+      .references(() => pesertaDidik.id, { onDelete: "cascade" }),
+    tahunAjaranId: uuid("tahun_ajaran_id")
+      .notNull()
+      .references(() => tahunAjaran.id, { onDelete: "cascade" }),
+    semester: text("semester").notNull(),
+    status: text("status").notNull().default("draf"),
+    konten: jsonb("konten").notNull().default({}),
+    drafAiId: uuid("draf_ai_id").references(() => drafAi.id, {
+      onDelete: "set null",
+    }),
+    catatan: text("catatan"),
+    dibuatOleh: text("dibuat_oleh"),
+    dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    diterbitkanPada: timestamp("diterbitkan_pada", { withTimezone: true }),
+  },
+  (t) => [
+    check(
+      "draf_eraport_semester_check",
+      sql`${t.semester} in ('ganjil', 'genap')`
+    ),
+    check(
+      "draf_eraport_status_check",
+      sql`${t.status} in ('draf', 'terbit', 'revisi')`
+    ),
+    unique("draf_eraport_tenant_pd_ta_semester_unique").on(
+      t.tenantId,
+      t.pesertaDidikId,
+      t.tahunAjaranId,
+      t.semester
+    ),
+  ]
+);
+
+/**
+ * Revisi E-Raport — APPEND-ONLY revision history (AC#3 accountability).
+ *
+ * A revision NEVER rewrites or deletes prior rows. Each revision appends a new
+ * row carrying `alasan` (required reason) + optional `kontenPerubahan` (the
+ * proposed change blob), and the action/repo layer atomically flips the parent
+ * `draf_eraport.status` to 'revisi'. Cascades on draf_eraport delete.
+ * `tenant_id` from the session GUC, never client-supplied (RLS WITH CHECK).
+ */
+export const revisiEraport = pgTable("revisi_eraport", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  tenantId: text("tenant_id")
+    .notNull()
+    .default(sql`current_setting('app.tenant_id', true)`)
+    .references(() => satuanPendidikan.id, { onDelete: "cascade" }),
+  eraportId: uuid("eraport_id")
+    .notNull()
+    .references(() => drafEraport.id, { onDelete: "cascade" }),
+  alasan: text("alasan").notNull(),
+  kontenPerubahan: jsonb("konten_perubahan"),
+  dibuatOleh: text("dibuat_oleh"),
+  dibuatPada: timestamp("dibuat_pada", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export type DrafEraport = typeof drafEraport.$inferSelect;
+export type DrafEraportInsert = typeof drafEraport.$inferInsert;
+export type RevisiEraport = typeof revisiEraport.$inferSelect;
+export type RevisiEraportInsert = typeof revisiEraport.$inferInsert;
 
 // ---------------------------------------------------------------------------
 // BANK SOAL DATA LAYER — butir_soal -> paket_soal -> paket_soal_butir.

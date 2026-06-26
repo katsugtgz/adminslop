@@ -1,0 +1,211 @@
+"use server";
+
+// SECURITY (identity doc §12 — "hiding UI is not authorization"):
+// Every action below re-evaluates `getAksesSaya().boleh(...)` SERVER-SIDE on
+// every call. The Absensi page (T6) may hide the form for a `wali_kelas`
+// client, but a determined client can construct a `fetch` + `FormData` and
+// POST it directly to this action. That POST MUST still throw — the action is
+// the boundary, not the UI. The proof lives in `actions.test.ts` describe
+// block "AC#5: hiding UI is not the authorization boundary".
+//
+// SECURITY (identity doc §13 — tenant tamper-proofing): `orgId` comes ONLY
+// from `akses.membership.orgId` (the live WorkOS Keanggotaan). A tampered
+// `tenantId` field in formData is deliberately NEVER read. Tenant scoping
+// happens via `withTenant(db, orgId, ...)` which sets the RLS session GUC
+// `app.tenant_id`, so every read is already scoped to the active tenant — a
+// cross-tenant id simply resolves to "not found" (a deny).
+//
+// SECURITY (identity doc §13 — pembatasan wins): `boleh()` returns
+// `{diizinkan:false, sumber:"pembatasan"}` when an admin / guru has a
+// `pembatasan_akses` row for the requested slug. Even `admin_satuan_pendidikan`
+// / `dev` cannot bypass a restriction — there is no superuser. The proof test
+// for "guru WITH pembatasan['absensi:buat']" verifies this (AC#5).
+
+import { revalidatePath } from "next/cache";
+
+import { catatAudit, getDb, withTenant } from "@/db/client";
+import { catatAbsensi, ubahAbsensi } from "@/db/queries/absensi";
+import type { MetodeInput, StatusKehadiran } from "@/db/queries/absensi";
+import { getAksesSaya } from "@/lib/auth/akses-saya";
+
+const REVALIDATE_TARGET = "/dashboard/absensi";
+
+/** Closed vocabulary: the four valid status_kehadiran literals. */
+const STATUS_KEHADIRAN: readonly StatusKehadiran[] = [
+  "hadir",
+  "izin",
+  "sakit",
+  "alpa",
+];
+
+/** True iff `s` is one of the StatusKehadiran literals. */
+function isValidStatus(s: string): s is StatusKehadiran {
+  return (STATUS_KEHADIRAN as readonly string[]).includes(s);
+}
+
+/** Closed vocabulary: the two valid metode_input literals. */
+const METODE_INPUT: readonly MetodeInput[] = ["manual", "qr"];
+
+/** True iff `s` is one of the MetodeInput literals. */
+function isValidMetode(s: string): s is MetodeInput {
+  return (METODE_INPUT as readonly string[]).includes(s);
+}
+
+/**
+ * Quick ISO-date `YYYY-MM-DD` shape check. NOT a strict calendar validator —
+ * it accepts the structure the action needs to reject obviously malformed
+ * input (the schema `date` column rejects the rest server-side). Leap-day
+ * and 30/31 day months are deferred to Postgres.
+ */
+function isIsoDateShape(s: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(s);
+}
+
+// 1. catatAbsensiAction -----------------------------------------------------
+
+/**
+ * Record an Absensi Harian (one row per peserta_didik per tanggal per
+ * rombongan_belajar). Requires the `absensi:buat` izin (AC#1: guru records;
+ * admin/dev manage school-wide). Audit row is appended inside the same
+ * transaction.
+ *
+ * `metodeInput` is optional and defaults to `'manual'` in the repo. When the
+ * caller supplies `'qr'`, an optional `sumberQr` (QR session token) is
+ * carried through. AC#3: a QR-captured row is still correctable via
+ * `ubahAbsensiAction` — `sumberQr` presence does NOT lock the record.
+ */
+export async function catatAbsensiAction(formData: FormData): Promise<void> {
+  // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
+  const akses = await getAksesSaya();
+  if (akses.status !== "active") {
+    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+  }
+  if (!akses.boleh("absensi:buat").diizinkan) {
+    throw new Error("Anda tidak memiliki izin untuk mencatat Absensi.");
+  }
+
+  // 2. Manual validation (no zod).
+  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
+  if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
+  const rombonganBelajarId = String(
+    formData.get("rombonganBelajarId") ?? ""
+  ).trim();
+  if (!rombonganBelajarId) throw new Error("ID Rombongan Belajar wajib diisi.");
+  const tanggal = String(formData.get("tanggal") ?? "").trim();
+  if (!tanggal) throw new Error("Tanggal wajib diisi.");
+  if (!isIsoDateShape(tanggal)) {
+    throw new Error("Tanggal harus berformat YYYY-MM-DD.");
+  }
+  const statusRaw = String(formData.get("statusKehadiran") ?? "").trim();
+  if (!isValidStatus(statusRaw)) {
+    throw new Error("Status Kehadiran tidak valid.");
+  }
+  const statusKehadiran: StatusKehadiran = statusRaw;
+  const metodeRaw = String(formData.get("metodeInput") ?? "").trim();
+  // metodeInput is OPTIONAL; default 'manual' in the repo. When provided, it
+  // must be in the closed vocabulary.
+  let metodeInput: MetodeInput | undefined;
+  if (metodeRaw !== "") {
+    if (!isValidMetode(metodeRaw)) {
+      throw new Error("Metode Input tidak valid.");
+    }
+    metodeInput = metodeRaw;
+  }
+  const catatanRaw = String(formData.get("catatan") ?? "").trim();
+  const catatan = catatanRaw || undefined;
+  const sumberQrRaw = String(formData.get("sumberQr") ?? "").trim();
+  const sumberQr = sumberQrRaw || undefined;
+
+  // 3. Execute under tenant scope + audit. orgId from membership ONLY.
+  const { db } = getDb();
+  await withTenant(db, akses.membership.orgId, async (tx) => {
+    const row = await catatAbsensi(tx, {
+      pesertaDidikId,
+      rombonganBelajarId,
+      tanggal,
+      statusKehadiran,
+      metodeInput,
+      catatan,
+      sumberQr,
+      dibuatOleh: akses.userId,
+    });
+    await catatAudit(tx, {
+      aktor: akses.userId,
+      aksi: "catat_absensi",
+      target: `absensi:${row.id}`,
+      beban: {
+        pesertaDidikId,
+        rombonganBelajarId,
+        tanggal,
+        statusKehadiran,
+        metodeInput: metodeInput ?? "manual",
+      },
+    });
+  });
+
+  // 4. Revalidate.
+  revalidatePath(REVALIDATE_TARGET);
+}
+
+// 2. ubahAbsensiAction ------------------------------------------------------
+
+/**
+ * Update the `statusKehadiran` and/or `catatan` on an existing Absensi row.
+ * Requires `absensi:ubah`. AC#3 (load-bearing): correctable EVEN IF the row
+ * was originally QR-captured — `metode_input` + `sumber_qr` are preserved by
+ * the repo, and `diperbarui_pada` advances. `catatan` is optional; an empty
+ * string clears it (null). Audit row appended inside the transaction.
+ */
+export async function ubahAbsensiAction(formData: FormData): Promise<void> {
+  const akses = await getAksesSaya();
+  if (akses.status !== "active") {
+    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+  }
+  if (!akses.boleh("absensi:ubah").diizinkan) {
+    throw new Error("Anda tidak memiliki izin untuk mengubah Absensi.");
+  }
+
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("ID Absensi wajib diisi.");
+
+  // Either statusKehadiran OR catatan (or both) must be present. Build a
+  // partial update so a caller can correct ONE field without forcing the
+  // other to be re-submitted.
+  const perubahan: {
+    statusKehadiran?: StatusKehadiran;
+    catatan?: string;
+  } = {};
+
+  if (formData.has("statusKehadiran")) {
+    const statusRaw = String(formData.get("statusKehadiran") ?? "").trim();
+    if (statusRaw !== "") {
+      if (!isValidStatus(statusRaw)) {
+        throw new Error("Status Kehadiran tidak valid.");
+      }
+      perubahan.statusKehadiran = statusRaw;
+    }
+  }
+  if (formData.has("catatan")) {
+    const catatanRaw = String(formData.get("catatan") ?? "").trim();
+    // An empty catatan CLEARS the note (writes null) — a corrected row can
+    // both add and remove a note.
+    perubahan.catatan = catatanRaw;
+  }
+
+  if (perubahan.statusKehadiran === undefined && !formData.has("catatan")) {
+    throw new Error("Tidak ada perubahan untuk disimpan.");
+  }
+
+  const { db } = getDb();
+  await withTenant(db, akses.membership.orgId, async (tx) => {
+    const row = await ubahAbsensi(tx, id, perubahan);
+    await catatAudit(tx, {
+      aktor: akses.userId,
+      aksi: "ubah_absensi",
+      target: `absensi:${row.id}`,
+      beban: { id, perubahan },
+    });
+  });
+
+  revalidatePath(REVALIDATE_TARGET);
+}
