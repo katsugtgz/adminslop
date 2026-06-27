@@ -1,0 +1,21 @@
+src/app/page.test.tsx
+  s_f38687804bcfdc::t_9ce997a27c0b4f 1-2,7,9-22,24-26,28-31,33-35,38,41-44
+src/app/page.tsx
+  s_f38687804bcfdc::t_6536b6148a2ebf 110,115-116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "38d765b28cf21fb4fe88209a4890d4bbcf3cd060",
+  "prompts": {},
+  "sessions": {
+    "s_f38687804bcfdc": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f096f-1c90-77d5-8eae-968b95979856",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
