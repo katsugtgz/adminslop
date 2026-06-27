@@ -34,10 +34,13 @@ export function CardHover({
   const cls = `t-lift${className ? ` ${className}` : ""}`;
   if (asChild && React.isValidElement(children)) {
     const childProps = (children.props ?? {}) as Record<string, unknown>;
+    // Spread `rest` first, then the child's own props, so the child wins for
+    // behaviour (onClick, aria-*, …); className is always merged.
     return React.cloneElement(
       children as React.ReactElement<Record<string, unknown>>,
       {
         ...rest,
+        ...childProps,
         className: cnMerge(childProps.className as string | undefined, cls),
       },
     );
