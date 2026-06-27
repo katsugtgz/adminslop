@@ -1,0 +1,19 @@
+docs/adr/0004-workos-role-session-strategy.md
+  s_5853b7e7654748::t_7cff281fadff7e 1-345
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "8a465d5c80712c46310b19704e3d90fae24ae70d",
+  "prompts": {},
+  "sessions": {
+    "s_5853b7e7654748": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f69d581dffe9w4ZR7Z1tfbIJ6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
