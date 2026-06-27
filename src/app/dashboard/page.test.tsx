@@ -1,14 +1,20 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 
-const { getActiveTenantContext } = vi.hoisted(() => ({
+const { getActiveTenantContext, getAuthenticatedUserId } = vi.hoisted(() => ({
   getActiveTenantContext: vi.fn(),
+  getAuthenticatedUserId: vi.fn(),
 }));
 
 // Stop transitive authkit/next server-module loads (resolvable only inside Next).
 vi.mock("@workos-inc/authkit-nextjs", () => ({
   withAuth: vi.fn(),
   signOut: vi.fn(),
+}));
+// TombolMasuk is a client component that calls the AuthKit client hook; stub
+// it so the server-component page renders without a provider.
+vi.mock("@/components/akses/tombol-masuk", () => ({
+  TombolMasuk: () => <button type="button">Masuk</button>,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("next/headers", () => ({ cookies: vi.fn() }));
@@ -22,6 +28,7 @@ vi.mock("@/components/dashboard-aktif", () => ({
 
 vi.mock("@/lib/auth/server", () => ({
   getActiveTenantContext,
+  getAuthenticatedUserId,
   ACTIVE_TENANT_COOKIE: "eapp_active_org",
   ACTIVE_TENANT_MAX_AGE: 2592000,
 }));
@@ -34,15 +41,31 @@ async function renderPage() {
   return render(tree);
 }
 
-beforeEach(() => getActiveTenantContext.mockReset());
+beforeEach(() => {
+  getActiveTenantContext.mockReset();
+  getAuthenticatedUserId.mockReset();
+});
 
 describe("DashboardPage — render by tenant context (#4)", () => {
-  it("denied -> Pembatasan Akses message", async () => {
+  it("denied (unauthenticated) -> Pembatasan Akses with a Masuk affordance", async () => {
     getActiveTenantContext.mockResolvedValue({ status: "denied" });
+    // No session server-side -> the page must surface a login action.
+    getAuthenticatedUserId.mockResolvedValue(null);
     await renderPage();
     expect(
       screen.getByRole("heading", { name: /Pembatasan Akses/i })
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /masuk/i })).toBeInTheDocument();
+  });
+
+  it("denied (authenticated, no membership) -> Pembatasan Akses with Keluar", async () => {
+    getActiveTenantContext.mockResolvedValue({ status: "denied" });
+    getAuthenticatedUserId.mockResolvedValue("user_123");
+    await renderPage();
+    expect(
+      screen.getByRole("heading", { name: /Pembatasan Akses/i })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /^keluar$/i })).toBeInTheDocument();
   });
 
   it("choose -> lists each membership as a selectable Satuan Pendidikan", async () => {
