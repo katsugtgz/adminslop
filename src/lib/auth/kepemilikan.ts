@@ -118,21 +118,21 @@ async function cariNilaiById(
 /** Resolve komponen_nilai(id) -> beban_mengajar id. Throws when absent. */
 async function bebanIdDariKomponen(tx: Tx, komponenNilaiId: string): Promise<string> {
   const kn = await cariKomponenNilaiById(tx, komponenNilaiId);
-  if (!kn) throw new Error("Komponen Nilai tidak ditemukan.");
+  if (!kn) throw new KepemilikanError("Komponen Nilai tidak ditemukan.");
   return kn.bebanMengajarId;
 }
 
 /** Resolve penilaian(id) -> komponen_nilai -> beban_mengajar id. */
 export async function bebanIdDariPenilaian(tx: Tx, penilaianId: string): Promise<string> {
   const p = await cariPenilaianById(tx, penilaianId);
-  if (!p) throw new Error("Penilaian tidak ditemukan.");
+  if (!p) throw new KepemilikanError("Penilaian tidak ditemukan.");
   return bebanIdDariKomponen(tx, p.komponenNilaiId);
 }
 
 /** Resolve nilai(id) -> penilaian -> komponen_nilai -> beban_mengajar id. */
 export async function bebanIdDariNilai(tx: Tx, nilaiId: string): Promise<string> {
   const n = await cariNilaiById(tx, nilaiId);
-  if (!n) throw new Error("Nilai tidak ditemukan.");
+  if (!n) throw new KepemilikanError("Nilai tidak ditemukan.");
   return bebanIdDariPenilaian(tx, n.penilaianId);
 }
 
@@ -261,9 +261,9 @@ export async function rombonganBelajarIdDariAbsensi(
   absensiId: string
 ): Promise<string> {
   const a = await cariAbsensiById(tx, absensiId);
-  if (!a) throw new Error("Absensi tidak ditemukan.");
+  if (!a) throw new KepemilikanError("Absensi tidak ditemukan.");
   if (!a.rombonganBelajarId) {
-    throw new Error("Absensi tidak terhubung dengan Rombongan Belajar.");
+    throw new KepemilikanError("Absensi tidak terhubung dengan Rombongan Belajar.");
   }
   return a.rombonganBelajarId;
 }
