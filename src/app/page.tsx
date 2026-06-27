@@ -107,13 +107,13 @@ export default function BerandaPage() {
           <TextStagger
             as="h1"
             className="mt-6 font-display text-[2.75rem] leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-8xl"
-            lines={[
+            lines={
               <>
                 EduAdmin Pro{" "}
                 <span className="text-gradient-warm">Premium</span>
                 <span className="text-accent">.</span>
-              </>,
-            ]}
+              </>
+            }
           />
 
           <p className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl md:text-2xl">

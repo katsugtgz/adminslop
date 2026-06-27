@@ -1,39 +1,46 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { render, screen } from "@testing-library/react";
 
 import BerandaPage from "./page";
 
 /**
- * ISSUE-002 regression — the landing (BerandaPage) used to spam the React
- * "Each child in a list should have a unique key prop" warning on server
- * render. This test renders the page and asserts no such warning fires.
+ * Landing (BerandaPage) smoke + structure tests.
  *
- * The spy also records the offending component stack so a regression
- * points straight at the culprit list.
+ * NOTE on ISSUE-002 (React "unique key prop" warning):
+ * The original offender — `<TextStagger lines={[ <>…</> ]} />`, an unkeyed
+ * array-literal fragment passed as a prop — only trips React's
+ * `warnForMissingKey` inside the RSC *flight serializer*
+ * (`react-server-dom-webpack`). It does NOT fire under `react-dom/server`
+ * `renderToString` nor under jsdom client rendering (verified: both report
+ * zero warnings even with the bug present). It therefore cannot be asserted
+ * by a Vitest unit test in this repo — the regression guard lives in the
+ * agent-browser dogfood harness, which checks the browser/server console for
+ * `unique "key"` after a fresh `/` load.
+ *
+ * What we *can* lock in here is that the landing renders its hero and module
+ * surface without throwing and that the fixed `TextStagger` usage still
+ * produces the brand headline.
  */
-describe("BerandaPage (landing) — no React key-prop warnings", () => {
-  let keyWarnings: string[];
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    keyWarnings = [];
-    consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation((...args: unknown[]) => {
-        const text = args.map(String).join(" ");
-        if (/unique "key" prop/i.test(text)) {
-          keyWarnings.push(text);
-        }
-      });
-  });
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
-  });
-
-  it("renders without any React list-key warnings", () => {
+describe("BerandaPage (landing)", () => {
+  it("renders the hero brand headline and primary CTA", () => {
     render(<BerandaPage />);
 
-    expect(keyWarnings, keyWarnings.join("\n---\n")).toHaveLength(0);
+    // The TextStagger hero renders the brand name across its line(s).
+    expect(
+      screen.getByRole("heading", { level: 1, name: /eduadmin pro/i }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", { name: /masuk ke dashboard/i }),
+    ).toBeInTheDocument();
+  });
+
+  it("renders every MVP module as a card with a dashboard link", () => {
+    render(<BerandaPage />);
+
+    // MVP_MODULES has 7 entries; each card exposes an aria-label "Buka <nama>".
+    const moduleLinks = screen.getAllByRole("link", { name: /^buka /i });
+    expect(moduleLinks).toHaveLength(7);
+    expect(moduleLinks[0]).toHaveAttribute("href", "/dashboard");
   });
 });
