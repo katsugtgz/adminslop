@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { QrCode } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import {
@@ -13,6 +14,7 @@ import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran
 import type { PesertaDidik, RombonganBelajar } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 
+import { PageReveal } from "@/components/motion";
 import { DaftarRombonganBelajarAbsensi } from "@/components/absensi/daftar-rombongan-belajar";
 import { FormAbsensi } from "@/components/absensi/form-absensi";
 import type { AbsensiExisting } from "@/components/absensi/types";
@@ -186,24 +188,52 @@ export default async function Page({
 
   if (!data.taAktif || !data.semester) {
     return (
-      <section className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-          <h1 className="text-2xl font-bold tracking-tight">Absensi Harian</h1>
-          <p className="text-sm text-muted-foreground">
-            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-            {akses.membership.roleSlug}
-          </p>
-        </header>
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-          Aktifkan Tahun Ajaran terlebih dahulu.{" "}
-          <Link
-            href="/dashboard/tahun-ajaran"
-            className="font-medium text-primary underline-offset-4 hover:underline"
+      <div className="flex flex-col gap-10 md:gap-14">
+        <PageReveal
+          as="section"
+          className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
+            }}
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
           >
-            Buka Pengaturan Tahun Ajaran
-          </Link>
-        </p>
-      </section>
+            15
+          </span>
+          <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+            <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+              <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
+              Modul · Absensi Harian
+            </p>
+            <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+              Absensi Harian
+            </h1>
+            <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+              Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+              {akses.membership.roleSlug}
+            </p>
+          </div>
+        </PageReveal>
+
+        <PageReveal as="section" delay={2}>
+          <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+            Aktifkan Tahun Ajaran terlebih dahulu.{" "}
+            <Link
+              href="/dashboard/tahun-ajaran"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Buka Pengaturan Tahun Ajaran
+            </Link>
+          </p>
+        </PageReveal>
+      </div>
     );
   }
 
@@ -215,34 +245,75 @@ export default async function Page({
   const pesertaNama = new Map(data.peserta.map((p) => [p.id, p.nama]));
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Absensi Harian</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
-          {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehTulis ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-14">
+      <PageReveal
+        as="section"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
+          }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
+        >
+          15
+        </span>
+        <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
+            Modul · Absensi Harian
+          </p>
+          <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+            Absensi Harian
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
+            {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehTulis ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Pilih Rombongan Belajar
-        </h2>
+      <PageReveal as="section" delay={2} className="flex flex-col gap-5">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+          >
+            01
+          </span>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Pilih Rombongan Belajar
+          </h2>
+        </div>
         <DaftarRombonganBelajarAbsensi
           rombonganBelajar={data.rombel}
           selectedId={sp.rombonganBelajarId}
           tanggal={tanggalAktif}
         />
-      </div>
+      </PageReveal>
 
       {rombelTerpilih && tanggalAktif && (
         <>
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">
-              {rombelTerpilih.nama} · Tanggal {tanggalAktif}
-            </h2>
+          <PageReveal as="section" delay={3} className="flex flex-col gap-5">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <span
+                aria-hidden="true"
+                className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+              >
+                02
+              </span>
+              <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+                {rombelTerpilih.nama} · Tanggal {tanggalAktif}
+              </h2>
+            </div>
 
             {bolehTulis ? (
               <FormAbsensi
@@ -254,25 +325,33 @@ export default async function Page({
                 existing={data.existing}
               />
             ) : data.peserta.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+              <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
                 Belum ada Peserta Didik.
               </p>
             ) : (
-              <p className="rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+              <p className="rounded-2xl border border-border bg-muted/30 p-5 text-sm text-muted-foreground">
                 Anda hanya dapat membaca Absensi. Peran Anda tidak dapat mengisi
                 kehadiran.
               </p>
             )}
-          </div>
+          </PageReveal>
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">
-              Rekap Absensi
-            </h2>
+          <PageReveal as="section" delay={3} className="flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+              >
+                03
+              </span>
+              <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+                Rekap Absensi
+              </h2>
+            </div>
             <RekapAbsensiTable rekap={data.rekap} pesertaNama={pesertaNama} />
-          </div>
+          </PageReveal>
         </>
       )}
-    </section>
+    </div>
   );
 }

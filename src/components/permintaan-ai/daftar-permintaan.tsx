@@ -1,6 +1,7 @@
 import { RotateCcw, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { CardHover, ShimmerText } from "@/components/motion";
 import type { PermintaanAi, DrafAi } from "@/db/schema";
 import type { StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 
@@ -17,12 +18,14 @@ const LABEL_STATUS: Record<StatusPermintaanAi, string> = {
 
 const BADGE_STATUS: Record<StatusPermintaanAi, string> = {
   dibuat: "bg-muted text-muted-foreground",
-  diproses: "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300",
-  selesai:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  gagal: "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300",
+  diproses: "bg-accent/10",
+  selesai: "bg-success/15 text-success",
+  gagal: "bg-destructive/12 text-destructive",
   dibatalkan: "bg-muted text-muted-foreground",
 };
+
+const BADGE_BASE =
+  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium";
 
 function formatTanggal(d: Date): string {
   return new Intl.DateTimeFormat("id-ID", {
@@ -60,7 +63,7 @@ export function DaftarPermintaan({
 }) {
   if (permintaan.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Permintaan AI.
       </p>
     );
@@ -76,28 +79,33 @@ export function DaftarPermintaan({
         const draf = drafMap.get(p.id);
 
         return (
-          <li
+          <CardHover
+            as="li"
             key={p.id}
-            className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm hover:border-accent/40"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold">
+                <span className="text-sm font-semibold text-foreground">
                   {LABEL_JENIS[p.jenis as keyof typeof LABEL_JENIS]}
                 </span>
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STATUS[status]}`}
-                >
-                  {LABEL_STATUS[status]}
-                </span>
+                {status === "diproses" ? (
+                  <ShimmerText className={`${BADGE_BASE} ${BADGE_STATUS.diproses}`}>
+                    {LABEL_STATUS.diproses}
+                  </ShimmerText>
+                ) : (
+                  <span className={`${BADGE_BASE} ${BADGE_STATUS[status]}`}>
+                    {LABEL_STATUS[status]}
+                  </span>
+                )}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                 Dibuat {formatTanggal(p.dibuatPada)}
               </span>
             </div>
 
             {status === "gagal" && p.pesanError ? (
-              <p className="text-xs text-rose-700 dark:text-rose-400">
+              <p className="text-xs text-destructive">
                 {p.pesanError}
               </p>
             ) : null}
@@ -131,7 +139,7 @@ export function DaftarPermintaan({
                 action={verifikasiAction}
               />
             ) : null}
-          </li>
+          </CardHover>
         );
       })}
     </ul>

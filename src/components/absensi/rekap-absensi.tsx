@@ -20,7 +20,7 @@ export function RekapAbsensiTable({
 }) {
   if (rekap.size === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Absensi.
       </p>
     );
@@ -34,41 +34,41 @@ export function RekapAbsensiTable({
   });
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground shadow-sm">
+    <div className="overflow-x-auto rounded-2xl border border-border bg-card text-card-foreground shadow-warm">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-border text-left text-xs text-muted-foreground">
-            <th scope="col" className="p-3 font-medium">
+          <tr className="border-b border-border text-left font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            <th scope="col" className="p-3.5 font-medium">
               Nama
             </th>
-            <th scope="col" className="p-3 font-medium text-right">
+            <th scope="col" className="p-3.5 font-medium text-right">
               Hadir
             </th>
-            <th scope="col" className="p-3 font-medium text-right">
+            <th scope="col" className="p-3.5 font-medium text-right">
               Izin
             </th>
-            <th scope="col" className="p-3 font-medium text-right">
+            <th scope="col" className="p-3.5 font-medium text-right">
               Sakit
             </th>
-            <th scope="col" className="p-3 font-medium text-right">
+            <th scope="col" className="p-3.5 font-medium text-right">
               Alpa
             </th>
-            <th scope="col" className="p-3 font-medium text-right">
+            <th scope="col" className="p-3.5 font-medium text-right">
               Total
             </th>
           </tr>
         </thead>
         <tbody>
           {rows.map(([pdId, r]) => (
-            <tr key={pdId} className="border-b border-border">
-              <td className="p-3 font-medium">
+            <tr key={pdId} className="border-b border-border/60 transition-colors last:border-0 hover:bg-muted/40">
+              <td className="p-3.5 font-medium text-foreground">
                 {pesertaNama.get(pdId) ?? "—"}
               </td>
-              <td className="p-3 text-right tabular-nums">{r.hadir}</td>
-              <td className="p-3 text-right tabular-nums">{r.izin}</td>
-              <td className="p-3 text-right tabular-nums">{r.sakit}</td>
-              <td className="p-3 text-right tabular-nums">{r.alpa}</td>
-              <td className="p-3 text-right font-semibold tabular-nums">
+              <td className="p-3.5 text-right tabular-nums">{r.hadir}</td>
+              <td className="p-3.5 text-right tabular-nums">{r.izin}</td>
+              <td className="p-3.5 text-right tabular-nums">{r.sakit}</td>
+              <td className="p-3.5 text-right tabular-nums">{r.alpa}</td>
+              <td className="p-3.5 text-right font-semibold tabular-nums text-accent">
                 {r.total}
               </td>
             </tr>

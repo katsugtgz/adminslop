@@ -1,6 +1,7 @@
 import { BadgeCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ShimmerText } from "@/components/motion";
 import type { DrafAi } from "@/db/schema";
 import type { StatusVerifikasi } from "@/db/queries/draf-ai";
 
@@ -15,13 +16,12 @@ const LABEL_VERIFIKASI: Record<StatusVerifikasi, string> = {
 
 /**
  * Tailwind badge classes tuned per verification state for at-a-glance scanning.
- * AC#3: a menunggu draft is NOT final — amber signals it still needs review.
+ * AC#3: a menunggu draft is NOT final — warning signals it still needs review.
  */
 const BADGE_VERIFIKASI: Record<StatusVerifikasi, string> = {
-  menunggu: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  disetujui:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  ditolak: "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300",
+  menunggu: "bg-warning/25 text-warning-foreground",
+  disetujui: "bg-success/15 text-success",
+  ditolak: "bg-destructive/12 text-destructive",
 };
 
 /**
@@ -51,33 +51,41 @@ export function KartuDraf({
   const menunggu = status === "menunggu";
 
   return (
-    <div className="mt-3 flex flex-col gap-3 rounded-lg border border-dashed border-border bg-muted/30 p-4">
+    <div className="mt-3 flex flex-col gap-3 rounded-xl border border-dashed border-border bg-muted/30 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           Draf AI
         </span>
-        <span
-          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_VERIFIKASI[status]}`}
-        >
-          {LABEL_VERIFIKASI[status]}
-        </span>
+        {menunggu ? (
+          <ShimmerText
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_VERIFIKASI.menunggu}`}
+          >
+            {LABEL_VERIFIKASI.menunggu}
+          </ShimmerText>
+        ) : (
+          <span
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_VERIFIKASI[status]}`}
+          >
+            {LABEL_VERIFIKASI[status]}
+          </span>
+        )}
       </div>
 
       {/* AC#3: AI content is unmistakably marked so it is never treated as final. */}
-      <div className="rounded-md border border-border bg-background p-3 text-sm">
-        <span className="mr-2 font-mono text-xs font-bold text-amber-700 dark:text-amber-400">
+      <div className="rounded-lg border border-border border-l-2 border-l-accent/60 bg-background p-3 text-sm">
+        <span className="mr-2 font-mono text-xs font-bold text-accent">
           [DRAF AI]
         </span>
         <span className="whitespace-pre-wrap">{draf.konten}</span>
       </div>
 
       {/* AC#2 provenance — traceable output. */}
-      <p className="text-xs text-muted-foreground">
+      <p className="font-mono text-xs text-muted-foreground">
         Provenance: {draf.provenance}
       </p>
 
       {status === "disetujui" ? (
-        <p className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+        <p className="flex items-center gap-1.5 text-xs font-medium text-success">
           <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
           Draf AI Terverifikasi
         </p>

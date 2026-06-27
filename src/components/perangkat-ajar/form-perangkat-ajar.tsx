@@ -46,10 +46,10 @@ export function FormPerangkatAjar({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">
+        <h2 className="font-display text-2xl tracking-tight text-foreground">
           Buat Perangkat Ajar
         </h2>
         <p className="text-xs text-muted-foreground">
@@ -66,7 +66,7 @@ export function FormPerangkatAjar({
           id="pa-jenis"
           name="jenis"
           defaultValue="modul_ajar"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {PILIHAN_JENIS.map(({ slug, label }) => (
             <option key={slug} value={slug}>
@@ -84,7 +84,7 @@ export function FormPerangkatAjar({
           id="pa-mapel"
           name="mataPelajaranId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="" disabled>
             Pilih Mata Pelajaran
@@ -105,7 +105,7 @@ export function FormPerangkatAjar({
           id="pa-tingkat"
           name="tingkatId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="">
             Tanpa Tingkat
@@ -128,7 +128,7 @@ export function FormPerangkatAjar({
           type="text"
           required
           placeholder="Judul Perangkat Ajar"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -141,7 +141,7 @@ export function FormPerangkatAjar({
           name="konten"
           rows={4}
           placeholder='{"tujuan":"...","langkah":[]}'
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg border border-input bg-background px-3 py-2 font-mono text-xs ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         <span className="text-xs text-muted-foreground">
           Opsional — objek JSON sebagai isi dokumen.
@@ -157,7 +157,7 @@ export function FormPerangkatAjar({
           name="drafAiId"
           type="text"
           placeholder="uuid draf_ai bila dibantu AI"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         <span className="text-xs text-muted-foreground">
           Bila diisi, dokumen ditandai menunggu Verifikasi Dokumen AI.

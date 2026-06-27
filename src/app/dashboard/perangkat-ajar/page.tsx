@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Compass } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import { listMataPelajaran } from "@/db/queries/mata-pelajaran";
@@ -12,6 +13,7 @@ import type { MataPelajaran, PerangkatAjar, Tingkat } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 import { DaftarPerangkatAjar } from "@/components/perangkat-ajar/daftar-perangkat-ajar";
 import {
   FormPerangkatAjar,
@@ -94,60 +96,97 @@ export default async function Page({
   };
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Perangkat Ajar</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuat ? "" : " (hanya baca)"}
-        </p>
-      </header>
-
-      <nav className="flex flex-wrap gap-2" aria-label="Filter Jenis">
-        <Link
-          href="/dashboard/perangkat-ajar"
-          className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-            jenisFilter === null
-              ? "bg-primary text-primary-foreground"
-              : "border border-input bg-background hover:bg-accent"
-          }`}
+    <div className="flex flex-col gap-10 md:gap-14">
+      <PageReveal
+        as="section"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
+          }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
         >
-          Semua
-        </Link>
-        {PILIHAN_JENIS.map(({ slug, label }) => (
+          17
+        </span>
+        <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            <Compass className="h-3.5 w-3.5" aria-hidden="true" />
+            Modul · Perangkat Ajar
+          </p>
+          <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+            Perangkat Ajar
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuat ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
+
+      <PageReveal as="section" delay={2} className="flex flex-col gap-4">
+        <nav className="flex flex-wrap gap-2" aria-label="Filter Jenis">
           <Link
-            key={slug}
-            href={`/dashboard/perangkat-ajar?jenis=${slug}`}
-            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-              jenisFilter === slug
-                ? "bg-primary text-primary-foreground"
-                : "border border-input bg-background hover:bg-accent"
+            href="/dashboard/perangkat-ajar"
+            className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+              jenisFilter === null
+                ? "bg-accent text-accent-foreground"
+                : "border border-border bg-card text-foreground hover:border-accent/40 hover:text-accent"
             }`}
           >
-            {label}
+            Semua
           </Link>
-        ))}
-      </nav>
+          {PILIHAN_JENIS.map(({ slug, label }) => (
+            <Link
+              key={slug}
+              href={`/dashboard/perangkat-ajar?jenis=${slug}`}
+              className={`inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                jenisFilter === slug
+                  ? "bg-accent text-accent-foreground"
+                  : "border border-border bg-card text-foreground hover:border-accent/40 hover:text-accent"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </PageReveal>
 
       {bolehBuat ? (
-        <FormPerangkatAjar
-          action={buatPerangkatAjarAction}
-          daftarMapel={daftarMapel}
-          daftarTingkat={daftarTingkat}
-        />
+        <PageReveal as="section" delay={2}>
+          <FormPerangkatAjar
+            action={buatPerangkatAjarAction}
+            daftarMapel={daftarMapel}
+            daftarTingkat={daftarTingkat}
+          />
+        </PageReveal>
       ) : null}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          {jenisFilter ? LABEL_JENIS[jenisFilter] : "Daftar Perangkat Ajar"}
-        </h2>
+      <PageReveal as="section" delay={3} className="flex flex-col gap-5">
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+          >
+            01
+          </span>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            {jenisFilter ? LABEL_JENIS[jenisFilter] : "Daftar Perangkat Ajar"}
+          </h2>
+        </div>
         <DaftarPerangkatAjar
           daftar={daftar}
           bolehUbah={bolehUbah}
           verifikasiAction={verifikasiDokumenAiAction}
         />
-      </div>
-    </section>
+      </PageReveal>
+    </div>
   );
 }

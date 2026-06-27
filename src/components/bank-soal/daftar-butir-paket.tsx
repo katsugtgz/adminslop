@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { CardHover } from "@/components/motion";
 import type { ButirSoal, PaketSoalButir } from "@/db/schema";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 
@@ -28,7 +29,7 @@ export function DaftarButirPaket({
 }) {
   if (members.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Butir Soal dalam Paket ini.
       </p>
     );
@@ -40,19 +41,20 @@ export function DaftarButirPaket({
         const butir = butirMap.get(m.butirSoalId);
         const jenis = butir?.jenis as JenisButirSoal | undefined;
         return (
-          <li
+          <CardHover
+            as="li"
             key={m.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm hover:border-accent/40"
           >
             <div className="flex flex-wrap items-center gap-3">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
                 {m.urutan}
               </span>
               <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-medium">
+                <span className="text-sm font-medium text-foreground">
                   {butir ? butir.pertanyaan : "(Butir hilang)"}
                 </span>
-                <span className="text-xs text-muted-foreground">
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                   {jenis ? LABEL_JENIS_BUTIR[jenis] : ""}
                   {butir ? ` · Kunci: ${butir.kunciJawaban}` : ""}
                 </span>
@@ -77,7 +79,7 @@ export function DaftarButirPaket({
                 </form>
               ) : null}
             </div>
-          </li>
+          </CardHover>
         );
       })}
     </ol>

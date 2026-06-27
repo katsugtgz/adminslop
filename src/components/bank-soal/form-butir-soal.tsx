@@ -47,10 +47,12 @@ export function FormButirSoal({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Buat Butir Soal</h2>
+        <h2 className="font-display text-2xl tracking-tight text-foreground">
+          Buat Butir Soal
+        </h2>
         <p className="text-xs text-muted-foreground">
           Butir Soal dapat digunakan ulang lintas Paket Soal.
         </p>
@@ -68,7 +70,7 @@ export function FormButirSoal({
           id="butir-mapel"
           name="mataPelajaranId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="" disabled>
             Pilih Mata Pelajaran
@@ -89,7 +91,7 @@ export function FormButirSoal({
           id="butir-tingkat"
           name="tingkatId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="">Tanpa Tingkat</option>
           {tingkat.map((t) => (
@@ -108,7 +110,7 @@ export function FormButirSoal({
           id="butir-jenis"
           name="jenis"
           defaultValue="pg"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {PILIHAN_JENIS_BUTIR.map(({ slug, label }) => (
             <option key={slug} value={slug}>
@@ -127,7 +129,7 @@ export function FormButirSoal({
           name="pertanyaan"
           rows={3}
           required
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -140,7 +142,7 @@ export function FormButirSoal({
           name="pilihan"
           rows={3}
           placeholder='{"A":"...","B":"...","C":"...","D":"..."}'
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg border border-input bg-background px-3 py-2 font-mono text-xs ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         <span className="text-xs text-muted-foreground">
           Opsional — objek JSON pilihan jawaban.
@@ -156,7 +158,7 @@ export function FormButirSoal({
           name="kunciJawaban"
           type="text"
           required
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -168,7 +170,7 @@ export function FormButirSoal({
           id="butir-pembahasan"
           name="pembahasan"
           rows={3}
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 

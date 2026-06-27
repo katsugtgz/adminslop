@@ -2,6 +2,7 @@ import { Archive } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { CardHover } from "@/components/motion";
 import type { ButirSoal } from "@/db/schema";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 
@@ -13,7 +14,7 @@ const LABEL_STATUS: Record<string, string> = {
 };
 
 const BADGE_STATUS: Record<string, string> = {
-  aktif: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  aktif: "bg-success/15 text-success",
   arsip: "bg-muted text-muted-foreground",
 };
 
@@ -37,7 +38,7 @@ export function DaftarButirSoal({
 }) {
   if (butir.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Butir Soal.
       </p>
     );
@@ -48,15 +49,18 @@ export function DaftarButirSoal({
       {butir.map((b) => {
         const jenis = b.jenis as JenisButirSoal;
         return (
-          <li
+          <CardHover
+            as="li"
             key={b.id}
-            className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm hover:border-accent/40"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
-              <div className="flex flex-col gap-1">
-                <span className="text-sm font-semibold">{b.pertanyaan}</span>
+              <div className="flex flex-col gap-1.5">
+                <span className="text-sm font-semibold text-foreground">
+                  {b.pertanyaan}
+                </span>
                 <span className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs text-muted-foreground">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     {LABEL_JENIS_BUTIR[jenis]}
                   </span>
                   <span
@@ -74,7 +78,7 @@ export function DaftarButirSoal({
               <div className="flex flex-wrap gap-2">
                 <Link
                   href={`${baseHref}&butirId=${b.id}`}
-                  className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+                  className="text-xs font-medium text-accent underline-offset-4 hover:underline"
                 >
                   Lihat detail
                 </Link>
@@ -93,7 +97,7 @@ export function DaftarButirSoal({
             <div className="text-xs text-muted-foreground">
               Kunci: <span className="font-mono">{b.kunciJawaban}</span>
             </div>
-          </li>
+          </CardHover>
         );
       })}
     </ul>
