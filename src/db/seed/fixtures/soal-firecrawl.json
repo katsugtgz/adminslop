@@ -1,0 +1,37 @@
+[
+  {
+    "_sumber": "firecrawl-fixture (contoh hasil scrape). Lihat scrape-soal.mjs untuk reproduksi.",
+    "_url": "https://example.edu/bank-soal",
+    "_ambil": "2026-06-27",
+    "mapelKode": "MTK",
+    "tingkatUrutan": 7,
+    "jenis": "pg",
+    "pertanyaan": "Keliling persegi panjang dengan panjang 12 cm dan lebar 8 cm adalah ...",
+    "pilihan": { "A": "20 cm", "B": "40 cm", "C": "96 cm", "D": "48 cm" },
+    "kunciJawaban": "B",
+    "pembahasan": "K = 2 × (p + l) = 2 × 20 = 40 cm."
+  },
+  {
+    "_sumber": "firecrawl-fixture",
+    "mapelKode": "IPAS",
+    "tingkatUrutan": 7,
+    "jenis": "pg",
+    "pertanyaan": "Planet terdekat dengan matahari dalam tata surya adalah ...",
+    "pilihan": { "A": "Venus", "B": "Bumi", "C": "Merkurius", "D": "Mars" },
+    "kunciJawaban": "C"
+  },
+  {
+    "mapelKode": "MTK",
+    "tingkatUrutan": 8,
+    "jenis": "isian",
+    "pertanyaan": "Hasil dari (-8) + 5 adalah ...",
+    "kunciJawaban": "-3"
+  },
+  {
+    "mapelKode": "BIN",
+    "tingkatUrutan": 7,
+    "jenis": "essay",
+    "pertanyaan": "Tuliskan tiga ciri teks deskripsi.",
+    "kunciJawaban": "Menggambarkan objek, menggunakan kesan/sifat, bersifat subjektif (rubrik 3 poin)."
+  }
+]
