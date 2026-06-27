@@ -1,0 +1,23 @@
+src/app/panduan/page.tsx
+  s_201fb0ef798f55::t_dae2a153922dd8 3-11,14,22-30,33-187
+src/app/dashboard/bantuan/page.tsx
+  s_201fb0ef798f55::t_2a3d8d26b5eceb 2-3,5,13-35,37-190
+src/app/bantuan/page.tsx
+  s_201fb0ef798f55::t_58e7d04924c92d 2-3,5,12-34,36-189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "959af9cee2bb535a835ba395c54c7e8771655e77",
+  "prompts": {},
+  "sessions": {
+    "s_201fb0ef798f55": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f981d58fffeIe8DK9qLdfaVLP",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
