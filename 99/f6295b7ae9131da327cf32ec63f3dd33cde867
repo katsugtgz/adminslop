@@ -1,0 +1,29 @@
+src/components/tur-awal.tsx
+  s_7a37a6bbc65000::t_a390f5f0787f6d 14,16,23
+src/components/pusat-bantuan.tsx
+  s_7a37a6bbc65000::t_0f1677f989e03d 6,10
+src/components/tur-awal.test.tsx
+  s_7a37a6bbc65000::t_88523483552497 59,71
+src/app/dashboard/pengaturan/page.test.tsx
+  s_7a37a6bbc65000::t_6dae3eab1e55c4 147
+src/app/dashboard/pengaturan/page.tsx
+  s_7a37a6bbc65000::t_011083d8b6141d 52,57
+src/app/dashboard/bantuan/page.tsx
+  s_7a37a6bbc65000::t_52a518c1f51fcf 16,20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "99f6295b7ae9131da327cf32ec63f3dd33cde867",
+  "prompts": {},
+  "sessions": {
+    "s_7a37a6bbc65000": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f69d5833ffeStb7RbPjzLWiII",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
