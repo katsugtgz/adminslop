@@ -1,9 +1,25 @@
 // Safety guard: refuse destructive seed against non-local DB hosts unless
 // SEED_FORCE=true. Prevents accidental `npm run db:seed` against staging/prod.
 
-const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "db", "postgres"]);
+const LOOPBACK_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 
-/** Parse hostname dari connection string Postgres. Null bila URL rusak. */
+function normalizeHost(host: string): string {
+  // URL.hostname returns bracketed [::1] for IPv6 literal; strip brackets
+  // supaya match dengan allowlist unbracketed.
+  return host.startsWith("[") && host.endsWith("]") ? host.slice(1, -1) : host;
+}
+
+function allowedSeedHosts(): Set<string> {
+  // Loopback selalu diizinkan; alias container (db/postgres) opt-in via
+  // SEED_LOCAL_HOSTS biar tak bisa bypass SEED_FORCE di orchestration env.
+  const optIn = (process.env.SEED_LOCAL_HOSTS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return new Set([...LOOPBACK_HOSTS, ...optIn]);
+}
+
+/** Parse hostname (unbracketed) dari connection string Postgres. Null bila URL rusak. */
 export function parseHost(connUrl: string): string | null {
   try {
     // pg connection strings selalu punya scheme (postgres(ql)://...); prefix
@@ -12,16 +28,17 @@ export function parseHost(connUrl: string): string | null {
       ? connUrl
       : `postgres://${connUrl}`;
     const host = new URL(withScheme).hostname;
-    return host === "" ? null : host;
+    if (host === "") return null;
+    return normalizeHost(host);
   } catch {
     return null;
   }
 }
 
-/** True bila host connection string termasuk allowlist host lokal/dev. */
+/** True bila host connection string loopback atau SEED_LOCAL_HOSTS opt-in. */
 export function isLocalHost(connUrl: string): boolean {
   const host = parseHost(connUrl);
-  return host !== null && LOCAL_HOSTS.has(host);
+  return host !== null && allowedSeedHosts().has(host);
 }
 
 /**
@@ -33,11 +50,48 @@ export function assertLocalOrForced(label: string, connUrl: string): void {
   // tunnel SSH ke staging dev). Harus diset sadar, bukan default.
   if (process.env.SEED_FORCE === "true") return;
   const host = parseHost(connUrl);
-  if (host === null || !LOCAL_HOSTS.has(host)) {
+  if (host === null || !allowedSeedHosts().has(host)) {
     console.error(
       `[seed] ${label} host "${host ?? "??"}" bukan host lokal. ` +
         "Seed destruktif (migrasi + cleanupTenant + re-insert). " +
-        "Untuk paksa, set SEED_FORCE=true.",
+        "Untuk paksa, set SEED_FORCE=true; untuk alias container (db/postgres), " +
+        "set SEED_LOCAL_HOSTS=db,postgres.",
+    );
+    process.exit(1);
+  }
+}
+
+/**
+ * Target DB (host:port/pathname) untuk perbandingan same-DB. Null bila URL rusak.
+ * Credentials diabaikan; port default 5432 bila tidak disebut.
+ */
+export function dbTarget(connUrl: string): string | null {
+  try {
+    const withScheme = /^[a-z]+:\/\//i.test(connUrl)
+      ? connUrl
+      : `postgres://${connUrl}`;
+    const url = new URL(withScheme);
+    if (url.hostname === "") return null;
+    return `${normalizeHost(url.hostname)}:${url.port || "5432"}${url.pathname}`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Exit(1) bila MIG_URL dan APP_URL menunjuk database berbeda. Migrasi +
+ * cleanupTenant jalan di MIG; insert data di APP — mismatch = data inkonsisten.
+ */
+export function assertSameDb(migUrl: string, appUrl: string): void {
+  const migTarget = dbTarget(migUrl);
+  const appTarget = dbTarget(appUrl);
+  // null ditangani assertLocalOrForced; lewati bila URL rusak.
+  if (migTarget === null || appTarget === null) return;
+  if (migTarget !== appTarget) {
+    console.error(
+      `[seed] DATABASE_MIGRATOR_URL (${migTarget}) dan DATABASE_URL (${appTarget}) ` +
+        "harus menunjuk database yang sama. Migrasi + cleanup jalan di MIG, " +
+        "insert data di APP — mismatch = data inkonsisten.",
     );
     process.exit(1);
   }
