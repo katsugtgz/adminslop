@@ -1,0 +1,23 @@
+src/components/cetak/daftar-template.tsx
+  s_53dbe59341d25a::t_edfa5c7f80200f 48
+src/components/beban-mengajar/daftar-wali-kelas.tsx
+  s_53dbe59341d25a::t_eefff7ec3f5005 45
+src/components/kurikulum/daftar-kurikulum.tsx
+  s_53dbe59341d25a::t_3a23f9307f8524 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "7cb77ddeed4a0d9eb6de8f2fa175730d7a780995",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
