@@ -1,0 +1,28 @@
+playwright.config.ts
+  s_61b7ffbc831b37::t_6024221dfce844 1-49
+e2e/mvp-tracer.spec.ts
+  s_61b7ffbc831b37::t_1bb4a4caa34bd3 1-166
+package.json
+  s_61b7ffbc831b37::t_ae5e5e8567e47a 13-14
+  s_61b7ffbc831b37::t_d898147238d3e9 40
+e2e/lib/console-guard.ts
+  s_61b7ffbc831b37::t_0161b948e7df7b 1-53
+package-lock.json
+  s_61b7ffbc831b37::t_d75bd74b7addf5 28,2250-2265,8258-8303
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "4205b7468bcb9da15e733e991cc5251a7815b6d9",
+  "prompts": {},
+  "sessions": {
+    "s_61b7ffbc831b37": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6c39279ffe9SlL4OZvdZCBqA",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
