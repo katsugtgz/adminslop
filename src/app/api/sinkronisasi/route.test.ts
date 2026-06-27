@@ -47,7 +47,13 @@ const mocks = vi.hoisted(() => {
         where: (expr: unknown) => {
           const rows = tableRows.get(table) ?? [];
           const preds = collectEqualities(expr);
-          if (preds.length === 0) return rows;
+          // Fail closed: bila mock tak bisa deteksi equality pred, throw —
+          // jangan return all rows (silent pass bila prod lupa .where(eq(...))).
+          if (preds.length === 0) {
+            throw new Error(
+              "Mock .where() received no supported equality predicates.",
+            );
+          }
           return rows.filter((r) => {
             const row = r as Record<string, unknown>;
             return preds.every(
