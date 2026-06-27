@@ -44,11 +44,16 @@ export function FormPermintaan({ action }: { action: ServerAksi }) {
     >
       <div className="flex flex-col gap-1">
         <h2 className="font-display text-2xl tracking-tight text-foreground">
-          Permintaan AI Baru
+          Permintaan AI Baru{" "}
+          <span className="align-middle font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            (mode demo)
+          </span>
         </h2>
         <p className="text-xs text-muted-foreground">
-          Buat permintaan konten AI. Draf yang dihasilkan perlu diverifikasi
-          sebelum digunakan.
+          Buat permintaan konten AI. Saat ini{" "}
+          <strong className="font-medium text-foreground">mode demo</strong>:
+          draf contoh dihasilkan tanpa LLM nyata (lihat ADR 0003). Draf yang
+          dihasilkan tetap perlu diverifikasi sebelum digunakan.
         </p>
       </div>
 
