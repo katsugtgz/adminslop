@@ -1,12 +1,14 @@
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
 import pg from "pg";
-import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { eq, sql } from "drizzle-orm";
+import { beforeAll, describe, expect, expectTypeOf, it } from "vitest";
 
 import { catatAudit, createDb, withTenant, type Db } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import type { RoleSlug } from "../lib/auth/types";
 
 // Load .env (Node native; no-op if missing).
 try {
@@ -100,5 +102,86 @@ describeOrSkip("tenant DB/RLS spine (#3)", () => {
     await expect(
       db.insert(schema.contohCatatan).values({ judul: "tanpa tenant" })
     ).rejects.toThrow();
+  });
+
+  // Invariant #3 (DB layer): a superuser/BYPASSRLS role skips RLS, collapsing
+  // tenant isolation. Assert the app role has neither (per docker/init.sql).
+  itOrSkip("app connection role is non-superuser with no BYPASSRLS (RLS cannot be bypassed)", async () => {
+    const result = await db.execute(sql`
+      select rolname, rolsuper, rolbypassrls, rolcreatedb, rolcreaterole
+      from pg_roles where rolname = current_user
+    `);
+    const role = result.rows[0];
+    expect(role, "current_user role row must exist").toBeDefined();
+    expect(role!.rolname).toBe("app_user");
+    expect(role!.rolsuper).toBe(false);
+    expect(role!.rolbypassrls).toBe(false);
+    expect(role!.rolcreatedb).toBe(false);
+    expect(role!.rolcreaterole).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Static identity invariants (#7): no-DB source/catalog checks. These always
+// run — they guard against regressions even when DATABASE_URL is absent.
+// ---------------------------------------------------------------------------
+
+const SRC_ROOT = path.join(process.cwd(), "src");
+
+function collectSourceFiles(dir: string, acc: string[] = []): string[] {
+  for (const entry of readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      collectSourceFiles(full, acc);
+    } else if (/\.(ts|tsx)$/.test(entry)) {
+      acc.push(full);
+    }
+  }
+  return acc;
+}
+
+const SOURCE_FILES = collectSourceFiles(SRC_ROOT);
+const isTestFile = (f: string) => /\.test\.(ts|tsx)$/.test(f);
+const isClientComponent = (content: string) =>
+  /^\s*['"]use client['"]/.test(content);
+
+describe("identity invariants — static source checks (#7, no DB)", () => {
+  // Invariant #3 (type layer): 'superuser' must never be a RoleSlug (would
+  // grant cross-tenant reach). NOTE: this assertion is enforced by
+  // `npm run typecheck`, not `vitest run`; the source scan below is the
+  // runtime guard.
+  it("RoleSlug type excludes 'superuser'", () => {
+    expectTypeOf<"superuser">().not.toMatchTypeOf<RoleSlug>();
+  });
+
+  // Invariant #3 (runtime): catches `as any`/dynamic 'superuser' role
+  // assignments the type check cannot see.
+  it("no source file assigns 'superuser' to a tenant_role field", () => {
+    const roleAssign = /(peran_akses|peranAkses|role_slug|roleSlug|tenant_role)\s*[:=]\s*['"]superuser['"]/;
+    const offenders = SOURCE_FILES.filter((f) => {
+      if (isTestFile(f)) return false;
+      return roleAssign.test(readFileSync(f, "utf8"));
+    }).map((f) => path.relative(SRC_ROOT, f));
+    expect(offenders).toEqual([]);
+  });
+
+  // Invariant #4: server secrets must never ship in a client bundle.
+  it("no client component ('use client') references any WORKOS_ env var", () => {
+    const offenders = SOURCE_FILES.filter((f) => {
+      const content = readFileSync(f, "utf8");
+      return isClientComponent(content) && /WORKOS_/.test(content);
+    }).map((f) => path.relative(SRC_ROOT, f));
+    expect(offenders).toEqual([]);
+  });
+
+  // Invariant #4: a NEXT_PUBLIC_WORKOS_(API_KEY|COOKIE_PASSWORD) would be
+  // inlined into every bundle at build time.
+  it("no source file exposes a NEXT_PUBLIC_WORKOS server secret", () => {
+    const publicSecret = /NEXT_PUBLIC_WORKOS_(API_KEY|COOKIE_PASSWORD)/;
+    const offenders = SOURCE_FILES.filter((f) => {
+      if (isTestFile(f)) return false;
+      return publicSecret.test(readFileSync(f, "utf8"));
+    }).map((f) => path.relative(SRC_ROOT, f));
+    expect(offenders).toEqual([]);
   });
 });
