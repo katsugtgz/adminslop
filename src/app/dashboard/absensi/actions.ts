@@ -120,6 +120,21 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
   const sumberQrRaw = String(formData.get("sumberQr") ?? "").trim();
   const sumberQr = sumberQrRaw || undefined;
 
+  // Task #15 guardrail (AC#3 audit-trail integrity): a row marked
+  // `metode_input='qr'` MUST carry a non-empty `sumber_qr` session token.
+  // Without this invariant, a hostile client could persist a row as
+  // "qr-captured" with no provenance — defeating the AC#3 audit trail that
+  // `ubahAbsensi` preserves. The future live-camera scanner UI will supply
+  // both fields together (Task #15); until then, manual entry simply omits
+  // `metodeInput` (defaults to 'manual' in the repo). NOTE: `sumberQr` is
+  // NEVER used to derive tenant scope (identity doc §13) — `withTenant`
+  // below uses `akses.membership.orgId` regardless of this value, so a
+  // tenant-B QR token posted to tenant-A's action resolves to a tenant-A
+  // row carrying a meaningless string, never a cross-tenant leak.
+  if (metodeInput === "qr" && !sumberQr) {
+    throw new Error("Token Sesi QR wajib diisi untuk metode input 'qr'.");
+  }
+
   // 3. Execute under tenant scope + audit. orgId from membership ONLY.
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

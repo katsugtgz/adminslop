@@ -718,3 +718,109 @@ describe("I. C3 ownership via wali_kelas (beban absent)", () => {
     expect(catatAudit).toHaveBeenCalledTimes(1);
   });
 });
+
+// ===========================================================================
+// J. Task #15 — QR data-path guardrail. Two invariants that must hold BEFORE
+// the live-camera scanner UI lands:
+//   (a) `metode_input='qr'` REQUIRES a non-empty `sumber_qr` token (audit-
+//       trail integrity for AC#3 — a row with no provenance defeats the
+//       correctable invariant).
+//   (b) A `sumberQr` value carrying tenant B's marker, posted to tenant A's
+//       action, does NOT leak tenant scope — `withTenant` uses
+//       `akses.membership.orgId` regardless (identity doc §13). Mirrors the
+//       test 18 pattern, specialized to the QR field.
+// ===========================================================================
+
+describe("J. Task #15 — QR guardrail (sumberQr required + cross-tenant deny)", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+  });
+
+  it("25. catatAbsensiAction + metodeInput=qr WITHOUT sumberQr -> throws /sumberQr wajib/i; no write", async () => {
+    // AC#3 audit-trail integrity: a row marked qr-captured with no session
+    // token defeats the correctable invariant. The guard rejects BEFORE any
+    // DB work — no withTenant, no catatAbsensi, no audit.
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+          metodeInput: "qr",
+          // sumberQr intentionally OMITTED
+        })
+      )
+    ).rejects.toThrow(/Token Sesi QR wajib diisi/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("26. catatAbsensiAction + metodeInput=qr + EMPTY sumberQr (whitespace) -> throws /sumberQr wajib/i", async () => {
+    // The guard must catch whitespace-only sumberQr, not just missing —
+    // String().trim() collapsed it to empty, which is the same hole.
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+          metodeInput: "qr",
+          sumberQr: "   ",
+        })
+      )
+    ).rejects.toThrow(/Token Sesi QR wajib diisi/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+  });
+
+  it("27. cross-tenant QR token: sumberQr carries tenant B marker, withTenant still uses membership.orgId (org_A); catatAbsensi called under tenant A scope", async () => {
+    // The hostile scenario: an attacker (or a confused UI) posts a sumberQr
+    // value that encodes tenant B's identifier, hoping it will route the
+    // write to tenant B. The action MUST ignore sumberQr for tenant scope
+    // and use akses.membership.orgId exclusively (identity doc §13).
+    // `sumberQr` IS still persisted (as opaque provenance) on the tenant-A
+    // row — never used to resolve the tenant.
+    await catatAbsensiAction(
+      formData({
+        pesertaDidikId: "pd_1",
+        rombonganBelajarId: "rombel_1",
+        tanggal: "2026-04-01",
+        statusKehadiran: "hadir",
+        metodeInput: "qr",
+        sumberQr: "qr-session-TENANT_B_SECRET_TOKEN",
+      })
+    );
+
+    // withTenant used membership.orgId ("org_A"), NEVER the victim id
+    // embedded in the sumberQr string.
+    expect(withTenant).toHaveBeenCalledTimes(1);
+    expect(withTenant).toHaveBeenCalledWith(DB, "org_A", expect.anything());
+    expect(withTenant).not.toHaveBeenCalledWith(
+      DB,
+      "TENANT_B",
+      expect.anything()
+    );
+    expect(withTenant).not.toHaveBeenCalledWith(
+      DB,
+      "org_B",
+      expect.anything()
+    );
+
+    // The QR row WAS written — under tenant A scope, carrying the opaque
+    // token as provenance. The cross-tenant deny is "no leak", not "no
+    // write"; the token is meaningless outside tenant A.
+    expect(catatAbsensi).toHaveBeenCalledWith(fakeTxRef, {
+      pesertaDidikId: "pd_1",
+      rombonganBelajarId: "rombel_1",
+      tanggal: "2026-04-01",
+      statusKehadiran: "hadir",
+      metodeInput: "qr",
+      catatan: undefined,
+      sumberQr: "qr-session-TENANT_B_SECRET_TOKEN",
+      dibuatOleh: "workos_u_1",
+    });
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+});
