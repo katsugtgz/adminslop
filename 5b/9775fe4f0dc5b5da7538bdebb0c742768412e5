@@ -1,0 +1,75 @@
+src/components/cetak/kontrol-cetak.tsx
+  s_1ff5d9db00094a::t_1a3c5026aa372b 39,42,48
+src/components/cetak/form-template.tsx
+  s_1ff5d9db00094a::t_8688509f05d061 21,24
+src/components/penilaian/daftar-komponen-nilai.tsx
+  s_1ff5d9db00094a::t_84cf29c52f3a24 39,53,57,60
+src/components/eraport/daftar-eraport.tsx
+  s_1ff5d9db00094a::t_c55dff1a0fe24c 15,17,19
+  s_1ff5d9db00094a::t_50f60b843719ae 65,81
+src/components/pembatasan-akses.tsx
+  s_1ff5d9db00094a::t_b7ac53f00976d8 5,13-24,26,29,31-41,46-47,50,55
+src/app/dashboard/peserta-didik/[id]/page.tsx
+  s_1ff5d9db00094a::t_4d4254c3ffb8c0 98-113,116,119,126-152,154-155,159,161,167,173,179,185,194,196-197,199,201-202,211,213-214,226,228-229,237-258
+  s_1ff5d9db00094a::t_316dd9c93b0010 20
+src/components/cetak/daftar-template.tsx
+  s_1ff5d9db00094a::t_4a216da866f94f 37,48,53,57,65
+src/components/eraport/detail-eraport.tsx
+  s_1ff5d9db00094a::t_c95fb2bb351bac 80,82,85
+  s_1ff5d9db00094a::t_0af3fe004f6a07 23-24,31
+src/components/penilaian/form-penilaian.tsx
+  s_1ff5d9db00094a::t_3f71e379b85e21 25,30
+src/components/eraport/form-draf.tsx
+  s_1ff5d9db00094a::t_d835990a0ffb54 24,27
+src/app/dashboard/peserta-didik/page.tsx
+  s_1ff5d9db00094a::t_dcf7f19653a52f 9
+  s_1ff5d9db00094a::t_acb782da0a23ae 64-90,92-96,98-107,113-114
+src/components/dashboard-aktif.tsx
+  s_1ff5d9db00094a::t_451dda3bd81583 658
+  s_1ff5d9db00094a::t_934810c137de40 36
+  s_1ff5d9db00094a::t_c28c3c8761fe89 282,304,326,348,370,392,414,436,459,481,505,528,550,573,595,617,639
+  s_1ff5d9db00094a::t_7daaa65bbc0934 190-195,197-205,207-229,231-235,237,240-248,251-256,259,262-269,275
+  s_1ff5d9db00094a::t_692ac7ffa3c554 279,301,323,345,367,389,411,433,456,478,502,525,547,570,592,614,636
+src/app/dashboard/eraport/page.tsx
+  s_1ff5d9db00094a::t_6f8075f702ad81 93-119,122-126,130-135,138-147,157,160
+  s_1ff5d9db00094a::t_8567dbc3f57d77 10
+src/components/penilaian/form-nilai.tsx
+  s_1ff5d9db00094a::t_7d7097010f1a6a 45,58
+src/components/penilaian/daftar-penilaian.tsx
+  s_1ff5d9db00094a::t_92cfc8d23b7a60 37,53,57,60
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/page.tsx
+  s_1ff5d9db00094a::t_12d65dbce6baef 58-83,85-88
+  s_1ff5d9db00094a::t_e0d64e42e5c66f 9
+src/components/penilaian/form-komponen-nilai.tsx
+  s_1ff5d9db00094a::t_96ea02fc8bad93 31,36
+src/app/dashboard/cetak/page.tsx
+  s_1ff5d9db00094a::t_18f1edff45418a 14
+  s_1ff5d9db00094a::t_6a21377e375b1d 71-106,108,110-111,113,124,137,140-146,149-150,152,160,164,177-198
+src/components/penilaian/daftar-nilai-akhir.tsx
+  s_1ff5d9db00094a::t_97b17b2f0ad9f6 30,37,40-41,44,47,54-55,58-61,63
+src/components/eraport/form-revisi.tsx
+  s_1ff5d9db00094a::t_04318e0bdc4cd2 22,25
+src/components/pilih-satuan-pendidikan.tsx
+  s_1ff5d9db00094a::t_ad5c1e708ecc65 5,19-21,23-26,31,55,63,75
+  s_1ff5d9db00094a::t_5e1deea5a02c99 22,33-39,41-47,49-54,56-62,65-74
+src/app/dashboard/penilaian/page.tsx
+  s_1ff5d9db00094a::t_faba30ce695e40 38
+  s_1ff5d9db00094a::t_bbc035f763d63b 254-281,284-287,289-331,334-335,337,339,350,354,364,376,381-386,389-390,398,400-401,406,413-418,421-422,431,436-437,446,451,453-473
+  s_1ff5d9db00094a::t_483cb95b71c965 184-195,199-211
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "5b9775fe4f0dc5b5da7538bdebb0c742768412e5",
+  "prompts": {},
+  "sessions": {
+    "s_1ff5d9db00094a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f981d56affeb0k9trglaKe09x",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
