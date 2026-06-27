@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# All secret values are either GitHub secret references or obviously-fake
+# placeholders (sk_test_dummy, dev-role credentials from .env.example). No real
+# credentials live in this file.
+env:
+  WORKOS_API_KEY: ${{ secrets.WORKOS_API_KEY || 'sk_test_dummy' }}
+  WORKOS_CLIENT_ID: ${{ secrets.WORKOS_CLIENT_ID || 'test_client_dummy' }}
+  WORKOS_COOKIE_PASSWORD: ${{ secrets.WORKOS_COOKIE_PASSWORD || 'dummy_cookie_password_for_ci_build_only_not_real' }}
+  # Postgres service-container credentials. Matches docker/init.sql + .env.example
+  # dev defaults (app_user is a non-superuser role so RLS is enforced).
+  DATABASE_URL: postgresql://app_user:app_password@localhost:5432/eduadmin
+  DATABASE_MIGRATOR_URL: postgresql://postgres:postgres@localhost:5432/eduadmin
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: eduadmin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d eduadmin"
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Mirrors docker/init.sql: creates the non-superuser app role so the app
+      # connection (DATABASE_URL) enforces RLS instead of bypassing it.
+      - name: Provision app_user role
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d eduadmin -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'app_user') THEN CREATE ROLE app_user WITH LOGIN PASSWORD 'app_password'; END IF; END \$\$;"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - run: npx vitest run
