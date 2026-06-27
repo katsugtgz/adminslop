@@ -295,8 +295,9 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     expect(konten!.namaSatuanPendidikan).toBe("Satuan Pendidikan Cetak A");
     expect(konten!.npsn).toBe("20XXXXXA");
     expect(konten!.logoUrl).toBe("https://a.example/logo.png");
-    // Preferensi.
-    expect(konten!.formatPreferensi).toBe("A4");
+    // Preferensi. DB stores "A4" (uppercase); getKontenCetak normalises to the
+    // lowercase FormatCetak type so PratinjauEraport's `=== "a4"` branch matches.
+    expect(konten!.formatPreferensi).toBe("a4");
     // Default template resolved.
     expect(konten!.template).not.toBeNull();
     expect(konten!.template!.id).toBe(templateId);
@@ -327,7 +328,7 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     );
     expect(konten).not.toBeNull();
     expect(konten!.template).toBeNull();
-    expect(konten!.formatPreferensi).toBe("F4");
+    expect(konten!.formatPreferensi).toBe("f4");
   });
 
   // 7. RLS isolation: SEED_B cannot see/mutate SEED_A's template or dokumen.
