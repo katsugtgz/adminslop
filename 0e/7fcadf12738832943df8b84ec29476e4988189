@@ -1,0 +1,21 @@
+src/components/motion/page-reveal.tsx
+  s_53dbe59341d25a::t_8757abbe691657 10-12,15,17-21,34,44-47
+src/components/motion/card-hover.tsx
+  s_53dbe59341d25a::t_115f9e858ea2f7 7-8,15,17-21,24,32,36-43,45-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0e7fcadf12738832943df8b84ec29476e4988189",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
