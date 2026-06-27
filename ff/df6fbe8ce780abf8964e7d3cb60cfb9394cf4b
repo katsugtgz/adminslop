@@ -1,0 +1,31 @@
+src/lib/offline/guard.ts
+  s_332d41a7a3a7dd::t_222fd886949ab8 6-20,25-35,37,41-43,46-52,55-57,70-79,82-83,87,93-96
+src/lib/offline/README.md
+  s_75639438b1330a::t_82700bfc0c9804 1-119
+src/lib/offline/guard.test.ts
+  s_332d41a7a3a7dd::t_222fd886949ab8 5,12-20,33-36,38-44,47-49,52-55,58-59,61,64,66-71,74,79,84,86-96,98,104-106,109,111-119,124,134-136,139,141-143,147-150,152
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "ffdf6fbe8ce780abf8964e7d3cb60cfb9394cf4b",
+  "prompts": {},
+  "sessions": {
+    "s_332d41a7a3a7dd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b3d180ffeJon5mp3UnO7fgV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_75639438b1330a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b36297ffeclqEgyjEH2iJGg",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
