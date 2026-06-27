@@ -1,0 +1,46 @@
+.gitignore
+  s_53dbe59341d25a::t_8549e9f4d978b5 76-80
+  s_53dbe59341d25a::t_ca36ad18d3acfe 37-38
+src/components/main-nav.tsx
+  s_53dbe59341d25a::t_599cd1c144a448 31
+  s_53dbe59341d25a::t_597c11bef3682c 1-30,32-46,48-66,68-84,86-101
+  s_53dbe59341d25a::t_a26bf5d13c31e7 47
+  s_53dbe59341d25a::t_49ee40df710675 85
+  s_53dbe59341d25a::t_806ee1cad5d5ae 67
+src/components/motion/card-hover.tsx
+  s_53dbe59341d25a::t_f352dd5da77321 1-41
+src/components/motion/page-reveal.tsx
+  s_53dbe59341d25a::t_82ac8e8560a774 1-40
+src/app/layout.tsx
+  s_53dbe59341d25a::t_eff607575098ed 2-6,12-13,15-23,27,29,39,52
+package.json
+  s_53dbe59341d25a::t_f007ba5f18608c 26
+src/components/motion/shimmer-text.tsx
+  s_53dbe59341d25a::t_6f66a531ca16c6 1-29
+src/components/motion/text-stagger.tsx
+  s_53dbe59341d25a::t_1c45ea865608b0 1-10,13,15-16,18-37,41-56
+  s_53dbe59341d25a::t_b4d95cd6c24e17 11-12,14,17,38-40
+src/app/globals.css
+  s_53dbe59341d25a::t_db12712211f804 5-13,15-27,29-30,32-88,92-119,122-135,137,157-160,181-184,191,194-237,241-511
+  s_53dbe59341d25a::t_dd7e3395df5058 512
+src/components/motion/index.ts
+  s_53dbe59341d25a::t_34ce958fbf3ec8 1-16
+package-lock.json
+  s_53dbe59341d25a::t_613f64174032d9 18,6179-6205,7664-7704
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f289ccc9d70b8ae835289279330470ea36845220",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
