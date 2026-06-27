@@ -21,11 +21,27 @@ export const metadata: Metadata = {
 
 const LANGKAH: {
   judul: string;
+  detail: string;
   ikon: React.ComponentType<{ className?: string }>;
 }[] = [
-  { judul: "Pengguna masuk dengan akun yang terdaftar.", ikon: LogIn },
-  { judul: "Pengguna memilih Satuan Pendidikan Aktif.", ikon: School },
-  { judul: "Pengguna mulai mengelola Peserta Didik dan Nilai.", ikon: Users },
+  {
+    judul: "Masuk dengan akun Anda",
+    detail:
+      "Gunakan tombol Masuk di pojok kanan atas. Akun terdaftar diberi Keanggotaan ke Satuan Pendidikan oleh Admin Anda.",
+    ikon: LogIn,
+  },
+  {
+    judul: "Pilih Satuan Pendidikan Aktif",
+    detail:
+      "Jika Anda memiliki lebih dari satu Keanggotaan, pilih Satuan Pendidikan yang ingin Anda kelola. Data antar Satuan Pendidikan selalu terisolasi.",
+    ikon: School,
+  },
+  {
+    judul: "Kelola Peserta Didik dan Nilai",
+    detail:
+      "Buka modul Peserta Didik untuk mencatat data, lalu modul Penilaian untuk Komponen Nilai dan Nilai Akhir. Hasilnya dapat dicetak melalui E-Raport.",
+    ikon: Users,
+  },
 ];
 
 export default function PanduanPage() {
@@ -75,9 +91,16 @@ export default function PanduanPage() {
           />
 
           <p className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl md:text-2xl">
-            Halaman ini akan menjadi titik masuk <strong>Tur Awal</strong> dan
-            <strong> Bantuan Kontekstual</strong> bagi Pengguna baru. Konten
-            lengkap akan ditambahkan ketika modul mulai aktif.
+            Tiga langkah untuk mulai mengelola Satuan Pendidikan Anda: masuk,
+            pilih Satuan Pendidikan Aktif, lalu kelola Peserta Didik dan Nilai.
+            Butuh jawaban lebih rinci? Lanjutkan ke{" "}
+            <Link
+              href="/bantuan"
+              className="font-medium text-foreground underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Pusat Bantuan
+            </Link>
+            .
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
@@ -150,8 +173,11 @@ export default function PanduanPage() {
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <p className="mt-auto pt-4 text-pretty text-muted-foreground sm:text-lg">
+                  <h3 className="mt-auto pt-4 font-display text-lg tracking-tight text-foreground sm:text-xl">
                     {step.judul}
+                  </h3>
+                  <p className="mt-2 text-pretty text-sm text-muted-foreground sm:text-base">
+                    {step.detail}
                   </p>
                 </CardHover>
               </li>
