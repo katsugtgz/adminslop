@@ -1,0 +1,19 @@
+docs/adr/0002-pii-at-rest-strategy.md
+  s_4d2fa5820aab43::t_4cbf52837edf53 1-273
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "46dbb1cf6712ccad02eceaf0b53ab05002f5d8d5",
+  "prompts": {},
+  "sessions": {
+    "s_4d2fa5820aab43": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6c39276ffejWJZxFSdXKWjv3",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
