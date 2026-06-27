@@ -8,6 +8,7 @@ import {
   assertPemilikBeban,
   assertPemilikRombongan,
   bebanIdDariPenilaian,
+  KepemilikanError,
   type AksesAktif,
 } from "@/lib/auth/kepemilikan";
 import { DraftAbsensiSchema, DraftNilaiSchema } from "@/lib/offline/schemas";
@@ -319,14 +320,18 @@ export async function POST(req: Request): Promise<NextResponse<ResponsSinkronisa
       );
       return NextResponse.json<ResponsSinkronisasi>(hasil);
     } catch (err) {
-      // C1: ownership denial (or chain resolution "not found") — the guru does
-      // not own the target Beban Mengajar. 403, never 500.
+      // C1: ownership denial — the guru does not own the target Beban Mengajar.
+      // KepemilikanError -> 403 (Bahasa message preserved); anything else is a
+      // DB/programming/audit failure -> 500 with a generic message (no leak).
+      if (err instanceof KepemilikanError) {
+        return NextResponse.json<ResponsSinkronisasi>(
+          { status: "error", pesan: err.message },
+          { status: 403 }
+        );
+      }
       return NextResponse.json<ResponsSinkronisasi>(
-        {
-          status: "error",
-          pesan: err instanceof Error ? err.message : "Terjadi kesalahan.",
-        },
-        { status: 403 }
+        { status: "error", pesan: "Terjadi kesalahan." },
+        { status: 500 }
       );
     }
   }
@@ -359,12 +364,17 @@ export async function POST(req: Request): Promise<NextResponse<ResponsSinkronisa
       return NextResponse.json<ResponsSinkronisasi>(hasil);
     } catch (err) {
       // C3: ownership denial — the guru does not own the target Rombongan Belajar.
+      // KepemilikanError -> 403 (Bahasa message preserved); anything else is a
+      // DB/programming/audit failure -> 500 with a generic message (no leak).
+      if (err instanceof KepemilikanError) {
+        return NextResponse.json<ResponsSinkronisasi>(
+          { status: "error", pesan: err.message },
+          { status: 403 }
+        );
+      }
       return NextResponse.json<ResponsSinkronisasi>(
-        {
-          status: "error",
-          pesan: err instanceof Error ? err.message : "Terjadi kesalahan.",
-        },
-        { status: 403 }
+        { status: "error", pesan: "Terjadi kesalahan." },
+        { status: 500 }
       );
     }
   }

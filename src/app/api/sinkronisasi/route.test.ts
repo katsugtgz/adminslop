@@ -18,7 +18,23 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 const mocks = vi.hoisted(() => {
   const tableRows = new Map<unknown, unknown[]>();
   const fakeTxLocal = {
-    select: () => ({ from: (table: unknown) => tableRows.get(table) ?? [] }),
+    // kepemilikan.ts resolvers now push indexed `.where(...)` filters to the
+    // DB. In tests the trailing JS `.find` in each helper does the final pick,
+    // so `.where` returns the full fixture set unchanged. `insert`/`update`
+    // are spies so deny tests can assert the post-gate write never runs.
+    select: () => ({
+      from: (table: unknown) => ({
+        where: () => tableRows.get(table) ?? [],
+      }),
+    }),
+    insert: vi.fn(() => ({
+      values: () => ({ returning: async () => [{ id: "mock_row" }] }),
+    })),
+    update: vi.fn(() => ({
+      set: () => ({
+        where: () => ({ returning: async () => [{ id: "mock_row" }] }),
+      }),
+    })),
   };
   return {
     getAksesSaya: vi.fn(),
@@ -173,6 +189,8 @@ beforeEach(() => {
   getDb.mockReset();
   withTenant.mockReset();
   catatAudit.mockReset();
+  fakeTxRef.insert.mockClear();
+  fakeTxRef.update.mockClear();
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTxRef));
   catatAudit.mockResolvedValue(undefined);
@@ -201,6 +219,11 @@ describe("C1: guru-A syncing guru-B's nilai -> 403 (ownership denied)", () => {
     expect(res.status).toBe(403);
     const body = await res.json();
     expect(body.status).toBe("error");
+    // Ownership message surfaces verbatim (KepemilikanError -> 403 path).
+    expect(body.pesan).toBe("Anda tidak memiliki izin untuk Beban Mengajar ini.");
+    // Gate denies BEFORE any write — the post-gate DB write + audit never run.
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
   });
 });
@@ -227,6 +250,11 @@ describe("C3: guru-A syncing guru-B's rombel absensi -> 403 (ownership denied)",
     expect(res.status).toBe(403);
     const body = await res.json();
     expect(body.status).toBe("error");
+    // Ownership message surfaces verbatim (KepemilikanError -> 403 path).
+    expect(body.pesan).toBe("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
+    // Gate denies BEFORE any write — the post-gate DB write + audit never run.
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
   });
 });

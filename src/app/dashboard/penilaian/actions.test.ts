@@ -20,7 +20,14 @@ const mocks = vi.hoisted(() => {
   // Per-table fixture rows, keyed by the real dbSchema table object reference.
   const tableRows = new Map<unknown, unknown[]>();
   const fakeTxLocal = {
-    select: () => ({ from: (table: unknown) => tableRows.get(table) ?? [] }),
+    // kepemilikan.ts resolvers push indexed `.where(...)` filters to the DB;
+    // in tests the trailing JS `.find` in each helper does the final pick, so
+    // `.where` returns the full fixture set unchanged.
+    select: () => ({
+      from: (table: unknown) => ({
+        where: () => tableRows.get(table) ?? [],
+      }),
+    }),
   };
   return {
     getAksesSaya: vi.fn(),

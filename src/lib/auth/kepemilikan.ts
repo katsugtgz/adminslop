@@ -25,11 +25,12 @@
  * GUC `app.tenant_id`. A cross-tenant id simply resolves to "not found" (a
  * deny). `orgId` is NEVER read from client input.
  *
- * Resolvers use `tx.select().from(table)` + a JS `.find` by id (NOT a `.where`
- * query) deliberately: the repos expose no `cari*ById`, this layer composes
- * from the schema directly, and the bounded tenant makes a full scan correct.
- * An indexed `cari*ById` repo helper would optimize them once permitted.
+ * Resolvers use indexed `tx.select().from(table).where(eq(table.id, id))`
+ * lookups (the bounded tenant + RLS scopes all reads). A trailing JS `.find`
+ * is retained as a defensive safety net over the already-filtered result set.
  */
+
+import { and, eq } from "drizzle-orm";
 
 import { dbSchema, type Tx } from "@/db/client";
 import type {
@@ -45,6 +46,18 @@ import type { AksesSaya } from "./akses-saya";
 
 /** The "active" branch of {@linkcode AksesSaya} (post status check). */
 export type AksesAktif = Extract<AksesSaya, { status: "active" }>;
+
+/**
+ * Ownership-denial error — lets callers (e.g. the sync route) distinguish a
+ * 403 (ownership gate) from a 500 (DB/programming/audit) via `instanceof`,
+ * without inspecting message text.
+ */
+export class KepemilikanError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "KepemilikanError";
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Beban Mengajar ownership chain resolvers (Penilaian surface).
@@ -62,7 +75,10 @@ async function cariBebanMengajarById(
   tx: Tx,
   id: string
 ): Promise<BebanMengajar | null> {
-  const rows = await tx.select().from(dbSchema.bebanMengajar);
+  const rows = await tx
+    .select()
+    .from(dbSchema.bebanMengajar)
+    .where(eq(dbSchema.bebanMengajar.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
@@ -71,13 +87,19 @@ async function cariKomponenNilaiById(
   tx: Tx,
   id: string
 ): Promise<KomponenNilai | null> {
-  const rows = await tx.select().from(dbSchema.komponenNilai);
+  const rows = await tx
+    .select()
+    .from(dbSchema.komponenNilai)
+    .where(eq(dbSchema.komponenNilai.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
 /** Find a penilaian by id. */
 async function cariPenilaianById(tx: Tx, id: string): Promise<Penilaian | null> {
-  const rows = await tx.select().from(dbSchema.penilaian);
+  const rows = await tx
+    .select()
+    .from(dbSchema.penilaian)
+    .where(eq(dbSchema.penilaian.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
@@ -86,7 +108,10 @@ async function cariNilaiById(
   tx: Tx,
   id: string
 ): Promise<NilaiPesertaDidik | null> {
-  const rows = await tx.select().from(dbSchema.nilaiPesertaDidik);
+  const rows = await tx
+    .select()
+    .from(dbSchema.nilaiPesertaDidik)
+    .where(eq(dbSchema.nilaiPesertaDidik.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
@@ -138,12 +163,12 @@ export async function assertPemilikBeban(
 
   const myPtkId = akses.pengguna?.ptkId ?? null;
   if (!myPtkId) {
-    throw new Error("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
+    throw new KepemilikanError("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
   }
   const bebanMengajarId = await bebanResolver();
   const beban = await cariBebanMengajarById(tx, bebanMengajarId);
   if (!beban || beban.ptkId !== myPtkId) {
-    throw new Error("Anda tidak memiliki izin untuk Beban Mengajar ini.");
+    throw new KepemilikanError("Anda tidak memiliki izin untuk Beban Mengajar ini.");
   }
 }
 
@@ -168,7 +193,15 @@ async function cariBebanMengajarByRombelDanPtk(
   rombonganBelajarId: string,
   ptkId: string
 ): Promise<BebanMengajar | null> {
-  const rows = await tx.select().from(dbSchema.bebanMengajar);
+  const rows = await tx
+    .select()
+    .from(dbSchema.bebanMengajar)
+    .where(
+      and(
+        eq(dbSchema.bebanMengajar.rombonganBelajarId, rombonganBelajarId),
+        eq(dbSchema.bebanMengajar.ptkId, ptkId)
+      )
+    );
   return (
     rows.find(
       (r) => r.rombonganBelajarId === rombonganBelajarId && r.ptkId === ptkId
@@ -182,7 +215,15 @@ async function cariWaliKelasByRombelDanPtk(
   rombonganBelajarId: string,
   ptkId: string
 ): Promise<WaliKelas | null> {
-  const rows = await tx.select().from(dbSchema.waliKelas);
+  const rows = await tx
+    .select()
+    .from(dbSchema.waliKelas)
+    .where(
+      and(
+        eq(dbSchema.waliKelas.rombonganBelajarId, rombonganBelajarId),
+        eq(dbSchema.waliKelas.ptkId, ptkId)
+      )
+    );
   return (
     rows.find(
       (r) => r.rombonganBelajarId === rombonganBelajarId && r.ptkId === ptkId
@@ -195,13 +236,19 @@ async function cariRombonganBelajarById(
   tx: Tx,
   id: string
 ): Promise<RombonganBelajar | null> {
-  const rows = await tx.select().from(dbSchema.rombonganBelajar);
+  const rows = await tx
+    .select()
+    .from(dbSchema.rombonganBelajar)
+    .where(eq(dbSchema.rombonganBelajar.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
 /** Find an absensi_harian by id (for resolving id -> rombonganBelajarId). */
 async function cariAbsensiById(tx: Tx, id: string): Promise<{ rombonganBelajarId: string | null } | null> {
-  const rows = await tx.select().from(dbSchema.absensiHarian);
+  const rows = await tx
+    .select()
+    .from(dbSchema.absensiHarian)
+    .where(eq(dbSchema.absensiHarian.id, id));
   return rows.find((r) => r.id === id) ?? null;
 }
 
@@ -244,7 +291,7 @@ export async function assertPemilikRombongan(
 
   const myPtkId = akses.pengguna?.ptkId ?? null;
   if (!myPtkId) {
-    throw new Error("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
+    throw new KepemilikanError("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
   }
   const rombonganBelajarId = await rombonganResolver();
   // Existence is implicit: a missing rombel has no assignment rows, so both
@@ -255,6 +302,6 @@ export async function assertPemilikRombongan(
   const beban = await cariBebanMengajarByRombelDanPtk(tx, rombonganBelajarId, myPtkId);
   const wali = await cariWaliKelasByRombelDanPtk(tx, rombonganBelajarId, myPtkId);
   if (!beban && !wali) {
-    throw new Error("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
+    throw new KepemilikanError("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
   }
 }
