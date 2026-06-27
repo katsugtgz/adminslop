@@ -1,0 +1,25 @@
+src/db/seed/guard.test.ts
+  s_53dbe59341d25a::t_bc8e4f6e7bd04d 1-72
+src/db/seed/guard.ts
+  s_53dbe59341d25a::t_1cae6e801638ce 1-13,16-44
+  s_53dbe59341d25a::t_d261aee917de2a 14-15
+src/db/seed/cli.ts
+  s_53dbe59341d25a::t_2e7982dd74f275 8
+  s_53dbe59341d25a::t_851edc4eef64f7 30-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "219ab5cc51929eca25f319d95acd4614d47058a3",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
