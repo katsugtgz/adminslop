@@ -10,7 +10,7 @@ export function NavAuth() {
 
   if (loading) {
     return (
-      <span className="text-sm text-muted-foreground" aria-live="polite">
+      <span className="text-sm text-foreground/70" aria-live="polite">
         Memuat…
       </span>
     );
