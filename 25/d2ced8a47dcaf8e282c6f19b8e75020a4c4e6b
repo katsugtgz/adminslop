@@ -1,0 +1,66 @@
+src/components/perangkat-ajar/kontrol-verifikasi-ai.tsx
+  s_c219ad101846d9::t_0453dfcd165544 48-60
+  s_c219ad101846d9::t_04bf9f33b22641 4,16-18,43,45,65-66
+src/app/dashboard/bank-soal/page.tsx
+  s_c219ad101846d9::t_6f597566e60707 252-257
+  s_c219ad101846d9::t_f39213108f8b61 2,13
+  s_c219ad101846d9::t_310e8ead3771d6 218-223
+  s_c219ad101846d9::t_a58be6a341be51 144-159,161-201,203-215,217,224-226,245,247-251,258-260,277-278,289,302-303,310-316
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_c219ad101846d9::t_f7b8fc150aa3c7 4,21-23,27-29,66,82-83,85,89,92-100,102,108,142
+src/components/absensi/rekap-absensi.tsx
+  s_c219ad101846d9::t_3abc412eca69c7 23,37,40-41,44,47,50,53,56,63-64,67-71
+src/components/bank-soal/form-tambah-butir.tsx
+  s_c219ad101846d9::t_bb9756387a7bba 28,37,41,44,52,68,78,85,95
+src/app/dashboard/perangkat-ajar/page.tsx
+  s_c219ad101846d9::t_3460eff683a9c3 2,16
+  s_c219ad101846d9::t_407c49e5d0f428 99-114,116-135,137-141,144,146-160,163-169,172-183,189-190
+src/components/bank-soal/form-butir-soal.tsx
+  s_c219ad101846d9::t_e1b2d474c96d0f 50,53-55,73,94,113,132,145,161,173
+src/app/dashboard/absensi/page.tsx
+  s_c219ad101846d9::t_eef028b3d70486 2,17
+  s_c219ad101846d9::t_51156e6a3a017a 191-206,208-236,248-282,284-295,301,305-316,328,332,337,339-350,352,355
+src/components/bank-soal/daftar-butir-paket.tsx
+  s_c219ad101846d9::t_ba1cfd596ba77b 4,32,44-45,47,50,54,57,82
+src/components/perangkat-ajar/form-perangkat-ajar.tsx
+  s_c219ad101846d9::t_515681782a44b4 49,52,69,87,108,131,144,160
+src/components/bank-soal/daftar-paket-soal.tsx
+  s_c219ad101846d9::t_d3ba220c66178b 3,26,37-38,40,43-46,53,57
+src/components/bank-soal/daftar-butir-soal.tsx
+  s_c219ad101846d9::t_4188bb9cf32ce7 5,17,41,52-53,55,58-61,63,81,100
+src/components/permintaan-ai/kartu-kuota.tsx
+  s_c219ad101846d9::t_d684369f5c5d52 16,18-28,41,44-48
+src/components/absensi/form-absensi.tsx
+  s_c219ad101846d9::t_1a22d4e1d461fb 45,59,68,70,81,89,101,110
+src/components/permintaan-ai/form-permintaan.tsx
+  s_c219ad101846d9::t_9afdd082ad0491 43,46-48,63,82
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_c219ad101846d9::t_2243202028636e 2,4,28,43-44,47,53,55-58,62,68
+src/components/bank-soal/form-paket-soal.tsx
+  s_c219ad101846d9::t_ec19a4039ee3a0 24,27-29,44,56,77,96,117
+src/components/permintaan-ai/kartu-draf.tsx
+  s_c219ad101846d9::t_e0cd0637ece176 83
+  s_c219ad101846d9::t_6a76f2871df8f2 4,19,22-24,54,56,75-76,88
+  s_c219ad101846d9::t_7bdd11b93956aa 59-71
+src/components/perangkat-ajar/daftar-perangkat-ajar.tsx
+  s_c219ad101846d9::t_1cf527404d7e18 4,25,34-35,37,41-42,57
+src/app/dashboard/permintaan-ai/page.tsx
+  s_c219ad101846d9::t_148ef47caf5622 90-123,126-130,133-135,137-141,143-154,164,167
+  s_c219ad101846d9::t_2e89919cb22b09 1-2,12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "25d2ced8a47dcaf8e282c6f19b8e75020a4c4e6b",
+  "prompts": {},
+  "sessions": {
+    "s_c219ad101846d9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f981d51dffeYW5X6ie0N7XvHv",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
