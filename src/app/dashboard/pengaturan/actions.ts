@@ -11,6 +11,7 @@ import { canAdminSatuanPendidikan } from "@/lib/auth/otorisasi";
 import {
   getActiveTenantContext,
   getAuthenticatedUserId,
+  requireAuth,
 } from "@/lib/auth/server";
 import {
   PengaturanSatuanPendidikanSchema,
@@ -29,6 +30,7 @@ const PENGATURAN_PATH = "/dashboard/pengaturan";
 export async function simpanProfilSatuanPendidikanAction(
   formData: FormData,
 ): Promise<void> {
+  await requireAuth();
   const ctx = await getActiveTenantContext();
   if (ctx.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -76,6 +78,7 @@ export async function simpanProfilSatuanPendidikanAction(
 export async function simpanPengaturanSatuanPendidikanAction(
   formData: FormData,
 ): Promise<void> {
+  await requireAuth();
   const ctx = await getActiveTenantContext();
   if (ctx.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
