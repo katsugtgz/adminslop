@@ -1,0 +1,22 @@
+src/app/panduan/page.test.tsx
+  s_f38687804bcfdc::t_2a4cb9ccc5fec0 45-50
+  s_f38687804bcfdc::t_0a2398424cf856 1-44,51-52
+src/app/panduan/page.tsx
+  s_f38687804bcfdc::t_386073deecaf31 24,27-44,94-103,176,178-180
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "e637231d0f40e96fa43da604fcbb7c9569ded307",
+  "prompts": {},
+  "sessions": {
+    "s_f38687804bcfdc": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f096f-1c90-77d5-8eae-968b95979856",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
