@@ -1,0 +1,21 @@
+src/components/permintaan-ai/form-permintaan.tsx
+  s_332d41a7a3a7dd::t_222fd886949ab8 47-50,53-56
+docs/adr/0003-mvp-ai-strategy.md
+  s_332d41a7a3a7dd::t_52b4bbc4b6561b 1-313
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "67986c1fc205caa292ecc34548428c47aef9f600",
+  "prompts": {},
+  "sessions": {
+    "s_332d41a7a3a7dd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b3d180ffeJon5mp3UnO7fgV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
