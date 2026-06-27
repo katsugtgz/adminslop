@@ -1,0 +1,23 @@
+src/app/dashboard/penilaian/actions.test.ts
+  s_53dbe59341d25a::t_ea4530ec756ac8 52-58
+src/app/dashboard/absensi/actions.test.ts
+  s_53dbe59341d25a::t_06fdd4cf70c10d 54-60
+src/app/api/sinkronisasi/route.test.ts
+  s_53dbe59341d25a::t_701daa0d3244e6 50-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "a485b257fed56cf6a3fa790888da5a36c441ef0b",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
