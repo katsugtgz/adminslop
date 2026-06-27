@@ -27,38 +27,40 @@ export function DaftarNilaiAkhir({
 }) {
   if (nilaiAkhir.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
         Belum ada Nilai Akhir.
       </p>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground shadow-sm">
+    <div className="overflow-x-auto rounded-2xl border border-border/60 bg-card text-card-foreground shadow-warm">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-border text-left text-xs text-muted-foreground">
-            <th scope="col" className="p-3 font-medium">
+          <tr className="border-b border-border text-left font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+            <th scope="col" className="p-3 font-medium sm:p-4">
               Nama
             </th>
-            <th scope="col" className="p-3 font-medium">
+            <th scope="col" className="p-3 font-medium sm:p-4">
               Nilai Akhir
             </th>
-            <th scope="col" className="p-3 font-medium">
+            <th scope="col" className="p-3 font-medium sm:p-4">
               Rincian
             </th>
           </tr>
         </thead>
         <tbody>
           {nilaiAkhir.map((n) => (
-            <tr key={n.pesertaDidikId} className="border-b border-border">
-              <td className="p-3 font-medium">
+            <tr key={n.pesertaDidikId} className="border-b border-border/60 transition-colors last:border-0 hover:bg-accent/[0.03]">
+              <td className="p-3 font-medium sm:p-4">
                 {pesertaNama.get(n.pesertaDidikId) ?? "—"}
               </td>
-              <td className="p-3 tabular-nums">{n.nilaiAkhir}</td>
-              <td className="p-3">
+              <td className="p-3 font-display text-base tabular-nums text-foreground sm:p-4">
+                {n.nilaiAkhir}
+              </td>
+              <td className="p-3 sm:p-4">
                 <details>
-                  <summary className="cursor-pointer text-xs text-muted-foreground hover:text-primary">
+                  <summary className="cursor-pointer text-xs text-accent underline-offset-4 hover:underline">
                     Rincian ({n.rincian.length} komponen)
                   </summary>
                   <ul className="mt-2 flex flex-col gap-1">

@@ -1,3 +1,5 @@
+import { KeyRound } from "lucide-react";
+
 import { getDb, withTenant } from "@/db/client";
 import { listPengguna, listPtk, loadAksesPengguna } from "@/db/queries/akses";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
@@ -5,6 +7,7 @@ import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { DaftarPengguna } from "@/components/akses/daftar-pengguna";
 import { DaftarPtk } from "@/components/akses/daftar-ptk";
 import { FormPtkBaru } from "@/components/akses/form-ptk-baru";
+import { PageReveal } from "@/components/motion";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 
@@ -83,29 +86,68 @@ export default async function Page() {
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Manajemen Akses</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehKelola ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <section className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative flex flex-col gap-3">
+          <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+            <KeyRound className="h-3.5 w-3.5" aria-hidden="true" />
+            Modul Akses
+          </p>
+          <h1 className="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Manajemen Akses
+          </h1>
+          <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            <span className="font-medium text-foreground">
+              {akses.membership.roleSlug}
+            </span>
+            {bolehKelola ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      {bolehKelola && <FormPtkBaru action={simpanPtkBaruAction} />}
+      {bolehKelola && (
+        <PageReveal delay={2}>
+          <FormPtkBaru action={simpanPtkBaruAction} />
+        </PageReveal>
+      )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Daftar PTK</h2>
+      <PageReveal delay={2} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground sm:text-xs">
+            01 — Personel
+          </p>
+          <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
+            Daftar PTK
+          </h2>
+        </div>
         <DaftarPtk
           ptks={ptks}
           bolehKelola={bolehKelola}
           hapusAction={hapusPtkAction}
         />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Daftar Pengguna</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground sm:text-xs">
+            02 — Pengguna &amp; Izin
+          </p>
+          <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
+            Daftar Pengguna
+          </h2>
+        </div>
         <DaftarPengguna
           penggunas={penggunas}
           bolehKelola={bolehKelola}
@@ -115,7 +157,7 @@ export default async function Page() {
           aturIzinAction={aturIzinAksesAction}
           aturPembatasanAction={aturPembatasanAksesAction}
         />
-      </div>
+      </PageReveal>
     </section>
   );
 }

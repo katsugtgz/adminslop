@@ -27,18 +27,20 @@ export function PeringatanKonflik({
   return (
     <div
       role="alert"
-      className="flex flex-col gap-2 rounded-xl border border-destructive/30 bg-destructive/5 p-4"
+      className="t-lift flex flex-col gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 shadow-warm hover:border-destructive/50 md:p-5"
     >
-      <div className="flex items-start gap-2">
-        <AlertTriangle
-          className="mt-0.5 h-5 w-5 shrink-0 text-destructive"
+      <div className="flex items-start gap-3">
+        <span
           aria-hidden="true"
-        />
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-destructive/10 text-destructive"
+        >
+          <AlertTriangle className="h-5 w-5" />
+        </span>
         <div className="flex flex-col gap-1">
-          <h3 className="text-sm font-semibold text-destructive">
+          <h3 className="font-display text-base tracking-tight text-destructive">
             Konflik Sinkronisasi
           </h3>
-          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-xs font-medium text-muted-foreground">{label}</p>
           <p className="text-sm text-foreground">
             {item.error ?? "Terjadi konflik — data server lebih baru."}
           </p>

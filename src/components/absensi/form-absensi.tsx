@@ -42,7 +42,7 @@ export function FormAbsensi({
 }) {
   if (peserta.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Peserta Didik.
       </p>
     );
@@ -56,7 +56,7 @@ export function FormAbsensi({
         return (
           <li
             key={p.id}
-            className="rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm"
           >
             <form action={aksi} className="flex flex-col gap-3">
               <input type="hidden" name="rombonganBelajarId" value={rombonganBelajarId} />
@@ -65,9 +65,9 @@ export function FormAbsensi({
               {row && <input type="hidden" name="id" value={row.id} />}
 
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <span className="text-sm font-semibold">{p.nama}</span>
+                <span className="text-sm font-semibold text-foreground">{p.nama}</span>
                 {row && (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                     Metode Input:{" "}
                     {row.metodeInput === "qr" ? "QR" : "Manual"}
                     {row.sumberQr ? " (koreksi)" : ""}
@@ -78,7 +78,7 @@ export function FormAbsensi({
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor={`status-${p.id}`}
-                  className="text-xs font-medium text-muted-foreground"
+                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
                 >
                   Status Kehadiran
                 </label>
@@ -86,7 +86,7 @@ export function FormAbsensi({
                   id={`status-${p.id}`}
                   name="statusKehadiran"
                   defaultValue={row?.statusKehadiran ?? "hadir"}
-                  className="h-10 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-10 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <option value="hadir">Hadir</option>
                   <option value="izin">Izin</option>
@@ -98,7 +98,7 @@ export function FormAbsensi({
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor={`catatan-${p.id}`}
-                  className="text-xs font-medium text-muted-foreground"
+                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
                 >
                   Catatan
                 </label>
@@ -107,7 +107,7 @@ export function FormAbsensi({
                   name="catatan"
                   type="text"
                   defaultValue={row?.catatan ?? ""}
-                  className="h-10 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="h-10 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>
 

@@ -33,6 +33,7 @@ import {
 import type { Membership } from "@/lib/auth/server";
 
 import { Button } from "@/components/ui/button";
+import { CardHover, PageReveal } from "@/components/motion";
 import { IndikatorOffline } from "@/components/offline/indikator-offline";
 
 /**
@@ -186,69 +187,99 @@ export async function DashboardAktif({
   ].includes("cetak:baca");
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex items-start gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <span
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
           aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-3 select-none font-display text-[8rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[10rem]"
         >
-          <Building2 className="h-6 w-6" />
-        </span>
-        <div className="flex-1">
-          <p className="text-sm text-muted-foreground">Satuan Pendidikan Aktif</p>
-          <h1 className="text-2xl font-bold tracking-tight">
-            {membership.orgName}
-          </h1>
-          <p className="mt-1 inline-flex items-center gap-1 text-sm text-muted-foreground">
-            <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden="true" />
-            Peran Anda: {membership.roleSlug}
-          </p>
-          <div className="mt-2">
-            <IndikatorOffline />
-          </div>
+          00
         </div>
-        <Button asChild variant="outline" size="icon" aria-label="Pusat Bantuan">
-          <Link href="/dashboard/bantuan">
-            <HelpCircle aria-hidden="true" />
-          </Link>
-        </Button>
-      </header>
+        <div className="relative flex items-start gap-4">
+          <span
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground shadow-warm"
+            aria-hidden="true"
+          >
+            <Building2 className="h-6 w-6" />
+          </span>
+          <div className="flex-1">
+            <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+              Satuan Pendidikan Aktif
+            </p>
+            <h1 className="mt-2 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+              {membership.orgName}
+            </h1>
+            <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
+              <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden="true" />
+              Peran Anda: {membership.roleSlug}
+            </p>
+            <div className="mt-3">
+              <IndikatorOffline />
+            </div>
+          </div>
+          <Button asChild variant="outline" size="icon" aria-label="Pusat Bantuan">
+            <Link href="/dashboard/bantuan">
+              <HelpCircle aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+      </PageReveal>
 
       {bolehAtur && (
-        <Link
-          href="/dashboard/pengaturan"
-          className="inline-flex h-11 items-center gap-2 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Settings className="h-4 w-4" aria-hidden="true" />
-          Pengaturan Sekolah
-        </Link>
+        <PageReveal delay={2}>
+          <Link
+            href="/dashboard/pengaturan"
+            className="inline-flex h-11 items-center gap-2 rounded-xl border border-input bg-background px-4 text-sm font-medium shadow-warm transition-colors hover:border-accent/40 hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <Settings className="h-4 w-4" aria-hidden="true" />
+            Pengaturan Sekolah
+          </Link>
+        </PageReveal>
       )}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm">
-          <p className="text-sm text-muted-foreground">Data contoh (tenant)</p>
-          <p className="mt-1 text-2xl font-semibold">
+      <PageReveal delay={3} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <CardHover className="rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm hover:border-accent/40">
+          <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
+            Data contoh (tenant)
+          </p>
+          <p className="mt-2 font-display text-3xl text-foreground">
             {jumlahCatatan === null ? "—" : jumlahCatatan}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="mt-1 text-xs text-muted-foreground">
             Jumlah catatan yang terisolasi per Satuan Pendidikan.
           </p>
-        </div>
-        <div className="rounded-xl border border-border bg-muted/40 p-5">
-          <p className="text-sm font-medium">Modul segera hadir</p>
+        </CardHover>
+        <div className="rounded-2xl border border-dashed border-border bg-accent/[0.03] p-5">
+          <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-accent/80">
+            Segera hadir
+          </p>
+          <p className="mt-2 text-sm font-medium text-foreground">
+            Modul tambahan
+          </p>
           <p className="mt-1 text-xs text-muted-foreground">
             Nilai, E-Raport, dan modul lainnya akan aktif di dalam Satuan
             Pendidikan ini.
           </p>
         </div>
-      </div>
+      </PageReveal>
 
       <nav aria-label="Modul Satuan Pendidikan" className="flex flex-col gap-4">
       {bolehLihatSinkronisasi && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <CloudOff className="h-5 w-5" />
@@ -267,10 +298,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatCetak && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Printer className="h-5 w-5" />
@@ -289,10 +320,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatAbsensi && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <CalendarCheck className="h-5 w-5" />
@@ -311,10 +342,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatPermintaanAi && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Bot className="h-5 w-5" />
@@ -333,10 +364,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatNotifikasi && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Bell className="h-5 w-5" />
@@ -355,10 +386,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatEraport && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <FileText className="h-5 w-5" />
@@ -377,10 +408,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatBankSoal && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <FileQuestion className="h-5 w-5" />
@@ -399,10 +430,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatPerangkatAjar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <BookMarked className="h-5 w-5" />
@@ -422,10 +453,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatPesertaDidik && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Users className="h-5 w-5" />
@@ -444,10 +475,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatImporPesertaDidik && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Upload className="h-5 w-5" />
@@ -468,10 +499,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatRombonganBelajar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <GraduationCap className="h-5 w-5" />
@@ -491,10 +522,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatTahunAjaran && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Calendar className="h-5 w-5" />
@@ -513,10 +544,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatAkses && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <KeyRound className="h-5 w-5" />
@@ -536,10 +567,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatBebanMengajar && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Briefcase className="h-5 w-5" />
@@ -558,10 +589,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatPenilaian && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <ClipboardList className="h-5 w-5" />
@@ -580,10 +611,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatArsip && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <Archive className="h-5 w-5" />
@@ -602,10 +633,10 @@ export async function DashboardAktif({
       )}
 
       {bolehLihatKurikulum && (
-        <div className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div       className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg sm:flex-row sm:items-center sm:justify-between t-lift">
           <div className="flex items-start gap-3">
             <span
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
               aria-hidden="true"
             >
               <BookOpen className="h-5 w-5" />
@@ -624,6 +655,6 @@ export async function DashboardAktif({
         </div>
       )}
       </nav>
-    </section>
+    </div>
   );
 }

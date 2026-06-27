@@ -1,6 +1,7 @@
 import type { PerangkatAjar } from "@/db/schema";
 import type { StatusDokumenAi } from "@/db/queries/perangkat-ajar";
 
+import { CardHover } from "@/components/motion";
 import { KontrolVerifikasiAi } from "./kontrol-verifikasi-ai";
 import { LABEL_JENIS, type ServerAksi } from "./form-perangkat-ajar";
 
@@ -21,7 +22,7 @@ export function DaftarPerangkatAjar({
 }) {
   if (daftar.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Perangkat Ajar.
       </p>
     );
@@ -30,14 +31,15 @@ export function DaftarPerangkatAjar({
   return (
     <ul className="flex flex-col gap-3">
       {daftar.map((p) => (
-        <li
+        <CardHover
+          as="li"
           key={p.id}
-          className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm hover:border-accent/40"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold">{p.judul}</span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-sm font-semibold text-foreground">{p.judul}</span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 {LABEL_JENIS[p.jenis as keyof typeof LABEL_JENIS]} · Mata
                 Pelajaran {p.mataPelajaranId.slice(0, 8)}
               </span>
@@ -52,7 +54,7 @@ export function DaftarPerangkatAjar({
               action={verifikasiAction}
             />
           ) : null}
-        </li>
+        </CardHover>
       ))}
     </ul>
   );

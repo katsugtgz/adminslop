@@ -42,115 +42,25 @@
 
 import { revalidatePath } from "next/cache";
 
-import { catatAudit, dbSchema, getDb, withTenant } from "@/db/client";
-import type { Tx } from "@/db/client";
-import type {
-  BebanMengajar,
-  KomponenNilai,
-  NilaiPesertaDidik,
-  Penilaian,
-} from "@/db/schema";
+import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatKomponenNilai, hapusKomponenNilai } from "@/db/queries/komponen-nilai";
 import { buatPenilaian, hapusPenilaian } from "@/db/queries/penilaian";
 import { hapusNilai, upsertNilai } from "@/db/queries/nilai-peserta-didik";
-import { getAksesSaya, type AksesSaya } from "@/lib/auth/akses-saya";
+import { getAksesSaya } from "@/lib/auth/akses-saya";
+import {
+  assertPemilikBeban,
+  bebanIdDariKomponen,
+  bebanIdDariNilai,
+  bebanIdDariPenilaian,
+} from "@/lib/auth/kepemilikan";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
 
-/** The "active" branch of {@linkcode AksesSaya} (post status check). */
-type AksesAktif = Extract<AksesSaya, { status: "active" }>;
-
 // ---------------------------------------------------------------------------
-// Ownership chain resolvers (private).
-//
-// The repos expose list/create/update/delete but no `cari*ById`, and this layer
-// cannot touch src/db. These helpers resolve a single row by id via a tenant-
-// scoped SELECT (RLS hides cross-tenant rows) and `.find` in TS. Bounded by the
-// tenant, they are correct; an indexed `cari*ById` repo helper would optimize
-// them once permitted.
+// Ownership guards + chain resolvers now live in `@/lib/auth/kepemilikan` so
+// the sync route (`/api/sinkronisasi`) enforces the SAME AC#4 gate (C1) without
+// duplicating the logic. See that module for the ownership model.
 // ---------------------------------------------------------------------------
-
-/** Find a beban_mengajar by id (tenant-scoped via the surrounding withTenant). */
-async function cariBebanMengajarById(
-  tx: Tx,
-  id: string
-): Promise<BebanMengajar | null> {
-  const rows = await tx.select().from(dbSchema.bebanMengajar);
-  return rows.find((r) => r.id === id) ?? null;
-}
-
-/** Find a komponen_nilai by id. */
-async function cariKomponenNilaiById(
-  tx: Tx,
-  id: string
-): Promise<KomponenNilai | null> {
-  const rows = await tx.select().from(dbSchema.komponenNilai);
-  return rows.find((r) => r.id === id) ?? null;
-}
-
-/** Find a penilaian by id. */
-async function cariPenilaianById(tx: Tx, id: string): Promise<Penilaian | null> {
-  const rows = await tx.select().from(dbSchema.penilaian);
-  return rows.find((r) => r.id === id) ?? null;
-}
-
-/** Find a nilai_peserta_didik by id. */
-async function cariNilaiById(
-  tx: Tx,
-  id: string
-): Promise<NilaiPesertaDidik | null> {
-  const rows = await tx.select().from(dbSchema.nilaiPesertaDidik);
-  return rows.find((r) => r.id === id) ?? null;
-}
-
-/** Resolve komponen_nilai(id) -> beban_mengajar id. Throws when absent. */
-async function bebanIdDariKomponen(tx: Tx, komponenNilaiId: string): Promise<string> {
-  const kn = await cariKomponenNilaiById(tx, komponenNilaiId);
-  if (!kn) throw new Error("Komponen Nilai tidak ditemukan.");
-  return kn.bebanMengajarId;
-}
-
-/** Resolve penilaian(id) -> komponen_nilai -> beban_mengajar id. */
-async function bebanIdDariPenilaian(tx: Tx, penilaianId: string): Promise<string> {
-  const p = await cariPenilaianById(tx, penilaianId);
-  if (!p) throw new Error("Penilaian tidak ditemukan.");
-  return bebanIdDariKomponen(tx, p.komponenNilaiId);
-}
-
-/** Resolve nilai(id) -> penilaian -> komponen_nilai -> beban_mengajar id. */
-async function bebanIdDariNilai(tx: Tx, nilaiId: string): Promise<string> {
-  const n = await cariNilaiById(tx, nilaiId);
-  if (!n) throw new Error("Nilai tidak ditemukan.");
-  return bebanIdDariPenilaian(tx, n.penilaianId);
-}
-
-/**
- * AC#4 OWNERSHIP GATE (gate 2). Resolves the target Beban Mengajar via
- * `bebanResolver` and confirms the active guru owns it. Admin (`akses:kelola`)
- * manages every Beban Mengajar school-wide and short-circuits WITHOUT resolving
- * (no DB hit, no check). A guru without a linked PTK is refused outright.
- *
- * `bebanResolver` is lazy so admin never pays the chain-resolution cost.
- */
-async function assertPemilikBeban(
-  tx: Tx,
-  akses: AksesAktif,
-  bebanResolver: () => Promise<string>
-): Promise<void> {
-  // Admin bypass: manages all Beban Mengajar. (Not a superuser — the role gate
-  // already bound, and pembatasan can still deny at gate 1.)
-  if (akses.boleh("akses:kelola").diizinkan) return;
-
-  const myPtkId = akses.pengguna?.ptkId ?? null;
-  if (!myPtkId) {
-    throw new Error("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
-  }
-  const bebanMengajarId = await bebanResolver();
-  const beban = await cariBebanMengajarById(tx, bebanMengajarId);
-  if (!beban || beban.ptkId !== myPtkId) {
-    throw new Error("Anda tidak memiliki izin untuk Beban Mengajar ini.");
-  }
-}
 
 // 1. simpanKomponenNilaiBaruAction ------------------------------------------
 

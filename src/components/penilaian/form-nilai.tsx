@@ -42,7 +42,7 @@ export function FormNilai({
 }) {
   if (peserta.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
         Belum ada Peserta Didik.
       </p>
     );
@@ -55,7 +55,7 @@ export function FormNilai({
         return (
           <li
             key={p.id}
-            className="rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/30 t-lift"
           >
             <form action={action} className="flex flex-col gap-3">
               <input type="hidden" name="penilaianId" value={penilaianId} />

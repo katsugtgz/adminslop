@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { BookText, ChevronRight, Layers } from "lucide-react";
 
+import { PageReveal } from "@/components/motion";
 import { getDb } from "@/db/client";
 import {
   listAlurTujuanPembelajaranByTP,
@@ -135,111 +136,151 @@ export default async function Page({
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Kurikulum</h1>
-        <p className="text-sm text-muted-foreground">
-          Jelajahi Kurikulum Merdeka: Mata Pelajaran, Fase, Capaian, Tujuan, dan
-          Alur Tujuan Pembelajaran.
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
+        >
+          01
+        </span>
+        <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+          <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+            <BookText className="h-3.5 w-3.5" aria-hidden="true" />
+            Referensi
+          </p>
+          <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            Kurikulum
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+            Jelajahi Kurikulum Merdeka: Mata Pelajaran, Fase, Capaian, Tujuan,
+            dan Alur Tujuan Pembelajaran.
+          </p>
+        </div>
+      </PageReveal>
 
       {tampilkanBreadcrumb && (
-        <nav
-          aria-label="breadcrumb"
-          className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/dashboard/kurikulum"
-            className="font-medium text-foreground hover:text-primary"
+        <PageReveal>
+          <nav
+            aria-label="breadcrumb"
+            className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border/60 bg-card/60 px-4 py-3 text-sm text-muted-foreground"
           >
-            Kurikulum
-          </Link>
-          {mapelTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <Link
-                href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(mapelTerpilih.id)}`}
-                className="hover:text-primary"
-              >
-                Mata Pelajaran: {mapelTerpilih.nama}
-              </Link>
-            </>
-          )}
-          {faseTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <Link
-                href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(sp.mapelId!)}&faseId=${encodeURIComponent(faseTerpilih.id)}`}
-                className="hover:text-primary"
-              >
-                Fase: {faseTerpilih.kode}
-              </Link>
-            </>
-          )}
-          {cpTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <Link
-                href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(sp.mapelId!)}${sp.faseId ? `&faseId=${encodeURIComponent(sp.faseId)}` : ""}&cpId=${encodeURIComponent(cpTerpilih.id)}`}
-                className="hover:text-primary"
-              >
-                Capaian Pembelajaran: {cpTerpilih.kode ?? cpTerpilih.elemen ?? "CP"}
-              </Link>
-            </>
-          )}
-          {tpTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <span className="font-medium text-foreground" aria-current="page">
-                Tujuan Pembelajaran: {tpTerpilih.urutan}
-              </span>
-            </>
-          )}
-        </nav>
+            <Layers
+              className="mr-1 h-3.5 w-3.5 text-accent"
+              aria-hidden="true"
+            />
+            <Link
+              href="/dashboard/kurikulum"
+              className="font-medium text-foreground underline-offset-4 hover:text-accent hover:underline"
+            >
+              Kurikulum
+            </Link>
+            {mapelTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <Link
+                  href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(mapelTerpilih.id)}`}
+                  className="underline-offset-4 hover:text-accent hover:underline"
+                >
+                  Mata Pelajaran: {mapelTerpilih.nama}
+                </Link>
+              </>
+            )}
+            {faseTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <Link
+                  href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(sp.mapelId!)}&faseId=${encodeURIComponent(faseTerpilih.id)}`}
+                  className="underline-offset-4 hover:text-accent hover:underline"
+                >
+                  Fase: {faseTerpilih.kode}
+                </Link>
+              </>
+            )}
+            {cpTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <Link
+                  href={`/dashboard/kurikulum?kurikulumId=${encodeURIComponent(sp.kurikulumId!)}&mapelId=${encodeURIComponent(sp.mapelId!)}${sp.faseId ? `&faseId=${encodeURIComponent(sp.faseId)}` : ""}&cpId=${encodeURIComponent(cpTerpilih.id)}`}
+                  className="underline-offset-4 hover:text-accent hover:underline"
+                >
+                  Capaian Pembelajaran: {cpTerpilih.kode ?? cpTerpilih.elemen ?? "CP"}
+                </Link>
+              </>
+            )}
+            {tpTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                <span
+                  className="font-medium text-foreground"
+                  aria-current="page"
+                >
+                  Tujuan Pembelajaran: {tpTerpilih.urutan}
+                </span>
+              </>
+            )}
+          </nav>
+        </PageReveal>
       )}
 
-      <DaftarKurikulum items={kurikulum} selectedId={sp.kurikulumId} />
+      <PageReveal>
+        <DaftarKurikulum items={kurikulum} selectedId={sp.kurikulumId} />
+      </PageReveal>
 
       {sp.kurikulumId && (
-        <DaftarMataPelajaran
-          items={mapel}
-          selectedId={sp.mapelId}
-          kurikulumId={sp.kurikulumId}
-        />
+        <PageReveal>
+          <DaftarMataPelajaran
+            items={mapel}
+            selectedId={sp.mapelId}
+            kurikulumId={sp.kurikulumId}
+          />
+        </PageReveal>
       )}
 
       {sp.mapelId && sp.kurikulumId && (
-        <DaftarFase
-          items={fase}
-          selectedId={sp.faseId}
-          kurikulumId={sp.kurikulumId}
-          mapelId={sp.mapelId}
-        />
+        <PageReveal>
+          <DaftarFase
+            items={fase}
+            selectedId={sp.faseId}
+            kurikulumId={sp.kurikulumId}
+            mapelId={sp.mapelId}
+          />
+        </PageReveal>
       )}
 
       {sp.mapelId && cp.length > 0 && (
-        <DaftarCapaianPembelajaran
-          items={cp}
-          selectedId={sp.cpId}
-          kurikulumId={sp.kurikulumId!}
-          mapelId={sp.mapelId}
-          faseId={sp.faseId}
-        />
+        <PageReveal>
+          <DaftarCapaianPembelajaran
+            items={cp}
+            selectedId={sp.cpId}
+            kurikulumId={sp.kurikulumId!}
+            mapelId={sp.mapelId}
+            faseId={sp.faseId}
+          />
+        </PageReveal>
       )}
 
       {sp.mapelId && sp.cpId && (
-        <DaftarTujuanPembelajaran
-          items={tp}
-          selectedId={sp.tpId}
-          kurikulumId={sp.kurikulumId!}
-          mapelId={sp.mapelId}
-          faseId={sp.faseId}
-          cpId={sp.cpId}
-        />
+        <PageReveal>
+          <DaftarTujuanPembelajaran
+            items={tp}
+            selectedId={sp.tpId}
+            kurikulumId={sp.kurikulumId!}
+            mapelId={sp.mapelId}
+            faseId={sp.faseId}
+            cpId={sp.cpId}
+          />
+        </PageReveal>
       )}
 
-      {sp.tpId && <DaftarAlurTujuanPembelajaran items={atp} />}
-    </section>
+      {sp.tpId && (
+        <PageReveal>
+          <DaftarAlurTujuanPembelajaran items={atp} />
+        </PageReveal>
+      )}
+    </div>
   );
 }

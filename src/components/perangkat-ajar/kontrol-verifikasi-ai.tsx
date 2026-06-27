@@ -1,6 +1,7 @@
 import { AlertTriangle, Check, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ShimmerText } from "@/components/motion";
 import type { StatusDokumenAi } from "@/db/queries/perangkat-ajar";
 
 import type { ServerAksi } from "./form-perangkat-ajar";
@@ -12,10 +13,9 @@ const LABEL_STATUS: Record<NonNullable<StatusDokumenAi>, string> = {
 };
 
 const BADGE_STATUS: Record<NonNullable<StatusDokumenAi>, string> = {
-  menunggu: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  disetujui:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  ditolak: "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300",
+  menunggu: "bg-warning/25 text-warning-foreground",
+  disetujui: "bg-success/15 text-success",
+  ditolak: "bg-destructive/12 text-destructive",
 };
 
 /**
@@ -40,22 +40,30 @@ export function KontrolVerifikasiAi({
   if (statusDokumenAi === null) return null;
 
   return (
-    <div className="flex flex-col gap-2 rounded-md border border-dashed border-border bg-muted/40 p-3">
+    <div className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-medium text-muted-foreground">
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           Dokumen AI Belum Diverifikasi
         </span>
-        <span
-          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STATUS[statusDokumenAi]}`}
-        >
-          {LABEL_STATUS[statusDokumenAi]}
-        </span>
+        {statusDokumenAi === "menunggu" ? (
+          <ShimmerText
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STATUS.menunggu}`}
+          >
+            {LABEL_STATUS.menunggu}
+          </ShimmerText>
+        ) : (
+          <span
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${BADGE_STATUS[statusDokumenAi]}`}
+          >
+            {LABEL_STATUS[statusDokumenAi]}
+          </span>
+        )}
       </div>
 
       {statusDokumenAi === "menunggu" ? (
         <>
-          <p className="flex items-start gap-1.5 text-xs text-amber-700 dark:text-amber-400">
-            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <p className="flex items-start gap-1.5 text-xs text-warning-foreground/90">
+            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" aria-hidden="true" />
             Konten AI belum diverifikasi tidak dapat digunakan sebagai dokumen
             resmi.
           </p>

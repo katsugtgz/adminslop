@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { CardHover, ShimmerText } from "@/components/motion";
 import { listSemuaItem, hapusDraft } from "@/lib/offline/store";
 import { syncSekarang } from "@/lib/offline/sync";
 import type {
@@ -73,57 +74,67 @@ export function DaftarPerubahanTertunda() {
   const konflik = items.filter((i) => i.status === "konflik");
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-5 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">
+        <div className="flex flex-col gap-1">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-accent sm:text-xs">
+            Antrean Lokal
+          </p>
+          <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
             Perubahan Tertunda
           </h2>
           <p className="text-sm text-muted-foreground">
             Data lokal belum disinkronkan{!online && " — sedang offline"}.
           </p>
         </div>
-        <Button
-          type="button"
-          onClick={handleSync}
-          disabled={sedangSinkron || !online || items.length === 0}
-        >
-          <RefreshCw
-            className={sedangSinkron ? "animate-spin" : ""}
-            aria-hidden="true"
-          />
-          Sinkronkan Sekarang
-        </Button>
+        <div className="flex flex-col items-start gap-2 sm:items-end">
+          <Button
+            type="button"
+            onClick={handleSync}
+            disabled={sedangSinkron || !online || items.length === 0}
+          >
+            <RefreshCw
+              className={sedangSinkron ? "animate-spin" : ""}
+              aria-hidden="true"
+            />
+            Sinkronkan Sekarang
+          </Button>
+          {sedangSinkron && (
+            <ShimmerText className="text-xs">
+              Memproses sinkronisasi...
+            </ShimmerText>
+          )}
+        </div>
       </header>
 
       {hasil && (
         <p
           role="status"
-          className="rounded-md border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground"
+          className="inline-flex items-center gap-2 rounded-md border border-success/30 bg-success/5 px-3 py-2 text-xs text-success"
         >
+          <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
           Sinkronisasi selesai — {hasil.berhasil} berhasil, {hasil.konflik}{" "}
           konflik, {hasil.gagal} gagal.
         </p>
       )}
 
       {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
           Belum ada perubahan tertunda.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {menunggu.map((item) => (
-            <li
-              key={item.draft.id}
-              className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-2 text-sm font-medium">
-                  <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
-                  {ringkasanDraft(item)}
-                </span>
-                <LencanaStatus status={item.status} />
-              </div>
+            <li key={item.draft.id}>
+              <CardHover className="group flex flex-col gap-1 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm hover:border-accent/40 md:p-5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+                    <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                    {ringkasanDraft(item)}
+                  </span>
+                  <LencanaStatus status={item.status} />
+                </div>
+              </CardHover>
             </li>
           ))}
 
@@ -161,7 +172,7 @@ function LencanaStatus({
 }) {
   if (status === "menunggu") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400">
+      <span className="inline-flex items-center gap-1 rounded-full border border-warning/30 bg-warning/10 px-2 py-0.5 text-xs font-medium text-warning">
         <Clock className="h-3 w-3" aria-hidden="true" />
         Menunggu
       </span>
@@ -169,14 +180,14 @@ function LencanaStatus({
   }
   if (status === "tersinkron") {
     return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+      <span className="inline-flex items-center gap-1 rounded-full border border-success/30 bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
         <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
         Tersinkron
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
+    <span className="inline-flex items-center gap-1 rounded-full border border-destructive/30 bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive">
       <AlertTriangle className="h-3 w-3" aria-hidden="true" />
       Konflik
     </span>

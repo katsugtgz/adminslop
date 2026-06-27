@@ -12,29 +12,39 @@ export function DaftarAlurTujuanPembelajaran({
   items: readonly AlurTujuanPembelajaran[];
 }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold tracking-tight">
-        Alur Tujuan Pembelajaran
-      </h2>
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          06 — Alur
+        </p>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Alur Tujuan Pembelajaran
+        </h2>
+      </div>
       {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
           Belum ada Alur Tujuan Pembelajaran.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {items.map((a) => (
             <li
               key={a.id}
-              className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+              className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 shadow-warm"
             >
-              <span className="flex items-start gap-2">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-semibold text-muted-foreground">
+              <span className="flex items-start gap-3">
+                <span
+                  aria-hidden="true"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted font-display text-sm font-semibold text-muted-foreground"
+                >
                   {a.urutan}
                 </span>
-                <span className="text-sm text-foreground">{a.deskripsi}</span>
+                <span className="flex-1 pt-1 text-sm text-foreground sm:text-[15px]">
+                  {a.deskripsi}
+                </span>
               </span>
               {a.sumber ? (
-                <span className="pl-8 text-xs text-muted-foreground">
+                <span className="pl-12 font-mono text-xs text-muted-foreground">
                   Sumber: {a.sumber}
                 </span>
               ) : null}

@@ -6,6 +6,7 @@ import { DaftarPesertaDidik } from "@/components/peserta-didik/daftar-peserta-di
 import { FormTambah } from "@/components/peserta-didik/form-tambah";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 
 import {
   simpanPesertaDidikBaruAction,
@@ -60,26 +61,56 @@ export default async function Page() {
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Peserta Didik</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehTulis ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            01 — Peserta Didik
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Peserta Didik
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehTulis ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      {bolehTulis && <FormTambah action={simpanPesertaDidikBaruAction} />}
+      {bolehTulis && (
+        <PageReveal delay={2}>
+          <FormTambah action={simpanPesertaDidikBaruAction} />
+        </PageReveal>
+      )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Daftar Peserta Didik</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <div className="flex items-center gap-2.5">
+          <span aria-hidden="true" className="font-mono text-[0.7rem] font-medium text-accent">
+            02
+          </span>
+          <span aria-hidden="true" className="h-px w-6 bg-accent/30" />
+          <h2 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+            Daftar Peserta Didik
+          </h2>
+        </div>
         <DaftarPesertaDidik
           peserta={peserta}
           bolehTulis={bolehTulis}
           ubahStatusAction={ubahStatusPesertaDidikAction}
         />
-      </div>
-    </section>
+      </PageReveal>
+    </div>
   );
 }

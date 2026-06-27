@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
+import { CardHover } from "@/components/motion";
 import type { TujuanPembelajaran } from "@/db/schema";
 
 /**
@@ -24,16 +26,21 @@ export function DaftarTujuanPembelajaran({
   cpId: string;
 }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold tracking-tight">
-        Tujuan Pembelajaran
-      </h2>
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          05 — Tujuan
+        </p>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Tujuan Pembelajaran
+        </h2>
+      </div>
       {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
           Belum ada Tujuan Pembelajaran.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {items.map((t) => {
             const selected = t.id === selectedId;
             const params = new URLSearchParams({
@@ -45,25 +52,38 @@ export function DaftarTujuanPembelajaran({
             if (faseId) params.set("faseId", faseId);
             return (
               <li key={t.id}>
-                <Link
-                  href={`/dashboard/kurikulum?${params.toString()}`}
-                  aria-current={selected ? "true" : undefined}
-                  className={`flex flex-col gap-1 rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-colors hover:border-primary ${
-                    selected ? "border-primary ring-2 ring-primary" : "border-border"
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/10 text-xs font-semibold text-primary">
+                <CardHover asChild>
+                  <Link
+                    href={`/dashboard/kurikulum?${params.toString()}`}
+                    aria-current={selected ? "true" : undefined}
+                    className={`group flex items-start gap-3 rounded-2xl border bg-card p-5 shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg ${
+                      selected
+                        ? "border-accent ring-2 ring-accent/25"
+                        : "border-border"
+                    }`}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 font-display text-sm font-semibold text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground"
+                    >
                       {t.urutan}
                     </span>
-                    <span className="text-sm text-foreground">{t.deskripsi}</span>
-                  </span>
-                  {t.sumber ? (
-                    <span className="pl-8 text-xs text-muted-foreground">
-                      Sumber: {t.sumber}
+                    <span className="flex flex-1 flex-col gap-1">
+                      <span className="text-sm text-foreground sm:text-[15px]">
+                        {t.deskripsi}
+                      </span>
+                      {t.sumber ? (
+                        <span className="font-mono text-xs text-muted-foreground">
+                          Sumber: {t.sumber}
+                        </span>
+                      ) : null}
                     </span>
-                  ) : null}
-                </Link>
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/40 transition-all group-hover:-translate-y-0.5 group-hover:text-accent"
+                    />
+                  </Link>
+                </CardHover>
               </li>
             );
           })}

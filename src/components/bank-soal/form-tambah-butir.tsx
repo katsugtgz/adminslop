@@ -25,7 +25,7 @@ export function FormTambahButir({
 }) {
   if (candidates.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-4 text-center text-xs text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-5 text-center text-xs text-muted-foreground">
         Semua Butir Soal yang aktif sudah ada di paket ini.
       </p>
     );
@@ -34,14 +34,14 @@ export function FormTambahButir({
   return (
     <form
       action={action}
-      className="flex flex-wrap items-end gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+      className="flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm"
     >
       <input type="hidden" name="paketSoalId" value={paketSoalId} />
 
-      <div className="flex flex-col gap-1">
+      <div className="flex min-w-[14rem] flex-1 flex-col gap-1">
         <label
           htmlFor={`tambah-butir-${paketSoalId}`}
-          className="text-xs font-medium text-muted-foreground"
+          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
         >
           Tambah ke Paket
         </label>
@@ -49,7 +49,7 @@ export function FormTambahButir({
           id={`tambah-butir-${paketSoalId}`}
           name="butirSoalId"
           defaultValue=""
-          className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+          className="h-10 rounded-lg border border-input bg-background px-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="" disabled>
             Pilih Butir Soal
@@ -65,7 +65,7 @@ export function FormTambahButir({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`tambah-urutan-${paketSoalId}`}
-          className="text-xs font-medium text-muted-foreground"
+          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
         >
           Urutan
         </label>
@@ -75,14 +75,14 @@ export function FormTambahButir({
           type="number"
           min={1}
           defaultValue={nextUrutan}
-          className="h-9 w-20 rounded-md border border-input bg-background px-2 text-sm"
+          className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`tambah-bobot-${paketSoalId}`}
-          className="text-xs font-medium text-muted-foreground"
+          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
         >
           Bobot
         </label>
@@ -92,7 +92,7 @@ export function FormTambahButir({
           type="text"
           inputMode="decimal"
           placeholder="1"
-          className="h-9 w-20 rounded-md border border-input bg-background px-2 text-sm"
+          className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 

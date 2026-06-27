@@ -41,6 +41,11 @@ export interface MembershipProvider {
  */
 export function membershipProvider(): MembershipProvider {
   if (process.env.DEV_MEMBERSHIP_ALL === "true") {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "DEV_MEMBERSHIP_ALL=true tidak boleh aktif di produksi — server berhenti."
+      );
+    }
     return new DevMembershipProvider();
   }
   return new WorkOSMembershipProvider();

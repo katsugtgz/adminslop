@@ -31,35 +31,44 @@ export function DaftarWaliKelas({
 }) {
   if (wali.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
         Belum ada Wali Kelas.
       </p>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-2">
-      {wali.map((row) => (
+    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {wali.map((row, idx) => (
         <li
           key={row.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-warm transition-shadow hover:shadow-warm-lg"
         >
+          <div className="flex items-center justify-between gap-2">
+            <span
+              aria-hidden="true"
+              className="font-mono text-xs font-medium text-muted-foreground/60"
+            >
+              {String(idx + 1).padStart(2, "0")}
+            </span>
+            {bolehKelola && (
+              <form action={hapusAction}>
+                <input type="hidden" name="id" value={row.id} />
+                <Button type="submit" variant="destructive" size="sm">
+                  <Trash2 className="h-4 w-4" aria-hidden="true" />
+                  Hapus
+                </Button>
+              </form>
+            )}
+          </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold">{row.ptkNama}</span>
+            <span className="text-base font-semibold text-foreground">
+              {row.ptkNama}
+            </span>
             <span className="text-xs text-muted-foreground">
               Wali: {row.rombonganBelajarNama}
             </span>
           </div>
-
-          {bolehKelola && (
-            <form action={hapusAction}>
-              <input type="hidden" name="id" value={row.id} />
-              <Button type="submit" variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4" aria-hidden="true" />
-                Hapus
-              </Button>
-            </form>
-          )}
         </li>
       ))}
     </ul>

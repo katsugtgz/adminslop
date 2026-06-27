@@ -1,3 +1,5 @@
+import { UserPlus } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 /**
@@ -16,59 +18,69 @@ export function FormPtkBaru({ action }: { action: ServerAksi }) {
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-5 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Tambah PTK</h2>
-        <p className="text-xs text-muted-foreground">
+        <p className="inline-flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-accent sm:text-xs">
+          <UserPlus className="h-3.5 w-3.5" aria-hidden="true" />
+          Personel Baru
+        </p>
+        <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
+          Tambah PTK
+        </h2>
+        <p className="text-xs text-muted-foreground sm:text-sm">
           Tambah catatan personel baru untuk Satuan Pendidikan Aktif.
         </p>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="ptk-nama" className="text-sm font-medium">
-          Nama
-        </label>
-        <input
-          id="ptk-nama"
-          name="nama"
-          type="text"
-          required
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5 sm:col-span-2">
+          <label htmlFor="ptk-nama" className="text-sm font-medium">
+            Nama
+          </label>
+          <input
+            id="ptk-nama"
+            name="nama"
+            type="text"
+            required
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="ptk-nip" className="text-sm font-medium">
+            NIP
+          </label>
+          <input
+            id="ptk-nip"
+            name="nip"
+            type="text"
+            inputMode="numeric"
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="ptk-jenis" className="text-sm font-medium">
+            Jenis
+          </label>
+          <select
+            id="ptk-jenis"
+            name="jenis"
+            defaultValue="pendidik"
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <option value="pendidik">Pendidik</option>
+            <option value="tenaga_kependidikan">Tenaga Kependidikan</option>
+          </select>
+        </div>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="ptk-nip" className="text-sm font-medium">
-          NIP
-        </label>
-        <input
-          id="ptk-nip"
-          name="nip"
-          type="text"
-          inputMode="numeric"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        />
+      <div>
+        <Button type="submit" className="w-fit">
+          Tambah PTK
+        </Button>
       </div>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="ptk-jenis" className="text-sm font-medium">
-          Jenis
-        </label>
-        <select
-          id="ptk-jenis"
-          name="jenis"
-          defaultValue="pendidik"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <option value="pendidik">Pendidik</option>
-          <option value="tenaga_kependidikan">Tenaga Kependidikan</option>
-        </select>
-      </div>
-
-      <Button type="submit" className="w-fit">
-        Tambah PTK
-      </Button>
     </form>
   );
 }

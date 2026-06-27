@@ -17,16 +17,21 @@ export function FormTahunAjaranBaru({ action }: { action: ServerAksi }) {
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Tambah Tahun Ajaran</h2>
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          Form
+        </p>
+        <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
+          Tambah Tahun Ajaran
+        </h2>
         <p className="text-xs text-muted-foreground">
           Tambah Tahun Ajaran baru untuk Satuan Pendidikan Aktif.
         </p>
       </div>
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         <label htmlFor="ta-nama" className="text-sm font-medium">
           Nama
         </label>
@@ -36,7 +41,7 @@ export function FormTahunAjaranBaru({ action }: { action: ServerAksi }) {
           type="text"
           required
           placeholder="2025/2026"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 

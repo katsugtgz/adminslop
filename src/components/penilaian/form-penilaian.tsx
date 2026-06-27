@@ -22,12 +22,12 @@ export function FormPenilaian({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm"
     >
       <input type="hidden" name="komponenNilaiId" value={komponenNilaiId} />
 
       <div className="flex flex-col gap-1">
-        <h3 className="text-base font-semibold tracking-tight">
+        <h3 className="font-display text-lg tracking-tight text-foreground">
           Tambah Penilaian
         </h3>
         <p className="text-xs text-muted-foreground">

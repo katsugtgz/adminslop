@@ -21,10 +21,12 @@ export function FormPaketSoal({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Buat Paket Soal</h2>
+        <h2 className="font-display text-2xl tracking-tight text-foreground">
+          Buat Paket Soal
+        </h2>
         <p className="text-xs text-muted-foreground">
           Rakit Butir Soal menjadi satu Paket untuk satu periode penilaian.
         </p>
@@ -39,7 +41,7 @@ export function FormPaketSoal({
           name="nama"
           type="text"
           required
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
 
@@ -51,7 +53,7 @@ export function FormPaketSoal({
           id="paket-mapel"
           name="mataPelajaranId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="" disabled>
             Pilih Mata Pelajaran
@@ -72,7 +74,7 @@ export function FormPaketSoal({
           id="paket-tingkat"
           name="tingkatId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="">Tanpa Tingkat</option>
           {tingkat.map((t) => (
@@ -91,7 +93,7 @@ export function FormPaketSoal({
           id="paket-ta"
           name="tahunAjaranId"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="" disabled>
             Pilih Tahun Ajaran
@@ -112,7 +114,7 @@ export function FormPaketSoal({
           id="paket-semester"
           name="semester"
           defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <option value="">Tanpa Semester</option>
           <option value="ganjil">Ganjil</option>

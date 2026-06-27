@@ -21,10 +21,10 @@ export function FormDrafEraport({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Buat Draf E-Raport</h2>
+        <h2 className="font-display text-lg tracking-tight text-foreground">Buat Draf E-Raport</h2>
         <p className="text-xs text-muted-foreground">
           Draf dibuat dari Nilai Akhir untuk Tahun Ajaran dan Semester aktif.
         </p>

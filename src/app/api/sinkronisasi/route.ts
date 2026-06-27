@@ -4,12 +4,15 @@ import { and, eq, sql } from "drizzle-orm";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { dbSchema } from "@/db/client";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
-import type {
-  AmplopDraft,
-  DraftAbsensi,
-  DraftNilai,
-  ResponsSinkronisasi,
-} from "@/lib/offline/types";
+import {
+  assertPemilikBeban,
+  assertPemilikRombongan,
+  bebanIdDariPenilaian,
+  KepemilikanError,
+  type AksesAktif,
+} from "@/lib/auth/kepemilikan";
+import { DraftAbsensiSchema, DraftNilaiSchema } from "@/lib/offline/schemas";
+import type { AmplopDraft, DraftAbsensi, DraftNilai, ResponsSinkronisasi } from "@/lib/offline/types";
 
 // NOTE: the spec proposed `src/app/dashboard/sinkronisasi/route.ts`. Next.js
 // App Router forbids a `page.tsx` and a `route.ts` in the SAME route segment
@@ -81,14 +84,27 @@ async function cariAbsensiByNaturalKey(
  * matches the client's, apply the edit and bump `versi`. When the row exists
  * but `versi` differs, refuse (conflict). When the row does not exist, INSERT
  * (a brand-new offline edit). Returns the sync response.
+ *
+ * C1 (security): an OWNERSHIP gate ({@linkcode assertPemilikBeban}) runs BEFORE
+ * any write — the active guru must own the Beban Mengajar that owns the target
+ * Penilaian (admin bypasses). Without this, a hostile guru could sync a draft
+ * referencing ANOTHER guru's `penilaianId` and overwrite their nilai.
  */
 async function terapkanDraftNilai(
   orgId: string,
+  akses: AksesAktif,
   userId: string,
   draft: DraftNilai
 ): Promise<ResponsSinkronisasi> {
   const { db } = getDb();
   return withTenant(db, orgId, async (tx) => {
+    // C1 gate 2: ownership (admin bypasses; guru must own the Penilaian's
+    // Beban Mengajar). Runs before the read AND before either write branch so
+    // no write can occur without ownership, conflict-path or otherwise.
+    await assertPemilikBeban(tx, akses, () =>
+      bebanIdDariPenilaian(tx, draft.penilaianId)
+    );
+
     const existing = await cariNilaiByNaturalKey(
       tx,
       draft.penilaianId,
@@ -160,14 +176,23 @@ async function terapkanDraftNilai(
  * AC#4 upsert for an Absensi draft. Same versi-match logic as nilai. New rows
  * carry `metode_input` from the draft; existing rows preserve their original
  * `metode_input` + `sumber_qr` (AC#3 correctable invariant from #15).
+ *
+ * C3 (security): an OWNERSHIP gate ({@linkcode assertPemilikRombongan}) runs
+ * BEFORE any write — the active guru must own the target Rombongan Belajar via
+ * a beban_mengajar or wali_kelas assignment (admin bypasses). Without this, a
+ * hostile guru could sync attendance for ANY rombel id.
  */
 async function terapkanDraftAbsensi(
   orgId: string,
+  akses: AksesAktif,
   userId: string,
   draft: DraftAbsensi
 ): Promise<ResponsSinkronisasi> {
   const { db } = getDb();
   return withTenant(db, orgId, async (tx) => {
+    // C3 gate 2: ownership of the draft's Rombongan Belajar (admin bypasses).
+    await assertPemilikRombongan(tx, akses, async () => draft.rombonganBelajarId);
+
     const existing = await cariAbsensiByNaturalKey(
       tx,
       draft.pesertaDidikId,
@@ -274,12 +299,41 @@ export async function POST(req: Request): Promise<NextResponse<ResponsSinkronisa
         { status: 403 }
       );
     }
-    const hasil = await terapkanDraftNilai(
-      akses.membership.orgId,
-      akses.userId,
-      amplop.draft as DraftNilai
-    );
-    return NextResponse.json<ResponsSinkronisasi>(hasil);
+    // C14: runtime-validate the draft envelope. Replaces the unchecked
+    // `as DraftNilai` cast — a hostile body with a non-numeric `nilai` or an
+    // unknown enum no longer reaches the DB write.
+    let draft: DraftNilai;
+    try {
+      draft = DraftNilaiSchema.parse(amplop.draft);
+    } catch {
+      return NextResponse.json<ResponsSinkronisasi>(
+        { status: "error", pesan: "Draft Nilai tidak valid." },
+        { status: 400 }
+      );
+    }
+    try {
+      const hasil = await terapkanDraftNilai(
+        akses.membership.orgId,
+        akses,
+        akses.userId,
+        draft
+      );
+      return NextResponse.json<ResponsSinkronisasi>(hasil);
+    } catch (err) {
+      // C1: ownership denial — the guru does not own the target Beban Mengajar.
+      // KepemilikanError -> 403 (Bahasa message preserved); anything else is a
+      // DB/programming/audit failure -> 500 with a generic message (no leak).
+      if (err instanceof KepemilikanError) {
+        return NextResponse.json<ResponsSinkronisasi>(
+          { status: "error", pesan: err.message },
+          { status: 403 }
+        );
+      }
+      return NextResponse.json<ResponsSinkronisasi>(
+        { status: "error", pesan: "Terjadi kesalahan." },
+        { status: 500 }
+      );
+    }
   }
 
   if (amplop.tipe === "absensi") {
@@ -289,12 +343,40 @@ export async function POST(req: Request): Promise<NextResponse<ResponsSinkronisa
         { status: 403 }
       );
     }
-    const hasil = await terapkanDraftAbsensi(
-      akses.membership.orgId,
-      akses.userId,
-      amplop.draft as DraftAbsensi
-    );
-    return NextResponse.json<ResponsSinkronisasi>(hasil);
+    // C14: runtime-validate the draft envelope (status/metode enums, tanggal
+    // shape, positive-int versi). Replaces the unchecked `as DraftAbsensi` cast.
+    let draft: DraftAbsensi;
+    try {
+      draft = DraftAbsensiSchema.parse(amplop.draft);
+    } catch {
+      return NextResponse.json<ResponsSinkronisasi>(
+        { status: "error", pesan: "Draft Absensi tidak valid." },
+        { status: 400 }
+      );
+    }
+    try {
+      const hasil = await terapkanDraftAbsensi(
+        akses.membership.orgId,
+        akses,
+        akses.userId,
+        draft
+      );
+      return NextResponse.json<ResponsSinkronisasi>(hasil);
+    } catch (err) {
+      // C3: ownership denial — the guru does not own the target Rombongan Belajar.
+      // KepemilikanError -> 403 (Bahasa message preserved); anything else is a
+      // DB/programming/audit failure -> 500 with a generic message (no leak).
+      if (err instanceof KepemilikanError) {
+        return NextResponse.json<ResponsSinkronisasi>(
+          { status: "error", pesan: err.message },
+          { status: 403 }
+        );
+      }
+      return NextResponse.json<ResponsSinkronisasi>(
+        { status: "error", pesan: "Terjadi kesalahan." },
+        { status: 500 }
+      );
+    }
   }
 
   return NextResponse.json<ResponsSinkronisasi>(

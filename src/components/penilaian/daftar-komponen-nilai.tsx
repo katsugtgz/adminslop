@@ -36,7 +36,7 @@ export function DaftarKomponenNilai({
 }) {
   if (komponen.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
         Belum ada Komponen Nilai.
       </p>
     );
@@ -50,14 +50,14 @@ export function DaftarKomponenNilai({
           <li
             key={k.id}
             aria-current={selected ? "true" : undefined}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm aria-[current=true]:ring-2 aria-[current=true]:ring-primary"
+            className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg aria-[current=true]:border-accent/50 aria-[current=true]:ring-2 aria-[current=true]:ring-accent/40 t-lift"
           >
             <Link
               href={`/dashboard/penilaian?bebanId=${encodeURIComponent(bebanId)}&komponenId=${encodeURIComponent(k.id)}`}
-              className="flex flex-col gap-0.5 hover:text-primary"
+              className="flex flex-col gap-0.5 hover:text-accent"
             >
               <span className="text-sm font-semibold">{k.nama}</span>
-              <span className="text-xs text-muted-foreground">
+              <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
                 Bobot: {k.bobot}
               </span>
             </Link>

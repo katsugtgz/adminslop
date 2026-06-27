@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { QrCode } from "lucide-react";
 
+import { CardHover } from "@/components/motion";
 import type { RombonganBelajar } from "@/db/schema";
 
 /**
@@ -23,7 +25,7 @@ export function DaftarRombonganBelajarAbsensi({
 }) {
   if (rombonganBelajar.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Rombongan Belajar.
       </p>
     );
@@ -38,28 +40,32 @@ export function DaftarRombonganBelajarAbsensi({
       {rombonganBelajar.map((r) => {
         const selected = r.id === selectedId;
         return (
-          <li
+          <CardHover
+            as="li"
             key={r.id}
             aria-current={selected ? "true" : undefined}
-            className="rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm aria-[current=true]:ring-2 aria-[current=true]:ring-primary"
+            className="bg-grain rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm hover:border-accent/40 aria-[current=true]:border-accent/50 aria-[current=true]:ring-2 aria-[current=true]:ring-accent"
           >
             <Link
               href={`/dashboard/absensi?rombonganBelajarId=${encodeURIComponent(
                 r.id
               )}${tanggalQuery}`}
-              className="flex items-center justify-between text-sm font-semibold hover:text-primary"
+              className="flex items-center justify-between gap-3 text-sm font-semibold text-foreground hover:text-accent"
             >
-              <span>{r.nama}</span>
+              <span className="flex items-center gap-2.5">
+                <QrCode className="h-4 w-4 text-accent" aria-hidden="true" />
+                {r.nama}
+              </span>
               {selected && (
                 <span
                   aria-hidden="true"
-                  className="text-xs font-normal text-primary"
+                  className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-accent"
                 >
                   Terpilih
                 </span>
               )}
             </Link>
-          </li>
+          </CardHover>
         );
       })}
     </ul>

@@ -13,9 +13,19 @@ export function KartuKuota({ kuota }: { kuota: InfoKuotaAi }) {
       : Math.min(100, Math.round((kuota.terpakai / kuota.batas) * 100));
 
   return (
-    <section className="flex flex-col gap-3 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
+    <section className="bg-grain flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-warm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-lg font-semibold tracking-tight">Kuota AI</h2>
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+          >
+            01
+          </span>
+          <h2 className="font-display text-2xl tracking-tight text-foreground">
+            Kuota AI
+          </h2>
+        </div>
         <p className="text-sm text-muted-foreground">
           {kuota.terpakai} dari {kuota.batas}{" "}
           <span className="text-muted-foreground">(tersisa {kuota.tersisa})</span>
@@ -28,11 +38,14 @@ export function KartuKuota({ kuota }: { kuota: InfoKuotaAi }) {
         aria-valuemax={100}
         aria-valuenow={persen}
         aria-label={`Kuota AI: ${kuota.terpakai} dari ${kuota.batas}`}
-        className="h-2 w-full overflow-hidden rounded-full bg-muted"
+        className="h-2.5 w-full overflow-hidden rounded-full bg-muted"
       >
         <div
-          className="h-full rounded-full bg-primary transition-[width]"
-          style={{ width: `${persen}%` }}
+          className="h-full rounded-full transition-[width]"
+          style={{
+            width: `${persen}%`,
+            backgroundImage: "var(--gradient-warm)",
+          }}
         />
       </div>
       <p className="text-xs text-muted-foreground">

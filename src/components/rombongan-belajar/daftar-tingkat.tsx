@@ -17,25 +17,33 @@ export function DaftarTingkat({
 }) {
   if (tingkat.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
         Belum ada Tingkat.
       </p>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-2">
-      {tingkat.map((t) => (
+    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {tingkat.map((t, idx) => (
         <li
           key={t.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-warm transition-shadow hover:shadow-warm-lg"
         >
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold">{t.nama}</span>
-            <span className="text-xs text-muted-foreground">
-              Urutan: {t.urutan}
+          <span
+            aria-hidden="true"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-secondary font-display text-lg text-secondary-foreground"
+          >
+            {t.urutan}
+          </span>
+          <span className="flex flex-col gap-0.5">
+            <span className="text-base font-semibold text-foreground">
+              {t.nama}
             </span>
-          </div>
+            <span className="font-mono text-xs text-muted-foreground">
+              {String(idx + 1).padStart(2, "0")} · Urutan: {t.urutan}
+            </span>
+          </span>
         </li>
       ))}
     </ul>

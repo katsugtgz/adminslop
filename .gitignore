@@ -34,6 +34,8 @@ coverage/
 playwright-report/
 test-results/
 .playwright/
+.playwright-mcp/
+.screenshots/
 
 # ── Drizzle / DB ────────────────────────────────────────────────────
 drizzle/meta/
@@ -71,3 +73,8 @@ Thumbs.db
 .omo/
 .serena/
 .env.local
+
+# ── Agent tooling artifacts (skills, debug captures) ────────────────
+.agents/
+skills-lock.json
+console-errors.txt

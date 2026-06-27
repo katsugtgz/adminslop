@@ -6,6 +6,7 @@ import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PratinjauEraport } from "@/components/cetak/pratinjau-eraport";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 
 export const dynamic = "force-dynamic";
 
@@ -54,16 +55,36 @@ export default async function Page({
   }
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Pratinjau Cetak</h1>
-        <p className="text-sm text-muted-foreground">
-          {akses.membership.orgName} · Semester: {konten.semester} · Status:{" "}
-          {konten.status}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            04 — Cetak · Pratinjau
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Pratinjau Cetak
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {akses.membership.orgName} · Semester: {konten.semester} · Status:{" "}
+            {konten.status}
+          </p>
+        </div>
+      </PageReveal>
 
-      <PratinjauEraport konten={konten} />
-    </section>
+      <PageReveal delay={2}>
+        <PratinjauEraport konten={konten} />
+      </PageReveal>
+    </div>
   );
 }

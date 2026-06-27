@@ -1,3 +1,6 @@
+import { CalendarDays } from "lucide-react";
+
+import { PageReveal } from "@/components/motion";
 import { getDb, withTenant } from "@/db/client";
 import { getSemesterAktif, listTahunAjaran } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
@@ -66,34 +69,58 @@ export default async function Page() {
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Tahun Ajaran</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehKelola ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
+        >
+          03
+        </span>
+        <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+          <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+            <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
+            Kalender Akademik
+          </p>
+          <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            Tahun Ajaran
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehKelola ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {bolehKelola && (
-        <>
+        <PageReveal className="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
           <FormTahunAjaranBaru action={simpanTahunAjaranBaruAction} />
           <KontrolSemester
             action={ubahSemesterAktifAction}
             semesterAktif={semester}
           />
-        </>
+        </PageReveal>
       )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Daftar Tahun Ajaran</h2>
+      <PageReveal className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            01 — Riwayat
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Daftar Tahun Ajaran
+          </h2>
+        </div>
         <DaftarTahunAjaran
           tahunAjaran={tahunAjaran}
           bolehKelola={bolehKelola}
           action={aktifkanTahunAjaranAction}
         />
-      </div>
-    </section>
+      </PageReveal>
+    </div>
   );
 }

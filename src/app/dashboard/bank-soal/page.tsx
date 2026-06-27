@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LayoutGrid, Search } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import { cariButirSoalById, listButirInPaket, listButirSoal, listPaketSoal } from "@/db/queries/bank-soal";
@@ -9,6 +10,7 @@ import type { ButirSoal, MataPelajaran, PaketSoalButir } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 import { DaftarButirPaket } from "@/components/bank-soal/daftar-butir-paket";
 import { DaftarButirSoal } from "@/components/bank-soal/daftar-butir-soal";
 import { DaftarPaketSoal } from "@/components/bank-soal/daftar-paket-soal";
@@ -139,50 +141,89 @@ export default async function Page({
   const baseHref = search ? `/dashboard/bank-soal?q=${encodeURIComponent(search)}` : "/dashboard/bank-soal";
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Bank Soal</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuatButir || bolehBuatPaket
-            ? ""
-            : " (hanya baca)"}
-        </p>
-      </header>
-
-      <form className="flex flex-wrap items-end gap-2">
-        <div className="flex flex-col gap-1">
-          <label htmlFor="bank-search" className="text-xs font-medium text-muted-foreground">
-            Cari
-          </label>
-          <input
-            id="bank-search"
-            name="q"
-            type="search"
-            defaultValue={search ?? ""}
-            placeholder="Cari pertanyaan..."
-            className="h-9 w-64 rounded-md border border-input bg-background px-3 text-sm"
-          />
-        </div>
-        <button
-          type="submit"
-          className="h-9 rounded-md border border-input bg-background px-4 text-sm font-medium hover:bg-accent"
+    <div className="flex flex-col gap-10 md:gap-14">
+      <PageReveal
+        as="section"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
+          }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
         >
-          Cari
-        </button>
-        {(search || butirIdFocus || paketIdFocus) && (
-          <Link
-            href="/dashboard/bank-soal"
-            className="ml-2 text-xs font-medium text-muted-foreground underline-offset-4 hover:underline"
-          >
-            Reset
-          </Link>
-        )}
-      </form>
+          16
+        </span>
+        <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            <LayoutGrid className="h-3.5 w-3.5" aria-hidden="true" />
+            Modul · Bank Soal
+          </p>
+          <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+            Bank Soal
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuatButir || bolehBuatPaket
+              ? ""
+              : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Butir Soal</h2>
+      <PageReveal as="section" delay={2} className="flex flex-col gap-4">
+        <form className="flex flex-wrap items-end gap-2">
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="bank-search"
+              className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+            >
+              Cari
+            </label>
+            <input
+              id="bank-search"
+              name="q"
+              type="search"
+              defaultValue={search ?? ""}
+              placeholder="Cari pertanyaan..."
+              className="h-10 w-64 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            />
+          </div>
+          <button
+            type="submit"
+            className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-border bg-secondary px-4 text-sm font-medium text-secondary-foreground transition-colors hover:border-accent/40 hover:bg-accent hover:text-accent-foreground"
+          >
+            <Search className="h-4 w-4" aria-hidden="true" />
+            Cari
+          </button>
+          {(search || butirIdFocus || paketIdFocus) && (
+            <Link
+              href="/dashboard/bank-soal"
+              className="ml-2 text-xs font-medium text-muted-foreground underline-offset-4 hover:text-accent hover:underline"
+            >
+              Reset
+            </Link>
+          )}
+        </form>
+      </PageReveal>
+
+      <PageReveal as="section" delay={2} className="flex flex-col gap-5">
+        <span
+          aria-hidden="true"
+          className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+        >
+          01
+        </span>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Butir Soal
+        </h2>
         {bolehBuatButir && !butirIdFocus && !paketIdFocus ? (
           <FormButirSoal
             action={buatButirSoalAction}
@@ -201,10 +242,22 @@ export default async function Page({
           arsipkanAction={arsipkanButirSoalAction}
           baseHref={baseHref}
         />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3 border-t border-border pt-6">
-        <h2 className="text-lg font-semibold tracking-tight">Paket Soal</h2>
+      <PageReveal
+        as="section"
+        delay={3}
+        className="flex flex-col gap-5 border-t border-border/60 pt-10"
+      >
+        <span
+          aria-hidden="true"
+          className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+        >
+          02
+        </span>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Paket Soal
+        </h2>
         {bolehBuatPaket && !paketIdFocus ? (
           <FormPaketSoal
             action={buatPaketSoalAction}
@@ -221,8 +274,8 @@ export default async function Page({
         />
 
         {paketIdFocus ? (
-          <div className="flex flex-col gap-3 border-t border-border pt-6">
-            <h3 className="text-base font-semibold tracking-tight">
+          <div className="flex flex-col gap-5 border-t border-border/60 pt-8">
+            <h3 className="font-display text-xl tracking-tight text-foreground">
               Rakit Paket
             </h3>
             {bolehUbahPaket ? (
@@ -233,7 +286,7 @@ export default async function Page({
                 nextUrutan={data.nextUrutan}
               />
             ) : (
-              <p className="rounded-xl border border-dashed border-border bg-muted/40 p-4 text-center text-xs text-muted-foreground">
+              <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-5 text-center text-xs text-muted-foreground">
                 Anda hanya dapat membaca Paket Soal ini.
               </p>
             )}
@@ -246,17 +299,21 @@ export default async function Page({
             />
           </div>
         ) : null}
-      </div>
-    </section>
+      </PageReveal>
+    </div>
   );
 }
 
 /** Inline read-only preview of a Butir Soal (drill-down target). */
 function ButirDetail({ butir }: { butir: ButirSoal }) {
   return (
-    <article className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm">
-      <span className="text-xs text-muted-foreground">Detail Butir Soal</span>
-      <p className="text-sm font-semibold">{butir.pertanyaan}</p>
+    <article className="bg-grain flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm">
+      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+        Detail Butir Soal
+      </span>
+      <p className="font-display text-lg tracking-tight text-foreground">
+        {butir.pertanyaan}
+      </p>
       <p className="text-xs text-muted-foreground">
         Kunci Jawaban: <span className="font-mono">{butir.kunciJawaban}</span>
       </p>

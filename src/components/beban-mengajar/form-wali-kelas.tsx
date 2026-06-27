@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import type { Ptk } from "@/db/schema";
-import type { RombonganBelajar } from "@/db/schema";
+import type { Ptk, RombonganBelajar } from "@/db/schema";
 
 import type { ServerAksi } from "./form-beban-mengajar-baru";
 
@@ -22,10 +21,13 @@ export function FormWaliKelas({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          Form
+        </p>
+        <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
           Tetapkan Wali Kelas
         </h2>
         <p className="text-xs text-muted-foreground">
@@ -33,48 +35,50 @@ export function FormWaliKelas({
         </p>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="wali-ptk" className="text-sm font-medium">
-          Guru/PTK
-        </label>
-        <select
-          id="wali-ptk"
-          name="ptkId"
-          required
-          defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <option value="" disabled>
-            — Pilih Guru/PTK —
-          </option>
-          {ptks.map((ptk) => (
-            <option key={ptk.id} value={ptk.id}>
-              {ptk.nama}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="wali-ptk" className="text-sm font-medium">
+            Guru/PTK
+          </label>
+          <select
+            id="wali-ptk"
+            name="ptkId"
+            required
+            defaultValue=""
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <option value="" disabled>
+              — Pilih Guru/PTK —
             </option>
-          ))}
-        </select>
-      </div>
+            {ptks.map((ptk) => (
+              <option key={ptk.id} value={ptk.id}>
+                {ptk.nama}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="wali-rombel" className="text-sm font-medium">
-          Rombongan Belajar
-        </label>
-        <select
-          id="wali-rombel"
-          name="rombonganBelajarId"
-          required
-          defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <option value="" disabled>
-            — Pilih Rombongan Belajar —
-          </option>
-          {rombels.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.nama}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="wali-rombel" className="text-sm font-medium">
+            Rombongan Belajar
+          </label>
+          <select
+            id="wali-rombel"
+            name="rombonganBelajarId"
+            required
+            defaultValue=""
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <option value="" disabled>
+              — Pilih Rombongan Belajar —
             </option>
-          ))}
-        </select>
+            {rombels.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.nama}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <Button type="submit" className="w-fit">

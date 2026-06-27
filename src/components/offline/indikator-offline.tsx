@@ -33,10 +33,10 @@ export function IndikatorOffline({ className }: { className?: string }) {
       role="status"
       aria-live="polite"
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-sm",
         sedangOffline
-          ? "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400"
-          : "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+          ? "border-warning/30 bg-warning/10 text-warning"
+          : "border-success/30 bg-success/10 text-success",
         className
       )}
     >

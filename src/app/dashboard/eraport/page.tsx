@@ -7,6 +7,7 @@ import { DaftarEraport } from "@/components/eraport/daftar-eraport";
 import { FormDrafEraport } from "@/components/eraport/form-draf";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 
 import {
   buatDrafEraportAction,
@@ -89,31 +90,61 @@ export default async function Page() {
   });
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">E-Raport</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuat || bolehTerbit || bolehRevisi ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            03 — E-Raport
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            E-Raport
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuat || bolehTerbit || bolehRevisi ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {data === null ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-          Aktifkan Tahun Ajaran terlebih dahulu untuk mengelola E-Raport.
-        </p>
+        <PageReveal delay={2}>
+          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
+            Aktifkan Tahun Ajaran terlebih dahulu untuk mengelola E-Raport.
+          </p>
+        </PageReveal>
       ) : (
         <>
           {bolehBuat ? (
-            <FormDrafEraport
-              daftarPesertaDidik={data.daftarPesertaDidik}
-              action={buatDrafEraportAction}
-            />
+            <PageReveal delay={2}>
+              <FormDrafEraport
+                daftarPesertaDidik={data.daftarPesertaDidik}
+                action={buatDrafEraportAction}
+              />
+            </PageReveal>
           ) : null}
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">Draf E-Raport</h2>
+          <PageReveal delay={3} className="flex flex-col gap-3">
+            <div className="flex items-center gap-2.5">
+              <span aria-hidden="true" className="font-mono text-[0.7rem] font-medium text-accent">
+                01
+              </span>
+              <span aria-hidden="true" className="h-px w-6 bg-accent/30" />
+              <h2 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+                Draf E-Raport
+              </h2>
+            </div>
             <DaftarEraport
               eraport={data.daftarEraport}
               pesertaMap={data.pesertaMap}
@@ -123,9 +154,9 @@ export default async function Page() {
               terbitAction={terbitkanEraportAction}
               revisiAction={catatRevisiEraportAction}
             />
-          </div>
+          </PageReveal>
         </>
       )}
-    </section>
+    </div>
   );
 }

@@ -40,10 +40,12 @@ export function FormPermintaan({ action }: { action: ServerAksi }) {
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Permintaan AI Baru</h2>
+        <h2 className="font-display text-2xl tracking-tight text-foreground">
+          Permintaan AI Baru
+        </h2>
         <p className="text-xs text-muted-foreground">
           Buat permintaan konten AI. Draf yang dihasilkan perlu diverifikasi
           sebelum digunakan.
@@ -58,7 +60,7 @@ export function FormPermintaan({ action }: { action: ServerAksi }) {
           id="permintaan-jenis"
           name="jenis"
           defaultValue="deskripsi_cp"
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="h-11 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {PILIHAN_JENIS.map(({ slug, label }) => (
             <option key={slug} value={slug}>
@@ -77,7 +79,7 @@ export function FormPermintaan({ action }: { action: ServerAksi }) {
           name="konteks"
           rows={4}
           placeholder='{"mapel":"Matematika","fase":"C","elemen":"Bilangan"}'
-          className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-lg border border-input bg-background px-3 py-2 font-mono text-xs ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
         <span className="text-xs text-muted-foreground">
           Opsional — objek JSON sebagai konteks permintaan.

@@ -22,11 +22,16 @@ export function KonteksGuru({
   wali: readonly BarisWaliKelas[];
 }) {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Beban Mengajar Saya
-        </h2>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            01 — Beban Saya
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Beban Mengajar Saya
+          </h2>
+        </div>
         <DaftarBebanMengajar
           beban={beban}
           bolehKelola={false}
@@ -35,10 +40,15 @@ export function KonteksGuru({
         />
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Wali Kelas Saya
-        </h2>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            02 — Wali Kelas Saya
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Wali Kelas Saya
+          </h2>
+        </div>
         <DaftarWaliKelas
           wali={wali}
           bolehKelola={false}

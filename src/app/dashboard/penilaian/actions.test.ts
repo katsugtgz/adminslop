@@ -19,8 +19,52 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 const mocks = vi.hoisted(() => {
   // Per-table fixture rows, keyed by the real dbSchema table object reference.
   const tableRows = new Map<unknown, unknown[]>();
+  function snakeToCamel(s: string): string {
+    return s.replace(/_([a-z0-9])/g, (_m, c) => c.toUpperCase());
+  }
+  function isEqualityParam(
+    c: unknown
+  ): c is { value: unknown; encoder: { name: string } } {
+    if (!c || typeof c !== "object") return false;
+    const enc = (c as { encoder?: { name?: unknown } }).encoder;
+    return !!enc && typeof enc.name === "string";
+  }
+  function collectEqualities(
+    node: unknown,
+    out: { col: string; val: unknown }[] = []
+  ): typeof out {
+    if (!node || typeof node !== "object") return out;
+    if (isEqualityParam(node)) {
+      out.push({ col: node.encoder.name, val: node.value });
+      return out;
+    }
+    const chunks = (node as { queryChunks?: unknown[] }).queryChunks;
+    if (Array.isArray(chunks)) for (const c of chunks) collectEqualities(c, out);
+    return out;
+  }
   const fakeTxLocal = {
-    select: () => ({ from: (table: unknown) => tableRows.get(table) ?? [] }),
+    // CONTRACT-ENFORCING `.where`: introspects the drizzle eq/and Param chunks (encoder.name + value) to actually filter fixture rows, so an omitted or mis-specified ownership predicate FAILS the test rather than silently passing.
+    select: () => ({
+      from: (table: unknown) => ({
+        where: (expr: unknown) => {
+          const rows = tableRows.get(table) ?? [];
+          const preds = collectEqualities(expr);
+          // Fail closed: bila mock tak bisa deteksi equality pred, throw —
+          // jangan return all rows (silent pass bila prod lupa .where(eq(...))).
+          if (preds.length === 0) {
+            throw new Error(
+              "Mock .where() received no supported equality predicates.",
+            );
+          }
+          return rows.filter((r) => {
+            const row = r as Record<string, unknown>;
+            return preds.every(
+              (p) => row[snakeToCamel(p.col)] === p.val || row[p.col] === p.val
+            );
+          });
+        },
+      }),
+    }),
   };
   return {
     getAksesSaya: vi.fn(),

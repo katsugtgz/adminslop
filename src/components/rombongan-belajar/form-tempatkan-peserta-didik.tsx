@@ -29,10 +29,13 @@ export function FormTempatkanPesertaDidik({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+          Penempatan
+        </p>
+        <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
           Tempatkan Peserta Didik
         </h2>
         <p className="text-xs text-muted-foreground">
@@ -40,48 +43,50 @@ export function FormTempatkanPesertaDidik({
         </p>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="tempatkan-peserta" className="text-sm font-medium">
-          Peserta Didik
-        </label>
-        <select
-          id="tempatkan-peserta"
-          name="pesertaDidikId"
-          required
-          defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <option value="" disabled>
-            Pilih Peserta Didik
-          </option>
-          {peserta.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.nama}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="tempatkan-peserta" className="text-sm font-medium">
+            Peserta Didik
+          </label>
+          <select
+            id="tempatkan-peserta"
+            name="pesertaDidikId"
+            required
+            defaultValue=""
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <option value="" disabled>
+              Pilih Peserta Didik
             </option>
-          ))}
-        </select>
-      </div>
+            {peserta.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.nama}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label htmlFor="tempatkan-rombel" className="text-sm font-medium">
-          Rombongan Belajar
-        </label>
-        <select
-          id="tempatkan-rombel"
-          name="rombonganBelajarId"
-          required
-          defaultValue=""
-          className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <option value="" disabled>
-            Pilih Rombongan Belajar
-          </option>
-          {rombel.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.nama}
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="tempatkan-rombel" className="text-sm font-medium">
+            Rombongan Belajar
+          </label>
+          <select
+            id="tempatkan-rombel"
+            name="rombonganBelajarId"
+            required
+            defaultValue=""
+            className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <option value="" disabled>
+              Pilih Rombongan Belajar
             </option>
-          ))}
-        </select>
+            {rombel.map((r) => (
+              <option key={r.id} value={r.id}>
+                {r.nama}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <Button type="submit" className="w-fit">

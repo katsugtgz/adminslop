@@ -36,16 +36,16 @@ export function KontrolCetak({
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Cetak Dokumen</h2>
+        <h2 className="font-display text-lg tracking-tight text-foreground">Cetak Dokumen</h2>
         <p className="text-xs text-muted-foreground">
           Hanya E-Raport berstatus Terbit yang dapat dicetak.
         </p>
       </div>
 
-      <p className="rounded-md border border-amber-300 bg-amber-50 p-2 text-xs text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-200">
+      <p className="rounded-lg border border-warning/40 bg-warning/10 p-2 text-xs text-warning-foreground">
         Catatan: Tanda Tangan Cetak dan Stempel Cetak adalah elemen format
         dokumen, BUKAN tanda tangan legal atau bukti persetujuan.
       </p>

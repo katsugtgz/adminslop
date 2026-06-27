@@ -20,15 +20,15 @@ function RiwayatRevisi({
 }) {
   if (revisiList.length === 0) return null;
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-dashed border-border bg-muted/30 p-3">
-      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+    <div className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-3">
+      <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
         Riwayat Revisi
       </span>
       <ul className="flex flex-col gap-1.5">
         {revisiList.map((r, i) => (
           <li key={i} className="flex flex-col gap-0.5 text-xs">
             <span className="font-medium text-foreground">Alasan Revisi: {r.alasan}</span>
-            <span className="text-muted-foreground">
+            <span className="font-mono text-[0.7rem] text-muted-foreground">
               {new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(r.dibuatPada)}
               {r.dibuatOleh ? ` · ${r.dibuatOleh}` : ""}
             </span>
@@ -77,12 +77,12 @@ export function DetailEraport({
       </Button>
 
       {terbuka ? (
-        <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-3">
+        <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-background p-4">
           <div className="flex flex-col gap-1">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
               Konten
             </span>
-            <pre className="overflow-x-auto rounded-md bg-muted/40 p-2 text-xs">
+            <pre className="overflow-x-auto rounded-lg bg-muted/40 p-2 text-xs">
               {JSON.stringify(eraport.konten, null, 2)}
             </pre>
           </div>

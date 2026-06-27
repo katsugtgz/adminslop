@@ -12,11 +12,11 @@ const LABEL_STATUS: Record<StatusEraport, string> = {
 };
 
 const BADGE_STATUS: Record<StatusEraport, string> = {
-  draf: "bg-muted text-muted-foreground",
+  draf: "bg-muted text-muted-foreground ring-1 ring-inset ring-border",
   terbit:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+    "bg-success/15 text-success ring-1 ring-inset ring-success/30",
   revisi:
-    "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+    "bg-warning/15 text-warning-foreground ring-1 ring-inset ring-warning/40",
 };
 
 function formatTanggal(d: Date): string {
@@ -62,7 +62,7 @@ export function DaftarEraport({
 }) {
   if (eraport.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
         Belum ada E-Raport.
       </p>
     );
@@ -78,7 +78,7 @@ export function DaftarEraport({
         return (
           <li
             key={e.id}
-            className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+            className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-5 text-card-foreground shadow-warm transition-colors hover:border-accent/30 t-lift"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="flex flex-wrap items-center gap-2">

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { CalendarDays, ClipboardList } from "lucide-react";
 
+import { PageReveal } from "@/components/motion";
 import { getDb, withTenant } from "@/db/client";
 import {
   getBebanMengajarSaya,
@@ -143,24 +145,49 @@ export default async function Page() {
   // No active period → friendly notice + link to enable one.
   if (!data.taAktif || !data.semester) {
     return (
-      <section className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-          <h1 className="text-2xl font-bold tracking-tight">Beban Mengajar</h1>
-          <p className="text-sm text-muted-foreground">
-            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-            {akses.membership.roleSlug}
-          </p>
-        </header>
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-          Aktifkan Tahun Ajaran terlebih dahulu.{" "}
-          <Link
-            href="/dashboard/tahun-ajaran"
-            className="font-medium text-primary underline-offset-4 hover:underline"
+      <div className="flex flex-col gap-10 md:gap-12">
+        <PageReveal
+          as="header"
+          className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+        >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
           >
-            Buka Pengaturan Tahun Ajaran
-          </Link>
-        </p>
-      </section>
+            04
+          </span>
+          <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+            <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden="true" />
+              Penugasan
+            </p>
+            <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              Beban Mengajar
+            </h1>
+            <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+              Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+              {akses.membership.roleSlug}
+            </p>
+          </div>
+        </PageReveal>
+        <PageReveal>
+          <p className="flex flex-col items-start gap-3 rounded-2xl border border-dashed border-border bg-muted/40 p-6 sm:flex-row sm:items-center sm:gap-4 sm:text-center">
+            <CalendarDays
+              className="h-5 w-5 shrink-0 text-accent"
+              aria-hidden="true"
+            />
+            <span className="text-sm text-muted-foreground">
+              Aktifkan Tahun Ajaran terlebih dahulu.{" "}
+              <Link
+                href="/dashboard/tahun-ajaran"
+                className="font-medium text-accent underline-offset-4 hover:underline"
+              >
+                Buka Pengaturan Tahun Ajaran
+              </Link>
+            </span>
+          </p>
+        </PageReveal>
+      </div>
     );
   }
 
@@ -195,16 +222,35 @@ export default async function Page() {
   // AC#4: guru with a linked PTK → read-only personalized context.
   if (isGuruContext) {
     return (
-      <section className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-          <h1 className="text-2xl font-bold tracking-tight">Beban Mengajar</h1>
-          <p className="text-sm text-muted-foreground">
-            Periode Aktif: {data.taAktif.nama} · Semester {labelSemester} ·
-            Peran Anda: {akses.membership.roleSlug} (konteks saya)
-          </p>
-        </header>
-        <KonteksGuru beban={barisBeban} wali={barisWali} />
-      </section>
+      <div className="flex flex-col gap-10 md:gap-12">
+        <PageReveal
+          as="header"
+          className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+        >
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
+          >
+            04
+          </span>
+          <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+            <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+              <ClipboardList className="h-3.5 w-3.5" aria-hidden="true" />
+              Konteks Saya
+            </p>
+            <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              Beban Mengajar
+            </h1>
+            <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+              Periode Aktif: {data.taAktif.nama} · Semester {labelSemester} ·
+              Peran Anda: {akses.membership.roleSlug} (konteks saya)
+            </p>
+          </div>
+        </PageReveal>
+        <PageReveal>
+          <KonteksGuru beban={barisBeban} wali={barisWali} />
+        </PageReveal>
+      </div>
     );
   }
 
@@ -217,63 +263,96 @@ export default async function Page() {
       akses.membership.roleSlug === "wali_kelas");
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Beban Mengajar</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
-          {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehKelola ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
+        >
+          04
+        </span>
+        <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+          <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+            <ClipboardList className="h-3.5 w-3.5" aria-hidden="true" />
+            Penugasan
+          </p>
+          <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            Beban Mengajar
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
+            {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehKelola ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {butuhPtk && (
-        <p className="rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
-          Hubungi admin untuk menghubungkan akun PTK Anda agar dapat melihat
-          Beban Mengajar dan Wali Kelas milik Anda.
-        </p>
+        <PageReveal>
+          <p className="rounded-2xl border border-border bg-secondary/60 p-4 text-sm text-muted-foreground">
+            Hubungi admin untuk menghubungkan akun PTK Anda agar dapat melihat
+            Beban Mengajar dan Wali Kelas milik Anda.
+          </p>
+        </PageReveal>
       )}
 
       {bolehKelola && (
-        <FormBebanMengajarBaru
-          action={simpanBebanMengajarBaruAction}
-          ptks={data.ptks}
-          mapel={data.mapel}
-          rombels={data.rombels}
-          tingkats={data.tingkats}
-        />
+        <PageReveal>
+          <FormBebanMengajarBaru
+            action={simpanBebanMengajarBaruAction}
+            ptks={data.ptks}
+            mapel={data.mapel}
+            rombels={data.rombels}
+            tingkats={data.tingkats}
+          />
+        </PageReveal>
       )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Daftar Beban Mengajar
-        </h2>
+      <PageReveal className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            01 — Beban
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Daftar Beban Mengajar
+          </h2>
+        </div>
         <DaftarBebanMengajar
           beban={barisBeban}
           bolehKelola={bolehKelola}
           hapusAction={hapusBebanMengajarAction}
         />
-      </div>
+      </PageReveal>
 
       {bolehKelola && (
-        <FormWaliKelas
-          action={upsertWaliKelasAction}
-          ptks={data.ptks}
-          rombels={data.rombels}
-        />
+        <PageReveal>
+          <FormWaliKelas
+            action={upsertWaliKelasAction}
+            ptks={data.ptks}
+            rombels={data.rombels}
+          />
+        </PageReveal>
       )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Daftar Wali Kelas
-        </h2>
+      <PageReveal className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            02 — Wali Kelas
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Daftar Wali Kelas
+          </h2>
+        </div>
         <DaftarWaliKelas
           wali={barisWali}
           bolehKelola={bolehKelola}
           hapusAction={hapusWaliKelasAction}
         />
-      </div>
-    </section>
+      </PageReveal>
+    </div>
   );
 }

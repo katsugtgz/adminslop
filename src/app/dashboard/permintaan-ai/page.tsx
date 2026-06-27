@@ -1,3 +1,5 @@
+import { Sparkles } from "lucide-react";
+
 import { getDb, withTenant } from "@/db/client";
 import { cariDrafAiByPermintaan } from "@/db/queries/draf-ai";
 import { getAtauBuatKuotaAi, type Semester } from "@/db/queries/kuota-ai";
@@ -7,6 +9,7 @@ import type { DrafAi } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 import { DaftarPermintaan } from "@/components/permintaan-ai/daftar-permintaan";
 import { FormPermintaan } from "@/components/permintaan-ai/form-permintaan";
 import { KartuKuota } from "@/components/permintaan-ai/kartu-kuota";
@@ -84,30 +87,71 @@ export default async function Page() {
   });
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Permintaan AI</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuat || bolehVerifikasi ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-14">
+      <PageReveal
+        as="section"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-50 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.5) 0%, transparent 65%)",
+          }}
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
+        >
+          12
+        </span>
+        <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            Modul · Permintaan AI
+          </p>
+          <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+            Permintaan AI
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuat || bolehVerifikasi ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {data === null ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-          Aktifkan Tahun Ajaran terlebih dahulu untuk mengelola Permintaan AI.
-        </p>
+        <PageReveal as="section" delay={2}>
+          <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
+            Aktifkan Tahun Ajaran terlebih dahulu untuk mengelola Permintaan AI.
+          </p>
+        </PageReveal>
       ) : (
         <>
-          <KartuKuota kuota={data.kuota} />
+          <PageReveal as="section" delay={2}>
+            <KartuKuota kuota={data.kuota} />
+          </PageReveal>
 
-          {bolehBuat ? <FormPermintaan action={buatPermintaanAiAction} /> : null}
+          {bolehBuat ? (
+            <PageReveal as="section" delay={2}>
+              <FormPermintaan action={buatPermintaanAiAction} />
+            </PageReveal>
+          ) : null}
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">
-              Daftar Permintaan AI
-            </h2>
+          <PageReveal as="section" delay={3} className="flex flex-col gap-5">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+              >
+                01
+              </span>
+              <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+                Daftar Permintaan AI
+              </h2>
+            </div>
             <DaftarPermintaan
               permintaan={data.permintaanList}
               drafMap={data.drafMap}
@@ -117,9 +161,9 @@ export default async function Page() {
               retryAction={retryPermintaanAiAction}
               verifikasiAction={verifikasiDrafAiAction}
             />
-          </div>
+          </PageReveal>
         </>
       )}
-    </section>
+    </div>
   );
 }

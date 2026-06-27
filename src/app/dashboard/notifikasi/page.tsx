@@ -1,3 +1,5 @@
+import { Bell } from "lucide-react";
+
 import { getDb, withTenant } from "@/db/client";
 import {
   getPreferensiNotifikasi,
@@ -8,6 +10,7 @@ import { getAksesSaya } from "@/lib/auth/akses-saya";
 
 import { DaftarNotifikasi } from "@/components/notifikasi/daftar-notifikasi";
 import { KontrolPreferensi } from "@/components/notifikasi/kontrol-preferensi";
+import { PageReveal } from "@/components/motion";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 
@@ -54,14 +57,33 @@ export default async function Page() {
   const myPenggunaId = akses.pengguna?.id;
   if (!myPenggunaId) {
     return (
-      <section className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-          <h1 className="text-2xl font-bold tracking-tight">Notifikasi</h1>
-          <p className="text-sm text-muted-foreground">
-            Pengingat Tugas Tertunda untuk Anda.
-          </p>
-        </header>
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <section className="flex flex-col gap-10">
+        <PageReveal
+          as="header"
+          className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative flex flex-col gap-3">
+            <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <Bell className="h-3.5 w-3.5" aria-hidden="true" />
+              Pusat Pengingat
+            </p>
+            <h1 className="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+              Notifikasi
+            </h1>
+            <p className="text-sm text-muted-foreground md:text-base">
+              Pengingat Tugas Tertunda untuk Anda.
+            </p>
+          </div>
+        </PageReveal>
+        <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
           Akun Anda belum terdaftar sebagai Pengguna. Hubungi admin.
         </p>
       </section>
@@ -83,34 +105,61 @@ export default async function Page() {
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight">Notifikasi</h1>
-          {belumDibaca > 0 && (
-            <span
-              aria-label={`${belumDibaca} Belum Dibaca`}
-              className="inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-destructive px-2 text-xs font-semibold text-destructive-foreground"
-            >
-              {belumDibaca}
-            </span>
-          )}
+    <section className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative flex flex-col gap-3">
+          <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+            <Bell className="h-3.5 w-3.5" aria-hidden="true" />
+            Pusat Pengingat
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+              Notifikasi
+            </h1>
+            {belumDibaca > 0 && (
+              <span
+                aria-label={`${belumDibaca} Belum Dibaca`}
+                className="inline-flex h-6 min-w-[1.5rem] items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2 text-xs font-semibold text-accent"
+              >
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-accent"
+                />
+                {belumDibaca}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground md:text-base">
+            Pengingat Tugas Tertunda untuk Anda.
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Pengingat Tugas Tertunda untuk Anda.
-        </p>
-      </header>
+      </PageReveal>
 
-      <DaftarNotifikasi
-        notifikasis={notifikasis}
-        tandaiDibacaAction={tandaiDibacaAction}
-        tandaiSemuaDibacaAction={tandaiSemuaDibacaAction}
-      />
+      <PageReveal delay={2}>
+        <DaftarNotifikasi
+          notifikasis={notifikasis}
+          tandaiDibacaAction={tandaiDibacaAction}
+          tandaiSemuaDibacaAction={tandaiSemuaDibacaAction}
+        />
+      </PageReveal>
 
-      <KontrolPreferensi
-        preferensi={preferensi}
-        aturPreferensiAction={aturPreferensiNotifikasiAction}
-      />
+      <PageReveal delay={3}>
+        <KontrolPreferensi
+          preferensi={preferensi}
+          aturPreferensiAction={aturPreferensiNotifikasiAction}
+        />
+      </PageReveal>
     </section>
   );
 }
