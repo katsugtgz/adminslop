@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Download } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import { getKontenCetak } from "@/db/queries/cetak";
@@ -6,6 +8,7 @@ import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PratinjauEraport } from "@/components/cetak/pratinjau-eraport";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { Button } from "@/components/ui/button";
 import { PageReveal } from "@/components/motion";
 
 export const dynamic = "force-dynamic";
@@ -79,6 +82,23 @@ export default async function Page({
             {akses.membership.orgName} · Semester: {konten.semester} · Status:{" "}
             {konten.status}
           </p>
+          {/*
+            Two print paths: (1) the on-screen Pratinjau below + browser print
+            dialog is the AC#3 golden target; (2) this "Unduh PDF" link is the
+            Task 14 server-rendered PDF vertical slice. The link is convenience
+            UI only — the GET route handler is the authz boundary (identity doc
+            §12; "hiding UI is not authorization").
+          */}
+          <Link
+            href={`/dashboard/cetak/pratinjau/${konten.eraportId}/pdf`}
+            download
+            className="no-print mt-4 inline-flex w-fit"
+          >
+            <Button type="button" variant="outline" size="sm">
+              <Download className="h-4 w-4" aria-hidden="true" />
+              Unduh PDF
+            </Button>
+          </Link>
         </div>
       </PageReveal>
 
