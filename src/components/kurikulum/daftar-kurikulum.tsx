@@ -9,7 +9,7 @@ import type { Kurikulum } from "@/db/schema";
  * query (clearing deeper levels — mapel/fase/cp/tp/atp — so the browser resets
  * into the chosen curriculum). GLOBAL data (ADR 0001): no tenant scoping.
  *
- * The approval-state badge uses the project token palette (`primary` for
+ * The approval-state badge uses the project token palette (`accent` for
  * disetujui, `muted` for memerlukan_tinjauan, `destructive` for ditolak).
  */
 const LABEL_STATUS: Record<Kurikulum["statusPersetujuan"], string> = {

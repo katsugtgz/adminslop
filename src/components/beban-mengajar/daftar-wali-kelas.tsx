@@ -42,7 +42,7 @@ export function DaftarWaliKelas({
       {wali.map((row, idx) => (
         <li
           key={row.id}
-          className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-warm transition-shadow hover:shadow-warm-lg"
+          className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-warm transition-shadow hover:shadow-warm-lg"
         >
           <div className="flex items-center justify-between gap-2">
             <span

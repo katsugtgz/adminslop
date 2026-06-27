@@ -45,7 +45,7 @@ export function DaftarTemplateCetak({
       {templates.map((t) => (
         <li
           key={t.id}
-          className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/30 t-lift"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm"
         >
           <span className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-semibold">{t.nama}</span>
