@@ -88,7 +88,7 @@ begin
     alter table komponen_nilai
       add constraint komponen_nilai_tenant_beban_fkey
       foreign key (tenant_id, beban_mengajar_id)
-      references beban_mengajar (tenant_id, id) on delete cascade;
+      references beban_mengajar (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -103,7 +103,7 @@ begin
     alter table penilaian
       add constraint penilaian_tenant_komponen_fkey
       foreign key (tenant_id, komponen_nilai_id)
-      references komponen_nilai (tenant_id, id) on delete cascade;
+      references komponen_nilai (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -118,7 +118,7 @@ begin
     alter table nilai_peserta_didik
       add constraint nilai_peserta_didik_tenant_penilaian_fkey
       foreign key (tenant_id, penilaian_id)
-      references penilaian (tenant_id, id) on delete cascade;
+      references penilaian (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -133,7 +133,7 @@ begin
     alter table nilai_peserta_didik
       add constraint nilai_peserta_didik_tenant_peserta_fkey
       foreign key (tenant_id, peserta_didik_id)
-      references peserta_didik (tenant_id, id) on delete cascade;
+      references peserta_didik (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -153,7 +153,7 @@ begin
     alter table permintaan_ai
       add constraint permintaan_ai_tenant_terkait_fkey
       foreign key (tenant_id, permintaan_terkait_id)
-      references permintaan_ai (tenant_id, id) on delete set null (permintaan_terkait_id);
+      references permintaan_ai (tenant_id, id) on delete set null (permintaan_terkait_id) not valid;
   end if;
 end $$;
 
@@ -168,7 +168,7 @@ begin
     alter table draf_ai
       add constraint draf_ai_tenant_permintaan_fkey
       foreign key (tenant_id, permintaan_ai_id)
-      references permintaan_ai (tenant_id, id) on delete cascade;
+      references permintaan_ai (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -183,7 +183,7 @@ begin
     alter table kuota_ai
       add constraint kuota_ai_tenant_tahun_ajaran_fkey
       foreign key (tenant_id, tahun_ajaran_id)
-      references tahun_ajaran (tenant_id, id) on delete cascade;
+      references tahun_ajaran (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -201,7 +201,7 @@ begin
     alter table draf_eraport
       add constraint draf_eraport_tenant_peserta_fkey
       foreign key (tenant_id, peserta_didik_id)
-      references peserta_didik (tenant_id, id) on delete cascade;
+      references peserta_didik (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -216,7 +216,7 @@ begin
     alter table draf_eraport
       add constraint draf_eraport_tenant_tahun_ajaran_fkey
       foreign key (tenant_id, tahun_ajaran_id)
-      references tahun_ajaran (tenant_id, id) on delete cascade;
+      references tahun_ajaran (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -232,7 +232,7 @@ begin
     alter table draf_eraport
       add constraint draf_eraport_tenant_draf_ai_fkey
       foreign key (tenant_id, draf_ai_id)
-      references draf_ai (tenant_id, id) on delete set null (draf_ai_id);
+      references draf_ai (tenant_id, id) on delete set null (draf_ai_id) not valid;
   end if;
 end $$;
 
@@ -247,7 +247,7 @@ begin
     alter table revisi_eraport
       add constraint revisi_eraport_tenant_eraport_fkey
       foreign key (tenant_id, eraport_id)
-      references draf_eraport (tenant_id, id) on delete cascade;
+      references draf_eraport (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -265,7 +265,7 @@ begin
     alter table absensi_harian
       add constraint absensi_harian_tenant_peserta_fkey
       foreign key (tenant_id, peserta_didik_id)
-      references peserta_didik (tenant_id, id) on delete cascade;
+      references peserta_didik (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -280,7 +280,7 @@ begin
     alter table absensi_harian
       add constraint absensi_harian_tenant_rombel_fkey
       foreign key (tenant_id, rombongan_belajar_id)
-      references rombongan_belajar (tenant_id, id) on delete cascade;
+      references rombongan_belajar (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -300,7 +300,7 @@ begin
     alter table butir_soal
       add constraint butir_soal_tenant_tingkat_fkey
       foreign key (tenant_id, tingkat_id)
-      references tingkat (tenant_id, id) on delete cascade;
+      references tingkat (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -316,7 +316,7 @@ begin
     alter table butir_soal
       add constraint butir_soal_tenant_draf_ai_fkey
       foreign key (tenant_id, draf_ai_id)
-      references draf_ai (tenant_id, id) on delete set null (draf_ai_id);
+      references draf_ai (tenant_id, id) on delete set null (draf_ai_id) not valid;
   end if;
 end $$;
 
@@ -331,7 +331,7 @@ begin
     alter table paket_soal
       add constraint paket_soal_tenant_tingkat_fkey
       foreign key (tenant_id, tingkat_id)
-      references tingkat (tenant_id, id) on delete cascade;
+      references tingkat (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -346,7 +346,7 @@ begin
     alter table paket_soal
       add constraint paket_soal_tenant_tahun_ajaran_fkey
       foreign key (tenant_id, tahun_ajaran_id)
-      references tahun_ajaran (tenant_id, id) on delete cascade;
+      references tahun_ajaran (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -361,7 +361,7 @@ begin
     alter table paket_soal_butir
       add constraint paket_soal_butir_tenant_paket_fkey
       foreign key (tenant_id, paket_soal_id)
-      references paket_soal (tenant_id, id) on delete cascade;
+      references paket_soal (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -376,7 +376,7 @@ begin
     alter table paket_soal_butir
       add constraint paket_soal_butir_tenant_butir_fkey
       foreign key (tenant_id, butir_soal_id)
-      references butir_soal (tenant_id, id) on delete cascade;
+      references butir_soal (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -395,7 +395,7 @@ begin
     alter table perangkat_ajar
       add constraint perangkat_ajar_tenant_tingkat_fkey
       foreign key (tenant_id, tingkat_id)
-      references tingkat (tenant_id, id) on delete cascade;
+      references tingkat (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -410,7 +410,7 @@ begin
     alter table perangkat_ajar
       add constraint perangkat_ajar_tenant_tahun_ajaran_fkey
       foreign key (tenant_id, tahun_ajaran_id)
-      references tahun_ajaran (tenant_id, id) on delete cascade;
+      references tahun_ajaran (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -426,7 +426,7 @@ begin
     alter table perangkat_ajar
       add constraint perangkat_ajar_tenant_draf_ai_fkey
       foreign key (tenant_id, draf_ai_id)
-      references draf_ai (tenant_id, id) on delete set null (draf_ai_id);
+      references draf_ai (tenant_id, id) on delete set null (draf_ai_id) not valid;
   end if;
 end $$;
 
@@ -444,7 +444,7 @@ begin
     alter table notifikasi
       add constraint notifikasi_tenant_pengguna_fkey
       foreign key (tenant_id, pengguna_id)
-      references pengguna (tenant_id, id) on delete cascade;
+      references pengguna (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -459,7 +459,7 @@ begin
     alter table preferensi_notifikasi
       add constraint preferensi_notifikasi_tenant_pengguna_fkey
       foreign key (tenant_id, pengguna_id)
-      references pengguna (tenant_id, id) on delete cascade;
+      references pengguna (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -477,7 +477,7 @@ begin
     alter table dokumen_cetak
       add constraint dokumen_cetak_tenant_eraport_fkey
       foreign key (tenant_id, draf_eraport_id)
-      references draf_eraport (tenant_id, id) on delete cascade;
+      references draf_eraport (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
 
@@ -492,6 +492,6 @@ begin
     alter table dokumen_cetak
       add constraint dokumen_cetak_tenant_template_fkey
       foreign key (tenant_id, template_cetak_id)
-      references template_cetak (tenant_id, id) on delete cascade;
+      references template_cetak (tenant_id, id) on delete cascade not valid;
   end if;
 end $$;
