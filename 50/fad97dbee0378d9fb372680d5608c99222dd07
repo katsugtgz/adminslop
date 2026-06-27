@@ -1,0 +1,20 @@
+src/test/setup.ts
+  s_f38687804bcfdc::t_c00d9c6495c8d0 1,4-18
+  s_f38687804bcfdc::t_b2667cebf043d1 19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "50fad97dbee0378d9fb372680d5608c99222dd07",
+  "prompts": {},
+  "sessions": {
+    "s_f38687804bcfdc": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f096f-1c90-77d5-8eae-968b95979856",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
