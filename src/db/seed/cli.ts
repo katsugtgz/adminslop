@@ -5,6 +5,7 @@ import { createDb } from "../client";
 import { runMigrations } from "../migrate";
 import { seedReferensiKurikulum } from "./referensi";
 import { cleanupTenant, seedTenant, DEMO_TENANTS, AKTOR_SEED } from "./tenant";
+import { assertLocalOrForced } from "./guard";
 
 // Load .env (Node native; no-op jika tak ada).
 try {
@@ -25,6 +26,11 @@ async function main() {
     console.error("DATABASE_URL (app_user, RLS) wajib untuk seed data tenant.");
     process.exit(1);
   }
+
+  // Safety guard: seed destruktif (migrasi + cleanupTenant). Tolak host
+  // non-lokal kecuali SEED_FORCE=true di-set sadar.
+  assertLocalOrForced("DATABASE_MIGRATOR_URL", MIG_URL);
+  assertLocalOrForced("DATABASE_URL", APP_URL);
 
   // 1. Migrasi sebagai superuser (idempotent — skip yang sudah terapan).
   const migDir = path.join(process.cwd(), "src", "db", "migrations");
