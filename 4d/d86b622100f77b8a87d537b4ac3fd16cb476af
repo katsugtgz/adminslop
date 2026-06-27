@@ -1,0 +1,39 @@
+src/app/dashboard/absensi/actions.test.ts
+  s_6e10c84751e565::t_29e6f4b2a4098c 25-32
+src/lib/auth/kepemilikan.ts
+  s_6e10c84751e565::t_b0b6f70739843d 294,305
+  s_6e10c84751e565::t_6ba094b87c879d 50-60
+  s_6e10c84751e565::t_42e14072f89591 78-81,90-93,99-102,111-114
+  s_6e10c84751e565::t_1097854a7c4b59 166,171
+  s_6e10c84751e565::t_e923f8b14fb7c5 28-30,33
+  s_6e10c84751e565::t_3ba5cce07a4e69 196-204,218-226,239-242,248-251
+  s_6e10c84751e565::t_874b4ea4486d7d 34
+  s_6e10c84751e565::t_6754ff06d43521 61
+src/app/api/sinkronisasi/route.test.ts
+  s_6e10c84751e565::t_d08d27e0c8207f 253-257
+  s_6e10c84751e565::t_6601d1f1d38b70 21-37
+  s_6e10c84751e565::t_68ed5e879e8156 222-226
+  s_6e10c84751e565::t_284cb5afe9dabd 192-193
+src/app/dashboard/penilaian/actions.test.ts
+  s_6e10c84751e565::t_cd11b071312ad2 23-30
+src/app/api/sinkronisasi/route.ts
+  s_6e10c84751e565::t_571922ea76321a 367-374,376-377
+  s_6e10c84751e565::t_e5a24dfc9cf019 11
+  s_6e10c84751e565::t_ea0aaebb62ee10 323-331,333-334
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "4dd86b622100f77b8a87d537b4ac3fd16cb476af",
+  "prompts": {},
+  "sessions": {
+    "s_6e10c84751e565": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f7eecd94ffeCOpC0LMSFDOEMR",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
