@@ -1,0 +1,23 @@
+src/db/queries/cetak.ts
+  s_53dbe59341d25a::t_8ded761c62f838 271-272
+  s_53dbe59341d25a::t_269747117c379f 273
+src/db/queries/cetak.test.ts
+  s_53dbe59341d25a::t_db328e5c0583b6 298-300
+  s_53dbe59341d25a::t_2ff1167377302c 331
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f6d7637064be770d4a91dd7d4998c91181dff616",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
