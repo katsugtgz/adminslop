@@ -144,7 +144,7 @@ describe("PengaturanPage (#5)", () => {
       screen.getByRole("heading", { name: /Pilih Satuan Pendidikan/i }),
     ).toBeInTheDocument();
     const link = screen.getByRole("link", {
-      name: /Kembali ke Dashboard/i,
+      name: /Kembali ke Beranda/i,
     }) as HTMLAnchorElement;
     expect(link.getAttribute("href")).toBe("/dashboard");
   });

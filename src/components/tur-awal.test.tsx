@@ -56,7 +56,7 @@ describe("TurAwal — first-visit guided walkthrough", () => {
     // Step 2
     fireEvent.click(screen.getByRole("button", { name: /Selanjutnya/i }));
     expect(
-      screen.getByText(/Pilih Satuan Pendidikan dari dashboard/i)
+      screen.getByText(/Pilih Satuan Pendidikan dari Beranda/i)
     ).toBeInTheDocument();
 
     // Step 3
@@ -68,7 +68,7 @@ describe("TurAwal — first-visit guided walkthrough", () => {
     // Step 4 (last) — button label changes to "Selesai"
     fireEvent.click(screen.getByRole("button", { name: /Selanjutnya/i }));
     expect(
-      screen.getByText(/Gunakan menu di dashboard untuk mengakses modul/i)
+      screen.getByText(/Gunakan menu di Beranda untuk mengakses modul/i)
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /^Selesai$/i })

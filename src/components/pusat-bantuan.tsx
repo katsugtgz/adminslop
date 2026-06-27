@@ -3,11 +3,11 @@ import Link from "next/link";
 const FAQ: { q: string; a: string }[] = [
   {
     q: "Bagaimana cara memilih Satuan Pendidikan?",
-    a: "Setelah masuk, buka Dashboard. Jika Anda memiliki lebih dari satu Keanggotaan Satuan Pendidikan, Anda akan diminta memilih Satuan Pendidikan Aktif. Pilihan ini menentukan ruang data yang dapat Anda kelola; data antar Satuan Pendidikan selalu terisolasi.",
+    a: "Setelah masuk, buka Beranda. Jika Anda memiliki lebih dari satu Keanggotaan Satuan Pendidikan, Anda akan diminta memilih Satuan Pendidikan Aktif. Pilihan ini menentukan ruang data yang dapat Anda kelola; data antar Satuan Pendidikan selalu terisolasi.",
   },
   {
     q: "Bagaimana cara menambah Peserta Didik?",
-    a: "Pada dashboard Satuan Pendidikan Aktif, pilih modul Peserta Didik. Admin dan Kepala Sekolah dapat menambah Peserta Didik baru lengkap dengan data Wali, Kontak Darurat, dan mutasi. Guru dan Wali Kelas dapat melihat data sesuai peran masing-masing.",
+    a: "Pada Beranda Satuan Pendidikan Aktif, pilih modul Peserta Didik. Admin dan Kepala Sekolah dapat menambah Peserta Didik baru lengkap dengan data Wali, Kontak Darurat, dan mutasi. Guru dan Wali Kelas dapat melihat data sesuai peran masing-masing.",
   },
   {
     q: "Bagaimana cara mencatat nilai?",

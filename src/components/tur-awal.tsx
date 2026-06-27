@@ -11,16 +11,16 @@ export const TUR_AWAL_BUKA_EVENT = "tur-awal:buka";
 
 const STEP_TITLES = [
   "Selamat datang di EduAdmin Pro Premium",
-  "Pilih Satuan Pendidikan dari dashboard",
+  "Pilih Satuan Pendidikan dari Beranda",
   "Kelola Peserta Didik, PTK, dan data sekolah",
-  "Gunakan menu di dashboard untuk mengakses modul",
+  "Gunakan menu di Beranda untuk mengakses modul",
 ] as const;
 
 const STEP_DESCRIPTIONS = [
   "Portal administrasi sekolah untuk Guru dan Satuan Pendidikan di Indonesia.",
   "Pilih Satuan Pendidikan Aktif sebelum mengelola data sekolah.",
   "Setelah memilih, modul Peserta Didik, PTK, dan data sekolah akan aktif.",
-  "Akses setiap modul melalui kartu di dashboard sesuai peran Anda.",
+  "Akses setiap modul melalui kartu di Beranda sesuai peran Anda.",
 ] as const;
 
 type State = { mulai: boolean; langkah: number };
