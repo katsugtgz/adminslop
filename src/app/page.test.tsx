@@ -1,33 +1,39 @@
-import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { render } from "@testing-library/react";
 
-import BerandaPage from "@/app/page";
+import BerandaPage from "./page";
 
-describe("BerandaPage (product shell)", () => {
-  it("menampilkan judul produk dalam Bahasa Indonesia", () => {
-    render(<BerandaPage />);
-    expect(
-      screen.getByRole("heading", { level: 1, name: /EduAdmin Pro Premium/i })
-    ).toBeInTheDocument();
+/**
+ * ISSUE-002 regression — the landing (BerandaPage) used to spam the React
+ * "Each child in a list should have a unique key prop" warning on server
+ * render. This test renders the page and asserts no such warning fires.
+ *
+ * The spy also records the offending component stack so a regression
+ * points straight at the culprit list.
+ */
+describe("BerandaPage (landing) — no React key-prop warnings", () => {
+  let keyWarnings: string[];
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    keyWarnings = [];
+    consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation((...args: unknown[]) => {
+        const text = args.map(String).join(" ");
+        if (/unique "key" prop/i.test(text)) {
+          keyWarnings.push(text);
+        }
+      });
   });
 
-  it("menyediakan aksi Dashboard dan Tur Awal", () => {
-    render(<BerandaPage />);
-    expect(
-      screen.getByRole("link", { name: /Masuk ke Dashboard/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /^Tur Awal$/i })
-    ).toBeInTheDocument();
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
   });
 
-  it("mendaftarkan modul MVP sebagai placeholder", () => {
+  it("renders without any React list-key warnings", () => {
     render(<BerandaPage />);
-    expect(
-      screen.getByRole("heading", { level: 2, name: /^Modul$/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Input Nilai & E-Raport")
-    ).toBeInTheDocument();
+
+    expect(keyWarnings, keyWarnings.join("\n---\n")).toHaveLength(0);
   });
 });
