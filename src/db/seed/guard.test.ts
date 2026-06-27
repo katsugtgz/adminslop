@@ -12,6 +12,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // restoreAllMocks guarantees spy cleanup bila test throw mid-way (manual
+  // mockRestore di tiap it tak jalan bila assertion gagal sebelumnya).
+  vi.restoreAllMocks();
   for (const k of ENV_KEYS) {
     if (saved[k] === undefined) delete process.env[k];
     else process.env[k] = saved[k];
