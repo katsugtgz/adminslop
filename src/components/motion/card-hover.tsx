@@ -4,20 +4,24 @@ import * as React from "react";
 
 /**
  * CardHover — wraps an element with the .t-lift hover lift transition.
- * Pass through props to a div by default; override via `as`.
+ * Forwards arbitrary DOM/ARIA props (aria-current, aria-label, role, …)
+ * onto the rendered element (or cloned child when `asChild`).
  *
  * For hover lift to be visible, the wrapped element should already
  * have a background + shadow (the lift replaces the shadow).
  *
  * Usage:
  *   <CardHover asChild><Link className="...">…</Link></CardHover>
- *   <CardHover className="rounded-xl bg-card p-5 shadow-warm">…</CardHover>
+ *   <CardHover as="li" aria-current="true" className="rounded-xl bg-card p-5 shadow-warm">…</CardHover>
  */
-export type CardHoverProps = {
-  children: React.ReactNode;
-  className?: string;
+export type CardHoverProps = Omit<
+  React.HTMLAttributes<HTMLElement>,
+  "className"
+> & {
+  children?: React.ReactNode;
   as?: React.ElementType;
   asChild?: boolean;
+  className?: string;
 };
 
 export function CardHover({
@@ -25,14 +29,24 @@ export function CardHover({
   className,
   as: Comp = "div",
   asChild = false,
+  ...rest
 }: CardHoverProps) {
   const cls = `t-lift${className ? ` ${className}` : ""}`;
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement<{ className?: string }>, {
-      className: cnMerge((children.props as { className?: string }).className, cls),
-    });
+    const childProps = (children.props ?? {}) as Record<string, unknown>;
+    return React.cloneElement(
+      children as React.ReactElement<Record<string, unknown>>,
+      {
+        ...rest,
+        className: cnMerge(childProps.className as string | undefined, cls),
+      },
+    );
   }
-  return <Comp className={cls}>{children}</Comp>;
+  return (
+    <Comp className={cls} {...rest}>
+      {children}
+    </Comp>
+  );
 }
 
 // Tiny merge to avoid pulling tailwind-merge into a tiny client component

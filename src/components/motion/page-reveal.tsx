@@ -7,11 +7,18 @@ import * as React from "react";
  * Mounts children with .t-rise CSS, then adds .is-shown after first paint
  * so transitions play. Honors prefers-reduced-motion via CSS guard.
  *
+ * Forwards arbitrary DOM/ARIA props (aria-label, role, data-*, …) onto the
+ * rendered element so callers can label named regions.
+ *
  * Usage:
  *   <PageReveal as="section" delay={2}><Hero /></PageReveal>
+ *   <PageReveal as="section" aria-label="Onboarding">…</PageReveal>
  */
-export type PageRevealProps = {
-  children: React.ReactNode;
+export type PageRevealProps = Omit<
+  React.HTMLAttributes<HTMLElement>,
+  "className"
+> & {
+  children?: React.ReactNode;
   /** 1-5; each step delays entrance by 80ms */
   delay?: 1 | 2 | 3 | 4 | 5;
   /** Element type to render (default div) */
@@ -24,6 +31,7 @@ export function PageReveal({
   delay = 1,
   as: Comp = "div",
   className,
+  ...rest
 }: PageRevealProps) {
   const [shown, setShown] = React.useState(false);
   React.useEffect(() => {
@@ -33,7 +41,10 @@ export function PageReveal({
 
   const delayClass = delay > 1 ? ` t-rise--${delay}` : "";
   return (
-    <Comp className={`t-rise${delayClass}${shown ? " is-shown" : ""}${className ? ` ${className}` : ""}`}>
+    <Comp
+      className={`t-rise${delayClass}${shown ? " is-shown" : ""}${className ? ` ${className}` : ""}`}
+      {...rest}
+    >
       {children}
     </Comp>
   );
