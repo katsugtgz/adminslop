@@ -11,6 +11,7 @@ import { KontrolCetak, type OpsiEraport } from "@/components/cetak/kontrol-cetak
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 import { Button } from "@/components/ui/button";
+import { PageReveal } from "@/components/motion";
 
 import { buatDokumenCetakAction, buatTemplateCetakAction } from "./actions";
 
@@ -67,27 +68,49 @@ export default async function Page() {
   });
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Cetak</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuat ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            04 — Cetak
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Cetak
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuat ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      {bolehBuat ? <FormTemplateCetak action={buatTemplateCetakAction} /> : null}
+      {bolehBuat ? (
+        <PageReveal delay={2}>
+          <FormTemplateCetak action={buatTemplateCetakAction} />
+        </PageReveal>
+      ) : null}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Template Cetak</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <SectionLabel nomor="01">Template Cetak</SectionLabel>
         <DaftarTemplateCetak templates={data.templates} />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Pratinjau Cetak</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <SectionLabel nomor="02">Pratinjau Cetak</SectionLabel>
         {data.eraportTerbit.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
             Belum ada E-Raport Terbit untuk dicetak.
           </p>
         ) : (
@@ -98,7 +121,7 @@ export default async function Page() {
               return (
                 <li
                   key={e.id}
-                  className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+                  className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/40 t-lift"
                 >
                   <span className="text-sm font-medium">{nama}</span>
                   <Link href={`/dashboard/cetak/pratinjau/${e.id}`}>
@@ -111,20 +134,22 @@ export default async function Page() {
             })}
           </ul>
         )}
-      </div>
+      </PageReveal>
 
       {bolehBuat ? (
-        <KontrolCetak
-          eraportOptions={data.eraportOptions}
-          templateOptions={data.templates}
-          action={buatDokumenCetakAction}
-        />
+        <PageReveal delay={4}>
+          <KontrolCetak
+            eraportOptions={data.eraportOptions}
+            templateOptions={data.templates}
+            action={buatDokumenCetakAction}
+          />
+        </PageReveal>
       ) : null}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Dokumen Cetak</h2>
+      <PageReveal delay={4} className="flex flex-col gap-3">
+        <SectionLabel nomor="03">Dokumen Cetak</SectionLabel>
         {data.dokumen.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
             Belum ada Dokumen Cetak.
           </p>
         ) : (
@@ -132,11 +157,11 @@ export default async function Page() {
             {data.dokumen.map((d) => (
               <li
                 key={d.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+                className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/40 t-lift"
               >
                 <span className="flex items-center gap-2 text-sm font-medium">
                   Format: {d.format.toUpperCase()}
-                  <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 font-mono text-[0.7rem] text-muted-foreground ring-1 ring-inset ring-border">
                     {d.tandaTanganNama ?? "Tanpa Tanda Tangan"}
                   </span>
                 </span>
@@ -149,7 +174,27 @@ export default async function Page() {
             ))}
           </ul>
         )}
-      </div>
-    </section>
+      </PageReveal>
+    </div>
+  );
+}
+
+function SectionLabel({
+  nomor,
+  children,
+}: {
+  nomor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span aria-hidden="true" className="font-mono text-[0.7rem] font-medium text-accent">
+        {nomor}
+      </span>
+      <span aria-hidden="true" className="h-px w-6 bg-accent/30" />
+      <h2 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+        {children}
+      </h2>
+    </div>
   );
 }

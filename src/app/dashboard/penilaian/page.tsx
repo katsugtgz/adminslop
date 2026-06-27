@@ -35,6 +35,7 @@ import { FormNilai, type NilaiExisting } from "@/components/penilaian/form-nilai
 import { FormPenilaian } from "@/components/penilaian/form-penilaian";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 
 import {
   hapusKomponenNilaiAction,
@@ -180,24 +181,34 @@ export default async function Page({
 
   if (!data.taAktif || !data.semester) {
     return (
-      <section className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-          <h1 className="text-2xl font-bold tracking-tight">Penilaian</h1>
-          <p className="text-sm text-muted-foreground">
+      <div className="flex flex-col gap-8">
+        <PageReveal
+          as="header"
+          className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+        >
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            02 — Penilaian
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Penilaian
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
             Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
             {akses.membership.roleSlug}
           </p>
-        </header>
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-          Aktifkan Tahun Ajaran terlebih dahulu.{" "}
-          <Link
-            href="/dashboard/tahun-ajaran"
-            className="font-medium text-primary underline-offset-4 hover:underline"
-          >
-            Buka Pengaturan Tahun Ajaran
-          </Link>
-        </p>
-      </section>
+        </PageReveal>
+        <PageReveal delay={2}>
+          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
+            Aktifkan Tahun Ajaran terlebih dahulu.{" "}
+            <Link
+              href="/dashboard/tahun-ajaran"
+              className="font-medium text-accent underline-offset-4 hover:underline"
+            >
+              Buka Pengaturan Tahun Ajaran
+            </Link>
+          </p>
+        </PageReveal>
+      </div>
     );
   }
 
@@ -240,72 +251,92 @@ export default async function Page({
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Penilaian</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
-          {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehTulis ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            02 — Penilaian
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Penilaian
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
+            {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehTulis ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {tampilkanBreadcrumb && (
-        <nav
-          aria-label="breadcrumb"
-          className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground"
-        >
-          <Link
-            href="/dashboard/penilaian"
-            className="font-medium text-foreground hover:text-primary"
+        <PageReveal delay={2}>
+          <nav
+            aria-label="breadcrumb"
+            className="flex flex-wrap items-center gap-1 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm text-muted-foreground shadow-warm"
           >
-            Penilaian
-          </Link>
-          {bebanTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <Link
-                href={`/dashboard/penilaian?bebanId=${encodeURIComponent(bebanTerpilih.id)}`}
-                className="hover:text-primary"
-              >
-                {isAdmin
-                  ? `${bebanTerpilih.ptkNama} · ${bebanTerpilih.mataPelajaranNama}`
-                  : bebanTerpilih.mataPelajaranNama}
-              </Link>
-            </>
-          )}
-          {komponenTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <Link
-                href={`/dashboard/penilaian?bebanId=${encodeURIComponent(sp.bebanId!)}&komponenId=${encodeURIComponent(komponenTerpilih.id)}`}
-                className="hover:text-primary"
-              >
-                {komponenTerpilih.nama}
-              </Link>
-            </>
-          )}
-          {penilaianTerpilih && (
-            <>
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-              <span
-                className="font-medium text-foreground"
-                aria-current="page"
-              >
-                {penilaianTerpilih.nama}
-              </span>
-            </>
-          )}
-        </nav>
+            <Link
+              href="/dashboard/penilaian"
+              className="font-medium text-foreground underline-offset-4 hover:text-accent hover:underline"
+            >
+              Penilaian
+            </Link>
+            {bebanTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
+                <Link
+                  href={`/dashboard/penilaian?bebanId=${encodeURIComponent(bebanTerpilih.id)}`}
+                  className="underline-offset-4 hover:text-accent hover:underline"
+                >
+                  {isAdmin
+                    ? `${bebanTerpilih.ptkNama} · ${bebanTerpilih.mataPelajaranNama}`
+                    : bebanTerpilih.mataPelajaranNama}
+                </Link>
+              </>
+            )}
+            {komponenTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
+                <Link
+                  href={`/dashboard/penilaian?bebanId=${encodeURIComponent(sp.bebanId!)}&komponenId=${encodeURIComponent(komponenTerpilih.id)}`}
+                  className="underline-offset-4 hover:text-accent hover:underline"
+                >
+                  {komponenTerpilih.nama}
+                </Link>
+              </>
+            )}
+            {penilaianTerpilih && (
+              <>
+                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
+                <span
+                  className="font-medium text-accent"
+                  aria-current="page"
+                >
+                  {penilaianTerpilih.nama}
+                </span>
+              </>
+            )}
+          </nav>
+        </PageReveal>
       )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
+      <PageReveal delay={2} className="flex flex-col gap-3">
+        <SectionLabel nomor="01">
           {isGuruContext ? "Beban Mengajar Saya" : "Beban Mengajar"}
-        </h2>
+        </SectionLabel>
         {barisBeban.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
             Belum ada Beban Mengajar.
           </p>
         ) : (
@@ -316,11 +347,11 @@ export default async function Page({
                 <li
                   key={b.id}
                   aria-current={selected ? "true" : undefined}
-                  className="rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm aria-[current=true]:ring-2 aria-[current=true]:ring-primary"
+                  className="group rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg aria-[current=true]:border-accent/50 aria-[current=true]:ring-2 aria-[current=true]:ring-accent/40 t-lift"
                 >
                   <Link
                     href={`/dashboard/penilaian?bebanId=${encodeURIComponent(b.id)}`}
-                    className="flex flex-col gap-0.5 hover:text-primary"
+                    className="flex flex-col gap-0.5 hover:text-accent"
                   >
                     {isAdmin && (
                       <span className="text-sm font-semibold">
@@ -330,7 +361,7 @@ export default async function Page({
                     <span
                       className={
                         isAdmin
-                          ? "text-xs text-muted-foreground"
+                          ? "font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground"
                           : "text-sm font-semibold"
                       }
                     >
@@ -342,21 +373,21 @@ export default async function Page({
             })}
           </ul>
         )}
-      </div>
+      </PageReveal>
 
       {sp.bebanId && (
         <>
           {bolehTulis && (
-            <FormKomponenNilai
-              action={simpanKomponenNilaiBaruAction}
-              bebanMengajarId={sp.bebanId}
-            />
+            <PageReveal delay={3}>
+              <FormKomponenNilai
+                action={simpanKomponenNilaiBaruAction}
+                bebanMengajarId={sp.bebanId}
+              />
+            </PageReveal>
           )}
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">
-              Komponen Nilai
-            </h2>
+          <PageReveal delay={3} className="flex flex-col gap-3">
+            <SectionLabel nomor="02">Komponen Nilai</SectionLabel>
             <DaftarKomponenNilai
               komponen={data.komponen}
               bolehTulis={bolehTulis}
@@ -364,31 +395,31 @@ export default async function Page({
               bebanId={sp.bebanId}
               hapusAction={hapusKomponenNilaiAction}
             />
-          </div>
+          </PageReveal>
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">
-              Nilai Akhir
-            </h2>
+          <PageReveal delay={3} className="flex flex-col gap-3">
+            <SectionLabel nomor="03">Nilai Akhir</SectionLabel>
             <DaftarNilaiAkhir
               nilaiAkhir={data.nilaiAkhir}
               pesertaNama={pesertaNama}
             />
-          </div>
+          </PageReveal>
         </>
       )}
 
       {sp.bebanId && sp.komponenId && (
         <>
           {bolehTulis && (
-            <FormPenilaian
-              action={simpanPenilaianBaruAction}
-              komponenNilaiId={sp.komponenId}
-            />
+            <PageReveal delay={4}>
+              <FormPenilaian
+                action={simpanPenilaianBaruAction}
+                komponenNilaiId={sp.komponenId}
+              />
+            </PageReveal>
           )}
 
-          <div className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">Penilaian</h2>
+          <PageReveal delay={4} className="flex flex-col gap-3">
+            <SectionLabel nomor="04">Penilaian</SectionLabel>
             <DaftarPenilaian
               penilaian={data.penilaian}
               bolehTulis={bolehTulis}
@@ -397,13 +428,13 @@ export default async function Page({
               komponenId={sp.komponenId}
               hapusAction={hapusPenilaianAction}
             />
-          </div>
+          </PageReveal>
         </>
       )}
 
       {sp.bebanId && sp.komponenId && sp.penilaianId && (
-        <div className="flex flex-col gap-3">
-          <h2 className="text-lg font-semibold tracking-tight">Input Nilai</h2>
+        <PageReveal delay={5} className="flex flex-col gap-3">
+          <SectionLabel nomor="05">Input Nilai</SectionLabel>
           {bolehTulis ? (
             <FormNilai
               action={upsertNilaiAction}
@@ -412,13 +443,33 @@ export default async function Page({
               nilaiMap={nilaiMap}
             />
           ) : (
-            <p className="rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
+            <p className="rounded-2xl border border-border/60 bg-muted/40 p-4 text-sm text-muted-foreground">
               Anda hanya dapat membaca Penilaian. Peran Anda tidak dapat mengisi
               nilai.
             </p>
           )}
-        </div>
+        </PageReveal>
       )}
-    </section>
+    </div>
+  );
+}
+
+function SectionLabel({
+  nomor,
+  children,
+}: {
+  nomor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span aria-hidden="true" className="font-mono text-[0.7rem] font-medium text-accent">
+        {nomor}
+      </span>
+      <span aria-hidden="true" className="h-px w-6 bg-accent/30" />
+      <h2 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+        {children}
+      </h2>
+    </div>
   );
 }

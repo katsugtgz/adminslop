@@ -34,7 +34,7 @@ export function DaftarTemplateCetak({
 }) {
   if (templates.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
         Belum ada Template Cetak.
       </p>
     );
@@ -45,16 +45,16 @@ export function DaftarTemplateCetak({
       {templates.map((t) => (
         <li
           key={t.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card p-4 text-card-foreground shadow-warm transition-colors hover:border-accent/30 t-lift"
         >
           <span className="flex flex-wrap items-center gap-2">
             <span className="text-sm font-semibold">{t.nama}</span>
             {t.isDefault ? (
-              <span className="inline-flex items-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+              <span className="inline-flex items-center rounded-full bg-success/15 px-2.5 py-0.5 text-xs font-medium text-success ring-1 ring-inset ring-success/30">
                 Default
               </span>
             ) : null}
-            <span className="text-xs text-muted-foreground">
+            <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
               Jenis: {t.jenis}
             </span>
           </span>
@@ -62,7 +62,7 @@ export function DaftarTemplateCetak({
             <span className="text-xs text-muted-foreground">
               {ringkasanPengaturan(t.pengaturan)}
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="font-mono text-[0.7rem] text-muted-foreground">
               Dibuat {formatTanggal(t.dibuatPada)}
             </span>
           </span>

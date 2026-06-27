@@ -17,6 +17,7 @@ import { FormUbahBiodata } from "@/components/peserta-didik/form-ubah-biodata";
 import { FormWali } from "@/components/peserta-didik/form-wali";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
+import { PageReveal } from "@/components/motion";
 
 import {
   catatMutasiPesertaDidikAction,
@@ -94,62 +95,94 @@ export default async function Page({
 
   if (!data) {
     return (
-      <section className="mx-auto flex max-w-md flex-col items-center gap-4 rounded-xl border border-border bg-card p-8 text-center text-card-foreground shadow-sm">
-        <h1 className="text-xl font-bold tracking-tight">
+      <PageReveal
+        as="section"
+        className="relative mx-auto flex max-w-md flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border/60 bg-card p-8 text-center text-card-foreground shadow-warm md:p-10"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.3) 0%, transparent 70%)",
+          }}
+        />
+        <p className="relative font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          404
+        </p>
+        <h1 className="relative font-display text-2xl tracking-tight text-foreground sm:text-3xl">
           Peserta Didik tidak ditemukan.
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="relative text-sm text-muted-foreground">
           Peserta Didik mungkin tidak ada di Satuan Pendidikan Aktif ini.
         </p>
-      </section>
+      </PageReveal>
     );
   }
 
   const { peserta, riwayat, wali, kontak, mutasi } = data;
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Detail Peserta Didik</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehTulis ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-8 md:gap-10">
+      <PageReveal
+        as="header"
+        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
+          }}
+        />
+        <div className="relative">
+          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+            01 — Peserta Didik · Detail
+          </p>
+          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
+            Detail Peserta Didik
+          </h1>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehTulis ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Biodata</h2>
+      <PageReveal delay={2} className="flex flex-col gap-3">
+        <SectionLabel nomor="01">Biodata</SectionLabel>
         {bolehTulis ? (
           <FormUbahBiodata action={ubahPesertaDidikAction} values={peserta} />
         ) : (
-          <dl className="grid grid-cols-1 gap-3 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm sm:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-3 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm sm:grid-cols-2">
             <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase text-muted-foreground">
+              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
                 Nama
               </dt>
               <dd className="text-sm font-semibold">{peserta.nama}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase text-muted-foreground">
+              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
                 NISN
               </dt>
               <dd className="text-sm">{peserta.nisn ? peserta.nisn : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase text-muted-foreground">
+              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
                 NIS
               </dt>
               <dd className="text-sm">{peserta.nis ? peserta.nis : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase text-muted-foreground">
+              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
                 Tanggal Lahir
               </dt>
               <dd className="text-sm">{peserta.tanggalLahir}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="text-xs font-medium uppercase text-muted-foreground">
+              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
                 Jenis Kelamin
               </dt>
               <dd className="text-sm">
@@ -158,15 +191,15 @@ export default async function Page({
             </div>
           </dl>
         )}
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Riwayat Status</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <SectionLabel nomor="02">Riwayat Status</SectionLabel>
         <DaftarRiwayatStatus riwayat={riwayat} />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Wali</h2>
+      <PageReveal delay={3} className="flex flex-col gap-3">
+        <SectionLabel nomor="03">Wali</SectionLabel>
         {bolehTulis && (
           <FormWali action={tambahWaliAction} pesertaDidikId={peserta.id} />
         )}
@@ -175,10 +208,10 @@ export default async function Page({
           bolehTulis={bolehTulis}
           hapusAction={hapusWaliAction}
         />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Kontak Darurat</h2>
+      <PageReveal delay={4} className="flex flex-col gap-3">
+        <SectionLabel nomor="04">Kontak Darurat</SectionLabel>
         {bolehTulis && (
           <FormKontakDarurat
             action={tambahKontakDaruratAction}
@@ -190,10 +223,10 @@ export default async function Page({
           bolehTulis={bolehTulis}
           hapusAction={hapusKontakDaruratAction}
         />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Mutasi</h2>
+      <PageReveal delay={4} className="flex flex-col gap-3">
+        <SectionLabel nomor="05">Mutasi</SectionLabel>
         {bolehTulis && (
           <FormMutasi
             action={catatMutasiPesertaDidikAction}
@@ -201,7 +234,27 @@ export default async function Page({
           />
         )}
         <DaftarMutasi mutasi={mutasi} />
-      </div>
-    </section>
+      </PageReveal>
+    </div>
+  );
+}
+
+function SectionLabel({
+  nomor,
+  children,
+}: {
+  nomor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span aria-hidden="true" className="font-mono text-[0.7rem] font-medium text-accent">
+        {nomor}
+      </span>
+      <span aria-hidden="true" className="h-px w-6 bg-accent/30" />
+      <h2 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
+        {children}
+      </h2>
+    </div>
   );
 }

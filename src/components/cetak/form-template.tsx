@@ -18,10 +18,10 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
   return (
     <form
       action={action}
-      className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm"
+      className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold tracking-tight">Buat Template</h2>
+        <h2 className="font-display text-lg tracking-tight text-foreground">Buat Template</h2>
         <p className="text-xs text-muted-foreground">
           Template berisi konfigurasi cetak yang dapat digunakan ulang.
         </p>

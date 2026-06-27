@@ -19,10 +19,10 @@ export function FormRevisi({
   return (
     <form
       action={action}
-      className="flex flex-col gap-2 rounded-lg border border-dashed border-border bg-muted/30 p-3"
+      className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-3"
     >
       <input type="hidden" name="id" value={eraportId} />
-      <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
         Catat Revisi
       </span>
       <div className="flex flex-col gap-1">
