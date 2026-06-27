@@ -1,4 +1,21 @@
+import { vi } from "vitest";
 import "@testing-library/jest-dom/vitest";
+
+/**
+ * Global AuthKit client-subpath mock.
+ *
+ * `@workos-inc/authkit-nextjs/components` (useAuth, AuthKitProvider) is a
+ * client-only entry whose real module transitively imports `next/cache`, which
+ * only resolves inside the Next runtime. Many server-component pages import
+ * `PembatasanAkses`, which now renders the client `TombolMasuk` (login needs
+ * the client `refreshAuth` hook). Rather than mock the subpath in every
+ * affected page test, stub it once here. Per-file `vi.mock` of the same
+ * specifier still takes precedence where a test needs richer behaviour.
+ */
+vi.mock("@workos-inc/authkit-nextjs/components", () => ({
+  useAuth: () => ({ user: null, loading: false, refreshAuth: () => {} }),
+  AuthKitProvider: ({ children }: { children: unknown }) => children,
+}));
 
 /**
  * jsdom 29 + vitest 4 does not always wire `window.localStorage`. Provide a
