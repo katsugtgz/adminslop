@@ -1,0 +1,19 @@
+src/db/seed/guard.test.ts
+  s_53dbe59341d25a::t_120f637677413e 15-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "da5d7ac1ce938959ff1a97550ef767d36068a72c",
+  "prompts": {},
+  "sessions": {
+    "s_53dbe59341d25a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f9afaf50ffefYmfI1YNWzV7Lx",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
