@@ -19,13 +19,44 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 const mocks = vi.hoisted(() => {
   // Per-table fixture rows, keyed by the real dbSchema table object reference.
   const tableRows = new Map<unknown, unknown[]>();
+  function snakeToCamel(s: string): string {
+    return s.replace(/_([a-z0-9])/g, (_m, c) => c.toUpperCase());
+  }
+  function isEqualityParam(
+    c: unknown
+  ): c is { value: unknown; encoder: { name: string } } {
+    if (!c || typeof c !== "object") return false;
+    const enc = (c as { encoder?: { name?: unknown } }).encoder;
+    return !!enc && typeof enc.name === "string";
+  }
+  function collectEqualities(
+    node: unknown,
+    out: { col: string; val: unknown }[] = []
+  ): typeof out {
+    if (!node || typeof node !== "object") return out;
+    if (isEqualityParam(node)) {
+      out.push({ col: node.encoder.name, val: node.value });
+      return out;
+    }
+    const chunks = (node as { queryChunks?: unknown[] }).queryChunks;
+    if (Array.isArray(chunks)) for (const c of chunks) collectEqualities(c, out);
+    return out;
+  }
   const fakeTxLocal = {
-    // kepemilikan.ts resolvers push indexed `.where(...)` filters to the DB;
-    // in tests the trailing JS `.find` in each helper does the final pick, so
-    // `.where` returns the full fixture set unchanged.
+    // CONTRACT-ENFORCING `.where`: introspects the drizzle eq/and Param chunks (encoder.name + value) to actually filter fixture rows, so an omitted or mis-specified ownership predicate FAILS the test rather than silently passing.
     select: () => ({
       from: (table: unknown) => ({
-        where: () => tableRows.get(table) ?? [],
+        where: (expr: unknown) => {
+          const rows = tableRows.get(table) ?? [];
+          const preds = collectEqualities(expr);
+          if (preds.length === 0) return rows;
+          return rows.filter((r) => {
+            const row = r as Record<string, unknown>;
+            return preds.every(
+              (p) => row[snakeToCamel(p.col)] === p.val || row[p.col] === p.val
+            );
+          });
+        },
       }),
     }),
   };
