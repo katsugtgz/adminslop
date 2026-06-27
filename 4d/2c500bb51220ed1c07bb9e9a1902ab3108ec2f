@@ -1,0 +1,55 @@
+src/app/dashboard/notifikasi/page.tsx
+  s_83bfa7291a4ca4::t_4a0ab9d9ddb6bf 1-2,13,60-86,108-145,147,149-155,157-162
+src/app/dashboard/arsip/page.tsx
+  s_83bfa7291a4ca4::t_9988dd3f765c6b 1-2,13,77-109,111-119,125,127-135,141,143-151,153
+src/app/dashboard/pengaturan/page.tsx
+  s_83bfa7291a4ca4::t_c1b4062fb3c75c 2,6,28-61,73-79,83,94-122,124-136,138,140-151,153
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_83bfa7291a4ca4::t_7dcb001c8a9213 1-2,8,67-96
+  s_83bfa7291a4ca4::t_55a479cefb198c 99-102,104-124,129-132,135-144,146-149,151-172,177-180,182-202
+src/app/dashboard/akses/page.tsx
+  s_83bfa7291a4ca4::t_e85e3a28b29c22 1-2,10
+  s_83bfa7291a4ca4::t_6de0d377508e62 89-118,120-124,126-134,140,142-150,160
+src/components/akses/daftar-ptk.tsx
+  s_83bfa7291a4ca4::t_934968443a55f2 1,4,31,38,40-57,59-68
+src/components/akses/daftar-pengguna.tsx
+  s_83bfa7291a4ca4::t_45860db9a2a098 223,225,232
+  s_83bfa7291a4ca4::t_ff4d4e750fe8d2 265-268,284
+  s_83bfa7291a4ca4::t_394a245b005aa9 313-316,332,340
+  s_83bfa7291a4ca4::t_0b04d08c10c8f4 396
+  s_83bfa7291a4ca4::t_f3bb01beceaeb7 378,389-395,397-405,407-428
+  s_83bfa7291a4ca4::t_65f5cdeeded3c9 1-2,4
+src/components/offline/indikator-offline.tsx
+  s_83bfa7291a4ca4::t_efe985e3b63867 36,38-39
+src/components/offline/peringatan-konflik.tsx
+  s_83bfa7291a4ca4::t_97627653cfe8b6 30
+  s_83bfa7291a4ca4::t_e84b77b72466c2 32-33,35-38,40,43
+src/app/dashboard/sinkronisasi/page.tsx
+  s_83bfa7291a4ca4::t_b489997585a5d7 4,8,22-55,57,59-61
+src/components/bantuan-kontekstual.tsx
+  s_83bfa7291a4ca4::t_ed88ede0df11d2 54,62
+src/components/pengaturan-satuan/form-profil.tsx
+  s_83bfa7291a4ca4::t_7faf9baabfa429 36,40-55,57-75,87,91-107,109-124
+src/components/offline/daftar-perubahan-tertunda.tsx
+  s_83bfa7291a4ca4::t_248b43be51af8f 7,77,79-83,90-107,113,115,122,126,128-137,175,183,190
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_83bfa7291a4ca4::t_f5809af270bf5f 37-52,54-71,73-85,87-107,110-126,128-143
+src/components/akses/form-ptk-baru.tsx
+  s_83bfa7291a4ca4::t_79b6ed7680c787 1-2,21,24-31,36-48,50-61,63-76,79-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "4d2c500bb51220ed1c07bb9e9a1902ab3108ec2f",
+  "prompts": {},
+  "sessions": {
+    "s_83bfa7291a4ca4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f981d4d5ffeAMnhuLEsqFfTI9",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
