@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
+import { CardHover } from "@/components/motion";
 import type { Fase } from "@/db/schema";
 
 /**
@@ -20,14 +22,21 @@ export function DaftarFase({
   mapelId: string;
 }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold tracking-tight">Fase</h2>
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          03 — Fase
+        </p>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Fase
+        </h2>
+      </div>
       {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
           Belum ada Fase.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((f) => {
             const selected = f.id === selectedId;
             const qs = new URLSearchParams({
@@ -37,25 +46,35 @@ export function DaftarFase({
             }).toString();
             return (
               <li key={f.id}>
-                <Link
-                  href={`/dashboard/kurikulum?${qs}`}
-                  aria-current={selected ? "true" : undefined}
-                  className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-colors hover:border-primary ${
-                    selected ? "border-primary ring-2 ring-primary" : "border-border"
-                  }`}
-                >
-                  <span className="flex flex-wrap items-center gap-3">
-                    <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                      {f.kode}
+                <CardHover asChild>
+                  <Link
+                    href={`/dashboard/kurikulum?${qs}`}
+                    aria-current={selected ? "true" : undefined}
+                    className={`group relative flex h-full flex-col gap-2 overflow-hidden rounded-2xl border bg-card p-5 shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg ${
+                      selected
+                        ? "border-accent ring-2 ring-accent/25"
+                        : "border-border"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <span className="rounded-lg bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold text-accent">
+                        {f.kode}
+                      </span>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="h-4 w-4 text-muted-foreground/40 transition-all group-hover:-translate-y-0.5 group-hover:text-accent"
+                      />
+                    </div>
+                    <span className="text-base font-semibold text-foreground">
+                      {f.nama}
                     </span>
-                    <span className="text-sm font-semibold">{f.nama}</span>
                     {f.rentangKelas ? (
                       <span className="text-xs text-muted-foreground">
                         {f.rentangKelas}
                       </span>
                     ) : null}
-                  </span>
-                </Link>
+                  </Link>
+                </CardHover>
               </li>
             );
           })}

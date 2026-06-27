@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { ArrowUpRight, Quote } from "lucide-react";
 
+import { CardHover } from "@/components/motion";
 import type { CapaianPembelajaran } from "@/db/schema";
 
 /**
@@ -23,16 +25,21 @@ export function DaftarCapaianPembelajaran({
   faseId?: string;
 }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h2 className="text-lg font-semibold tracking-tight">
-        Capaian Pembelajaran
-      </h2>
+    <section className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          04 — Capaian
+        </p>
+        <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+          Capaian Pembelajaran
+        </h2>
+      </div>
       {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+        <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
           Belum ada Capaian Pembelajaran.
         </p>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="flex flex-col gap-3">
           {items.map((c) => {
             const selected = c.id === selectedId;
             const params = new URLSearchParams({
@@ -43,30 +50,48 @@ export function DaftarCapaianPembelajaran({
             if (faseId) params.set("faseId", faseId);
             return (
               <li key={c.id}>
-                <Link
-                  href={`/dashboard/kurikulum?${params.toString()}`}
-                  aria-current={selected ? "true" : undefined}
-                  className={`flex flex-col gap-2 rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-colors hover:border-primary ${
-                    selected ? "border-primary ring-2 ring-primary" : "border-border"
-                  }`}
-                >
-                  <span className="flex flex-wrap items-center gap-2">
-                    {c.kode ? (
-                      <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                        {c.kode}
+                <CardHover asChild>
+                  <Link
+                    href={`/dashboard/kurikulum?${params.toString()}`}
+                    aria-current={selected ? "true" : undefined}
+                    className={`group relative flex flex-col gap-3 overflow-hidden rounded-2xl border bg-card p-5 shadow-warm transition-colors hover:border-accent/40 hover:shadow-warm-lg ${
+                      selected
+                        ? "border-accent ring-2 ring-accent/25"
+                        : "border-border"
+                    }`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <span className="flex flex-wrap items-center gap-2">
+                        {c.kode ? (
+                          <span className="rounded-md bg-accent/10 px-2 py-0.5 font-mono text-xs font-semibold text-accent">
+                            {c.kode}
+                          </span>
+                        ) : null}
+                        {c.elemen ? (
+                          <span className="text-sm font-semibold text-foreground">
+                            {c.elemen}
+                          </span>
+                        ) : null}
+                      </span>
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="h-4 w-4 text-muted-foreground/40 transition-all group-hover:-translate-y-0.5 group-hover:text-accent"
+                      />
+                    </div>
+                    <p className="flex gap-2 text-sm text-foreground sm:text-[15px]">
+                      <Quote
+                        className="h-4 w-4 shrink-0 text-accent/50"
+                        aria-hidden="true"
+                      />
+                      <span className="text-pretty">{c.deskripsi}</span>
+                    </p>
+                    {c.sumber ? (
+                      <span className="font-mono text-xs text-muted-foreground">
+                        Sumber: {c.sumber}
                       </span>
                     ) : null}
-                    {c.elemen ? (
-                      <span className="text-sm font-semibold">{c.elemen}</span>
-                    ) : null}
-                  </span>
-                  <span className="text-sm text-foreground">{c.deskripsi}</span>
-                  {c.sumber ? (
-                    <span className="text-xs text-muted-foreground">
-                      Sumber: {c.sumber}
-                    </span>
-                  ) : null}
-                </Link>
+                  </Link>
+                </CardHover>
               </li>
             );
           })}

@@ -25,6 +25,11 @@ function labelSemester(semester: Semester): string {
   return semester === "ganjil" ? "Ganjil" : "Genap";
 }
 
+/** Small dot badge for the active semester. */
+function dotSemester(semester: Semester): string {
+  return semester === "ganjil" ? "bg-accent" : "bg-chart-2";
+}
+
 /**
  * Read-only or manageable list of Beban Mengajar. When `bolehKelola` is true
  * each row renders its own server form posting to `hapusBebanMengajarAction`
@@ -42,24 +47,47 @@ export function DaftarBebanMengajar({
 }) {
   if (beban.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
         Belum ada Beban Mengajar.
       </p>
     );
   }
 
   return (
-    <ul className="flex flex-col gap-2">
-      {beban.map((row) => (
+    <ul className="flex flex-col gap-3">
+      {beban.map((row, idx) => (
         <li
           key={row.id}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+          className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-5 shadow-warm transition-shadow hover:shadow-warm-lg"
         >
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold">{row.ptkNama}</span>
-            <span className="text-xs text-muted-foreground">
-              {row.mataPelajaranNama} · Target: {row.targetNama} ·{" "}
-              {labelSemester(row.semester)}
+          <div className="flex flex-col gap-1">
+            <span className="flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className="font-mono text-xs font-medium text-muted-foreground/60"
+              >
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+              <span className="text-base font-semibold text-foreground">
+                {row.ptkNama}
+              </span>
+            </span>
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-6 text-xs text-muted-foreground">
+              <span>{row.mataPelajaranNama}</span>
+              <span aria-hidden="true" className="text-muted-foreground/40">
+                ·
+              </span>
+              <span>Target: {row.targetNama}</span>
+              <span aria-hidden="true" className="text-muted-foreground/40">
+                ·
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden="true"
+                  className={`h-1.5 w-1.5 rounded-full ${dotSemester(row.semester)}`}
+                />
+                {labelSemester(row.semester)}
+              </span>
             </span>
           </div>
 

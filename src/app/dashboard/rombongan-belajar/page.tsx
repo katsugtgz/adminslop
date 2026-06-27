@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { CalendarDays, Layers } from "lucide-react";
 
+import { PageReveal } from "@/components/motion";
 import { getDb, withTenant } from "@/db/client";
 import { listPesertaDidik } from "@/db/queries/peserta-didik";
 import { listRombonganBelajar } from "@/db/queries/rombongan-belajar";
@@ -104,42 +106,79 @@ export default async function Page() {
   );
 
   return (
-    <section className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-        <h1 className="text-2xl font-bold tracking-tight">Rombongan Belajar</h1>
-        <p className="text-sm text-muted-foreground">
-          Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-          {akses.membership.roleSlug}
-          {bolehBuat ? "" : " (hanya baca)"}
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 md:gap-12">
+      <PageReveal
+        as="header"
+        className="relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card"
+      >
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-4 top-2 select-none font-display text-[10rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem] md:right-8 md:text-[16rem]"
+        >
+          02
+        </span>
+        <div className="relative px-5 py-8 sm:px-8 sm:py-10 md:px-10">
+          <p className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
+            <Layers className="h-3.5 w-3.5" aria-hidden="true" />
+            Manajemen Satuan
+          </p>
+          <h1 className="mt-4 font-display text-3xl tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            Rombongan Belajar
+          </h1>
+          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
+            {akses.membership.roleSlug}
+            {bolehBuat ? "" : " (hanya baca)"}
+          </p>
+        </div>
+      </PageReveal>
 
       {bolehBuat && (
-        <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
+        <PageReveal className="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
           <FormTingkatBaru action={simpanTingkatBaruAction} />
           <FormRombonganBelajarBaru
             action={simpanRombonganBelajarBaruAction}
             tingkat={tingkat}
           />
-        </div>
+        </PageReveal>
       )}
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">Daftar Tingkat</h2>
+      <PageReveal className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            01 — Tingkat
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Daftar Tingkat
+          </h2>
+        </div>
         <DaftarTingkat tingkat={tingkat} bolehBuat={bolehBuat} />
-      </div>
+      </PageReveal>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">
-          Daftar Rombongan Belajar
-        </h2>
+      <PageReveal className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            02 — Kelas
+          </p>
+          <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            Daftar Rombongan Belajar
+          </h2>
+        </div>
         <DaftarRombonganBelajar rombel={rombel} bolehBuat={bolehBuat} />
-      </div>
+      </PageReveal>
 
       {bolehKelola &&
         bolehBacaPeserta &&
         (taAktif ? (
-          <div className="flex flex-col gap-6">
+          <PageReveal className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+                03 — Penempatan
+              </p>
+              <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+                Penempatan &amp; Progresi
+              </h2>
+            </div>
             <FormTempatkanPesertaDidik
               action={tempatkanPesertaDidikAction}
               peserta={peserta}
@@ -150,19 +189,27 @@ export default async function Page() {
               tinggalAction={tinggalTingkatAction}
               peserta={peserta}
             />
-          </div>
+          </PageReveal>
         ) : (
-          <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
-            Aktifkan Tahun Ajaran terlebih dahulu.{" "}
-            <Link
-              href="/dashboard/tahun-ajaran"
-              className="font-medium text-primary underline-offset-4 hover:underline"
-            >
-              Kelola Tahun Ajaran
-            </Link>
-            .
-          </p>
+          <PageReveal>
+            <p className="flex flex-col items-start gap-3 rounded-2xl border border-dashed border-border bg-muted/40 p-6 sm:flex-row sm:items-center sm:gap-4 sm:text-center">
+              <CalendarDays
+                className="h-5 w-5 shrink-0 text-accent"
+                aria-hidden="true"
+              />
+              <span className="text-sm text-muted-foreground">
+                Aktifkan Tahun Ajaran terlebih dahulu.{" "}
+                <Link
+                  href="/dashboard/tahun-ajaran"
+                  className="font-medium text-accent underline-offset-4 hover:underline"
+                >
+                  Kelola Tahun Ajaran
+                </Link>
+                .
+              </span>
+            </p>
+          </PageReveal>
         ))}
-    </section>
+    </div>
   );
 }
