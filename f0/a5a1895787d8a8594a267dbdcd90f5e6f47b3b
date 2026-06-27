@@ -1,0 +1,73 @@
+src/components/beban-mengajar/daftar-wali-kelas.tsx
+  s_3646018222d2df::t_aedec8d502a090 34,41-42,45,47-63,65-67
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_3646018222d2df::t_61a7b934293005 2,4
+  s_3646018222d2df::t_984bf746774e12 109-134,137,143,146-154,156,158-166,168,173-181,192,194-211,213
+src/components/beban-mengajar/form-wali-kelas.tsx
+  s_3646018222d2df::t_2ae60f6bba8c04 2,24,27-30,38-51,53-59,61-73,75-81
+src/components/rombongan-belajar/form-tempatkan-peserta-didik.tsx
+  s_3646018222d2df::t_af75727f6b8ad1 32,35-38,46-59,61-67,69-81,83-89
+src/components/rombongan-belajar/daftar-rombongan-belajar.tsx
+  s_3646018222d2df::t_11ef83c18827ee 1-2,21,28-29,32,34-47
+src/components/kurikulum/daftar-fase.tsx
+  s_3646018222d2df::t_92a2094909cbe4 2,4,25-33,35,39,49-69,76-77
+src/app/dashboard/kurikulum/page.tsx
+  s_3646018222d2df::t_2e4c32acc2ee51 2,4
+  s_3646018222d2df::t_b2bc5c3efa4165 139-163,166-169,171-226,229-231,234-240,244-251,255-263,267-276,279-284
+src/components/rombongan-belajar/form-tingkat-baru.tsx
+  s_3646018222d2df::t_ec2d775510ee7f 23,26-31,37,46,50,60
+src/components/tahun-ajaran/daftar-tahun-ajaran.tsx
+  s_3646018222d2df::t_202ed8435cc569 1-2,28,35-36,41-45,47-64,66-70,77-79
+src/app/dashboard/tahun-ajaran/page.tsx
+  s_3646018222d2df::t_62a47f56dc5941 1-3
+  s_3646018222d2df::t_1a6d5040e75edf 72-97,100,106,109-117,123-124
+src/components/rombongan-belajar/daftar-tingkat.tsx
+  s_3646018222d2df::t_9a002578066bbd 20,27-28,31,33-41,43,45-46
+  s_3646018222d2df::t_4d87a4218fe86b 44
+src/components/beban-mengajar/daftar-beban-mengajar.tsx
+  s_3646018222d2df::t_58218c472b74bb 28-32,50,57-58,61,63-90
+src/app/dashboard/beban-mengajar/page.tsx
+  s_3646018222d2df::t_1a4a86e06f2a2e 225-253
+  s_3646018222d2df::t_a45bbd0b37d574 2,4
+  s_3646018222d2df::t_f6a6b75f308b8a 148-155,157-190
+  s_3646018222d2df::t_8908e8c43477a6 266-292,295-300,304-312,315-323,329,332-338,341-349,355-356
+src/components/rombongan-belajar/kontrol-progresi.tsx
+  s_3646018222d2df::t_1fd4cb00b315a8 1-2,32,34-43,46-50,58,71-75,83,119
+src/components/beban-mengajar/konteks-guru.tsx
+  s_3646018222d2df::t_be700ecca8c5f1 25-34,43-51
+src/components/rombongan-belajar/form-rombongan-belajar-baru.tsx
+  s_3646018222d2df::t_e2c53d96f167e2 29,32-35,43,52,56,65
+src/components/kurikulum/daftar-kurikulum.tsx
+  s_3646018222d2df::t_632b30b26173d5 3,22,35-43,45,49-50,55-63,65-66,70-91
+  s_3646018222d2df::t_afc239883cb150 67-69
+src/components/kurikulum/daftar-mata-pelajaran.tsx
+  s_3646018222d2df::t_5061439fe8bba3 2,4,23-31,33,37-38,46-64,66-77
+src/components/kurikulum/daftar-capaian-pembelajaran.tsx
+  s_3646018222d2df::t_595345dd69bc41 2,4,28-36,38,42,53-90,93-94
+src/components/tahun-ajaran/kontrol-semester.tsx
+  s_3646018222d2df::t_e928983304251c 1-2,27,30-39,45,53
+src/components/tahun-ajaran/form-tahun-ajaran-baru.tsx
+  s_3646018222d2df::t_a9e0c9d0834281 20,23-28,34,44
+src/components/kurikulum/daftar-alur-tujuan-pembelajaran.tsx
+  s_3646018222d2df::t_61f3a5e71a3fe4 15-23,25,29,33,35-39,42-44,47
+src/components/beban-mengajar/form-beban-mengajar-baru.tsx
+  s_3646018222d2df::t_4ee48080150182 2,37,40-43,51-64,66-72,74-86,88-94,96-113,115-132,135
+src/components/kurikulum/daftar-tujuan-pembelajaran.tsx
+  s_3646018222d2df::t_302c4428dec1b9 2,4,29-37,39,43,55-68,71-79,81-86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "f0a5a1895787d8a8594a267dbdcd90f5e6f47b3b",
+  "prompts": {},
+  "sessions": {
+    "s_3646018222d2df": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f981d545ffe4mj9GJL1g1qlmI",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
