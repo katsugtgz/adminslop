@@ -1,0 +1,19 @@
+docs/adr/0006-rag-help-strategy.md
+  s_657582a84c89ff::t_5d7de534607695 1-336
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "6d4caaea0969b5a202877fbd6a110e478f31630c",
+  "prompts": {},
+  "sessions": {
+    "s_657582a84c89ff": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f67a81c0ffeD90w77FRHY9qhK",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
