@@ -1,0 +1,35 @@
+src/lib/absensi/qr-pemindai.test.ts
+  s_d946e161b759b2::t_716c7f39aa5735 1-146
+src/app/dashboard/absensi/actions.test.ts
+  s_d946e161b759b2::t_19f5137dc24a74 754,774
+  s_332d41a7a3a7dd::t_222fd886949ab8 721-753,755-773,775-826
+src/app/dashboard/absensi/actions.ts
+  s_d946e161b759b2::t_9e96e3a68221fb 135
+  s_332d41a7a3a7dd::t_222fd886949ab8 123-134,136-137
+src/lib/absensi/qr-pemindai.ts
+  s_d946e161b759b2::t_5f06d6bbdd4763 1-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "89be2aaca27f819c7d5baf2e1d6ff7457f2024f7",
+  "prompts": {},
+  "sessions": {
+    "s_332d41a7a3a7dd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b3d180ffeJon5mp3UnO7fgV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_d946e161b759b2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b36299ffej2dl5U1jWgAmMu",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
