@@ -72,7 +72,12 @@ export function dbTarget(connUrl: string): string | null {
       : `postgres://${connUrl}`;
     const url = new URL(withScheme);
     if (url.hostname === "") return null;
-    return `${normalizeHost(url.hostname)}:${url.port || "5432"}${url.pathname}`;
+    // Fail-closed: tanpa database name eksplisit, PostgreSQL default dbname =
+    // username koneksi → postgres://migrator@host vs postgres://app@host
+    // collapse padahal beda DB. Tolak ambiguous biar assertSameDb tak tertipu.
+    const db = url.pathname;
+    if (db === "" || db === "/") return null;
+    return `${normalizeHost(url.hostname)}:${url.port || "5432"}${db}`;
   } catch {
     return null;
   }
@@ -85,8 +90,16 @@ export function dbTarget(connUrl: string): string | null {
 export function assertSameDb(migUrl: string, appUrl: string): void {
   const migTarget = dbTarget(migUrl);
   const appTarget = dbTarget(appUrl);
-  // null ditangani assertLocalOrForced; lewati bila URL rusak.
-  if (migTarget === null || appTarget === null) return;
+  // Fail-closed: URL rusak / pathname ambiguous = tak bisa verifikasi same-DB.
+  // Silent bypass bisa akibat migrasi bersih DB_A + seed DB_B (data inkonsisten).
+  if (migTarget === null || appTarget === null) {
+    console.error(
+      "[seed] Tidak dapat mem-parse DATABASE_MIGRATOR_URL atau DATABASE_URL, " +
+        "atau URL tanpa nama database eksplisit. Verifikasi connection string " +
+        "valid dan menyertakan pathname database (mis. .../eduadmin).",
+    );
+    process.exit(1);
+  }
   if (migTarget !== appTarget) {
     console.error(
       `[seed] DATABASE_MIGRATOR_URL (${migTarget}) dan DATABASE_URL (${appTarget}) ` +

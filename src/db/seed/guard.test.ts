@@ -1,6 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { dbTarget, isLocalHost, parseHost } from "./guard";
+import { assertLocalOrForced, assertSameDb, dbTarget, isLocalHost, parseHost } from "./guard";
 
 // Guard baca process.env.SEED_LOCAL_HOSTS + SEED_FORCE saat call. Reset antar
 // test biar tak kontaminasi.
@@ -137,5 +137,151 @@ describe("seed guard: dbTarget (same-DB comparison)", () => {
 
   it("URL rusak mengembalikan null", () => {
     expect(dbTarget("garbage :: not :: a :: url")).toBeNull();
+  });
+
+  it("pathname kosong (tanpa db name) → null (fail-closed)", () => {
+    // PostgreSQL default dbname = username → ambiguous, harus ditolak.
+    expect(dbTarget("postgres://u:p@localhost:5432")).toBeNull();
+  });
+
+  it("pathname hanya / → null (fail-closed)", () => {
+    expect(dbTarget("postgres://u:p@localhost:5432/")).toBeNull();
+  });
+});
+
+describe("seed guard: assertLocalOrForced", () => {
+  it("host lokal → tak exit", () => {
+    const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("should not exit");
+    });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertLocalOrForced("test", "postgres://u:p@localhost:5432/db"),
+    ).not.toThrow();
+    expect(exitSpy).not.toHaveBeenCalled();
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("host non-lokal → exit(1) + pesan error", () => {
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation((code?: string | number | null) => {
+        throw new Error(`exit:${code}`);
+      });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertLocalOrForced("test", "postgres://u:p@rds.amazonaws.com/db"),
+    ).toThrow("exit:1");
+    expect(errSpy).toHaveBeenCalled();
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("SEED_FORCE=true bypass guard untuk host non-lokal", () => {
+    process.env.SEED_FORCE = "true";
+    const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("should not exit");
+    });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertLocalOrForced("test", "postgres://u:p@rds.amazonaws.com/db"),
+    ).not.toThrow();
+    expect(exitSpy).not.toHaveBeenCalled();
+    expect(errSpy).not.toHaveBeenCalled();
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("SEED_LOCAL_HOSTS opt-in mengizinkan alias container", () => {
+    process.env.SEED_LOCAL_HOSTS = "db";
+    const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("should not exit");
+    });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertLocalOrForced("test", "postgres://u:p@db:5432/eduadmin"),
+    ).not.toThrow();
+    expect(exitSpy).not.toHaveBeenCalled();
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("URL rusak → exit(1) (fail-closed)", () => {
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation((code?: string | number | null) => {
+        throw new Error(`exit:${code}`);
+      });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() => assertLocalOrForced("test", "garbage :: not a url")).toThrow(
+      "exit:1",
+    );
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+});
+
+describe("seed guard: assertSameDb", () => {
+  it("target sama → tak exit", () => {
+    const exitSpy = vi.spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("should not exit");
+    });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const url = "postgres://u:p@localhost:5432/eduadmin";
+    expect(() => assertSameDb(url, url)).not.toThrow();
+    expect(exitSpy).not.toHaveBeenCalled();
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("target berbeda (database beda) → exit(1)", () => {
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation((code?: string | number | null) => {
+        throw new Error(`exit:${code}`);
+      });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertSameDb(
+        "postgres://u:p@localhost:5432/dev_a",
+        "postgres://u:p@localhost:5432/dev_b",
+      ),
+    ).toThrow("exit:1");
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("MIG URL rusak → exit(1) (fail-closed)", () => {
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation((code?: string | number | null) => {
+        throw new Error(`exit:${code}`);
+      });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    expect(() =>
+      assertSameDb(
+        "garbage :: not :: a :: url",
+        "postgres://u:p@localhost:5432/db",
+      ),
+    ).toThrow("exit:1");
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
+  });
+
+  it("pathname ambigu (tanpa db name) → exit(1) (fail-closed)", () => {
+    const exitSpy = vi
+      .spyOn(process, "exit")
+      .mockImplementation((code?: string | number | null) => {
+        throw new Error(`exit:${code}`);
+      });
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    // postgres://migrator@localhost vs postgres://app@localhost: dbname
+    // default = username → ambigu, harus fail-closed.
+    expect(() =>
+      assertSameDb("postgres://migrator@localhost", "postgres://app@localhost"),
+    ).toThrow("exit:1");
+    exitSpy.mockRestore();
+    errSpy.mockRestore();
   });
 });
