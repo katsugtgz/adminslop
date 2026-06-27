@@ -34,109 +34,113 @@ export function FormPengaturan({
 }: FormPengaturanProps) {
   return (
     <form action={simpanPengaturanSatuanPendidikanAction} className="space-y-4">
-      <div className="space-y-1.5">
-        <label htmlFor="pengaturan-tahunAjaran" className="text-sm font-medium">
-          Tahun Ajaran Aktif
-        </label>
-        <input
-          id="pengaturan-tahunAjaran"
-          name="tahunAjaran"
-          type="text"
-          required
-          placeholder="2026/2027"
-          disabled={readOnly}
-          defaultValue={values.tahunAjaranAktif ?? ""}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-        />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <label htmlFor="pengaturan-tahunAjaran" className="text-sm font-medium">
+            Tahun Ajaran Aktif
+          </label>
+          <input
+            id="pengaturan-tahunAjaran"
+            name="tahunAjaran"
+            type="text"
+            required
+            placeholder="2026/2027"
+            disabled={readOnly}
+            defaultValue={values.tahunAjaranAktif ?? ""}
+            className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="pengaturan-semester" className="text-sm font-medium">
+            Semester Aktif
+          </label>
+          <select
+            id="pengaturan-semester"
+            name="semester"
+            disabled={readOnly}
+            defaultValue={values.semesterAktif ?? "ganjil"}
+            className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {SEMESTER_OPTIONS.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-1.5">
+          <label htmlFor="pengaturan-zonaWaktu" className="text-sm font-medium">
+            Zona Waktu
+          </label>
+          <input
+            id="pengaturan-zonaWaktu"
+            name="zonaWaktu"
+            type="text"
+            disabled={readOnly}
+            defaultValue={values.zonaWaktu || "Asia/Jakarta"}
+            className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label
+            htmlFor="pengaturan-cetakPaperSize"
+            className="text-sm font-medium"
+          >
+            Ukuran Kertas Cetak
+          </label>
+          <select
+            id="pengaturan-cetakPaperSize"
+            name="cetakPaperSize"
+            disabled={readOnly}
+            defaultValue={values.cetakPaperSize || "A4"}
+            className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            {PAPER_SIZE_OPTIONS.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="pengaturan-semester" className="text-sm font-medium">
-          Semester Aktif
-        </label>
-        <select
-          id="pengaturan-semester"
-          name="semester"
-          disabled={readOnly}
-          defaultValue={values.semesterAktif ?? "ganjil"}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {SEMESTER_OPTIONS.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="flex flex-col gap-3 border-t border-border/60 pt-4 sm:flex-row sm:items-center sm:gap-6">
+        <div className="flex items-center gap-2">
+          <input
+            id="pengaturan-cetakTampilkanLogo"
+            name="cetakTampilkanLogo"
+            type="checkbox"
+            disabled={readOnly}
+            defaultChecked={values.cetakTampilkanLogo}
+            className="h-4 w-4 rounded border-input accent-accent disabled:cursor-not-allowed disabled:opacity-60"
+          />
+          <label
+            htmlFor="pengaturan-cetakTampilkanLogo"
+            className="text-sm font-medium"
+          >
+            Tampilkan Logo di Cetak
+          </label>
+        </div>
 
-      <div className="space-y-1.5">
-        <label htmlFor="pengaturan-zonaWaktu" className="text-sm font-medium">
-          Zona Waktu
-        </label>
-        <input
-          id="pengaturan-zonaWaktu"
-          name="zonaWaktu"
-          type="text"
-          disabled={readOnly}
-          defaultValue={values.zonaWaktu || "Asia/Jakarta"}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-        />
-      </div>
-
-      <div className="space-y-1.5">
-        <label
-          htmlFor="pengaturan-cetakPaperSize"
-          className="text-sm font-medium"
-        >
-          Ukuran Kertas Cetak
-        </label>
-        <select
-          id="pengaturan-cetakPaperSize"
-          name="cetakPaperSize"
-          disabled={readOnly}
-          defaultValue={values.cetakPaperSize || "A4"}
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {PAPER_SIZE_OPTIONS.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input
-          id="pengaturan-cetakTampilkanLogo"
-          name="cetakTampilkanLogo"
-          type="checkbox"
-          disabled={readOnly}
-          defaultChecked={values.cetakTampilkanLogo}
-          className="h-4 w-4 rounded border-input disabled:cursor-not-allowed disabled:opacity-60"
-        />
-        <label
-          htmlFor="pengaturan-cetakTampilkanLogo"
-          className="text-sm font-medium"
-        >
-          Tampilkan Logo di Cetak
-        </label>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <input
-          id="pengaturan-cetakTampilkanHeader"
-          name="cetakTampilkanHeader"
-          type="checkbox"
-          disabled={readOnly}
-          defaultChecked={values.cetakTampilkanHeader}
-          className="h-4 w-4 rounded border-input disabled:cursor-not-allowed disabled:opacity-60"
-        />
-        <label
-          htmlFor="pengaturan-cetakTampilkanHeader"
-          className="text-sm font-medium"
-        >
-          Tampilkan Kop Surat di Cetak
-        </label>
+        <div className="flex items-center gap-2">
+          <input
+            id="pengaturan-cetakTampilkanHeader"
+            name="cetakTampilkanHeader"
+            type="checkbox"
+            disabled={readOnly}
+            defaultChecked={values.cetakTampilkanHeader}
+            className="h-4 w-4 rounded border-input accent-accent disabled:cursor-not-allowed disabled:opacity-60"
+          />
+          <label
+            htmlFor="pengaturan-cetakTampilkanHeader"
+            className="text-sm font-medium"
+          >
+            Tampilkan Kop Surat di Cetak
+          </label>
+        </div>
       </div>
 
       {readOnly ? (

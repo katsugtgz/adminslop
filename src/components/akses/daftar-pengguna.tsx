@@ -1,4 +1,7 @@
+import { Link2, ShieldCheck } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
+import { CardHover } from "@/components/motion";
 import type { PenggunaDenganPtk } from "@/db/queries/akses";
 import type { Ptk } from "@/db/schema";
 import type { IzinSlug } from "@/lib/auth/types";
@@ -217,15 +220,16 @@ export function FormLinkPtk({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`link-${penggunaId}`}
-          className="text-xs font-medium text-muted-foreground"
+          className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground"
         >
+          <Link2 className="h-3 w-3" aria-hidden="true" />
           Tautan PTK
         </label>
         <select
           id={`link-${penggunaId}`}
           name="ptkId"
           defaultValue={currentPtkId ?? ""}
-          className="h-9 rounded-md border border-input bg-background px-2 text-sm"
+          className="h-9 rounded-md border border-input bg-background px-2 text-sm shadow-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           <option value="">Tidak terhubung</option>
           {ptks.map((p) => (
@@ -258,7 +262,10 @@ export function FormAturIzin({
 }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-sm font-medium">Izin Akses</legend>
+      <legend className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+        <ShieldCheck className="h-3 w-3" aria-hidden="true" />
+        Izin Akses
+      </legend>
       {DAFTAR_IZIN.map((slug) => (
         <form
           key={slug}
@@ -274,7 +281,7 @@ export function FormAturIzin({
               name="aktif"
               defaultChecked={izin.includes(slug)}
               aria-label={`izin-${slug}`}
-              className="h-4 w-4 rounded border-input"
+              className="h-4 w-4 rounded border-input accent-accent"
             />
             {labelIzin(slug)}
           </label>
@@ -303,7 +310,10 @@ export function FormAturPembatasan({
 }) {
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-sm font-medium">Pembatasan Akses</legend>
+      <legend className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive">
+        <ShieldCheck className="h-3 w-3" aria-hidden="true" />
+        Pembatasan Akses
+      </legend>
       {DAFTAR_IZIN.map((slug) => (
         <form
           key={slug}
@@ -319,7 +329,7 @@ export function FormAturPembatasan({
               name="aktif"
               defaultChecked={pembatasan.includes(slug)}
               aria-label={`pembatasan-${slug}`}
-              className="h-4 w-4 rounded border-input"
+              className="h-4 w-4 rounded border-input accent-destructive"
             />
             {labelIzin(slug)}
           </label>
@@ -327,7 +337,7 @@ export function FormAturPembatasan({
             type="text"
             name="alasan"
             placeholder="Alasan"
-            className="h-9 w-40 rounded-md border border-input bg-background px-2 text-sm"
+            className="h-9 w-40 rounded-md border border-input bg-background px-2 text-sm shadow-sm ring-offset-background transition-colors placeholder:text-muted-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
           <Button type="submit" size="sm" variant="ghost">
             Simpan
@@ -365,7 +375,7 @@ export function DaftarPengguna({
 }) {
   if (penggunas.length === 0) {
     return (
-      <p className="rounded-xl border border-dashed border-border bg-muted/40 p-6 text-center text-sm text-muted-foreground">
+      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
         Belum ada Pengguna.
       </p>
     );
@@ -376,43 +386,46 @@ export function DaftarPengguna({
       {penggunas.map((pengguna) => {
         const akses = aksesMap.get(pengguna.id) ?? { izin: [], pembatasan: [] };
         return (
-          <li
-            key={pengguna.id}
-            className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
-          >
-            <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold">
-                {pengguna.nama ? pengguna.nama : pengguna.userId}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                Peran Akses: {pengguna.peranAkses}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                Tautan PTK:{" "}
-                {pengguna.ptk ? pengguna.ptk.nama : "Tidak terhubung"}
-              </span>
-            </div>
-
-            {bolehKelola && (
-              <div className="flex flex-col gap-3 border-t border-border pt-3">
-                <FormLinkPtk
-                  penggunaId={pengguna.id}
-                  ptks={ptks}
-                  currentPtkId={pengguna.ptkId}
-                  action={linkAction}
-                />
-                <FormAturIzin
-                  penggunaId={pengguna.id}
-                  izin={akses.izin}
-                  action={aturIzinAction}
-                />
-                <FormAturPembatasan
-                  penggunaId={pengguna.id}
-                  pembatasan={akses.pembatasan}
-                  action={aturPembatasanAction}
-                />
+          <li key={pengguna.id}>
+            <CardHover className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-4 text-card-foreground shadow-warm hover:border-accent/40 md:p-5">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-sm font-semibold text-foreground">
+                  {pengguna.nama ? pengguna.nama : pengguna.userId}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Peran Akses: {pengguna.peranAkses}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  Tautan PTK:{" "}
+                  {pengguna.ptk ? (
+                    pengguna.ptk.nama
+                  ) : (
+                    <span className="italic">Tidak terhubung</span>
+                  )}
+                </span>
               </div>
-            )}
+
+              {bolehKelola && (
+                <div className="flex flex-col gap-4 border-t border-border/60 pt-3">
+                  <FormLinkPtk
+                    penggunaId={pengguna.id}
+                    ptks={ptks}
+                    currentPtkId={pengguna.ptkId}
+                    action={linkAction}
+                  />
+                  <FormAturIzin
+                    penggunaId={pengguna.id}
+                    izin={akses.izin}
+                    action={aturIzinAction}
+                  />
+                  <FormAturPembatasan
+                    penggunaId={pengguna.id}
+                    pembatasan={akses.pembatasan}
+                    action={aturPembatasanAction}
+                  />
+                </div>
+              )}
+            </CardHover>
           </li>
         );
       })}
