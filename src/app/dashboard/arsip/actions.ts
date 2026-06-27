@@ -27,15 +27,11 @@ import { revalidatePath } from "next/cache";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { arsipkan, aturRetensi, pulihkan, type TabelArsip } from "@/db/queries/arsip";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/arsip";
 
-const TABEL_ARSIP_WHITELIST: readonly TabelArsip[] = [
-  "ptk",
-  "penilaian",
-  "beban_mengajar",
-  "wali_kelas",
-];
+const TABEL_ARSIP_WHITELIST = ["ptk", "penilaian", "beban_mengajar", "wali_kelas"] as const;
 
 function isTabelArsip(t: string): t is TabelArsip {
   return (TABEL_ARSIP_WHITELIST as readonly string[]).includes(t);
@@ -50,6 +46,7 @@ function isTabelArsip(t: string): t is TabelArsip {
  * the whitelist (AC#5).
  */
 export async function arsipkanAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -92,6 +89,7 @@ export async function arsipkanAction(formData: FormData): Promise<void> {
  * traceable. `tabel` is validated against the whitelist (AC#5).
  */
 export async function pulihkanAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -133,6 +131,7 @@ export async function pulihkanAction(formData: FormData): Promise<void> {
  * validated against the whitelist (AC#5).
  */
 export async function aturRetensiAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

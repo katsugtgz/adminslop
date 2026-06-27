@@ -29,6 +29,7 @@ import {
   type Semester,
 } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/tahun-ajaran";
 
@@ -48,6 +49,7 @@ export async function simpanTahunAjaranBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -88,6 +90,7 @@ export async function simpanTahunAjaranBaruAction(
 export async function aktifkanTahunAjaranAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -125,6 +128,7 @@ export async function aktifkanTahunAjaranAction(
 export async function ubahSemesterAktifAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

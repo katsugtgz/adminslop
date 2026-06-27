@@ -35,9 +35,10 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ drafEraportId: string }> }
 ): Promise<Response> {
-  const { drafEraportId } = await params;
-
-  const akses = await getAksesSaya();
+  const [{ drafEraportId }, akses] = await Promise.all([
+    params,
+    getAksesSaya(),
+  ]);
   if (akses.status !== "active") {
     return new Response("Satuan Pendidikan Aktif belum dipilih.", {
       status: 401,

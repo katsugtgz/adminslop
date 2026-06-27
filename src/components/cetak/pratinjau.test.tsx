@@ -5,8 +5,8 @@ import type { KontenCetak } from "@/db/queries/cetak";
 
 import {
   PratinjauEraport,
-  hitungPengaturanEfektif,
 } from "./pratinjau-eraport";
+import { hitungPengaturanEfektif } from "./pengaturan-eraport";
 
 function fixture(over: Partial<KontenCetak> = {}): KontenCetak {
   return {

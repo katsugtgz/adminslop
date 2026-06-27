@@ -1,10 +1,13 @@
 import type { TemplateCetak } from "@/db/schema";
 
+// Module-scope formatter — Intl.DateTimeFormat is expensive to construct.
+const formatterTanggalMedium = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 function formatTanggal(d: Date): string {
-  return new Intl.DateTimeFormat("id-ID", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(d);
+  return formatterTanggalMedium.format(d);
 }
 
 /** Compact, human-readable summary of a template's pengaturan blob. */

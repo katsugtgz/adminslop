@@ -26,6 +26,7 @@ import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatDokumenCetak, buatTemplateCetak } from "@/db/queries/cetak";
 import type { FormatCetak } from "@/db/queries/cetak";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/cetak";
 
@@ -69,6 +70,7 @@ function parsePengaturan(formData: FormData): Record<string, unknown> {
 export async function buatTemplateCetakAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -116,6 +118,7 @@ export async function buatTemplateCetakAction(
 export async function buatDokumenCetakAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

@@ -6,7 +6,8 @@ import { CardHover } from "@/components/motion";
 import type { ButirSoal } from "@/db/schema";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 
-import { LABEL_JENIS_BUTIR, type ServerAksi } from "./form-butir-soal";
+import { LABEL_JENIS_BUTIR } from "./jenis-butir";
+import type { ServerAksi } from "./form-butir-soal";
 
 const LABEL_STATUS: Record<string, string> = {
   aktif: "Aktif",

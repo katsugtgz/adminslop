@@ -31,16 +31,12 @@ import {
   assertPemilikRombongan,
   rombonganBelajarIdDariAbsensi,
 } from "@/lib/auth/kepemilikan";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/absensi";
 
 /** Closed vocabulary: the four valid status_kehadiran literals. */
-const STATUS_KEHADIRAN: readonly StatusKehadiran[] = [
-  "hadir",
-  "izin",
-  "sakit",
-  "alpa",
-];
+const STATUS_KEHADIRAN = ["hadir", "izin", "sakit", "alpa"] as const;
 
 /** True iff `s` is one of the StatusKehadiran literals. */
 function isValidStatus(s: string): s is StatusKehadiran {
@@ -48,7 +44,7 @@ function isValidStatus(s: string): s is StatusKehadiran {
 }
 
 /** Closed vocabulary: the two valid metode_input literals. */
-const METODE_INPUT: readonly MetodeInput[] = ["manual", "qr"];
+const METODE_INPUT = ["manual", "qr"] as const;
 
 /** True iff `s` is one of the MetodeInput literals. */
 function isValidMetode(s: string): s is MetodeInput {
@@ -80,6 +76,7 @@ function isIsoDateShape(s: string): boolean {
  */
 export async function catatAbsensiAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -140,6 +137,7 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // C3 gate 2: ownership of the target Rombongan Belajar (admin bypasses;
     // guru must own the rombel via beban_mengajar / wali_kelas).
+    // react-doctor-disable-next-line async-parallel: catatAbsensi depends on ownership gate; audit depends on row.id, react-doctor/async-parallel
     await assertPemilikRombongan(tx, akses, async () => rombonganBelajarId);
     const row = await catatAbsensi(tx, {
       pesertaDidikId,
@@ -179,6 +177,7 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
  * string clears it (null). Audit row appended inside the transaction.
  */
 export async function ubahAbsensiAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -222,6 +221,7 @@ export async function ubahAbsensiAction(formData: FormData): Promise<void> {
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // C3 gate 2: ownership — resolve absensi(id) -> rombongan_belajar, then
     // confirm the active guru owns that rombel (admin bypasses).
+    // react-doctor-disable-next-line async-parallel: ubahAbsensi depends on ownership gate; audit depends on row.id, react-doctor/async-parallel
     await assertPemilikRombongan(tx, akses, () =>
       rombonganBelajarIdDariAbsensi(tx, id)
     );

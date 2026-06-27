@@ -33,17 +33,12 @@ import {
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
 /** Closed vocabulary of valid JenisButirSoal literals (mirrors schema CHECK). */
-const JENIS_BUTIR: readonly JenisButirSoal[] = [
-  "pg",
-  "essay",
-  "isian",
-  "jodohkan",
-  "benar_salah",
-];
+const JENIS_BUTIR = ["pg", "essay", "isian", "jodohkan", "benar_salah"] as const;
 
 /** True iff `v` is one of the JenisButirSoal literals. */
 function isValidJenis(v: string): v is JenisButirSoal {
@@ -59,6 +54,7 @@ function isValidJenis(v: string): v is JenisButirSoal {
  * throws, propagating to the client as a Bahasa error).
  */
 export async function buatButirSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -121,6 +117,7 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
  * ditemukan".
  */
 export async function ubahButirSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -177,6 +174,7 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
 export async function arsipkanButirSoalAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -209,6 +207,7 @@ export async function arsipkanButirSoalAction(
  * to a Tahun Ajaran (required) + optional semester + optional Tingkat.
  */
 export async function buatPaketSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -258,6 +257,7 @@ export async function buatPaketSoalAction(formData: FormData): Promise<void> {
 export async function tambahButirKePaketAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -305,6 +305,7 @@ export async function tambahButirKePaketAction(
 export async function hapusButirDariPaketAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

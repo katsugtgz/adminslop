@@ -17,6 +17,16 @@ vi.mock("@workos-inc/authkit-nextjs/components", () => ({
   AuthKitProvider: ({ children }: { children: unknown }) => children,
 }));
 
+vi.mock("@workos-inc/authkit-nextjs", () => ({
+  withAuth: async () => ({ user: { id: "test-user" } }),
+  signOut: async () => {},
+  handleAuth: async () => new Response(),
+  refreshSession: async () => ({}),
+  updateSession: async () => ({}),
+  getAuthorizedUrl: async () => "",
+  getSessionFromCookie: async () => undefined,
+}));
+
 /**
  * jsdom 29 + vitest 4 does not always wire `window.localStorage`. Provide a
  * minimal in-memory polyfill so client components using localStorage (e.g.

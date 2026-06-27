@@ -42,17 +42,12 @@ import type {
 } from "@/db/queries/perangkat-ajar";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/perangkat-ajar";
 
 /** Closed vocabulary of valid JenisPerangkatAjar literals (mirrors schema CHECK). */
-const JENIS_PERANGKAT_AJAR: readonly JenisPerangkatAjar[] = [
-  "modul_ajar",
-  "rpp",
-  "silabus",
-  "prota",
-  "promes",
-];
+const JENIS_PERANGKAT_AJAR = ["modul_ajar", "rpp", "silabus", "prota", "promes"] as const;
 
 /** True iff `v` is one of the JenisPerangkatAjar literals (AC#4 validation). */
 function isValidJenis(v: string): v is JenisPerangkatAjar {
@@ -90,6 +85,7 @@ export async function buatPerangkatAjarAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -167,6 +163,7 @@ export async function buatPerangkatAjarAction(
 export async function ubahPerangkatAjarAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -226,6 +223,7 @@ export async function ubahPerangkatAjarAction(
 export async function verifikasiDokumenAiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

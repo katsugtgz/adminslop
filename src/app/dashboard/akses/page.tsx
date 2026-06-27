@@ -73,8 +73,14 @@ export default async function Page() {
         { izin: string[]; pembatasan: string[] }
       >();
       if (bolehKelola) {
-        for (const pengguna of daftarPengguna) {
-          aksesPerPengguna.set(pengguna.id, await loadAksesPengguna(tx, pengguna.id));
+        const entries = await Promise.all(
+          daftarPengguna.map(async (pengguna) => [
+            pengguna.id,
+            await loadAksesPengguna(tx, pengguna.id),
+          ] as const)
+        );
+        for (const [id, aksesRow] of entries) {
+          aksesPerPengguna.set(id, aksesRow);
         }
       }
       return {

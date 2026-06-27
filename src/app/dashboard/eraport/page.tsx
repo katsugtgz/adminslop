@@ -61,23 +61,30 @@ export default async function Page() {
     const ta = await getTahunAjaranAktif(tx);
     if (!ta) return null;
 
-    const semester = await getSemesterAktif(tx);
-    const daftarPesertaDidik = await listPesertaDidik(tx);
-    const daftarEraport = await listDrafEraport(tx);
+    const [semester, daftarPesertaDidik, daftarEraport] = await Promise.all([
+      getSemesterAktif(tx),
+      listPesertaDidik(tx),
+      listDrafEraport(tx),
+    ]);
 
     // peserta_didik id -> row map for name resolution in the list.
     const pesertaMap = new Map(daftarPesertaDidik.map((p) => [p.id, p]));
 
     // Revision history per eraport (append-only, newest-first). Only needed
     // for the detail expansion; load for every eraport in one pass.
+    const revisiEntries = await Promise.all(
+      daftarEraport.map(async (e) => [
+        e.id,
+        await listRevisiByEraport(tx, e.id),
+      ] as const)
+    );
     const revisiMap = new Map<
       string,
       { alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]
     >();
-    for (const e of daftarEraport) {
-      const rows = await listRevisiByEraport(tx, e.id);
+    for (const [eraportId, rows] of revisiEntries) {
       revisiMap.set(
-        e.id,
+        eraportId,
         rows.map((r) => ({
           alasan: r.alasan,
           dibuatPada: r.dibuatPada,

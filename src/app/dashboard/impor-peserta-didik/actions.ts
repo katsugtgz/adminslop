@@ -21,6 +21,7 @@ import { revalidatePath } from "next/cache";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatPesertaDidik, listPesertaDidik } from "@/db/queries/peserta-didik";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 import { parseCsv } from "@/lib/impor/parse-csv";
 import { validasiBatch } from "@/lib/impor/validasi-peserta-didik";
 import type { JenisKelamin } from "@/db/queries/peserta-didik";
@@ -38,6 +39,7 @@ const REVALIDATE_TARGET = "/dashboard/impor-peserta-didik";
  * from `akses.membership.orgId` — never from formData (§13).
  */
 export async function imporPesertaDidikAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -73,6 +75,7 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
     let tidakValid = 0;
     for (const h of hasil) {
       if (h.status === "valid") {
+        // react-doctor-disable-next-line async-await-in-loop: serial: AC#5 no-silent-overwrite requires row-by-row validation, react-doctor/async-await-in-loop
         await buatPesertaDidik(tx, {
           nama: h.data.nama,
           nisn: h.data.nisn ?? null,

@@ -263,6 +263,32 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* Native <progress> styled with the warm gradient fill (used by KartuKuota).
+     Keeps native progressbar semantics without an ARIA role override. */
+  .progress-warm {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 0.625rem;
+    width: 100%;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: var(--muted);
+  }
+  .progress-warm::-webkit-progress-bar {
+    background: transparent;
+    border-radius: 9999px;
+  }
+  .progress-warm::-webkit-progress-value {
+    background-image: var(--gradient-warm);
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+  }
+  .progress-warm::-moz-progress-bar {
+    background-image: var(--gradient-warm);
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+  }
+
   /* Warm card treatment — soft shadow + warm tint */
   .shadow-warm {
     box-shadow:

@@ -1,0 +1,37 @@
+name: React Doctor
+
+# Scans every pull request for new React issues (state/effect, performance,
+# architecture, security, accessibility) introduced by the change, then tracks
+# the project health-score trend on every push to `main`. See:
+#   https://react.doctor/ci
+# Docs / action reference: https://github.com/millionco/react-doctor
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  statuses: write
+
+# Cancel any in-flight scan for the same PR/branch when a new commit lands so
+# reviewers only ever see the latest result.
+concurrency:
+  group: react-doctor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  react-doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # fetch-depth: 0 lets the scanner resolve the PR merge base so it
+          # reports only NEW issues relative to the target branch.
+          fetch-depth: 0
+
+      - uses: millionco/react-doctor@v2

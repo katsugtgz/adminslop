@@ -173,14 +173,16 @@ export async function loadAksesPengguna(
   db: Db | Tx,
   penggunaId: string
 ): Promise<AksesPengguna> {
-  const izinRows = await db
-    .select({ slug: izinAkses.slug })
-    .from(izinAkses)
-    .where(eq(izinAkses.penggunaId, penggunaId));
-  const batasRows = await db
-    .select({ slug: pembatasanAkses.slug })
-    .from(pembatasanAkses)
-    .where(eq(pembatasanAkses.penggunaId, penggunaId));
+  const [izinRows, batasRows] = await Promise.all([
+    db
+      .select({ slug: izinAkses.slug })
+      .from(izinAkses)
+      .where(eq(izinAkses.penggunaId, penggunaId)),
+    db
+      .select({ slug: pembatasanAkses.slug })
+      .from(pembatasanAkses)
+      .where(eq(pembatasanAkses.penggunaId, penggunaId)),
+  ]);
   return {
     izin: izinRows.map((r) => r.slug),
     pembatasan: batasRows.map((r) => r.slug),

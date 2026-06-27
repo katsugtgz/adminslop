@@ -8,9 +8,11 @@ import { listMembershipsForUser } from "@/lib/auth/membership";
 import {
   ACTIVE_TENANT_COOKIE,
   ACTIVE_TENANT_MAX_AGE,
+  requireAuth,
 } from "@/lib/auth/server";
 
 export async function signOutAction() {
+  await requireAuth();
   await signOut();
 }
 
@@ -20,6 +22,7 @@ export async function signOutAction() {
  * cannot inject a tenant it is not a member of.
  */
 export async function pilihSatuanPendidikanAction(formData: FormData) {
+  await requireAuth();
   const orgId = String(formData.get("orgId") ?? "");
 
   const auth = await withAuth();

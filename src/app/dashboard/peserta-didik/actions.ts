@@ -40,6 +40,7 @@ import {
   type StatusPesertaDidik,
 } from "@/db/queries/peserta-didik";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/peserta-didik";
 
@@ -48,12 +49,7 @@ const REVALIDATE_TARGET = "/dashboard/peserta-didik";
 /** NISN is exactly 8 digits when present. */
 const NISN_RE = /^\d{8}$/;
 /** Valid status literals (mirror the schema CHECK constraint). */
-const STATUS_VALID: readonly StatusPesertaDidik[] = [
-  "aktif",
-  "pindah",
-  "lulus",
-  "keluar",
-];
+const STATUS_VALID = ["aktif", "pindah", "lulus", "keluar"] as const;
 /** Valid arah mutasi literals. */
 const ARAH_VALID = ["masuk", "keluar"] as const;
 type ArahMutasi = (typeof ARAH_VALID)[number];
@@ -100,6 +96,7 @@ export async function simpanPesertaDidikBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -164,6 +161,7 @@ export async function simpanPesertaDidikBaruAction(
 export async function ubahPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -219,6 +217,7 @@ export async function ubahPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: ubahPesertaDidik depends on existence guard; audit logs after successful update, react-doctor/async-parallel
     await assertPesertaAda(tx, id);
     await ubahPesertaDidik(tx, id, input);
     await catatAudit(tx, {
@@ -243,6 +242,7 @@ export async function ubahPesertaDidikAction(
 export async function ubahStatusPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -264,6 +264,7 @@ export async function ubahStatusPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: ubahStatus depends on existence guard; audit logs after successful update, react-doctor/async-parallel
     await assertPesertaAda(tx, id);
     await ubahStatus(tx, id, {
       status,
@@ -302,6 +303,7 @@ export async function ubahStatusPesertaDidikAction(
 export async function catatMutasiPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -333,6 +335,7 @@ export async function catatMutasiPesertaDidikAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: mutasi depends on existence guard; status transition + audit follow atomically (AC#3), react-doctor/async-parallel
     await assertPesertaAda(tx, id);
     // 1. Record the transfer row (mutasi repo).
     await tambahMutasi(tx, {
@@ -369,6 +372,7 @@ export async function catatMutasiPesertaDidikAction(
  * Pengguna and cannot sign in. No user_id/auth columns are touched here.
  */
 export async function tambahWaliAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -389,6 +393,7 @@ export async function tambahWaliAction(formData: FormData): Promise<void> {
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: tambahWali depends on existence guard; audit logs after successful insert, react-doctor/async-parallel
     await assertPesertaAda(tx, pesertaDidikId);
     await tambahWali(tx, {
       pesertaDidikId,
@@ -415,6 +420,7 @@ export async function tambahWaliAction(formData: FormData): Promise<void> {
  * delete to the active tenant — a cross-tenant id is a silent no-op.
  */
 export async function hapusWaliAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -449,6 +455,7 @@ export async function hapusWaliAction(formData: FormData): Promise<void> {
 export async function tambahKontakDaruratAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -468,6 +475,7 @@ export async function tambahKontakDaruratAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: tambahKontakDarurat depends on existence guard; audit logs after successful insert, react-doctor/async-parallel
     await assertPesertaAda(tx, pesertaDidikId);
     await tambahKontakDarurat(tx, {
       pesertaDidikId,
@@ -495,6 +503,7 @@ export async function tambahKontakDaruratAction(
 export async function hapusKontakDaruratAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

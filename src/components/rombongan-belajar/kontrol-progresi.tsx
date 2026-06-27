@@ -80,6 +80,7 @@ function FormProgresi({
           name="tahunAjaranBaruId"
           type="text"
           required
+          aria-label="Tahun Ajaran Baru"
           className="h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>

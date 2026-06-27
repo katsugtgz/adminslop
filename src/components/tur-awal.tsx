@@ -94,12 +94,13 @@ export function TurAwal() {
   const isLast = state.langkah === STEP_TITLES.length - 1;
 
   return (
-    <div
-      role="dialog"
+    <dialog
+      open={state.mulai}
       aria-modal="true"
       aria-labelledby="tur-awal-judul"
       aria-describedby="tur-awal-deskripsi"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 focus-visible:outline-none sm:items-center"
+      onCancel={lewati}
+      className="m-0 fixed inset-0 z-50 flex items-end justify-center border-0 bg-black/50 p-4 focus-visible:outline-none sm:items-center"
     >
       <div className="w-full max-w-md rounded-t-xl border border-border bg-card p-6 text-card-foreground shadow-xl sm:rounded-xl">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -138,7 +139,7 @@ export function TurAwal() {
           </Button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
 

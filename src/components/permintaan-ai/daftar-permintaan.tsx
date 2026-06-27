@@ -6,7 +6,8 @@ import type { PermintaanAi, DrafAi } from "@/db/schema";
 import type { StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 
 import { KartuDraf } from "./kartu-draf";
-import { LABEL_JENIS, type ServerAksi } from "./form-permintaan";
+import { LABEL_JENIS } from "./jenis-permintaan";
+import type { ServerAksi } from "./form-permintaan";
 
 const LABEL_STATUS: Record<StatusPermintaanAi, string> = {
   dibuat: "Dibuat",
@@ -27,11 +28,14 @@ const BADGE_STATUS: Record<StatusPermintaanAi, string> = {
 const BADGE_BASE =
   "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium";
 
+// Module-scope formatter — Intl.DateTimeFormat is expensive to construct.
+const formatterTanggalMedium = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 function formatTanggal(d: Date): string {
-  return new Intl.DateTimeFormat("id-ID", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(d);
+  return formatterTanggalMedium.format(d);
 }
 
 /**

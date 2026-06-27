@@ -107,6 +107,7 @@ export function FormAbsensi({
                   name="catatan"
                   type="text"
                   defaultValue={row?.catatan ?? ""}
+                  aria-label="Catatan"
                   className="h-10 rounded-lg border border-input bg-background px-3 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>

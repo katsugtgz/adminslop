@@ -15,11 +15,8 @@ import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 import { PageReveal } from "@/components/motion";
 import { DaftarPerangkatAjar } from "@/components/perangkat-ajar/daftar-perangkat-ajar";
-import {
-  FormPerangkatAjar,
-  LABEL_JENIS,
-  PILIHAN_JENIS,
-} from "@/components/perangkat-ajar/form-perangkat-ajar";
+import { FormPerangkatAjar } from "@/components/perangkat-ajar/form-perangkat-ajar";
+import { LABEL_JENIS, PILIHAN_JENIS } from "@/components/perangkat-ajar/jenis-perangkat";
 
 import { verifikasiDokumenAiAction, buatPerangkatAjarAction } from "./actions";
 

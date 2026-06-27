@@ -104,6 +104,7 @@ export async function syncSekarang(opsi?: OpsiSync): Promise<HasilSinkronisasi> 
   for (const draft of listDraftPending()) {
     const tipe = tipeDariDraft(draft);
     try {
+      // react-doctor-disable-next-line react-doctor/async-await-in-loop — drafts are flushed sequentially so the server's per-draft versi-aware upsert stays ordered and progress is observable per item.
       const resp = await kirimDraft(draft, opsi);
       if (resp.status === "ok") {
         hapusDraft(tipe, draft.id);
@@ -140,6 +141,7 @@ export async function syncDraftByTipe(
   const pending = listDraftPending().filter((d) => tipeDariDraft(d) === tipe);
   for (const draft of pending) {
     try {
+      // react-doctor-disable-next-line react-doctor/async-await-in-loop — drafts are flushed sequentially so the server's per-draft versi-aware upsert stays ordered and progress is observable per item.
       const resp = await kirimDraft(draft, opsi);
       if (resp.status === "ok") {
         hapusDraft(tipe, draft.id);

@@ -62,6 +62,15 @@ const MVP_MODULES: Modul[] = [
   },
 ];
 
+/** Hoisted to module scope to satisfy react-doctor/`jsx-no-jsx-as-prop`. */
+const HEADLINE_JUDUL: React.ReactNode = (
+  <>
+    EduAdmin Pro{" "}
+    <span className="text-gradient-warm">Premium</span>
+    <span className="text-accent">.</span>
+  </>
+);
+
 export default function BerandaPage() {
   return (
     <div className="flex flex-col gap-16 md:gap-24">
@@ -107,13 +116,7 @@ export default function BerandaPage() {
           <TextStagger
             as="h1"
             className="mt-6 font-display text-[2.75rem] leading-[0.95] tracking-tight text-foreground sm:text-7xl md:text-8xl"
-            lines={
-              <>
-                EduAdmin Pro{" "}
-                <span className="text-gradient-warm">Premium</span>
-                <span className="text-accent">.</span>
-              </>
-            }
+            lines={HEADLINE_JUDUL}
           />
 
           <p className="mt-8 max-w-2xl text-pretty text-lg text-muted-foreground sm:text-xl md:text-2xl">

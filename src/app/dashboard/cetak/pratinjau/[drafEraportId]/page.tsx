@@ -33,9 +33,10 @@ export default async function Page({
 }: {
   params: Promise<{ drafEraportId: string }>;
 }) {
-  const { drafEraportId } = await params;
-
-  const akses = await getAksesSaya();
+  const [{ drafEraportId }, akses] = await Promise.all([
+    params,
+    getAksesSaya(),
+  ]);
 
   if (akses.status === "denied") {
     return <PembatasanAkses />;

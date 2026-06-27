@@ -48,16 +48,12 @@ import {
 import type { JenisPermintaanAi, StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/permintaan-ai";
 
 /** Closed vocabulary of valid JenisPermintaanAi literals (mirrors schema CHECK). */
-const JENIS_PERMINTAAN_AI: readonly JenisPermintaanAi[] = [
-  "deskripsi_cp",
-  "deskripsi_tp",
-  "deskripsi_atp",
-  "narasi_raport",
-];
+const JENIS_PERMINTAAN_AI = ["deskripsi_cp", "deskripsi_tp", "deskripsi_atp", "narasi_raport"] as const;
 
 /** True iff `v` is one of the JenisPermintaanAi literals. */
 function isValidJenis(v: string): v is JenisPermintaanAi {
@@ -117,6 +113,7 @@ async function prosesPermintaanAi(
   }
 
   // 3. AC#1 state machine: dibuat -> diproses -> selesai.
+  // react-doctor-disable-next-line async-parallel: AC#1 state machine + AC#5 budget: each step depends on prior completing, react-doctor/async-parallel
   const permintaan = await buatPermintaanAi(tx, {
     jenis,
     konteks,
@@ -130,6 +127,7 @@ async function prosesPermintaanAi(
 
   // 5. AC#2 provenance + AC#3 menunggu draft (not final by default).
   const { konten, provenance } = jalankanMockAi(jenis);
+  // react-doctor-disable-next-line async-parallel: AC#1 state machine: draft creation follows diproses transition, react-doctor/async-parallel
   await buatDrafAi(tx, {
     permintaanAiId: permintaan.id,
     konten,
@@ -161,6 +159,7 @@ async function prosesPermintaanAi(
  */
 export async function buatPermintaanAiAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -223,6 +222,7 @@ export async function buatPermintaanAiAction(formData: FormData): Promise<void> 
 export async function batalkanPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -269,6 +269,7 @@ export async function batalkanPermintaanAiAction(
 export async function verifikasiDrafAiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -311,6 +312,7 @@ export async function verifikasiDrafAiAction(
 export async function retryPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

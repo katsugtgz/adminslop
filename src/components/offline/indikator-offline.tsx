@@ -12,11 +12,12 @@ import { cn } from "@/lib/utils";
  * mount.
  */
 export function IndikatorOffline({ className }: { className?: string }) {
-  const [online, setOnline] = useState<boolean | null>(null);
+  const [online, setOnline] = useState<boolean | null>(
+    () => (typeof navigator !== "undefined" ? navigator.onLine : null)
+  );
 
   useEffect(() => {
     const update = () => setOnline(navigator.onLine);
-    update();
     window.addEventListener("online", update);
     window.addEventListener("offline", update);
     return () => {
@@ -29,9 +30,7 @@ export function IndikatorOffline({ className }: { className?: string }) {
   const Ikon = sedangOffline ? CloudOff : Cloud;
 
   return (
-    <span
-      role="status"
-      aria-live="polite"
+    <output
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-sm",
         sedangOffline
@@ -46,6 +45,6 @@ export function IndikatorOffline({ className }: { className?: string }) {
         : sedangOffline
           ? "Mode Offline"
           : "Online"}
-    </span>
+    </output>
   );
 }

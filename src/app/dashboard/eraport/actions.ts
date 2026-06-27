@@ -46,6 +46,7 @@ import {
 import type { SemesterEraport } from "@/db/queries/eraport";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/eraport";
 
@@ -62,6 +63,7 @@ const REVALIDATE_TARGET = "/dashboard/eraport";
  */
 export async function buatDrafEraportAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -142,6 +144,7 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
  * throws (RLS hides it).
  */
 export async function terbitkanEraportAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -178,6 +181,7 @@ export async function terbitkanEraportAction(formData: FormData): Promise<void> 
 export async function catatRevisiEraportAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

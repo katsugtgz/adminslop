@@ -2,25 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CircleHelp, Home, type LucideIcon } from "lucide-react";
 
-type NavItem = {
-  href: string;
-  label: string;
-  icon: LucideIcon;
-  shortLabel: string;
-};
-
-export const PRIMARY_NAV: NavItem[] = [
-  { href: "/", label: "Beranda", icon: Home, shortLabel: "Beranda" },
-  {
-    href: "/panduan",
-    label: "Panduan Penggunaan",
-    icon: BookOpen,
-    shortLabel: "Panduan",
-  },
-  { href: "/bantuan", label: "Bantuan", icon: CircleHelp, shortLabel: "Bantuan" },
-];
+import { PRIMARY_NAV } from "@/components/main-nav-items";
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
