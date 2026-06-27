@@ -1,0 +1,19 @@
+src/db/migrations/0015_fk_tenant_scoping.sql
+  s_4514f9825d81fa::t_2da6632da65cd0 91,106,121,136,156,171,186,204,219,235,250,268,283,303,319,334,349,364,379,398,413,429,447,462,480,495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "bad502775af1d209c4e1ff871fd8dfe4522b37dc",
+  "prompts": {},
+  "sessions": {
+    "s_4514f9825d81fa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f7eecd8bffesK2wfoHxN9OowA",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
