@@ -1,0 +1,19 @@
+docs/roadmap/post-mvp-backlog.md
+  s_d51203eb29856d::t_664b824c4822c3 1-185
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "60a91ed3fbfe1d3d44d66989fba79a6f6d48887c",
+  "prompts": {},
+  "sessions": {
+    "s_d51203eb29856d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6874825ffepUr1NOWpy1C7CY",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

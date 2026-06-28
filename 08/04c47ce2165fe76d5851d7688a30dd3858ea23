@@ -1,0 +1,20 @@
+.omo/evidence/release/mvp-ship-gates.md
+  s_5a9a8dfd35d906::t_62b2772982c387 201
+  s_5a9a8dfd35d906::t_68787ce5d691e6 1-200,202-235
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "0804c47ce2165fe76d5851d7688a30dd3858ea23",
+  "prompts": {},
+  "sessions": {
+    "s_5a9a8dfd35d906": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6925a0ffferTNvuDSwr2hjpy",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+src/components/akses/tombol-masuk.tsx
+  s_f38687804bcfdc::t_341f73e74a6d41 1-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "2af0884a65efecd904dd48d6c65d074baa237073",
+  "prompts": {},
+  "sessions": {
+    "s_f38687804bcfdc": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f096f-1c90-77d5-8eae-968b95979856",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

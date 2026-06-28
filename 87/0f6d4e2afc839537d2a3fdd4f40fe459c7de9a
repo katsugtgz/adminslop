@@ -1,0 +1,28 @@
+src/app/dashboard/impor-peserta-didik/page.test.tsx
+  s_332d41a7a3a7dd::t_222fd886949ab8 8,226-339
+  s_d946e161b759b2::t_673f9886215605 340
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "870f6d4e2afc839537d2a3fdd4f40fe459c7de9a",
+  "prompts": {},
+  "sessions": {
+    "s_332d41a7a3a7dd": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b3d180ffeJon5mp3UnO7fgV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_d946e161b759b2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6b36299ffej2dl5U1jWgAmMu",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+src/app/dashboard/page.tsx
+  s_f38687804bcfdc::t_c031ab2d2d2a6f 1,13-14
+src/app/dashboard/page.test.tsx
+  s_f38687804bcfdc::t_ea53ff672a0331 4,6,14-18,31,44-47,50-61,63,68
+src/components/pembatasan-akses.test.tsx
+  s_f38687804bcfdc::t_a84ab1c31f88b3 1-4,8-11,13-84,86-91,93-94
+  s_f38687804bcfdc::t_04bdf16026378b 5-7,12,85,92
+src/components/pembatasan-akses.tsx
+  s_f38687804bcfdc::t_be6187b4b9aa02 6,9-20,22,48-67,72-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "6ec410117c1390280d942b041ccee4cd2567be86",
+  "prompts": {},
+  "sessions": {
+    "s_f38687804bcfdc": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f096f-1c90-77d5-8eae-968b95979856",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

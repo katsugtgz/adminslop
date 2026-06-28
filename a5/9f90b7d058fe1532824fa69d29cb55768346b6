@@ -1,0 +1,19 @@
+docs/adr/0005-consent-notification-foundation.md
+  s_4b68cdf1ae35d1::t_58aecd90a0f323 1-405
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "a59f90b7d058fe1532824fa69d29cb55768346b6",
+  "prompts": {},
+  "sessions": {
+    "s_4b68cdf1ae35d1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f67a81c4ffeplSCYrpYQ8NNUn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

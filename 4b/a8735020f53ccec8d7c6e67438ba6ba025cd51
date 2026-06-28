@@ -1,0 +1,20 @@
+docs/runbooks/migrations.md
+  s_de19a0d26ef511::t_d6dfe6c786d980 1-288,293,295-349
+  s_de19a0d26ef511::t_77a6e332a70ce3 289-292,294
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "4ba8735020f53ccec8d7c6e67438ba6ba025cd51",
+  "prompts": {},
+  "sessions": {
+    "s_de19a0d26ef511": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6c39282ffetO7zHjSVn65pNs",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

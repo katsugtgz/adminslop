@@ -1,0 +1,25 @@
+src/db/rls.test.ts
+  s_ea549eb5ad3a56::t_64235641558968 106,109,111-113,115
+  s_ea549eb5ad3a56::t_512849d7a8fb1c 149-152,157-158,168,177-178
+  s_ea549eb5ad3a56::t_c04b9c44bda49e 1,5-6,11
+  s_ea549eb5ad3a56::t_eb0c5b16b68b8b 107-108
+  s_ea549eb5ad3a56::t_3a8e333a08469d 110,114,116-120
+  s_ea549eb5ad3a56::t_6502d407dab6e5 121,123-148,153-156,159-167,169-176,179-186
+  s_ea549eb5ad3a56::t_6b04f0b2f6ff50 122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "c2466b98ab9f226a504b04bd96da2f3551477351",
+  "prompts": {},
+  "sessions": {
+    "s_ea549eb5ad3a56": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f6c43e44ffeZ7C7AkM8yfEr8r",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}

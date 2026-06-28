@@ -1,0 +1,25 @@
+src/app/dashboard/pengaturan/actions.test.ts
+  s_a6a21a98fb981a::t_c8685293c5ded2 96,107
+  s_a6a21a98fb981a::t_9c3b5b71b6617c 19,37
+src/app/dashboard/pengaturan/actions.ts
+  s_a6a21a98fb981a::t_1674c6e7189216 33,81
+  s_a6a21a98fb981a::t_d395e8d3f345ad 14
+package.json
+  s_a6a21a98fb981a::t_94ce0eddc21501 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "973a49c9d9e04bc124dc2999029bfc7eb821e9e2",
+  "prompts": {},
+  "sessions": {
+    "s_a6a21a98fb981a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f626bdfbffeB0OKDG6TzHxqsO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
