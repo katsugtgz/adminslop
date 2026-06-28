@@ -1,0 +1,19 @@
+src/db/seed/seed.test.ts
+  s_a6a21a98fb981a::t_14eab835486ff0 68-72
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "88c0ac5e5672920f4349a1b80666b2fae1c0d072",
+  "prompts": {},
+  "sessions": {
+    "s_a6a21a98fb981a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f626bdfbffeB0OKDG6TzHxqsO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
