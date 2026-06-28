@@ -1,0 +1,174 @@
+src/components/absensi/rekap-absensi.tsx
+  s_a6a21a98fb981a::t_35825fddd35bc4 30-38
+docs/adr/0002-pii-at-rest-strategy.md
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 23
+src/components/bank-soal/jenis-butir.ts
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 17-20
+.github/workflows/ci.yml
+  s_9be4b3f3771135::t_ad88f49c43141e 59
+src/components/akses/tombol-masuk.tsx
+  s_123bc7cc6fa716::t_b651d4f8e9612d 19
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 7,23
+src/app/dashboard/absensi/page.tsx
+  s_292e627b98d5f2::t_715842038157a6 46-81,228-230,256-258
+src/app/dashboard/pengaturan/actions.test.ts
+  s_292e627b98d5f2::t_687971726665e5 1,116-117
+  s_292e627b98d5f2::t_6443fbf0eb10d2 118-119
+src/components/akses/use-masuk.ts
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 1-4,8-11
+  s_123bc7cc6fa716::t_b651d4f8e9612d 5-7
+src/components/permintaan-ai/jenis-permintaan.ts
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 16-19
+src/components/pengaturan-satuan/form-profil.tsx
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 122
+.github/workflows/react-doctor.yml
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 37
+e2e/mvp-tracer.spec.ts
+  s_9be4b3f3771135::t_ad88f49c43141e 73,95
+src/components/tur-awal.test.tsx
+  s_123bc7cc6fa716::t_9dfff50ad4fcc3 4
+  s_123bc7cc6fa716::t_8b903f5e979044 8-13
+src/db/seed/tenant.ts
+  s_63f5371737c7e0::t_252c7c0dcda1a5 400,411,420
+src/app/page.test.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 44-46
+src/components/dashboard-aktif/kepala-dashboard.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 8-15,29-30,66
+src/app/dashboard/arsip/actions.ts
+  s_292e627b98d5f2::t_715842038157a6 34-39
+src/components/cetak/pengaturan-eraport.ts
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 21-30,35,42-43
+src/components/eraport/detail-eraport.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 22,36,64
+src/app/auth/actions.ts
+  s_a6a21a98fb981a::t_416d4c7d84d3e3 15-17
+src/app/globals.css
+  s_123bc7cc6fa716::t_b651d4f8e9612d 471-473
+src/db/rls.test.ts
+  s_63f5371737c7e0::t_252c7c0dcda1a5 146
+src/components/motion/page-reveal.tsx
+  s_123bc7cc6fa716::t_b651d4f8e9612d 22-23
+src/components/penilaian/breadcrumb-penilaian.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 34
+src/app/dashboard/absensi/actions.test.ts
+  s_292e627b98d5f2::t_22255415041877 739-741
+  s_292e627b98d5f2::t_99b9d44650e65f 84-86,100,125-127,228,235-237,684-702
+  s_292e627b98d5f2::t_bf882d5280a3e7 703-705
+src/db/seed/seed.test.ts
+  s_63f5371737c7e0::t_252c7c0dcda1a5 5,68-71,152,191
+docs/roadmap/post-mvp-backlog.md
+  s_9be4b3f3771135::t_ad88f49c43141e 13,87-88,140-144,150
+src/app/panduan/page.test.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 50-52
+src/components/penilaian/lookup.ts
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 115-119
+.omo/evidence/release/mvp-ship-gates.md
+  s_9be4b3f3771135::t_ad88f49c43141e 57,76,158,162,164-165
+src/components/offline/indikator-offline.tsx
+  s_a6a21a98fb981a::t_2dbdde0c266a81 3,10-12,14-29,31-32
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 48
+src/app/dashboard/peserta-didik/[id]/page.tsx
+  s_123bc7cc6fa716::t_b651d4f8e9612d 199,226
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 211
+src/components/tur-awal.tsx
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 3,63,79-86,105
+src/app/dashboard/penilaian/actions.ts
+  s_292e627b98d5f2::t_715842038157a6 59-63,244,281,318
+src/db/seed/scrape-soal.mjs
+  s_63f5371737c7e0::t_252c7c0dcda1a5 131-134
+src/app/dashboard/penilaian/actions.test.ts
+  s_292e627b98d5f2::t_9bd60b1f8dacc9 159-161,374-375,380,386-387,390,395-396,399,406,506,623-630,638,648,667
+  s_292e627b98d5f2::t_1eb73f8c416648 466-469
+src/components/eraport/daftar-eraport.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 60
+src/components/app-shell.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 8-9
+src/components/rombongan-belajar/kontrol-progresi.tsx
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 1,23,29,31-32,43,136
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 78
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/page.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 94
+src/app/dashboard/eraport/page.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 83,89
+src/app/api/sinkronisasi/route.test.ts
+  s_292e627b98d5f2::t_7009ab25e7ca31 185,193,300-332,335
+  s_292e627b98d5f2::t_ab3a42b30f2425 333-334
+  s_292e627b98d5f2::t_a85c09959b6724 336-337
+src/lib/offline/README.md
+  s_9be4b3f3771135::t_ad88f49c43141e 5
+src/app/api/sinkronisasi/route.ts
+  s_a6a21a98fb981a::t_dbaadd735212de 232-236,241
+  s_292e627b98d5f2::t_715842038157a6 193-196
+  s_a6a21a98fb981a::t_c1626ff61f33f9 242
+src/components/perangkat-ajar/jenis-perangkat.ts
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 17-20
+src/components/dashboard-aktif/ringkasan-tenant.tsx
+  s_b524ff0b6a897b::t_67a4e5dd19c89a 50,56-57
+src/components/nav-auth.tsx
+  s_123bc7cc6fa716::t_b651d4f8e9612d 11
+  s_123bc7cc6fa716::t_b9cc1dfaf983c4 5,45
+docs/adr/0006-rag-help-strategy.md
+  s_9be4b3f3771135::t_5a7f93d358bce6 331-335
+src/db/seed/referensi.ts
+  s_63f5371737c7e0::t_252c7c0dcda1a5 169-174
+src/app/dashboard/absensi/actions.ts
+  s_292e627b98d5f2::t_e1d1e82fa69540 29,143-144
+  s_292e627b98d5f2::t_715842038157a6 145-146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "286b07d8df15dd044ebefe48688c4f5c4c6695c1",
+  "prompts": {},
+  "sessions": {
+    "s_123bc7cc6fa716": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f39e2869ffem4lqFRTT2fM7C3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_292e627b98d5f2": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f39e2876ffevI2mTsf630J3Hx",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_63f5371737c7e0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f39e2896ffevR7bh7O9iJEGb4",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_9be4b3f3771135": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f39e2864ffe7gK5l5HqWFW8aS",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_a6a21a98fb981a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f626bdfbffeB0OKDG6TzHxqsO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_b524ff0b6a897b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f39823daffeFjjYbP5OmZwK0m",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
