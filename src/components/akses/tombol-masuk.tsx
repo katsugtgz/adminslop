@@ -4,6 +4,7 @@ import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { LogIn } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useMasuk } from "@/components/akses/use-masuk";
 
 /**
  * TombolMasuk — primary client-side login trigger.
@@ -15,10 +16,11 @@ import { Button } from "@/components/ui/button";
  */
 export function TombolMasuk() {
   const { refreshAuth } = useAuth();
+  const masuk = useMasuk(refreshAuth);
   return (
     <Button
       type="button"
-      onClick={() => void refreshAuth({ ensureSignedIn: true })}
+      onClick={masuk}
       aria-label="Masuk ke EduAdmin Pro Premium"
     >
       <LogIn aria-hidden="true" />

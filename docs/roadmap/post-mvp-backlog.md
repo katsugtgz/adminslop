@@ -10,7 +10,7 @@
 
 ## 1. Headline
 
-**Backlog size: 26 items. 19 ADR-required (Y), 7 defer (no ADR — explicitly killed or out-of-scope), 0 build-now.** Every ADR-required item has `Owner: product-owner` (or more specific owner where the plan/ADRs specify) and `Default-if-silent: defer`. **Zero Wave 5 candidates accepted** — the safe default, because every Wave 5-eligible item depends on at least one Deferred ADR (0002/0003/0004) or on T22 (consent) / T23 (AI/RAG), both of which are themselves owner-gated and unresolved.
+**Backlog size: 26 items. 17 ADR-required (Y), 9 defer (no ADR — explicitly killed, out-of-scope, business-review, or already policy-deferred), 0 build-now.** Every ADR-required item has `Owner: product-owner` (or more specific owner where the plan/ADRs specify) and `Default-if-silent: defer`. **Zero Wave 5 candidates accepted** — the safe default, because every Wave 5-eligible item depends on at least one Deferred ADR (0002/0003/0004) or on T22 (consent) / T23 (AI/RAG), both of which are themselves owner-gated and unresolved.
 
 This is the post-MVP **ADR backlog**, not a build backlog. Every Y row is a decision waiting on an owner signal, not a ticket waiting on an engineer.
 
@@ -84,8 +84,8 @@ Columns (matching Task 21 MUST-DO column spec):
 
 | Status | Count | Items |
 |---|---|---|
-| `ADR-required (Y)` | 19 | #2, #5, #6, #7, #8, #9, #10, #11, #16, #17, #18, #20, #21, #22, #23, #24, #26 + #25 per-feature at adoption |
-| `defer (N — killed / out-of-scope / business-review)` | 7 | #1 (business review), #3 (business review), #4 (killed), #12 (separate project), #13 (low value), #14 (killed), #15 (static docs), #19 (gated, no ADR until tech selection), #25 (already-deferred policy) |
+| `ADR-required (Y)` | 17 | #2, #5, #6, #7, #8, #9, #10, #11, #16, #17, #18, #20, #21, #22, #23, #24, #26 |
+| `defer (N — killed / out-of-scope / business-review / already policy-deferred)` | 9 | #1 (business review), #3 (business review), #4 (killed), #12 (separate project), #13 (low value), #14 (killed), #15 (static docs), #19 (gated, no ADR until tech selection), #25 (already-deferred policy) |
 | `build-now` | 0 | — |
 
 **Zero `build-now`** is correct and load-bearing: every post-MVP feature is in post-MVP because it needs an owner decision or is killed. This is the same property T5 §4 established for the 25-feature union; this backlog preserves it.
@@ -137,16 +137,17 @@ Inherited from T5 §4 + this backlog's additions. Next free ADR number is **0005
 | **[0006] k-anonymity & anti-shaming for leaderboards** | #5, #6 | k-anon threshold + re-identification risk for minor-identifying analytics | not drafted |
 | **[0007] Parent/Wali access model** | #11 (partly #10) | non-PTK auth role + data minimization + consent model + ADR 0004 role vocab extension | not drafted |
 | **[0008] AI provenance & retrieval safety** | #16, #17, #18, #24 | source snapshots + repeatable prompts/parsers + schema validation + golden diffs + human approval + retrieval safety + ML governance for minors + pgvector adoption decision | not drafted; gates T23; requires ADR 0003 Accepted |
-| **[0009] Legal signature & offline sensitive actions** | #20, #21 (could split into two) | UU ITE / PerMenkominfo / BSrE + offline authorization + conflict rules + audit | not drafted |
-| **[0010] Multi-tenant oversight expansion (Instansi Pengelola)** | #22 | new `lintas_satuan:baca` permission + cross-yayasan RLS + org-of-orgs model | not drafted; T19 ADR 0004 Decision 4 explicitly gates this; requires #1 GTM |
-| **[0011] Real-time collaboration infra** | #23 | WebSocket/SSE + conflict resolution + entity-lock | not drafted |
-| **[0012] Biometrics (face scan + WAJAH column)** | #26 | UU PDP Pasal 5(2) + DPIA + consent from Wali + purpose limitation + retention + secure storage | not drafted; T18 §4b explicit deferral; trips ADR 0002 trigger |
+| **[0009] Legal signature workflow** | #20 | UU ITE / PerMenkominfo / BSrE + certificate authority + approval workflow + audit | not drafted |
+| **[0010] Offline sensitive actions** | #21 | offline authorization + conflict rules + audit + T16 read-side offline-cache dependency | not drafted |
+| **[0011] Multi-tenant oversight expansion (Instansi Pengelola)** | #22 | new `lintas_satuan:baca` permission + cross-yayasan RLS + org-of-orgs model | not drafted; T19 ADR 0004 Decision 4 explicitly gates this; requires #1 GTM |
+| **[0012] Real-time collaboration infra** | #23 | WebSocket/SSE + conflict resolution + entity-lock | not drafted |
+| **[0013] Biometrics (face scan + WAJAH column)** | #26 | UU PDP Pasal 5(2) + DPIA + consent from Wali + purpose limitation + retention + secure storage | not drafted; T18 §4b explicit deferral; trips ADR 0002 trigger |
 
 **Plus 3 owner business decisions that gate technical ADRs (not ADRs themselves):**
 
 | Business decision | Gates |
 |---|---|
-| #1 GTM final shape | [0010] Instansi Pengelola |
+| #1 GTM final shape | [0011] Instansi Pengelola |
 | #2 Dapodik retention duty (compliance review) | #2 retention ADR (compliance-sensitive) |
 | #3 Monetization final numbers | #25 WorkOS enterprise adoption sequencing |
 

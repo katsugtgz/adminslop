@@ -119,7 +119,7 @@ export function FormProfil({ values, readOnly = false }: FormProfilProps) {
             className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
           <p className="text-xs text-muted-foreground">
-            Cosongkan jika tidak ada.
+            Kosongkan jika tidak ada.
           </p>
         </div>
       </div>

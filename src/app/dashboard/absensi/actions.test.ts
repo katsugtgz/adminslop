@@ -81,6 +81,9 @@ const mocks = vi.hoisted(() => {
     catatAudit: vi.fn(async () => undefined),
     catatAbsensi: vi.fn(async () => ({ id: "absensi_new" })),
     ubahAbsensi: vi.fn(async () => ({ id: "absensi_1" })),
+    listPenempatanByPesertaDidik: vi.fn(async () => [
+      { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" },
+    ]),
     revalidatePath: vi.fn(),
     fakeTx: fakeTxLocal,
     tableRows,
@@ -94,6 +97,7 @@ const {
   catatAudit,
   catatAbsensi,
   ubahAbsensi,
+  listPenempatanByPesertaDidik,
   revalidatePath,
   fakeTx: fakeTxRef,
   tableRows,
@@ -117,6 +121,9 @@ vi.mock("@/db/client", async (importOriginal) => {
 vi.mock("@/db/queries/absensi", () => ({
   catatAbsensi: mocks.catatAbsensi,
   ubahAbsensi: mocks.ubahAbsensi,
+}));
+vi.mock("@/db/queries/penempatan-rombongan-belajar", () => ({
+  listPenempatanByPesertaDidik: mocks.listPenempatanByPesertaDidik,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
@@ -218,12 +225,16 @@ beforeEach(() => {
   catatAudit.mockReset();
   catatAbsensi.mockReset();
   ubahAbsensi.mockReset();
+  listPenempatanByPesertaDidik.mockReset();
   revalidatePath.mockReset();
   // restore default implementations cleared by mockReset
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTxRef));
   catatAbsensi.mockResolvedValue({ id: "absensi_new" });
   ubahAbsensi.mockResolvedValue({ id: "absensi_1" });
+  listPenempatanByPesertaDidik.mockResolvedValue([
+    { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" },
+  ]);
   catatAudit.mockResolvedValue(undefined);
   // Default C3 ownership fixtures: guru ptk_A owns rombel_1 via beban_mengajar,
   // and absensi_1 lives under rombel_1. Cleared per test; deny tests override.
@@ -670,6 +681,28 @@ describe("H. C3 DENY — guru does NOT own the Rombongan Belajar", () => {
     expect(catatAudit).not.toHaveBeenCalled();
   });
 
+  it("22b. catatAbsensiAction rejects peserta from another rombel after ownership passes", async () => {
+    aturFixtures({
+      beban: [{ rombonganBelajarId: "rombel_1", ptkId: "ptk_A" }],
+    });
+    listPenempatanByPesertaDidik.mockResolvedValue([
+      { pesertaDidikId: "pd_2", rombonganBelajarId: "rombel_2" },
+    ]);
+
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_2",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+        })
+      )
+    ).rejects.toThrow(/tidak terdaftar di Rombongan Belajar ini/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
   it("23. admin still BYPASSES when the rombel is owned by nobody (bypass, not satisfaction)", async () => {
     // No beban / wali row links ANY ptk to rombel_1 — an admin succeeds anyway
     // (akses:kelola short-circuits ownership). Proves the deny above is an
@@ -703,6 +736,9 @@ describe("I. C3 ownership via wali_kelas (beban absent)", () => {
     aturFixtures({
       wali: [{ rombonganBelajarId: "rombel_2", ptkId: "ptk_A" }],
     });
+    listPenempatanByPesertaDidik.mockResolvedValue([
+      { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_2" },
+    ]);
   });
 
   it("24. catatAbsensiAction (rombel_2 owned via wali_kelas) -> catatAbsensi called", async () => {

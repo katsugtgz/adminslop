@@ -13,8 +13,8 @@ export const LABEL_JENIS: Record<JenisPermintaanAi, string> = {
 
 /** Ordered select options (slug + Bahasa label) rendered by the form. */
 export const PILIHAN_JENIS: readonly { slug: JenisPermintaanAi; label: string }[] = [
-  { slug: "deskripsi_cp", label: LABEL_JENIS.deskripsi_cp },
-  { slug: "deskripsi_tp", label: LABEL_JENIS.deskripsi_tp },
-  { slug: "deskripsi_atp", label: LABEL_JENIS.deskripsi_atp },
-  { slug: "narasi_raport", label: LABEL_JENIS.narasi_raport },
+  ...(Object.keys(LABEL_JENIS) as JenisPermintaanAi[]).map((slug) => ({
+    slug,
+    label: LABEL_JENIS[slug],
+  })),
 ];

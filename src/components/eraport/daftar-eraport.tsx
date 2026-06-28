@@ -57,7 +57,7 @@ export function DaftarEraport({
 }: {
   eraport: readonly DrafEraport[];
   pesertaMap: ReadonlyMap<string, PesertaDidik>;
-  revisiMap: ReadonlyMap<string, { alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]>;
+  revisiMap: ReadonlyMap<string, { id: string; alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]>;
   bolehTerbit: boolean;
   bolehRevisi: boolean;
   terbitAction: ServerAksi;

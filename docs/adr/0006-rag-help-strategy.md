@@ -328,9 +328,10 @@ ADR). **Rejected for this slice.** Curriculum seeding is separately gated
   data-posture decisions; the "no PII indexing" rule in this ADR's slice keeps
   the RAG surface on the safe side of ADR 0002 by never letting PII enter the
   retrieval index.
-- `.omo/evidence/task-23-rag-dependency.log` — grep assertion that this ADR's
-  `Depends on` references ADR 0003 / T13.
-- `.omo/evidence/task-23-analytics-excluded.log` — grep assertion that advanced
-  analytics / ML / prediction are marked deferred / ADR-required in this ADR.
+- `.omo/evidence/task-23-rag-dependency.log` — existing evidence log with the
+  grep assertion that this ADR's `Depends on` references ADR 0003 / T13.
+- `.omo/evidence/task-23-analytics-excluded.log` — existing evidence log with
+  the grep assertion that advanced analytics / ML / prediction are marked
+  deferred / ADR-required in this ADR.
 - `.omo/notepads/post-mvp-roadmap-hyperplan/learnings.md` — T5, T13, T20, T21
   entries (the dependency chain this ADR formalizes).

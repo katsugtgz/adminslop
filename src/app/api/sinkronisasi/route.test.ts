@@ -182,6 +182,7 @@ function aturFixtures(opts: {
   beban?: unknown[];
   rombel?: unknown[];
   wali?: unknown[];
+  absensi?: unknown[];
 }): void {
   tableRows.clear();
   if (opts.penilaian) tableRows.set(dbSchema.penilaian, opts.penilaian);
@@ -189,6 +190,7 @@ function aturFixtures(opts: {
   if (opts.beban) tableRows.set(dbSchema.bebanMengajar, opts.beban);
   if (opts.rombel) tableRows.set(dbSchema.rombonganBelajar, opts.rombel);
   if (opts.wali) tableRows.set(dbSchema.waliKelas, opts.wali);
+  if (opts.absensi) tableRows.set(dbSchema.absensiHarian, opts.absensi);
 }
 
 /** Build a POST Request whose JSON body is `body`. */
@@ -290,6 +292,44 @@ describe("C3: guru-A syncing guru-B's rombel absensi -> 403 (ownership denied)",
     expect(body.pesan).toBe("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
     // Gate denies BEFORE any write — the post-gate DB write + audit never run.
     expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+});
+
+describe("C3: absensi update uses existing row's rombel for ownership", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru", { ptkId: "ptk_A" }));
+    aturFixtures({
+      rombel: [{ id: "rombel_A" }, { id: "rombel_B" }],
+      beban: [
+        { rombonganBelajarId: "rombel_A", ptkId: "ptk_A" },
+        { rombonganBelajarId: "rombel_B", ptkId: "ptk_B" },
+      ],
+      absensi: [
+        {
+          id: "absensi_B",
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_B",
+          tanggal: "2026-04-01",
+          versi: 1,
+        },
+      ],
+    });
+  });
+
+  it("2b. draft claims owned rombel_A but existing row is rombel_B -> 403", async () => {
+    const res = await POST(
+      postJson({
+        tipe: "absensi",
+        draft: { ...DRAFT_ABSENSI_VALID, rombonganBelajarId: "rombel_A" },
+      })
+    );
+
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.status).toBe("error");
+    expect(body.pesan).toBe("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
     expect(fakeTxRef.update).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
   });

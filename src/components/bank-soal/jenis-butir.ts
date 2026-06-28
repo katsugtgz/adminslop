@@ -14,9 +14,8 @@ export const PILIHAN_JENIS_BUTIR: readonly {
   slug: JenisButirSoal;
   label: string;
 }[] = [
-  { slug: "pg", label: LABEL_JENIS_BUTIR.pg },
-  { slug: "essay", label: LABEL_JENIS_BUTIR.essay },
-  { slug: "isian", label: LABEL_JENIS_BUTIR.isian },
-  { slug: "jodohkan", label: LABEL_JENIS_BUTIR.jodohkan },
-  { slug: "benar_salah", label: LABEL_JENIS_BUTIR.benar_salah },
+  ...(Object.keys(LABEL_JENIS_BUTIR) as JenisButirSoal[]).map((slug) => ({
+    slug,
+    label: LABEL_JENIS_BUTIR[slug],
+  })),
 ];

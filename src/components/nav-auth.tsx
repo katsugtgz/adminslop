@@ -2,11 +2,13 @@
 
 import { useAuth } from "@workos-inc/authkit-nextjs/components";
 import { signOutAction } from "@/app/auth/actions";
+import { useMasuk } from "@/components/akses/use-masuk";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 
 export function NavAuth() {
   const { user, loading, refreshAuth } = useAuth();
+  const masuk = useMasuk(refreshAuth);
 
   if (loading) {
     return (
@@ -40,7 +42,7 @@ export function NavAuth() {
   return (
     <Button
       type="button"
-      onClick={() => void refreshAuth({ ensureSignedIn: true })}
+      onClick={masuk}
       aria-label="Masuk ke EduAdmin Pro Premium"
     >
       Masuk

@@ -14,9 +14,8 @@ export const PILIHAN_JENIS: readonly {
   slug: JenisPerangkatAjar;
   label: string;
 }[] = [
-  { slug: "modul_ajar", label: LABEL_JENIS.modul_ajar },
-  { slug: "rpp", label: LABEL_JENIS.rpp },
-  { slug: "silabus", label: LABEL_JENIS.silabus },
-  { slug: "prota", label: LABEL_JENIS.prota },
-  { slug: "promes", label: LABEL_JENIS.promes },
+  ...(Object.keys(LABEL_JENIS) as JenisPerangkatAjar[]).map((slug) => ({
+    slug,
+    label: LABEL_JENIS[slug],
+  })),
 ];

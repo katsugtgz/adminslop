@@ -196,7 +196,7 @@ export default async function Page({
         <DaftarRiwayatStatus riwayat={riwayat} />
       </PageReveal>
 
-      <PageReveal delay={3} className="flex flex-col gap-3">
+      <PageReveal delay={4} className="flex flex-col gap-3">
         <SectionLabel nomor="03">Wali</SectionLabel>
         {bolehTulis && (
           <FormWali action={tambahWaliAction} pesertaDidikId={peserta.id} />
@@ -208,7 +208,7 @@ export default async function Page({
         />
       </PageReveal>
 
-      <PageReveal delay={4} className="flex flex-col gap-3">
+      <PageReveal delay={5} className="flex flex-col gap-3">
         <SectionLabel nomor="04">Kontak Darurat</SectionLabel>
         {bolehTulis && (
           <FormKontakDarurat
@@ -223,7 +223,7 @@ export default async function Page({
         />
       </PageReveal>
 
-      <PageReveal delay={4} className="flex flex-col gap-3">
+      <PageReveal delay={6} className="flex flex-col gap-3">
         <SectionLabel nomor="05">Mutasi</SectionLabel>
         {bolehTulis && (
           <FormMutasi

@@ -80,12 +80,13 @@ export default async function Page() {
     );
     const revisiMap = new Map<
       string,
-      { alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]
+      { id: string; alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]
     >();
     for (const [eraportId, rows] of revisiEntries) {
       revisiMap.set(
         eraportId,
         rows.map((r) => ({
+          id: r.id,
           alasan: r.alasan,
           dibuatPada: r.dibuatPada,
           dibuatOleh: r.dibuatOleh,

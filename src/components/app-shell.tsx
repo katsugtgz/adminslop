@@ -4,11 +4,9 @@ import { GraduationCap } from "lucide-react";
 import { DesktopNav, MobileTabBar } from "@/components/main-nav";
 import { NavAuth } from "@/components/nav-auth";
 
-// Module scope: bake the year at module load so JSX never calls new Date()
-// during render (avoids hydration mismatch + react-doctor hydration warning).
-const tahunSekarang = new Date().getFullYear();
-
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const tahunSekarang = new Date().getFullYear();
+
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <a

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
  * Unit tests for the Pengaturan Satuan Pendidikan server actions (#5).
@@ -111,6 +111,10 @@ beforeEach(() => {
       fn(FAKE_TX),
   );
   mocks.catatAudit.mockResolvedValue(undefined);
+});
+
+afterEach(() => {
+  expect(mocks.requireAuth).toHaveBeenCalledTimes(1);
 });
 
 describe("simpanProfilSatuanPendidikanAction (#5)", () => {

@@ -91,7 +91,7 @@ export default async function Page({
             §12; "hiding UI is not authorization").
           */}
           <Link
-            href={`/dashboard/cetak/pratinjau/${konten.eraportId}/pdf`}
+            href={`/dashboard/cetak/pratinjau/${drafEraportId}/pdf`}
             download
             className="no-print mt-4 inline-flex w-fit"
           >

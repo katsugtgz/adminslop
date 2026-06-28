@@ -2,7 +2,7 @@
 
 > Source of truth for the **MVP** offline surface. Read before adding any new
 > offline producer (a form that queues a draft) or any new sensitive-action
-> label. Post-MVP aspirations live in `postmvp.md`, not here.
+> label. Post-MVP aspirations live in `../../../postmvp.md`, not here.
 
 ## 1. MVP scope: read-only by intent
 

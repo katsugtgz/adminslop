@@ -31,7 +31,12 @@ import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/arsip";
 
-const TABEL_ARSIP_WHITELIST = ["ptk", "penilaian", "beban_mengajar", "wali_kelas"] as const;
+const TABEL_ARSIP_WHITELIST = [
+  "ptk",
+  "penilaian",
+  "beban_mengajar",
+  "wali_kelas",
+] as const satisfies readonly TabelArsip[];
 
 function isTabelArsip(t: string): t is TabelArsip {
   return (TABEL_ARSIP_WHITELIST as readonly string[]).includes(t);

@@ -12,6 +12,9 @@ import {
 } from "@/lib/auth/server";
 
 export async function signOutAction() {
+  // Defense-in-depth: react-doctor server-auth-actions gate. `signOut()` itself
+  // tolerates an expired session, but an explicit auth check prevents
+  // unauthenticated clients from invoking the action directly.
   await requireAuth();
   await signOut();
 }

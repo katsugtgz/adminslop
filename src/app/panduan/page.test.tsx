@@ -47,6 +47,8 @@ describe("PanduanPage (Tur Awal) — usable onboarding, not a deferred stub", ()
       name: /pusat bantuan/i,
     });
     expect(bantuanLinks.length).toBeGreaterThanOrEqual(1);
-    expect(bantuanLinks[0]).toHaveAttribute("href", "/bantuan");
+    bantuanLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/bantuan");
+    });
   });
 });

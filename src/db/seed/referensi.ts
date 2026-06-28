@@ -166,7 +166,12 @@ export async function seedReferensiKurikulum(mig: Pool): Promise<void> {
   const cpRows = (await mig.query<{
     id: string;
     kode: string;
-  }>(`SELECT id, kode FROM capaian_pembelajaran`)).rows;
+  }>(
+    `SELECT cp.id, cp.kode
+     FROM capaian_pembelajaran cp
+     JOIN kurikulum k ON k.id = cp.kurikulum_id
+     WHERE k.nama = 'Kurikulum Merdeka'`,
+  )).rows;
   for (const cp of cpRows) {
     for (let ur = 1; ur <= 2; ur++) {
       const deskripsi = `TP ${ur} untuk ${cp.kode} (memerlukan tinjauan reviewer).`;

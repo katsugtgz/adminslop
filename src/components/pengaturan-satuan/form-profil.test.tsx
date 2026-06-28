@@ -75,7 +75,7 @@ describe("FormProfil (#5)", () => {
 
   it("renders helper text for logo URL", () => {
     render(<FormProfil values={fakeRow()} />);
-    expect(screen.getByText(/Cosongkan jika tidak ada/i)).toBeInTheDocument();
+    expect(screen.getByText(/Kosongkan jika tidak ada/i)).toBeInTheDocument();
   });
 
   it("readOnly=true disables all fields, hides submit, shows read-only note", () => {

@@ -19,6 +19,7 @@ function RiwayatRevisi({
   revisiList,
 }: {
   revisiList: readonly {
+    id: string;
     alasan: string;
     dibuatPada: Date;
     dibuatOleh: string | null;
@@ -32,7 +33,7 @@ function RiwayatRevisi({
       </span>
       <ul className="flex flex-col gap-1.5">
         {revisiList.map((r) => (
-          <li key={r.dibuatPada.toISOString()} className="flex flex-col gap-0.5 text-xs">
+          <li key={r.id} className="flex flex-col gap-0.5 text-xs">
             <span className="font-medium text-foreground">Alasan Revisi: {r.alasan}</span>
             <span className="font-mono text-[0.7rem] text-muted-foreground">
               {formatterTanggalMedium.format(r.dibuatPada)}
@@ -60,6 +61,7 @@ export function DetailEraport({
 }: {
   eraport: DrafEraport;
   revisiList: readonly {
+    id: string;
     alasan: string;
     dibuatPada: Date;
     dibuatOleh: string | null;

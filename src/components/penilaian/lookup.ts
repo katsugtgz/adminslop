@@ -112,7 +112,11 @@ export function bangunLookupPenilaian(
     ? data.penilaian.find((p) => p.id === sp.penilaianId)
     : undefined;
 
-  const labelSemester = data.semester === "ganjil" ? "Ganjil" : "Genap";
+  const labelSemester = data.semester === null
+    ? "Belum diatur"
+    : data.semester === "ganjil"
+      ? "Ganjil"
+      : "Genap";
   const tampilkanBreadcrumb = Boolean(
     bebanTerpilih || komponenTerpilih || penilaianTerpilih,
   );

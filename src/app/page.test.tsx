@@ -41,6 +41,8 @@ describe("BerandaPage (landing)", () => {
     // MVP_MODULES has 7 entries; each card exposes an aria-label "Buka <nama>".
     const moduleLinks = screen.getAllByRole("link", { name: /^buka /i });
     expect(moduleLinks).toHaveLength(7);
-    expect(moduleLinks[0]).toHaveAttribute("href", "/dashboard");
+    moduleLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/dashboard");
+    });
   });
 });

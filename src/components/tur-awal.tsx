@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { HelpCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -60,6 +60,7 @@ function tandaiSelesai(): void {
  */
 export function TurAwal() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     let selesai = false;
@@ -75,6 +76,14 @@ export function TurAwal() {
     return () => window.removeEventListener(TUR_AWAL_BUKA_EVENT, onBuka);
   }, []);
 
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (state.mulai && !dialog.open) dialog.showModal();
+    else if (!state.mulai && dialog.open) dialog.close();
+  }, [state.mulai]);
+
   const lewati = useCallback(() => {
     tandaiSelesai();
     dispatch({ type: "tutup" });
@@ -89,13 +98,11 @@ export function TurAwal() {
     }
   }, [state.langkah]);
 
-  if (!state.mulai) return null;
-
   const isLast = state.langkah === STEP_TITLES.length - 1;
 
   return (
     <dialog
-      open={state.mulai}
+      ref={dialogRef}
       aria-modal="true"
       aria-labelledby="tur-awal-judul"
       aria-describedby="tur-awal-deskripsi"

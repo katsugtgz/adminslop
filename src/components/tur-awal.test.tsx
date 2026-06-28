@@ -1,10 +1,16 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { TurAwal, TombolTurAwal, TUR_AWAL_BUKA_EVENT } from "./tur-awal";
+import { TurAwal, TombolTurAwal } from "./tur-awal";
 
 describe("TurAwal — first-visit guided walkthrough", () => {
   beforeEach(() => {
+    HTMLDialogElement.prototype.showModal ??= function showModal() {
+      this.setAttribute("open", "");
+    };
+    HTMLDialogElement.prototype.close ??= function close() {
+      this.removeAttribute("open");
+    };
     window.localStorage.clear();
   });
 
@@ -108,8 +114,6 @@ describe("TurAwal — first-visit guided walkthrough", () => {
     fireEvent.click(screen.getByRole("button", { name: /Mulai Tur Awal/i }));
     expect(window.localStorage.getItem("eapp_tur_selesai")).toBeNull();
 
-    // The component listens for the named event and re-opens.
-    window.dispatchEvent(new CustomEvent(TUR_AWAL_BUKA_EVENT));
     vi.runAllTimers();
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();

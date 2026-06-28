@@ -43,6 +43,42 @@ interface PageData {
   readonly tanggal?: string;
 }
 
+function AbsensiHero({ detail }: { detail: string }) {
+  return (
+    <PageReveal
+      as="section"
+      className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
+        }}
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
+      >
+        15
+      </span>
+      <div className="relative px-6 py-10 sm:px-10 sm:py-14">
+        <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
+          Modul · Absensi Harian
+        </p>
+        <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
+          Absensi Harian
+        </h1>
+        <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
+          {detail}
+        </p>
+      </div>
+    </PageReveal>
+  );
+}
+
 /**
  * Absensi Harian — server-rendered daily attendance surface for the active
  * Satuan Pendidikan: pick a Rombongan Belajar + tanggal, then mark attendance
@@ -189,38 +225,9 @@ export default async function Page({
   if (!data.taAktif || !data.semester) {
     return (
       <div className="flex flex-col gap-10 md:gap-14">
-        <PageReveal
-          as="section"
-          className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
-        >
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
-            }}
-          />
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
-          >
-            15
-          </span>
-          <div className="relative px-6 py-10 sm:px-10 sm:py-14">
-            <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
-              <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
-              Modul · Absensi Harian
-            </p>
-            <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
-              Absensi Harian
-            </h1>
-            <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
-              Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-              {akses.membership.roleSlug}
-            </p>
-          </div>
-        </PageReveal>
+        <AbsensiHero
+          detail={`Satuan Pendidikan Aktif: ${akses.membership.orgName} · Peran Anda: ${akses.membership.roleSlug}`}
+        />
 
         <PageReveal as="section" delay={2}>
           <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
@@ -246,40 +253,9 @@ export default async function Page({
 
   return (
     <div className="flex flex-col gap-10 md:gap-14">
-      <PageReveal
-        as="section"
-        className="bg-grain relative isolate overflow-hidden rounded-2xl border border-border/60 bg-card shadow-warm"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
-          }}
-        />
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute right-4 top-1 select-none font-display text-[9rem] leading-none tracking-tighter text-foreground/[0.03] sm:text-[13rem]"
-        >
-          15
-        </span>
-        <div className="relative px-6 py-10 sm:px-10 sm:py-14">
-          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
-            <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
-            Modul · Absensi Harian
-          </p>
-          <h1 className="mt-3 font-display text-4xl tracking-tight text-foreground sm:text-5xl">
-            Absensi Harian
-          </h1>
-          <p className="mt-3 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base">
-            Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
-            {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
-            {akses.membership.roleSlug}
-            {bolehTulis ? "" : " (hanya baca)"}
-          </p>
-        </div>
-      </PageReveal>
+      <AbsensiHero
+        detail={`Satuan Pendidikan Aktif: ${akses.membership.orgName} · Periode Aktif: ${data.taAktif.nama} · Semester ${labelSemester} · Peran Anda: ${akses.membership.roleSlug}${bolehTulis ? "" : " (hanya baca)"}`}
+      />
 
       <PageReveal as="section" delay={2} className="flex flex-col gap-5">
         <div className="flex items-center gap-3">

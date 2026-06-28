@@ -5,6 +5,14 @@ import { Button } from "@/components/ui/button";
 import { PageReveal } from "@/components/motion";
 import { IndikatorOffline } from "@/components/offline/indikator-offline";
 
+const LABEL_PERAN: Record<string, string> = {
+  admin_satuan_pendidikan: "Admin Satuan Pendidikan",
+  wali_kelas: "Wali Kelas",
+  kepala_sekolah: "Kepala Sekolah",
+  guru: "Guru",
+  dev: "Pengembang",
+};
+
 /**
  * Kepala (header) dashboard Satuan Pendidikan aktif. Menampilkan nama Satuan
  * Pendidikan, peran pengguna, indikator Mode Offline, dan tombol Pusat
@@ -18,6 +26,8 @@ export function KepalaDashboard({
   orgName: string;
   roleSlug: string;
 }) {
+  const labelPeran = LABEL_PERAN[roleSlug] ?? roleSlug;
+
   return (
     <PageReveal
       as="header"
@@ -53,7 +63,7 @@ export function KepalaDashboard({
           </h1>
           <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
             <CheckCircle2 className="h-4 w-4 text-accent" aria-hidden="true" />
-            Peran Anda: {roleSlug}
+            Peran Anda: {labelPeran}
           </p>
           <div className="mt-3">
             <IndikatorOffline />

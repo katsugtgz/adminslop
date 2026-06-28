@@ -26,6 +26,7 @@ import { revalidatePath } from "next/cache";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { catatAbsensi, ubahAbsensi } from "@/db/queries/absensi";
 import type { MetodeInput, StatusKehadiran } from "@/db/queries/absensi";
+import { listPenempatanByPesertaDidik } from "@/db/queries/penempatan-rombongan-belajar";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import {
   assertPemilikRombongan,
@@ -139,6 +140,10 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
     // guru must own the rombel via beban_mengajar / wali_kelas).
     // react-doctor-disable-next-line async-parallel: catatAbsensi depends on ownership gate; audit depends on row.id, react-doctor/async-parallel
     await assertPemilikRombongan(tx, akses, async () => rombonganBelajarId);
+    const penempatan = await listPenempatanByPesertaDidik(tx, pesertaDidikId);
+    if (!penempatan.some((p) => p.rombonganBelajarId === rombonganBelajarId)) {
+      throw new Error("Peserta Didik tidak terdaftar di Rombongan Belajar ini.");
+    }
     const row = await catatAbsensi(tx, {
       pesertaDidikId,
       rombonganBelajarId,

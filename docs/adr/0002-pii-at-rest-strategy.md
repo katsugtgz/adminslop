@@ -20,7 +20,7 @@ audited 2026-06-27, transcript in `.omo/evidence/task-10-secret-history.log`
 
 - **`peserta_didik`** (students): `nama`, `nisn` (national student ID), `nis`
   (school student ID), `tanggal_lahir`, `jenis_kelamin`.
-- **`wali_pesertaDidik`** (parent/guardian contacts): `nama`, `telepon`,
+- **`wali_peserta_didik`** (parent/guardian contacts): `nama`, `telepon`,
   `email`.
 - **`kontak_darurat`** (emergency contacts): `nama`, `telepon`.
 - **`akses`** (PTK / teachers): `nama`, `nip` (national teacher ID).

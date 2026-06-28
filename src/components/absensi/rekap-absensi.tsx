@@ -27,11 +27,15 @@ export function RekapAbsensiTable({
   }
 
   // Stable order: alphabetical by name (instead of by opaque uuid).
-  const rows = [...rekap.entries()].toSorted(([aId], [bId]) => {
-    const aNama = pesertaNama.get(aId) ?? "—";
-    const bNama = pesertaNama.get(bId) ?? "—";
-    return aNama < bNama ? -1 : aNama > bNama ? 1 : 0;
-  });
+  // CI targets Node 20+, so `toSorted` (ES2023) is available.
+  const rows = rekap
+    .entries()
+    .toArray()
+    .toSorted(([aId], [bId]) => {
+      const aNama = pesertaNama.get(aId) ?? "—";
+      const bNama = pesertaNama.get(bId) ?? "—";
+      return aNama < bNama ? -1 : aNama > bNama ? 1 : 0;
+    });
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-border bg-card text-card-foreground shadow-warm">

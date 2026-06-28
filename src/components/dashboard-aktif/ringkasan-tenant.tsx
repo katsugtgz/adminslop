@@ -47,14 +47,14 @@ export function RingkasanTenant({
         </CardHover>
         <div className="rounded-2xl border border-dashed border-border bg-accent/[0.03] p-5">
           <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-accent/80">
-            Segera hadir
+            Berikutnya
           </p>
           <p className="mt-2 text-sm font-medium text-foreground">
             Modul tambahan
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Nilai, E-Raport, dan modul lainnya akan aktif di dalam Satuan
-            Pendidikan ini.
+            Arsip, laporan lanjutan, dan modul operasional lainnya akan
+            bertahap aktif di dalam Satuan Pendidikan ini.
           </p>
         </div>
       </PageReveal>

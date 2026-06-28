@@ -34,4 +34,4 @@ jobs:
           # reports only NEW issues relative to the target branch.
           fetch-depth: 0
 
-      - uses: millionco/react-doctor@v2
+      - uses: millionco/react-doctor@2ba03bdb569b53db728ae0731a8802291c5b6f62

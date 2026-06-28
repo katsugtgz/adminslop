@@ -56,6 +56,11 @@ import {
 import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
+const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function assertUuidShape(id: string): void {
+  if (!UUID_SHAPE.test(id)) throw new Error("ID tidak valid");
+}
 
 // ---------------------------------------------------------------------------
 // Ownership guards + chain resolvers now live in `@/lib/auth/kepemilikan` so
@@ -236,6 +241,7 @@ export async function hapusKomponenNilaiAction(
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Komponen Nilai wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -272,6 +278,7 @@ export async function hapusPenilaianAction(formData: FormData): Promise<void> {
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Penilaian wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -308,6 +315,7 @@ export async function hapusNilaiAction(formData: FormData): Promise<void> {
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Nilai wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

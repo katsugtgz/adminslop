@@ -143,7 +143,7 @@ function collectSourceFiles(dir: string, acc: string[] = []): string[] {
 const SOURCE_FILES = collectSourceFiles(SRC_ROOT);
 const isTestFile = (f: string) => /\.test\.(ts|tsx)$/.test(f);
 const isClientComponent = (content: string) =>
-  /^\s*['"]use client['"]/.test(content);
+  /^(?:\s|\/\/[^\n]*(?:\n|$)|\/\*[\s\S]*?\*\/)*['"]use client['"]/.test(content);
 
 describe("identity invariants — static source checks (#7, no DB)", () => {
   // Invariant #3 (type layer): 'superuser' must never be a RoleSlug (would

@@ -128,6 +128,10 @@ let existing = [];
 if (existsSync(FIXTURE)) {
   try {
     existing = JSON.parse(readFileSync(FIXTURE, "utf8"));
+    if (!Array.isArray(existing)) {
+      console.warn(`[scrape-soal] fixture bukan array, diabaikan: ${FIXTURE}`);
+      existing = [];
+    }
   } catch {
     existing = [];
   }

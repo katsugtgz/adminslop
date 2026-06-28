@@ -70,7 +70,7 @@ const EVIDENCE_DIR = ".omo/evidence";
  * Smoke test — always runs and is always green when the app is up.
  *
  * Purpose: prove the Playwright ↔ webServer (`npm run dev`) ↔ Next.js wiring
- * works, and produce evidence artifacts (`task-9-tracer.png`,
+ * works, and produce evidence artifacts (`task-9-smoke.png`,
  * `task-9-console-error.log`) even when the gated tracer is skipped. This is
  * what makes the spec exit 0 locally regardless of auth provisioning.
  */
@@ -92,7 +92,7 @@ test("smoke: dev server /health is up (always-green wiring proof)", async ({
   ).toBe(0);
 
   // Evidence: capture so the deliverable file exists.
-  await page.screenshot({ path: `${EVIDENCE_DIR}/task-9-tracer.png` });
+  await page.screenshot({ path: `${EVIDENCE_DIR}/task-9-smoke.png` });
 });
 
 /**

@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Repeat } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { PesertaDidik } from "@/db/schema";
@@ -20,12 +20,16 @@ function FormProgresi({
   submitLabel,
   action,
   peserta,
+  icon = "up",
 }: {
   legend: string;
   submitLabel: string;
   action: ServerAksi;
   peserta: readonly PesertaDidik[];
+  icon?: "up" | "repeat";
 }) {
+  const Icon = icon === "repeat" ? Repeat : ArrowUp;
+
   return (
     <form
       action={action}
@@ -36,7 +40,7 @@ function FormProgresi({
           aria-hidden="true"
           className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent"
         >
-          <ArrowUp className="h-4 w-4" />
+          <Icon className="h-4 w-4" />
         </span>
         <h3 className="font-display text-lg tracking-tight text-foreground sm:text-xl">
           {legend}
@@ -129,6 +133,7 @@ export function KontrolProgresi({
         submitLabel="Tinggal Tingkat"
         action={tinggalAction}
         peserta={peserta}
+        icon="repeat"
       />
     </div>
   );

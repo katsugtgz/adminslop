@@ -31,7 +31,7 @@ export function BreadcrumbPenilaian({
   return (
     <PageReveal delay={2}>
       <nav
-        aria-label="breadcrumb"
+        aria-label="Jejak navigasi penilaian"
         className="flex flex-wrap items-center gap-1 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm text-muted-foreground shadow-warm"
       >
         <Link
