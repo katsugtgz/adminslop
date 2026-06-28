@@ -48,6 +48,7 @@ import {
   type TipeNotifikasi,
 } from "@/db/queries/notifikasi";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/notifikasi";
 
@@ -66,6 +67,7 @@ function isValidTipe(tipe: string): tipe is TipeNotifikasi {
  * so a cross-tenant id simply resolves to "not found" (a deny).
  */
 export async function tandaiDibacaAction(notifikasiId: string): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -114,6 +116,7 @@ export async function tandaiDibacaAction(notifikasiId: string): Promise<void> {
  * directly, so cross-user targeting is impossible by construction (AC#5).
  */
 export async function tandaiSemuaDibacaAction(): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -155,6 +158,7 @@ export async function tandaiSemuaDibacaAction(): Promise<void> {
 export async function aturPreferensiNotifikasiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

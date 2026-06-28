@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg, { DatabaseError } from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db, type Tx } from "../client";
 import { runMigrations } from "../migrate";
 import * as schema from "../schema";
+import { cleanupTestTenants } from "../test-cleanup";
 import { buatPermintaanAi } from "./permintaan-ai";
 import { buatDrafAi } from "./draf-ai";
 
@@ -159,6 +160,10 @@ describeOrSkip(
           .returning();
         return ta.id;
       });
+    });
+
+    afterAll(async () => {
+      await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
     });
 
     /** Seed a GLOBAL mata_pelajaran with a unique nama (for RESTRICT test). */

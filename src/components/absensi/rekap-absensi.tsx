@@ -27,7 +27,8 @@ export function RekapAbsensiTable({
   }
 
   // Stable order: alphabetical by name (instead of by opaque uuid).
-  const rows = [...rekap.entries()].sort(([aId], [bId]) => {
+  // CI targets Node 20+, so `toSorted` (ES2023) is available.
+  const rows = Array.from(rekap.entries()).toSorted(([aId], [bId]) => {
     const aNama = pesertaNama.get(aId) ?? "—";
     const bNama = pesertaNama.get(bId) ?? "—";
     return aNama < bNama ? -1 : aNama > bNama ? 1 : 0;

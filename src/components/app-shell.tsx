@@ -5,6 +5,8 @@ import { DesktopNav, MobileTabBar } from "@/components/main-nav";
 import { NavAuth } from "@/components/nav-auth";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const tahunSekarang = new Date().getFullYear();
+
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <a
@@ -52,7 +54,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <footer className="hidden border-t border-border/60 py-6 text-sm text-muted-foreground md:block">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-4 sm:px-6">
           <p>
-            © {new Date().getFullYear()} EduAdmin{" "}
+            © {tahunSekarang} EduAdmin{" "}
             <span className="text-accent">Pro Premium</span>. Dibuat untuk Guru
             dan Satuan Pendidikan di Indonesia.
           </p>

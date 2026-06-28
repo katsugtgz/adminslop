@@ -337,6 +337,7 @@ export function FormAturPembatasan({
             type="text"
             name="alasan"
             placeholder="Alasan"
+            aria-label="Alasan"
             className="h-9 w-40 rounded-md border border-input bg-background px-2 text-sm shadow-sm ring-offset-background transition-colors placeholder:text-muted-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           />
           <Button type="submit" size="sm" variant="ghost">

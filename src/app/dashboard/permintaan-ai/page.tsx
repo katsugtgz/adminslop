@@ -66,15 +66,24 @@ export default async function Page() {
     const ta = await getTahunAjaranAktif(tx);
     if (!ta) return null;
 
-    const semester = await getSemesterAktif(tx);
-    const permintaanList = await listPermintaanAi(tx);
+    const [semester, permintaanList] = await Promise.all([
+      getSemesterAktif(tx),
+      listPermintaanAi(tx),
+    ]);
 
-    const drafMap = new Map<string, DrafAi>();
+    const selesaiIds: string[] = [];
     for (const p of permintaanList) {
-      if (p.status === "selesai") {
-        const draf = await cariDrafAiByPermintaan(tx, p.id);
-        if (draf) drafMap.set(p.id, draf);
-      }
+      if (p.status === "selesai") selesaiIds.push(p.id);
+    }
+    const drafEntries = await Promise.all(
+      selesaiIds.map(async (id) => [
+        id,
+        await cariDrafAiByPermintaan(tx, id),
+      ] as const)
+    );
+    const drafMap = new Map<string, DrafAi>();
+    for (const [id, draf] of drafEntries) {
+      if (draf) drafMap.set(id, draf);
     }
 
     const kuota = await getAtauBuatKuotaAi(

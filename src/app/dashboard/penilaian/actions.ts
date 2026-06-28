@@ -53,8 +53,14 @@ import {
   bebanIdDariNilai,
   bebanIdDariPenilaian,
 } from "@/lib/auth/kepemilikan";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
+const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function assertUuidShape(id: string): void {
+  if (!UUID_SHAPE.test(id)) throw new Error("ID tidak valid");
+}
 
 // ---------------------------------------------------------------------------
 // Ownership guards + chain resolvers now live in `@/lib/auth/kepemilikan` so
@@ -73,6 +79,7 @@ const REVALIDATE_TARGET = "/dashboard/penilaian";
 export async function simpanKomponenNilaiBaruAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -94,6 +101,7 @@ export async function simpanKomponenNilaiBaruAction(
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: ownership (admin bypasses; guru must own beban_mengajar).
+    // react-doctor-disable-next-line async-parallel: komponen insert depends on ownership gate; audit depends on kn.id, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, async () => bebanMengajarId);
     const kn = await buatKomponenNilai(tx, { bebanMengajarId, nama, bobot });
     await catatAudit(tx, {
@@ -116,6 +124,7 @@ export async function simpanKomponenNilaiBaruAction(
 export async function simpanPenilaianBaruAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -134,6 +143,7 @@ export async function simpanPenilaianBaruAction(
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: resolve komponen -> beban, then ownership.
+    // react-doctor-disable-next-line async-parallel: penilaian insert depends on ownership gate; audit depends on p.id, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, () =>
       bebanIdDariKomponen(tx, komponenNilaiId)
     );
@@ -163,6 +173,7 @@ export async function simpanPenilaianBaruAction(
  * optional teacher note.
  */
 export async function upsertNilaiAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -188,6 +199,7 @@ export async function upsertNilaiAction(formData: FormData): Promise<void> {
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: resolve penilaian -> komponen -> beban, then ownership.
+    // react-doctor-disable-next-line async-parallel: nilai upsert depends on ownership gate; audit depends on n.id, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, () =>
       bebanIdDariPenilaian(tx, penilaianId)
     );
@@ -218,6 +230,7 @@ export async function upsertNilaiAction(formData: FormData): Promise<void> {
 export async function hapusKomponenNilaiAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -228,10 +241,12 @@ export async function hapusKomponenNilaiAction(
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Komponen Nilai wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: resolve komponen(id) -> beban, then ownership.
+    // react-doctor-disable-next-line async-parallel: hapus depends on ownership gate; audit logs after successful delete, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, () => bebanIdDariKomponen(tx, id));
     await hapusKomponenNilai(tx, id);
     await catatAudit(tx, {
@@ -252,6 +267,7 @@ export async function hapusKomponenNilaiAction(
  * penilaian(id) -> komponen_nilai -> beban_mengajar.
  */
 export async function hapusPenilaianAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -262,10 +278,12 @@ export async function hapusPenilaianAction(formData: FormData): Promise<void> {
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Penilaian wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: resolve penilaian(id) -> komponen -> beban, then ownership.
+    // react-doctor-disable-next-line async-parallel: hapus depends on ownership gate; audit logs after successful delete, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, () => bebanIdDariPenilaian(tx, id));
     await hapusPenilaian(tx, id);
     await catatAudit(tx, {
@@ -286,6 +304,7 @@ export async function hapusPenilaianAction(formData: FormData): Promise<void> {
  * nilai(id) -> penilaian -> komponen_nilai -> beban_mengajar.
  */
 export async function hapusNilaiAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -296,10 +315,12 @@ export async function hapusNilaiAction(formData: FormData): Promise<void> {
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Nilai wajib diisi.");
+  assertUuidShape(id);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: resolve nilai(id) -> penilaian -> komponen -> beban, then ownership.
+    // react-doctor-disable-next-line async-parallel: hapus depends on ownership gate; audit logs after successful delete, react-doctor/async-parallel
     await assertPemilikBeban(tx, akses, () => bebanIdDariNilai(tx, id));
     await hapusNilai(tx, id);
     await catatAudit(tx, {

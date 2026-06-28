@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import { CardHover } from "@/components/motion";
 import type { PaketSoal } from "@/db/schema";
 import type { MataPelajaran } from "@/db/schema";
@@ -13,19 +14,23 @@ import type { MataPelajaran } from "@/db/schema";
 export function DaftarPaketSoal({
   paket,
   mapelMap,
+  bolehBuat,
   baseHref,
 }: {
   paket: readonly PaketSoal[];
   /** mataPelajaranId -> MataPelajaran display row (for name resolution). */
   mapelMap: ReadonlyMap<string, MataPelajaran>;
+  bolehBuat: boolean;
   /** Prefix for the per-row drill-down link (searchParams-based routing). */
   baseHref: string;
 }) {
   if (paket.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Paket Soal.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Paket Soal."
+        href={bolehBuat ? "#form-paket-soal" : undefined}
+        labelTautan={bolehBuat ? "Tambah Paket" : undefined}
+      />
     );
   }
 

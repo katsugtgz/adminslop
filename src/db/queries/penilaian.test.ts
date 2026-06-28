@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db, type Tx } from "../client";
 import { runMigrations } from "../migrate";
 import * as schema from "../schema";
+import { cleanupTestTenants } from "../test-cleanup";
 
 import { buatPenilaian, hapusPenilaian, listPenilaian, ubahPenilaian } from "./penilaian";
 
@@ -134,6 +135,10 @@ describeOrSkip(
           .returning();
         return b.id;
       });
+    });
+
+    afterAll(async () => {
+      await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
     });
 
     /** Seed a komponen_nilai under the shared beban with a unique nama. */

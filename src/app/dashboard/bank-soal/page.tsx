@@ -17,12 +17,15 @@ import { DaftarPaketSoal } from "@/components/bank-soal/daftar-paket-soal";
 import { FormButirSoal } from "@/components/bank-soal/form-butir-soal";
 import { FormPaketSoal } from "@/components/bank-soal/form-paket-soal";
 import { FormTambahButir } from "@/components/bank-soal/form-tambah-butir";
+import { PromptAiEksternal } from "@/components/bank-soal/prompt-ai-eksternal";
+import { TempelJsonButirSoal } from "@/components/bank-soal/tempel-json-butir-soal";
 
 import {
   arsipkanButirSoalAction,
   buatButirSoalAction,
   buatPaketSoalAction,
   hapusButirDariPaketAction,
+  imporButirSoalJsonAction,
   tambahButirKePaketAction,
 } from "./actions";
 
@@ -82,57 +85,61 @@ export default async function Page({
 
   // GLOBAL mata pelajaran (no tenant scoping) — load outside withTenant.
   const { db } = getDb();
-  const mataPelajaran = await listMataPelajaran(db);
+  const [mataPelajaran, data] = await Promise.all([
+    listMataPelajaran(db),
+    withTenant(db, akses.membership.orgId, async (tx) => {
+      const [tingkatAll, tahunAjaranAll, butirList, paketList] =
+        await Promise.all([
+          listTingkat(tx),
+          listTahunAjaran(tx),
+          listButirSoal(tx, { search }),
+          listPaketSoal(tx),
+        ] as const);
 
-  const data = await withTenant(db, akses.membership.orgId, async (tx) => {
-    const [tingkatAll, tahunAjaranAll, butirList, paketList] =
-      await Promise.all([
-        listTingkat(tx),
-        listTahunAjaran(tx),
-        listButirSoal(tx, { search }),
-        listPaketSoal(tx),
-      ] as const);
-
-    // Drill-down: paket assembly view.
-    let paketMembers: readonly PaketSoalButir[] = [];
-    const butirInPaketMap = new Map<string, ButirSoal>();
-    let addCandidates: readonly ButirSoal[] = [];
-    let nextUrutan = 1;
-    if (paketIdFocus) {
-      paketMembers = await listButirInPaket(tx, paketIdFocus);
-      const memberButirIds = new Set(paketMembers.map((m) => m.butirSoalId));
-      // Butir candidates = aktif butir NOT already in this paket.
-      addCandidates = butirList.filter(
-        (b) => b.status === "aktif" && !memberButirIds.has(b.id)
-      );
-      nextUrutan =
-        paketMembers.reduce((max, m) => Math.max(max, m.urutan), 0) + 1;
-      for (const m of paketMembers) {
-        if (!butirInPaketMap.has(m.butirSoalId)) {
-          const b = await cariButirSoalById(tx, m.butirSoalId);
-          if (b) butirInPaketMap.set(m.butirSoalId, b);
+      // Drill-down: paket assembly view.
+      let paketMembers: readonly PaketSoalButir[] = [];
+      const butirInPaketMap = new Map<string, ButirSoal>();
+      let addCandidates: readonly ButirSoal[] = [];
+      let nextUrutan = 1;
+      if (paketIdFocus) {
+        paketMembers = await listButirInPaket(tx, paketIdFocus);
+        const memberButirIds = new Set(paketMembers.map((m) => m.butirSoalId));
+        // Butir candidates = aktif butir NOT already in this paket.
+        addCandidates = butirList.filter(
+          (b) => b.status === "aktif" && !memberButirIds.has(b.id)
+        );
+        nextUrutan =
+          paketMembers.reduce((max, m) => Math.max(max, m.urutan), 0) + 1;
+        // Fan out the unique butir lookups concurrently (each is an independent
+        // indexed read under RLS).
+        const uniqueButirIds = [...new Set(paketMembers.map((m) => m.butirSoalId))];
+        const butirResults = await Promise.all(
+          uniqueButirIds.map((id) => cariButirSoalById(tx, id))
+        );
+        for (const b of butirResults) {
+          if (b) butirInPaketMap.set(b.id, b);
         }
       }
-    }
 
-    // Drill-down: butir detail preview.
-    let butirFocus: ButirSoal | null = null;
-    if (butirIdFocus) {
-      butirFocus = await cariButirSoalById(tx, butirIdFocus);
-    }
+      // Drill-down: butir detail preview.
+      let butirFocus: ButirSoal | null = null;
+      if (butirIdFocus) {
+        butirFocus = await cariButirSoalById(tx, butirIdFocus);
+      }
 
-    return {
-      tingkatAll,
-      tahunAjaranAll,
-      butirList,
-      paketList,
-      paketMembers,
-      butirInPaketMap,
-      addCandidates,
-      nextUrutan,
-      butirFocus,
-    };
-  });
+      return {
+        tingkatAll,
+        tahunAjaranAll,
+        butirList,
+        paketList,
+        paketMembers,
+        butirInPaketMap,
+        addCandidates,
+        nextUrutan,
+        butirFocus,
+      };
+    }),
+  ]);
 
   const mapelMap = new Map<string, MataPelajaran>(
     mataPelajaran.map((m) => [m.id, m])
@@ -225,11 +232,39 @@ export default async function Page({
           Butir Soal
         </h2>
         {bolehBuatButir && !butirIdFocus && !paketIdFocus ? (
-          <FormButirSoal
-            action={buatButirSoalAction}
-            mataPelajaran={mataPelajaran}
-            tingkat={data.tingkatAll}
-          />
+          <div id="form-butir-soal">
+            <FormButirSoal
+              action={buatButirSoalAction}
+              mataPelajaran={mataPelajaran}
+              tingkat={data.tingkatAll}
+            />
+          </div>
+        ) : null}
+
+        {bolehBuatButir ? (
+          <section
+            id="ai-eksternal"
+            className="mt-8 flex flex-col gap-4 rounded-2xl border border-border/60 bg-muted/20 p-5"
+          >
+            <div className="flex flex-col gap-1">
+              <h2 className="font-display text-2xl tracking-tight text-foreground">
+                AI Eksternal (Beta)
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Buat prompt, salin, jalankan di ChatGPT/Gemini/Claude Anda
+                sendiri, lalu tempel hasil JSON kembali ke sini. Platform tidak
+                mengirim data ke layanan AI eksternal, Anda yang mengontrol
+                transfer.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <PromptAiEksternal
+                mataPelajaran={mataPelajaran}
+                tingkat={data.tingkatAll}
+              />
+              <TempelJsonButirSoal action={imporButirSoalJsonAction} />
+            </div>
+          </section>
         ) : null}
 
         {butirIdFocus && data.butirFocus ? (
@@ -238,6 +273,7 @@ export default async function Page({
 
         <DaftarButirSoal
           butir={data.butirList}
+          bolehBuat={bolehBuatButir}
           bolehUbah={bolehUbahButir}
           arsipkanAction={arsipkanButirSoalAction}
           baseHref={baseHref}
@@ -259,17 +295,20 @@ export default async function Page({
           Paket Soal
         </h2>
         {bolehBuatPaket && !paketIdFocus ? (
-          <FormPaketSoal
-            action={buatPaketSoalAction}
-            mataPelajaran={mataPelajaran}
-            tingkat={data.tingkatAll}
-            tahunAjaran={data.tahunAjaranAll}
-          />
+          <div id="form-paket-soal">
+            <FormPaketSoal
+              action={buatPaketSoalAction}
+              mataPelajaran={mataPelajaran}
+              tingkat={data.tingkatAll}
+              tahunAjaran={data.tahunAjaranAll}
+            />
+          </div>
         ) : null}
 
         <DaftarPaketSoal
           paket={data.paketList}
           mapelMap={mapelMap}
+          bolehBuat={bolehBuatPaket}
           baseHref={baseHref}
         />
 

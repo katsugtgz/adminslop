@@ -190,7 +190,10 @@ async function terapkanDraftAbsensi(
 ): Promise<ResponsSinkronisasi> {
   const { db } = getDb();
   return withTenant(db, orgId, async (tx) => {
-    // C3 gate 2: ownership of the draft's Rombongan Belajar (admin bypasses).
+    // C3 gate 2: ownership of the draft's Rombongan Belajar for NEW rows
+    // (admin bypasses). Existing rows are re-checked against the server row's
+    // rombel below; the draft rombel is client-supplied and not authoritative
+    // for updates.
     await assertPemilikRombongan(tx, akses, async () => draft.rombonganBelajarId);
 
     const existing = await cariAbsensiByNaturalKey(
@@ -226,9 +229,16 @@ async function terapkanDraftAbsensi(
       return { status: "ok" as const, versi: 1 };
     }
 
+    // Version conflict check before the per-update ownership assert: `existing`
+    // is already tenant-scoped via `withTenant` + RLS, and `versi` is a
+    // monotonic counter — not sensitive. The ownership assert below still runs
+    // before any mutation, so we don't broaden the write boundary; we only
+    // short-circuit no-op conflict paths without awaiting the assert.
     if (existing.versi !== draft.versi) {
       return { status: "konflik" as const, versi: existing.versi };
     }
+
+    await assertPemilikRombongan(tx, akses, async () => existing.rombonganBelajarId);
 
     const versiBaru = existing.versi + 1;
     const updated = await tx

@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { FormPermintaan, PILIHAN_JENIS } from "./form-permintaan";
+import { FormPermintaan } from "./form-permintaan";
+import { PILIHAN_JENIS } from "./jenis-permintaan";
 
 describe("FormPermintaan (#12 / T7)", () => {
   it("renders the Jenis select with all four Bahasa options", () => {

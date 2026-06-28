@@ -1,10 +1,11 @@
 import path from "node:path";
 
 import pg from "pg";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db } from "../client";
 import { runMigrations } from "../migrate";
+import { cleanupTestTenants } from "../test-cleanup";
 
 import {
   buatPesertaDidik,
@@ -64,6 +65,10 @@ describeOrSkip("peserta-didik repository (queries/peserta-didik.ts — #7 Wave 2
 
     // 3. App client uses the non-superuser role — RLS enforced.
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
   });
 
   // 1. buatPesertaDidik creates a peserta_didik (status defaults to 'aktif')

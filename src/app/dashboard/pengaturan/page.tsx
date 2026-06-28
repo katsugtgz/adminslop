@@ -49,12 +49,12 @@ export default async function PengaturanPage() {
           </h1>
           <p className="text-sm text-muted-foreground">
             Anda belum memilih Satuan Pendidikan aktif. Silakan pilih Satuan
-            Pendidikan dari Dashboard untuk mengelola pengaturan.
+            Pendidikan dari Beranda untuk mengelola pengaturan.
           </p>
           <Button asChild>
             <Link href="/dashboard">
               <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Kembali ke Dashboard
+              Kembali ke Beranda
             </Link>
           </Button>
         </div>

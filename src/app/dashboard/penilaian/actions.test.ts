@@ -156,6 +156,9 @@ function formData(obj: Record<string, string>): FormData {
 const TX = expect.anything();
 /** `expect.anything()` stand-in for the db passed as first withTenant arg. */
 const DB = expect.anything();
+const ID_KOMPONEN = "11111111-1111-4111-8111-111111111111";
+const ID_PENILAIAN = "22222222-2222-4222-8222-222222222222";
+const ID_NILAI = "33333333-3333-4333-8333-333333333333";
 
 /**
  * Build an "active" AksesSaya mock whose `boleh()` mirrors the REAL
@@ -368,39 +371,39 @@ describe("B. admin success — ownership bypassed (akses:kelola)", () => {
   });
 
   it("6. hapusKomponenNilaiAction -> hapusKomponenNilai + audit(hapus_komponen_nilai)", async () => {
-    await hapusKomponenNilaiAction(formData({ id: "kn_42" }));
-    expect(hapusKomponenNilai).toHaveBeenCalledWith(fakeTxRef, "kn_42");
+    await hapusKomponenNilaiAction(formData({ id: ID_KOMPONEN }));
+    expect(hapusKomponenNilai).toHaveBeenCalledWith(fakeTxRef, ID_KOMPONEN);
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
       expect.objectContaining({
         aksi: "hapus_komponen_nilai",
-        target: "komponen_nilai:kn_42",
+        target: `komponen_nilai:${ID_KOMPONEN}`,
       })
     );
   });
 
   it("7. hapusPenilaianAction -> hapusPenilaian + audit(hapus_penilaian)", async () => {
-    await hapusPenilaianAction(formData({ id: "p_42" }));
-    expect(hapusPenilaian).toHaveBeenCalledWith(fakeTxRef, "p_42");
+    await hapusPenilaianAction(formData({ id: ID_PENILAIAN }));
+    expect(hapusPenilaian).toHaveBeenCalledWith(fakeTxRef, ID_PENILAIAN);
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
-      expect.objectContaining({ aksi: "hapus_penilaian", target: "penilaian:p_42" })
+      expect.objectContaining({ aksi: "hapus_penilaian", target: `penilaian:${ID_PENILAIAN}` })
     );
   });
 
   it("8. hapusNilaiAction -> hapusNilai + audit(hapus_nilai)", async () => {
-    await hapusNilaiAction(formData({ id: "n_42" }));
-    expect(hapusNilai).toHaveBeenCalledWith(fakeTxRef, "n_42");
+    await hapusNilaiAction(formData({ id: ID_NILAI }));
+    expect(hapusNilai).toHaveBeenCalledWith(fakeTxRef, ID_NILAI);
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
-      expect.objectContaining({ aksi: "hapus_nilai", target: "nilai:n_42" })
+      expect.objectContaining({ aksi: "hapus_nilai", target: `nilai:${ID_NILAI}` })
     );
   });
 
   it("8b. admin DOES NOT resolve the ownership chain (no fakeTx.from hit)", async () => {
     // Admin bypass means the chain resolvers never run — tableRows stays empty
     // yet the action succeeds. This is the ownership-BYPASS proof.
-    await hapusNilaiAction(formData({ id: "n_42" }));
+    await hapusNilaiAction(formData({ id: ID_NILAI }));
     expect(hapusNilai).toHaveBeenCalledTimes(1);
     expect(tableRows.size).toBe(0);
   });
@@ -460,7 +463,10 @@ describe("D. AC#4 DENY — guru does NOT own the Beban Mengajar", () => {
     // beban_mengajar bm_X is owned by ptk_B (a DIFFERENT guru).
     aturFixtures({
       beban: [{ id: "bm_X", ptkId: "ptk_B" }],
-      komponen: [{ id: "kn_1", bebanMengajarId: "bm_X" }],
+      komponen: [
+        { id: "kn_1", bebanMengajarId: "bm_X" },
+        { id: ID_KOMPONEN, bebanMengajarId: "bm_X" },
+      ],
       penilaian: [{ id: "p_1", komponenNilaiId: "kn_1" }],
       nilai: [{ id: "n_1", penilaianId: "p_1" }],
     });
@@ -497,7 +503,7 @@ describe("D. AC#4 DENY — guru does NOT own the Beban Mengajar", () => {
   });
 
   it("15. hapusKomponenNilaiAction (komponen kn_1 -> bm_X) -> throws /Beban Mengajar/i; NOT called", async () => {
-    await expect(hapusKomponenNilaiAction(formData({ id: "kn_1" }))).rejects.toThrow(
+    await expect(hapusKomponenNilaiAction(formData({ id: ID_KOMPONEN }))).rejects.toThrow(
       /Beban Mengajar/i
     );
     expect(hapusKomponenNilai).not.toHaveBeenCalled();
@@ -614,6 +620,14 @@ describe("G. manual validation failures", () => {
     ).rejects.toThrow(/harus berupa angka/i);
     expect(buatKomponenNilai).not.toHaveBeenCalled();
   });
+
+  it("24. hapusPenilaianAction + malformed id -> /ID tidak valid/i before DB", async () => {
+    await expect(hapusPenilaianAction(formData({ id: "bukan-uuid" }))).rejects.toThrow(
+      /ID tidak valid/i
+    );
+    expect(withTenant).not.toHaveBeenCalled();
+    expect(hapusPenilaian).not.toHaveBeenCalled();
+  });
 });
 
 // ===========================================================================
@@ -621,7 +635,7 @@ describe("G. manual validation failures", () => {
 // ===========================================================================
 
 describe("H. non-active akses context", () => {
-  it("24. getAksesSaya denied -> any action throws /belum dipilih/i; no DB", async () => {
+  it("25. getAksesSaya denied -> any action throws /belum dipilih/i; no DB", async () => {
     getAksesSaya.mockResolvedValue({ status: "denied" } as AksesSaya);
     await expect(
       simpanKomponenNilaiBaruAction(
@@ -631,7 +645,7 @@ describe("H. non-active akses context", () => {
     expect(withTenant).not.toHaveBeenCalled();
   });
 
-  it("25. getAksesSaya choose -> any action throws /belum dipilih/i; no DB", async () => {
+  it("26. getAksesSaya choose -> any action throws /belum dipilih/i; no DB", async () => {
     getAksesSaya.mockResolvedValue({
       status: "choose",
       memberships: [],
@@ -650,7 +664,7 @@ describe("H. non-active akses context", () => {
 // ===========================================================================
 
 describe("I. tenant tamper-proofing", () => {
-  it("26. bogus formData tenantId is IGNORED; withTenant uses membership.orgId", async () => {
+  it("27. bogus formData tenantId is IGNORED; withTenant uses membership.orgId", async () => {
     getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
     await simpanKomponenNilaiBaruAction(
       formData({

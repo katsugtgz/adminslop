@@ -2,7 +2,7 @@ import path from "node:path";
 
 import pg from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db } from "../client";
 import { runMigrations } from "../migrate";
@@ -64,6 +64,15 @@ describeOrSkip("seed dev (e2e fixture)", () => {
       await seedTenant(db, demo);
     }
   }, 60_000);
+
+  // afterAll: pertahankan data seed demo. cleanupTenant + DELETE satuan
+  // sebelumnya menghapus demo tenant setelah test, tapi data dev runtime
+  // (DEV_MEMBERSHIP_ALL + login pengguna) bergantung padanya. seed.test.ts
+  // idempoten: beforeAll already calls cleanupTenant+insert, jadi re-run
+  // tetap bersih. Hanya tutup pool.
+  afterAll(async () => {
+    await mig?.end();
+  });
 
   it("semua entitas inti terisi (>0) per tenant", async () => {
     const rows = await withTenant(db, t.id, async (tx) => {
@@ -145,6 +154,7 @@ describeOrSkip("seed dev (e2e fixture)", () => {
       }
       return out;
     });
+    expect(rows.length).toBeGreaterThan(0);
     for (const r of rows) expect(r.status).toBe("terbit");
   });
 
@@ -183,8 +193,7 @@ describeOrSkip("seed dev (e2e fixture)", () => {
     expect(after[0]?.id).toBe(expected);
   });
 
-  it("semua row seed ditandai aktor penanda (dibuat_oleh)", async () => {
-    // Contoh: butir_soal + penilaian → dibuat_oleh = AKTOR_SEED.
+  it("butir_soal seed ditandai aktor penanda (dibuat_oleh)", async () => {
     const butir = await withTenant(db, t.id, (tx) =>
       tx.select({ o: schema.butirSoal.dibuatOleh }).from(schema.butirSoal).limit(1),
     );

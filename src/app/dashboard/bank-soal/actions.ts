@@ -33,21 +33,94 @@ import {
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
 /** Closed vocabulary of valid JenisButirSoal literals (mirrors schema CHECK). */
-const JENIS_BUTIR: readonly JenisButirSoal[] = [
-  "pg",
-  "essay",
-  "isian",
-  "jodohkan",
-  "benar_salah",
-];
+const JENIS_BUTIR = ["pg", "essay", "isian", "jodohkan", "benar_salah"] as const;
 
 /** True iff `v` is one of the JenisButirSoal literals. */
 function isValidJenis(v: string): v is JenisButirSoal {
   return (JENIS_BUTIR as readonly string[]).includes(v);
+}
+
+export interface HasilImpor {
+  readonly ok: boolean;
+  readonly tersimpan: number;
+  readonly gagal: number;
+  readonly errors: readonly string[];
+}
+
+interface KandidatImporButir {
+  readonly nomor: number;
+  readonly mataPelajaranId: string;
+  readonly tingkatId: string | null;
+  readonly jenis: JenisButirSoal;
+  readonly pertanyaan: string;
+  readonly pilihan: unknown;
+  readonly kunciJawaban: string;
+  readonly pembahasan: string | null;
+}
+
+function ambilString(item: Record<string, unknown>, key: string): string {
+  const value = item[key];
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function validasiKandidatImpor(
+  item: unknown,
+  index: number
+): { kandidat: KandidatImporButir | null; errors: string[] } {
+  const label = `Butir ${index + 1}`;
+  if (typeof item !== "object" || item === null || Array.isArray(item)) {
+    return { kandidat: null, errors: [`${label}: objek JSON tidak valid.`] };
+  }
+
+  const row = item as Record<string, unknown>;
+  const errors: string[] = [];
+  const mataPelajaranId = ambilString(row, "mataPelajaranId");
+  if (!mataPelajaranId) errors.push(`${label}: mataPelajaranId wajib diisi.`);
+
+  const jenisRaw = ambilString(row, "jenis");
+  if (!isValidJenis(jenisRaw)) {
+    errors.push(`${label}: jenis Butir Soal tidak valid.`);
+  }
+
+  const pertanyaan = ambilString(row, "pertanyaan");
+  if (!pertanyaan) errors.push(`${label}: pertanyaan wajib diisi.`);
+
+  const kunciJawaban = ambilString(row, "kunciJawaban");
+  if (!kunciJawaban) errors.push(`${label}: kunciJawaban wajib diisi.`);
+
+  if (errors.length > 0 || !isValidJenis(jenisRaw)) {
+    return { kandidat: null, errors };
+  }
+
+  const tingkatIdRaw = row.tingkatId;
+  const tingkatId =
+    typeof tingkatIdRaw === "string" && tingkatIdRaw.trim()
+      ? tingkatIdRaw.trim()
+      : null;
+  const pembahasanRaw = row.pembahasan;
+  const pembahasan =
+    typeof pembahasanRaw === "string" && pembahasanRaw.trim()
+      ? pembahasanRaw.trim()
+      : null;
+
+  return {
+    kandidat: {
+      nomor: index + 1,
+      mataPelajaranId,
+      tingkatId,
+      jenis: jenisRaw,
+      pertanyaan,
+      pilihan: row.pilihan ?? null,
+      kunciJawaban,
+      pembahasan,
+    },
+    errors: [],
+  };
 }
 
 // 1. buatButirSoalAction -----------------------------------------------------
@@ -59,6 +132,7 @@ function isValidJenis(v: string): v is JenisButirSoal {
  * throws, propagating to the client as a Bahasa error).
  */
 export async function buatButirSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -121,6 +195,7 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
  * ditemukan".
  */
 export async function ubahButirSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -177,6 +252,7 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
 export async function arsipkanButirSoalAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -209,6 +285,7 @@ export async function arsipkanButirSoalAction(
  * to a Tahun Ajaran (required) + optional semester + optional Tingkat.
  */
 export async function buatPaketSoalAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -258,6 +335,7 @@ export async function buatPaketSoalAction(formData: FormData): Promise<void> {
 export async function tambahButirKePaketAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -305,6 +383,7 @@ export async function tambahButirKePaketAction(
 export async function hapusButirDariPaketAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -330,4 +409,98 @@ export async function hapusButirDariPaketAction(
   });
 
   revalidatePath(REVALIDATE_TARGET);
+}
+
+export async function imporButirSoalJsonAction(
+  _prevState: HasilImpor | null,
+  formData: FormData
+): Promise<HasilImpor> {
+  await requireAuth();
+  const akses = await getAksesSaya();
+  if (akses.status !== "active") {
+    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+  }
+  if (!akses.boleh("bank_soal:buat").diizinkan) {
+    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
+  }
+
+  const jsonText = String(formData.get("jsonButir") ?? "").trim();
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(jsonText);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "format tidak dikenal";
+    return {
+      ok: false,
+      tersimpan: 0,
+      gagal: 0,
+      errors: [`JSON tidak valid: ${detail}`],
+    };
+  }
+
+  if (!Array.isArray(parsed)) {
+    return {
+      ok: false,
+      tersimpan: 0,
+      gagal: 0,
+      errors: ["JSON harus berupa array butir soal."],
+    };
+  }
+
+  const errors: string[] = [];
+  const kandidat: KandidatImporButir[] = [];
+  for (const [index, item] of parsed.entries()) {
+    const hasil = validasiKandidatImpor(item, index);
+    errors.push(...hasil.errors);
+    if (hasil.kandidat) kandidat.push(hasil.kandidat);
+  }
+
+  let tersimpan = 0;
+  let gagal = parsed.length - kandidat.length;
+  const { db } = getDb();
+  await withTenant(db, akses.membership.orgId, async (tx) => {
+    const hasilSimpan = await Promise.all(
+      kandidat.map(async (item) => {
+        try {
+          const butir = await buatButirSoal(tx, {
+            mataPelajaranId: item.mataPelajaranId,
+            tingkatId: item.tingkatId,
+            jenis: item.jenis,
+            pertanyaan: item.pertanyaan,
+            pilihan: item.pilihan,
+            kunciJawaban: item.kunciJawaban,
+            pembahasan: item.pembahasan,
+            dibuatOleh: akses.userId,
+          });
+          await catatAudit(tx, {
+            aktor: akses.userId,
+            aksi: "impor-ai-eksternal",
+            target: `butir_soal:${butir.id}`,
+            beban: {
+              provenance: `eksternal-pengguna:${akses.userId}:${item.jenis}:${new Date().toISOString()}`,
+            },
+          });
+          return { ok: true as const };
+        } catch (error) {
+          const detail =
+            error instanceof Error ? error.message : "kesalahan basis data";
+          return {
+            ok: false as const,
+            error: `Butir ${item.nomor}: gagal disimpan (${detail}).`,
+          };
+        }
+      })
+    );
+    for (const hasil of hasilSimpan) {
+      if (hasil.ok) {
+        tersimpan += 1;
+      } else {
+        gagal += 1;
+        errors.push(hasil.error);
+      }
+    }
+  });
+
+  if (tersimpan > 0) revalidatePath(REVALIDATE_TARGET);
+  return { ok: tersimpan > 0, tersimpan, gagal, errors };
 }

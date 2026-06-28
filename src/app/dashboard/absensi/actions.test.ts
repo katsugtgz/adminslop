@@ -81,6 +81,9 @@ const mocks = vi.hoisted(() => {
     catatAudit: vi.fn(async () => undefined),
     catatAbsensi: vi.fn(async () => ({ id: "absensi_new" })),
     ubahAbsensi: vi.fn(async () => ({ id: "absensi_1" })),
+    listPenempatanByPesertaDidik: vi.fn(async () => [
+      { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" },
+    ]),
     revalidatePath: vi.fn(),
     fakeTx: fakeTxLocal,
     tableRows,
@@ -94,6 +97,7 @@ const {
   catatAudit,
   catatAbsensi,
   ubahAbsensi,
+  listPenempatanByPesertaDidik,
   revalidatePath,
   fakeTx: fakeTxRef,
   tableRows,
@@ -117,6 +121,9 @@ vi.mock("@/db/client", async (importOriginal) => {
 vi.mock("@/db/queries/absensi", () => ({
   catatAbsensi: mocks.catatAbsensi,
   ubahAbsensi: mocks.ubahAbsensi,
+}));
+vi.mock("@/db/queries/penempatan-rombongan-belajar", () => ({
+  listPenempatanByPesertaDidik: mocks.listPenempatanByPesertaDidik,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
@@ -218,12 +225,16 @@ beforeEach(() => {
   catatAudit.mockReset();
   catatAbsensi.mockReset();
   ubahAbsensi.mockReset();
+  listPenempatanByPesertaDidik.mockReset();
   revalidatePath.mockReset();
   // restore default implementations cleared by mockReset
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTxRef));
   catatAbsensi.mockResolvedValue({ id: "absensi_new" });
   ubahAbsensi.mockResolvedValue({ id: "absensi_1" });
+  listPenempatanByPesertaDidik.mockResolvedValue([
+    { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" },
+  ]);
   catatAudit.mockResolvedValue(undefined);
   // Default C3 ownership fixtures: guru ptk_A owns rombel_1 via beban_mengajar,
   // and absensi_1 lives under rombel_1. Cleared per test; deny tests override.
@@ -670,6 +681,28 @@ describe("H. C3 DENY — guru does NOT own the Rombongan Belajar", () => {
     expect(catatAudit).not.toHaveBeenCalled();
   });
 
+  it("22b. catatAbsensiAction rejects peserta from another rombel after ownership passes", async () => {
+    aturFixtures({
+      beban: [{ rombonganBelajarId: "rombel_1", ptkId: "ptk_A" }],
+    });
+    listPenempatanByPesertaDidik.mockResolvedValue([
+      { pesertaDidikId: "pd_2", rombonganBelajarId: "rombel_2" },
+    ]);
+
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_2",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+        })
+      )
+    ).rejects.toThrow(/tidak terdaftar di Rombongan Belajar ini/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
   it("23. admin still BYPASSES when the rombel is owned by nobody (bypass, not satisfaction)", async () => {
     // No beban / wali row links ANY ptk to rombel_1 — an admin succeeds anyway
     // (akses:kelola short-circuits ownership). Proves the deny above is an
@@ -703,6 +736,9 @@ describe("I. C3 ownership via wali_kelas (beban absent)", () => {
     aturFixtures({
       wali: [{ rombonganBelajarId: "rombel_2", ptkId: "ptk_A" }],
     });
+    listPenempatanByPesertaDidik.mockResolvedValue([
+      { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_2" },
+    ]);
   });
 
   it("24. catatAbsensiAction (rombel_2 owned via wali_kelas) -> catatAbsensi called", async () => {
@@ -715,6 +751,112 @@ describe("I. C3 ownership via wali_kelas (beban absent)", () => {
       })
     );
     expect(catatAbsensi).toHaveBeenCalledTimes(1);
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ===========================================================================
+// J. Task #15 — QR data-path guardrail. Two invariants that must hold BEFORE
+// the live-camera scanner UI lands:
+//   (a) `metode_input='qr'` REQUIRES a non-empty `sumber_qr` token (audit-
+//       trail integrity for AC#3 — a row with no provenance defeats the
+//       correctable invariant).
+//   (b) A `sumberQr` value carrying tenant B's marker, posted to tenant A's
+//       action, does NOT leak tenant scope — `withTenant` uses
+//       `akses.membership.orgId` regardless (identity doc §13). Mirrors the
+//       test 18 pattern, specialized to the QR field.
+// ===========================================================================
+
+describe("J. Task #15 — QR guardrail (sumberQr required + cross-tenant deny)", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+  });
+
+  it("25. catatAbsensiAction + metodeInput=qr WITHOUT sumberQr -> throws /sumberQr wajib/i; no write", async () => {
+    // AC#3 audit-trail integrity: a row marked qr-captured with no session
+    // token defeats the correctable invariant. The guard rejects BEFORE any
+    // DB work — no withTenant, no catatAbsensi, no audit.
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+          metodeInput: "qr",
+          // sumberQr intentionally OMITTED
+        })
+      )
+    ).rejects.toThrow(/Token Sesi QR wajib diisi/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("26. catatAbsensiAction + metodeInput=qr + EMPTY sumberQr (whitespace) -> throws /sumberQr wajib/i", async () => {
+    // The guard must catch whitespace-only sumberQr, not just missing —
+    // String().trim() collapsed it to empty, which is the same hole.
+    await expect(
+      catatAbsensiAction(
+        formData({
+          pesertaDidikId: "pd_1",
+          rombonganBelajarId: "rombel_1",
+          tanggal: "2026-04-01",
+          statusKehadiran: "hadir",
+          metodeInput: "qr",
+          sumberQr: "   ",
+        })
+      )
+    ).rejects.toThrow(/Token Sesi QR wajib diisi/i);
+    expect(catatAbsensi).not.toHaveBeenCalled();
+  });
+
+  it("27. cross-tenant QR token: sumberQr carries tenant B marker, withTenant still uses membership.orgId (org_A); catatAbsensi called under tenant A scope", async () => {
+    // The hostile scenario: an attacker (or a confused UI) posts a sumberQr
+    // value that encodes tenant B's identifier, hoping it will route the
+    // write to tenant B. The action MUST ignore sumberQr for tenant scope
+    // and use akses.membership.orgId exclusively (identity doc §13).
+    // `sumberQr` IS still persisted (as opaque provenance) on the tenant-A
+    // row — never used to resolve the tenant.
+    await catatAbsensiAction(
+      formData({
+        pesertaDidikId: "pd_1",
+        rombonganBelajarId: "rombel_1",
+        tanggal: "2026-04-01",
+        statusKehadiran: "hadir",
+        metodeInput: "qr",
+        sumberQr: "qr-session-TENANT_B_SECRET_TOKEN",
+      })
+    );
+
+    // withTenant used membership.orgId ("org_A"), NEVER the victim id
+    // embedded in the sumberQr string.
+    expect(withTenant).toHaveBeenCalledTimes(1);
+    expect(withTenant).toHaveBeenCalledWith(DB, "org_A", expect.anything());
+    expect(withTenant).not.toHaveBeenCalledWith(
+      DB,
+      "TENANT_B",
+      expect.anything()
+    );
+    expect(withTenant).not.toHaveBeenCalledWith(
+      DB,
+      "org_B",
+      expect.anything()
+    );
+
+    // The QR row WAS written — under tenant A scope, carrying the opaque
+    // token as provenance. The cross-tenant deny is "no leak", not "no
+    // write"; the token is meaningless outside tenant A.
+    expect(catatAbsensi).toHaveBeenCalledWith(fakeTxRef, {
+      pesertaDidikId: "pd_1",
+      rombonganBelajarId: "rombel_1",
+      tanggal: "2026-04-01",
+      statusKehadiran: "hadir",
+      metodeInput: "qr",
+      catatan: undefined,
+      sumberQr: "qr-session-TENANT_B_SECRET_TOKEN",
+      dibuatOleh: "workos_u_1",
+    });
     expect(catatAudit).toHaveBeenCalledTimes(1);
   });
 });

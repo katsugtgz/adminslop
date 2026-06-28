@@ -35,3 +35,15 @@ export async function getAuthenticatedUserId(): Promise<string | null> {
   const auth = await withAuth();
   return auth.user?.id ?? null;
 }
+
+/**
+ * Authentication gate for server actions. Wraps WorkOS `withAuth` under a name
+ * the `react-doctor/server-auth-actions` rule recognizes. This is the
+ * AUTHENTICATION first line — the real AUTHORIZATION gate remains
+ * `getAksesSaya().boleh(...)` (identity doc §12). Throws if no session.
+ */
+export async function requireAuth(): Promise<{ userId: string }> {
+  const auth = await withAuth();
+  if (!auth.user) throw new Error("Belum terautentikasi.");
+  return { userId: auth.user.id };
+}

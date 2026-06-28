@@ -241,9 +241,9 @@ export async function listNotifikasiAktif(
     .from(preferensiNotifikasi)
     .where(eq(preferensiNotifikasi.penggunaId, penggunaId));
 
-  const tipeNonaktif = preferensi
-    .filter((p) => !p.aktif)
-    .map((p) => p.tipe);
+  const tipeNonaktif = preferensi.flatMap((p) =>
+    !p.aktif ? [p.tipe] : []
+  );
 
   if (tipeNonaktif.length === 0) {
     return db

@@ -44,6 +44,7 @@ import type { Semester } from "@/db/queries/beban-mengajar";
 import { hapusWaliKelas, upsertWaliKelas } from "@/db/queries/wali-kelas";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/beban-mengajar";
 
@@ -101,6 +102,7 @@ export async function simpanBebanMengajarBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -137,6 +139,7 @@ export async function simpanBebanMengajarBaruAction(
   //    AC#4: active TA + semester resolved server-side inside withTenant.
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: beban insert depends on active period; audit depends on beban.id, react-doctor/async-parallel
     const { tahunAjaranId, semester } = await resolvePeriodAktif(tx);
     const beban = await buatBebanMengajar(tx, {
       ptkId,
@@ -175,6 +178,7 @@ export async function simpanBebanMengajarBaruAction(
 export async function ubahBebanMengajarAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -234,6 +238,7 @@ export async function ubahBebanMengajarAction(
 export async function hapusBebanMengajarAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -271,6 +276,7 @@ export async function hapusBebanMengajarAction(
 export async function upsertWaliKelasAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -289,6 +295,7 @@ export async function upsertWaliKelasAction(
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    // react-doctor-disable-next-line async-parallel: wali upsert depends on active period; audit depends on wali.id, react-doctor/async-parallel
     const { tahunAjaranId, semester } = await resolvePeriodAktif(tx);
     const wali = await upsertWaliKelas(tx, {
       ptkId,
@@ -323,6 +330,7 @@ export async function upsertWaliKelasAction(
 export async function hapusWaliKelasAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

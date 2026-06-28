@@ -82,6 +82,7 @@ export function DaftarRetensi({
                       type="number"
                       min="1"
                       defaultValue={row?.periodeBulan ?? 84}
+                      aria-label="Periode (Bulan)"
                       className="h-9 w-28 rounded-md border border-input bg-background px-2 text-sm"
                     />
                   </div>
@@ -98,6 +99,7 @@ export function DaftarRetensi({
                       type="text"
                       defaultValue={row?.keterangan ?? ""}
                       placeholder="opsional"
+                      aria-label="Keterangan"
                       className="h-9 w-48 rounded-md border border-input bg-background px-2 text-sm"
                     />
                   </div>

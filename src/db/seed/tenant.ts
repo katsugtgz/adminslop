@@ -397,7 +397,7 @@ export async function seedTenant(db: Db, t: DemoTenant): Promise<void> {
     // ── Komponen Nilai + Penilaian + Nilai Peserta Didik ─────────────────
     const pesertaRombelPertama = pesertaByRombel.get(rombelPertama)!;
     for (const [_kode, bebanId] of bebanByMapel) {
-      const [komp] = await tx
+      const [kompForm, kompSum] = await tx
         .insert(schema.komponenNilai)
         .values([
           { bebanMengajarId: bebanId, nama: "Formatif", bobot: "40" },
@@ -408,7 +408,7 @@ export async function seedTenant(db: Db, t: DemoTenant): Promise<void> {
       const [penForm] = await tx
         .insert(schema.penilaian)
         .values({
-          komponenNilaiId: komp!.id,
+          komponenNilaiId: kompForm!.id,
           nama: "Tugas 1",
           tanggal: "2026-08-20",
           dibuatOleh: AKTOR_SEED,
@@ -417,7 +417,7 @@ export async function seedTenant(db: Db, t: DemoTenant): Promise<void> {
       const [penSum] = await tx
         .insert(schema.penilaian)
         .values({
-          komponenNilaiId: komp!.id,
+          komponenNilaiId: kompSum!.id,
           nama: "Ulangan Harian 1",
           tanggal: "2026-09-15",
           dibuatOleh: AKTOR_SEED,

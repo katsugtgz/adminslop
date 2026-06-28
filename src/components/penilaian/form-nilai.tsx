@@ -79,6 +79,7 @@ export function FormNilai({
                   step="any"
                   inputMode="decimal"
                   defaultValue={existing?.nilai ?? ""}
+                  aria-label="Nilai"
                   className="h-10 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>
@@ -95,6 +96,7 @@ export function FormNilai({
                   name="catatan"
                   type="text"
                   defaultValue={existing?.catatan ?? ""}
+                  aria-label="Catatan"
                   className="h-10 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>

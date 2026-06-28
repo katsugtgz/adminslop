@@ -31,10 +31,11 @@ import {
   linkPtk,
 } from "@/db/queries/akses";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 import type { IzinSlug } from "@/lib/auth/types";
 
 /** Closed vocabulary of valid IzinSlug literals (single source of truth). */
-const IZIN_SLUGS: readonly IzinSlug[] = [
+const IZIN_SLUGS = [
   "ptk:baca",
   "ptk:buat",
   "ptk:hapus",
@@ -90,7 +91,7 @@ const IZIN_SLUGS: readonly IzinSlug[] = [
   "cetak:buat",
   "cetak:ubah",
   "offline:baca",
-];
+] as const;
 
 /** True iff `slug` is one of the IzinSlug literals. */
 function isValidIzinSlug(slug: string): slug is IzinSlug {
@@ -108,6 +109,7 @@ const REVALIDATE_TARGET = "/dashboard/akses";
  */
 export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -150,6 +152,7 @@ export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
  * the active tenant — a cross-tenant ptkId is a silent no-op.
  */
 export async function hapusPtkAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -183,6 +186,7 @@ export async function hapusPtkAction(formData: FormData): Promise<void> {
  * `ptkId` unlinks (sets ptk_id = null).
  */
 export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -218,6 +222,7 @@ export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
  * `aktif` checkbox: `formData.get("aktif") === "on"` → grant; otherwise revoke.
  */
 export async function aturIzinAksesAction(formData: FormData): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -259,6 +264,7 @@ export async function aturIzinAksesAction(formData: FormData): Promise<void> {
 export async function aturPembatasanAksesAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");

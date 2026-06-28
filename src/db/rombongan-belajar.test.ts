@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg, { DatabaseError } from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import { cleanupTestTenants } from "./test-cleanup";
 
 // Load .env (Node native; no-op if missing).
 try {
@@ -98,6 +99,10 @@ describeOrSkip("rombongan belajar tables (#8, Wave 1 / T1)", () => {
 
     // 3. App client uses the non-superuser role — RLS enforced.
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
   });
 
   // 1. tahun_ajaran CRUD + partial unique on active: at most one aktif per

@@ -1,33 +1,48 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 
-import BerandaPage from "@/app/page";
+import BerandaPage from "./page";
 
-describe("BerandaPage (product shell)", () => {
-  it("menampilkan judul produk dalam Bahasa Indonesia", () => {
+/**
+ * Landing (BerandaPage) smoke + structure tests.
+ *
+ * NOTE on ISSUE-002 (React "unique key prop" warning):
+ * The original offender — `<TextStagger lines={[ <>…</> ]} />`, an unkeyed
+ * array-literal fragment passed as a prop — only trips React's
+ * `warnForMissingKey` inside the RSC *flight serializer*
+ * (`react-server-dom-webpack`). It does NOT fire under `react-dom/server`
+ * `renderToString` nor under jsdom client rendering (verified: both report
+ * zero warnings even with the bug present). It therefore cannot be asserted
+ * by a Vitest unit test in this repo — the regression guard lives in the
+ * agent-browser dogfood harness, which checks the browser/server console for
+ * `unique "key"` after a fresh `/` load.
+ *
+ * What we *can* lock in here is that the landing renders its hero and module
+ * surface without throwing and that the fixed `TextStagger` usage still
+ * produces the brand headline.
+ */
+describe("BerandaPage (landing)", () => {
+  it("renders the hero brand headline and primary CTA", () => {
     render(<BerandaPage />);
+
+    // The TextStagger hero renders the brand name across its line(s).
     expect(
-      screen.getByRole("heading", { level: 1, name: /EduAdmin Pro Premium/i })
+      screen.getByRole("heading", { level: 1, name: /eduadmin pro/i }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("link", { name: /masuk ke dashboard/i }),
     ).toBeInTheDocument();
   });
 
-  it("menyediakan aksi Dashboard dan Tur Awal", () => {
+  it("renders every MVP module as a card with a dashboard link", () => {
     render(<BerandaPage />);
-    expect(
-      screen.getByRole("link", { name: /Masuk ke Dashboard/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /^Tur Awal$/i })
-    ).toBeInTheDocument();
-  });
 
-  it("mendaftarkan modul MVP sebagai placeholder", () => {
-    render(<BerandaPage />);
-    expect(
-      screen.getByRole("heading", { level: 2, name: /^Modul$/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Input Nilai & E-Raport")
-    ).toBeInTheDocument();
+    // MVP_MODULES has 7 entries; each card exposes an aria-label "Buka <nama>".
+    const moduleLinks = screen.getAllByRole("link", { name: /^buka /i });
+    expect(moduleLinks).toHaveLength(7);
+    moduleLinks.forEach((link) => {
+      expect(link).toHaveAttribute("href", "/dashboard");
+    });
   });
 });

@@ -209,19 +209,20 @@ export async function getNilaiAkhir(
   // 5. Build the result per student.
   const hasil: NilaiAkhirPesertaDidik[] = [];
   for (const [pdId, presence] of presenceByStudent) {
-    const rincian = komponenRows
-      .filter((k) => presence.has(k.id))
-      .map((k) => {
-        const accum = byKey.get(`${pdId}|${k.id}`);
-        const bobot = Number(k.bobot);
-        return {
+    const rincian = komponenRows.flatMap((k) => {
+      if (!presence.has(k.id)) return [];
+      const accum = byKey.get(`${pdId}|${k.id}`);
+      const bobot = Number(k.bobot);
+      return [
+        {
           komponenNilaiId: k.id,
           nama: k.nama,
           bobot,
           rataRata: accum && accum.count > 0 ? accum.sum / accum.count : null,
           jumlahPenilaian: accum?.count ?? 0,
-        };
-      });
+        },
+      ];
+    });
 
     // Weighted average: Σ(avg × bobot) / Σ(bobot) over components with non-null avg.
     let numerator = 0;

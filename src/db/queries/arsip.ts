@@ -181,6 +181,93 @@ export async function pulihkan(
 }
 
 /**
+ * Read archived rows for ONE table (RLS-scoped). The switch/case maps the
+ * whitelisted TabelArsip literal to its drizzle table object (AC#5: the
+ * user-supplied string never reaches raw SQL). Returns BarisArsip rows tagged
+ * with the source `tabel` so callers can fan out across tables concurrently
+ * and concatenate.
+ */
+async function readArsipForTable(
+  db: Db | Tx,
+  t: TabelArsip
+): Promise<BarisArsip[]> {
+  switch (t) {
+    case "ptk": {
+      const rows = await db
+        .select({
+          id: ptk.id,
+          arsipPada: ptk.arsipPada,
+          arsipOleh: ptk.arsipOleh,
+          label: ptk.nama,
+        })
+        .from(ptk)
+        .where(isNotNull(ptk.arsipPada));
+      return rows.map((r) => ({
+        id: r.id,
+        tabel: "ptk",
+        arsipPada: r.arsipPada as Date,
+        arsipOleh: r.arsipOleh,
+        label: r.label,
+      }));
+    }
+    case "penilaian": {
+      const rows = await db
+        .select({
+          id: penilaian.id,
+          arsipPada: penilaian.arsipPada,
+          arsipOleh: penilaian.arsipOleh,
+          label: penilaian.nama,
+        })
+        .from(penilaian)
+        .where(isNotNull(penilaian.arsipPada));
+      return rows.map((r) => ({
+        id: r.id,
+        tabel: "penilaian",
+        arsipPada: r.arsipPada as Date,
+        arsipOleh: r.arsipOleh,
+        label: r.label,
+      }));
+    }
+    case "beban_mengajar": {
+      const rows = await db
+        .select({
+          id: bebanMengajar.id,
+          arsipPada: bebanMengajar.arsipPada,
+          arsipOleh: bebanMengajar.arsipOleh,
+          label: bebanMengajar.semester,
+        })
+        .from(bebanMengajar)
+        .where(isNotNull(bebanMengajar.arsipPada));
+      return rows.map((r) => ({
+        id: r.id,
+        tabel: "beban_mengajar",
+        arsipPada: r.arsipPada as Date,
+        arsipOleh: r.arsipOleh,
+        label: r.label,
+      }));
+    }
+    case "wali_kelas": {
+      const rows = await db
+        .select({
+          id: waliKelas.id,
+          arsipPada: waliKelas.arsipPada,
+          arsipOleh: waliKelas.arsipOleh,
+          label: waliKelas.semester,
+        })
+        .from(waliKelas)
+        .where(isNotNull(waliKelas.arsipPada));
+      return rows.map((r) => ({
+        id: r.id,
+        tabel: "wali_kelas",
+        arsipPada: r.arsipPada as Date,
+        arsipOleh: r.arsipOleh,
+        label: r.label,
+      }));
+    }
+  }
+}
+
+/**
  * List archived rows (arsip_pada IS NOT NULL) across the supported tables. When
  * `tabel` is omitted, scans all four; otherwise narrows to one. Ordered by
  * arsip_pada DESC (most recent first). RLS scopes every read to the tenant.
@@ -189,98 +276,11 @@ export async function listArsip(
   db: Db | Tx,
   tabel?: TabelArsip
 ): Promise<BarisArsip[]> {
-  const out: BarisArsip[] = [];
   const tables: readonly TabelArsip[] = tabel ? [tabel] : TABEL_ARSIP;
-
-  for (const t of tables) {
-    switch (t) {
-      case "ptk": {
-        const rows = await db
-          .select({
-            id: ptk.id,
-            arsipPada: ptk.arsipPada,
-            arsipOleh: ptk.arsipOleh,
-            label: ptk.nama,
-          })
-          .from(ptk)
-          .where(isNotNull(ptk.arsipPada));
-        for (const r of rows) {
-          out.push({
-            id: r.id,
-            tabel: "ptk",
-            arsipPada: r.arsipPada as Date,
-            arsipOleh: r.arsipOleh,
-            label: r.label,
-          });
-        }
-        break;
-      }
-      case "penilaian": {
-        const rows = await db
-          .select({
-            id: penilaian.id,
-            arsipPada: penilaian.arsipPada,
-            arsipOleh: penilaian.arsipOleh,
-            label: penilaian.nama,
-          })
-          .from(penilaian)
-          .where(isNotNull(penilaian.arsipPada));
-        for (const r of rows) {
-          out.push({
-            id: r.id,
-            tabel: "penilaian",
-            arsipPada: r.arsipPada as Date,
-            arsipOleh: r.arsipOleh,
-            label: r.label,
-          });
-        }
-        break;
-      }
-      case "beban_mengajar": {
-        const rows = await db
-          .select({
-            id: bebanMengajar.id,
-            arsipPada: bebanMengajar.arsipPada,
-            arsipOleh: bebanMengajar.arsipOleh,
-            label: bebanMengajar.semester,
-          })
-          .from(bebanMengajar)
-          .where(isNotNull(bebanMengajar.arsipPada));
-        for (const r of rows) {
-          out.push({
-            id: r.id,
-            tabel: "beban_mengajar",
-            arsipPada: r.arsipPada as Date,
-            arsipOleh: r.arsipOleh,
-            label: r.label,
-          });
-        }
-        break;
-      }
-      case "wali_kelas": {
-        const rows = await db
-          .select({
-            id: waliKelas.id,
-            arsipPada: waliKelas.arsipPada,
-            arsipOleh: waliKelas.arsipOleh,
-            label: waliKelas.semester,
-          })
-          .from(waliKelas)
-          .where(isNotNull(waliKelas.arsipPada));
-        for (const r of rows) {
-          out.push({
-            id: r.id,
-            tabel: "wali_kelas",
-            arsipPada: r.arsipPada as Date,
-            arsipOleh: r.arsipOleh,
-            label: r.label,
-          });
-        }
-        break;
-      }
-    }
-  }
-
+  const groups = await Promise.all(
+    tables.map((t) => readArsipForTable(db, t))
+  );
+  const out = groups.flat();
   out.sort((a, b) => b.arsipPada.getTime() - a.arsipPada.getTime());
   return out;
 }

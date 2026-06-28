@@ -8,6 +8,7 @@ import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { DaftarTemplateCetak } from "@/components/cetak/daftar-template";
 import { FormTemplateCetak } from "@/components/cetak/form-template";
 import { KontrolCetak, type OpsiEraport } from "@/components/cetak/kontrol-cetak";
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 import { Button } from "@/components/ui/button";
@@ -110,9 +111,11 @@ export default async function Page() {
       <PageReveal delay={3} className="flex flex-col gap-3">
         <SectionLabel nomor="02">Pratinjau Cetak</SectionLabel>
         {data.eraportTerbit.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
-            Belum ada E-Raport Terbit untuk dicetak.
-          </p>
+          <KosongDenganTautan
+            pesan="Belum ada E-Raport Terbit untuk dicetak."
+            href="/dashboard/eraport"
+            labelTautan="Buka E-Raport"
+          />
         ) : (
           <ul className="flex flex-col gap-2">
             {data.eraportTerbit.map((e) => {
@@ -137,7 +140,7 @@ export default async function Page() {
       </PageReveal>
 
       {bolehBuat ? (
-        <PageReveal delay={4}>
+        <PageReveal id="kontrol-cetak" delay={4}>
           <KontrolCetak
             eraportOptions={data.eraportOptions}
             templateOptions={data.templates}
@@ -149,9 +152,11 @@ export default async function Page() {
       <PageReveal delay={4} className="flex flex-col gap-3">
         <SectionLabel nomor="03">Dokumen Cetak</SectionLabel>
         {data.dokumen.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
-            Belum ada Dokumen Cetak.
-          </p>
+          <KosongDenganTautan
+            pesan="Belum ada Dokumen Cetak."
+            href={bolehBuat ? "#kontrol-cetak" : undefined}
+            labelTautan={bolehBuat ? "Buat Dokumen Cetak" : undefined}
+          />
         ) : (
           <ul className="flex flex-col gap-2">
             {data.dokumen.map((d) => (

@@ -75,6 +75,7 @@ export function FormTambahButir({
           type="number"
           min={1}
           defaultValue={nextUrutan}
+          aria-label="Urutan"
           className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
@@ -92,6 +93,7 @@ export function FormTambahButir({
           type="text"
           inputMode="decimal"
           placeholder="1"
+          aria-label="Bobot"
           className="h-10 w-20 rounded-lg border border-input bg-background px-2 text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>

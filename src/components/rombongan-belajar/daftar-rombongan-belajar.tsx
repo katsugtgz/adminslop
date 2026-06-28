@@ -1,5 +1,6 @@
 import { Users } from "lucide-react";
 
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import type { RombonganBelajar } from "@/db/schema";
 
 /**
@@ -18,9 +19,11 @@ export function DaftarRombonganBelajar({
 }) {
   if (rombel.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Rombongan Belajar.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Rombongan Belajar."
+        href={_bolehBuat ? "#form-rombongan-belajar" : "/dashboard/akses"}
+        labelTautan={_bolehBuat ? "Buat Rombongan Belajar" : "Buka Akses"}
+      />
     );
   }
 

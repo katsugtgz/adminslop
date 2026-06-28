@@ -43,6 +43,9 @@ export function TextStagger({
         // Only delay lines 2-4 (line 1 plays immediately)
         const delayClass = idx > 1 && idx <= 4 ? ` t-stagger-line--${idx}` : "";
         return (
+          // Positional stagger: index is the semantic line position (the
+          // animation delay is derived from it) and lines never reorder.
+          // react-doctor-disable-next-line no-array-index-as-key
           <span
             key={i}
             className={`t-stagger-line${delayClass}${lineClassName ? ` ${lineClassName}` : ""}`}

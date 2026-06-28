@@ -5,7 +5,8 @@ import { CardHover } from "@/components/motion";
 import type { ButirSoal, PaketSoalButir } from "@/db/schema";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 
-import { LABEL_JENIS_BUTIR, type ServerAksi } from "./form-butir-soal";
+import { LABEL_JENIS_BUTIR } from "./jenis-butir";
+import type { ServerAksi } from "./form-butir-soal";
 
 /**
  * Ordered list of Butir Soal in a Paket. Each row shows `urutan`, the

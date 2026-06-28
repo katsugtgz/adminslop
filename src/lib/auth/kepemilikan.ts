@@ -299,8 +299,10 @@ export async function assertPemilikRombongan(
   // make the "does this rombel exist in this tenant?" intent explicit and to
   // anchor a future active-period tighten.)
   void (await cariRombonganBelajarById(tx, rombonganBelajarId));
-  const beban = await cariBebanMengajarByRombelDanPtk(tx, rombonganBelajarId, myPtkId);
-  const wali = await cariWaliKelasByRombelDanPtk(tx, rombonganBelajarId, myPtkId);
+  const [beban, wali] = await Promise.all([
+    cariBebanMengajarByRombelDanPtk(tx, rombonganBelajarId, myPtkId),
+    cariWaliKelasByRombelDanPtk(tx, rombonganBelajarId, myPtkId),
+  ]);
   if (!beban && !wali) {
     throw new KepemilikanError("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
   }

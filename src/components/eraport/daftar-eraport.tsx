@@ -19,11 +19,14 @@ const BADGE_STATUS: Record<StatusEraport, string> = {
     "bg-warning/15 text-warning-foreground ring-1 ring-inset ring-warning/40",
 };
 
+// Module-scope formatter — Intl.DateTimeFormat is expensive to construct.
+const formatterTanggalMedium = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 function formatTanggal(d: Date): string {
-  return new Intl.DateTimeFormat("id-ID", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(d);
+  return formatterTanggalMedium.format(d);
 }
 
 /** Resolve a peserta_didik nama by id (defensive when the map is partial). */
@@ -54,7 +57,7 @@ export function DaftarEraport({
 }: {
   eraport: readonly DrafEraport[];
   pesertaMap: ReadonlyMap<string, PesertaDidik>;
-  revisiMap: ReadonlyMap<string, { alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]>;
+  revisiMap: ReadonlyMap<string, { id: string; alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]>;
   bolehTerbit: boolean;
   bolehRevisi: boolean;
   terbitAction: ServerAksi;

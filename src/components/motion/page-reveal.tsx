@@ -19,8 +19,8 @@ export type PageRevealProps = Omit<
   "className"
 > & {
   children?: React.ReactNode;
-  /** 1-5; each step delays entrance by 80ms */
-  delay?: 1 | 2 | 3 | 4 | 5;
+  /** 1-6; each step delays entrance by 80ms */
+  delay?: 1 | 2 | 3 | 4 | 5 | 6;
   /** Element type to render (default div) */
   as?: React.ElementType;
   className?: string;

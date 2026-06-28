@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 /**
  * Unit tests for the Pengaturan Satuan Pendidikan server actions (#5).
@@ -16,6 +16,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => {
   return {
+    requireAuth: vi.fn(async () => ({ userId: "workos_u_1" })),
     getActiveTenantContext: vi.fn(),
     getAuthenticatedUserId: vi.fn(),
     getDb: vi.fn(),
@@ -33,6 +34,7 @@ vi.mock("@workos-inc/authkit-nextjs", () => ({
   signOut: vi.fn(),
 }));
 vi.mock("@/lib/auth/server", () => ({
+  requireAuth: mocks.requireAuth,
   getActiveTenantContext: mocks.getActiveTenantContext,
   getAuthenticatedUserId: mocks.getAuthenticatedUserId,
 }));
@@ -91,6 +93,7 @@ const pengaturanPayload = (over: Record<string, string> = {}) => ({
 });
 
 beforeEach(() => {
+  mocks.requireAuth.mockReset();
   mocks.getActiveTenantContext.mockReset();
   mocks.getAuthenticatedUserId.mockReset();
   mocks.getDb.mockReset();
@@ -101,12 +104,17 @@ beforeEach(() => {
   mocks.getProfilDanPengaturan.mockReset();
   mocks.revalidatePath.mockReset();
 
+  mocks.requireAuth.mockResolvedValue({ userId: "workos_u_1" });
   mocks.getDb.mockReturnValue({ db: FAKE_DB });
   mocks.withTenant.mockImplementation(
     async (_db: unknown, _id: unknown, fn: (tx: unknown) => Promise<unknown>) =>
       fn(FAKE_TX),
   );
   mocks.catatAudit.mockResolvedValue(undefined);
+});
+
+afterEach(() => {
+  expect(mocks.requireAuth).toHaveBeenCalledTimes(1);
 });
 
 describe("simpanProfilSatuanPendidikanAction (#5)", () => {

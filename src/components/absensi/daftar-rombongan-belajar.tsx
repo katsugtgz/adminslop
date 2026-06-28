@@ -2,6 +2,7 @@ import Link from "next/link";
 import { QrCode } from "lucide-react";
 
 import { CardHover } from "@/components/motion";
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import type { RombonganBelajar } from "@/db/schema";
 
 /**
@@ -25,9 +26,11 @@ export function DaftarRombonganBelajarAbsensi({
 }) {
   if (rombonganBelajar.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Rombongan Belajar.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Rombongan Belajar."
+        href="/dashboard/rombongan-belajar"
+        labelTautan="Buat Rombongan Belajar"
+      />
     );
   }
 

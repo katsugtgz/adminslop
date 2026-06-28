@@ -53,6 +53,7 @@ export function FormUbahStatus({
         name="catatan"
         type="text"
         placeholder="Catatan"
+        aria-label="Catatan"
         className={INPUT_CLASS}
       />
 

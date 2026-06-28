@@ -3,7 +3,8 @@ import type { StatusDokumenAi } from "@/db/queries/perangkat-ajar";
 
 import { CardHover } from "@/components/motion";
 import { KontrolVerifikasiAi } from "./kontrol-verifikasi-ai";
-import { LABEL_JENIS, type ServerAksi } from "./form-perangkat-ajar";
+import { LABEL_JENIS } from "./jenis-perangkat";
+import type { ServerAksi } from "./form-perangkat-ajar";
 
 /**
  * Daftar Perangkat Ajar — AC#4 per-jenis list. Each row shows its Bahasa Jenis

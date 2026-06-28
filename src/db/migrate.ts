@@ -32,6 +32,7 @@ export async function runMigrations(
       .sort();
 
     for (const file of files) {
+      // react-doctor-disable-next-line react-doctor/async-await-in-loop — schema migrations must run in defined order on a shared client; each step depends on the prior committed DDL.
       const done = await client.query(
         "select 1 from schema_migrations where id = $1",
         [file]

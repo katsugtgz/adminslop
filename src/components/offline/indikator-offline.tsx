@@ -1,37 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { CloudOff, Cloud } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 /**
  * Mode Offline (#21) — compact online/offline badge. Subscribes to the browser
- * `online` / `offline` events so it updates live. Renders neutral on the server
- * (no `navigator` yet) and on first paint, then snaps to the real status after
- * mount.
+ * `online` / `offline` events via `useSyncExternalStore` for SSR-safe initial
+ * state (server renders "online"; client hydrates to the real value without a
+ * mount-effect re-render).
  */
-export function IndikatorOffline({ className }: { className?: string }) {
-  const [online, setOnline] = useState<boolean | null>(null);
+function subscribe(callback: () => void) {
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
+  return () => {
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
+  };
+}
 
-  useEffect(() => {
-    const update = () => setOnline(navigator.onLine);
-    update();
-    window.addEventListener("online", update);
-    window.addEventListener("offline", update);
-    return () => {
-      window.removeEventListener("online", update);
-      window.removeEventListener("offline", update);
-    };
-  }, []);
+function getSnapshot() {
+  return navigator.onLine;
+}
+
+function getServerSnapshot() {
+  return true;
+}
+
+export function IndikatorOffline({ className }: { className?: string }) {
+  const online = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const sedangOffline = online === false;
   const Ikon = sedangOffline ? CloudOff : Cloud;
 
   return (
-    <span
-      role="status"
-      aria-live="polite"
+    <output
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium shadow-sm",
         sedangOffline
@@ -41,11 +45,7 @@ export function IndikatorOffline({ className }: { className?: string }) {
       )}
     >
       <Ikon className="h-3.5 w-3.5" aria-hidden="true" />
-      {online === null
-        ? "Memeriksa koneksi"
-        : sedangOffline
-          ? "Mode Offline"
-          : "Online"}
-    </span>
+      {sedangOffline ? "Mode Offline" : "Online"}
+    </output>
   );
 }

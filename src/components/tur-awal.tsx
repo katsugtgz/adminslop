@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { HelpCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,16 +11,16 @@ export const TUR_AWAL_BUKA_EVENT = "tur-awal:buka";
 
 const STEP_TITLES = [
   "Selamat datang di EduAdmin Pro Premium",
-  "Pilih Satuan Pendidikan dari dashboard",
+  "Pilih Satuan Pendidikan dari Beranda",
   "Kelola Peserta Didik, PTK, dan data sekolah",
-  "Gunakan menu di dashboard untuk mengakses modul",
+  "Gunakan menu di Beranda untuk mengakses modul",
 ] as const;
 
 const STEP_DESCRIPTIONS = [
   "Portal administrasi sekolah untuk Guru dan Satuan Pendidikan di Indonesia.",
   "Pilih Satuan Pendidikan Aktif sebelum mengelola data sekolah.",
   "Setelah memilih, modul Peserta Didik, PTK, dan data sekolah akan aktif.",
-  "Akses setiap modul melalui kartu di dashboard sesuai peran Anda.",
+  "Akses setiap modul melalui kartu di Beranda sesuai peran Anda.",
 ] as const;
 
 type State = { mulai: boolean; langkah: number };
@@ -60,6 +60,7 @@ function tandaiSelesai(): void {
  */
 export function TurAwal() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     let selesai = false;
@@ -75,6 +76,14 @@ export function TurAwal() {
     return () => window.removeEventListener(TUR_AWAL_BUKA_EVENT, onBuka);
   }, []);
 
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (state.mulai && !dialog.open) dialog.showModal();
+    else if (!state.mulai && dialog.open) dialog.close();
+  }, [state.mulai]);
+
   const lewati = useCallback(() => {
     tandaiSelesai();
     dispatch({ type: "tutup" });
@@ -89,17 +98,16 @@ export function TurAwal() {
     }
   }, [state.langkah]);
 
-  if (!state.mulai) return null;
-
   const isLast = state.langkah === STEP_TITLES.length - 1;
 
   return (
-    <div
-      role="dialog"
+    <dialog
+      ref={dialogRef}
       aria-modal="true"
       aria-labelledby="tur-awal-judul"
       aria-describedby="tur-awal-deskripsi"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 focus-visible:outline-none sm:items-center"
+      onCancel={lewati}
+      className="m-0 fixed inset-0 z-50 flex items-end justify-center border-0 bg-black/50 p-4 focus-visible:outline-none sm:items-center"
     >
       <div className="w-full max-w-md rounded-t-xl border border-border bg-card p-6 text-card-foreground shadow-xl sm:rounded-xl">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -138,7 +146,7 @@ export function TurAwal() {
           </Button>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
 

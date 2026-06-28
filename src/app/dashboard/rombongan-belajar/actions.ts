@@ -47,6 +47,7 @@ import {
 import { getTahunAjaranAktif, getSemesterAktif, cariTahunAjaranById } from "@/db/queries/tahun-ajaran";
 import { buatTingkat, cariTingkatBerikutnya, cariTingkatById } from "@/db/queries/tingkat";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/rombongan-belajar";
 
@@ -71,6 +72,7 @@ export async function simpanTingkatBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -116,6 +118,7 @@ export async function simpanTingkatBaruAction(
 export async function simpanRombonganBelajarBaruAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -166,6 +169,7 @@ export async function simpanRombonganBelajarBaruAction(
 export async function tempatkanPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -252,6 +256,7 @@ export async function tempatkanPesertaDidikAction(
 export async function kenaikanTingkatAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -320,6 +325,7 @@ export async function kenaikanTingkatAction(
     }
 
     // 3. Find-or-create the next-grade rombel in the NEW TA (same nama).
+    // react-doctor-disable-next-line async-parallel: nextRombel depends on full ownership/tingkat chain; penempatan + audit depend on nextRombel.id, react-doctor/async-parallel
     const nextRombel = await cariAtauBuatRombonganBelajar(tx, {
       nama: rombel.nama,
       tingkatId: nextTingkat.id,
@@ -366,6 +372,7 @@ export async function kenaikanTingkatAction(
 export async function tinggalTingkatAction(
   formData: FormData
 ): Promise<void> {
+  await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
@@ -422,6 +429,7 @@ export async function tinggalTingkatAction(
 
     // Find-or-create the SAME-grade rombel in the NEW TA (same nama, same
     // tingkat — no progression).
+    // react-doctor-disable-next-line async-parallel: nextRombel depends on ownership chain; penempatan + audit depend on nextRombel.id, react-doctor/async-parallel
     const nextRombel = await cariAtauBuatRombonganBelajar(tx, {
       nama: rombel.nama,
       tingkatId: rombel.tingkatId,

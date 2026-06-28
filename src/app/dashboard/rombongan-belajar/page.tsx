@@ -134,7 +134,10 @@ export default async function Page() {
       </PageReveal>
 
       {bolehBuat && (
-        <PageReveal className="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
+        <PageReveal
+          id="form-rombongan-belajar"
+          className="flex flex-col gap-4 lg:flex-row lg:flex-wrap"
+        >
           <FormTingkatBaru action={simpanTingkatBaruAction} />
           <FormRombonganBelajarBaru
             action={simpanRombonganBelajarBaruAction}

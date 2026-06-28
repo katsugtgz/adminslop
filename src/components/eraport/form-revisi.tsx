@@ -34,6 +34,7 @@ export function FormRevisi({
           name="alasan"
           rows={2}
           required
+          aria-label="Alasan Revisi"
           className="rounded-md border border-input bg-background px-2 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>
@@ -49,6 +50,7 @@ export function FormRevisi({
           name="kontenPerubahan"
           type="text"
           placeholder='{"nilaiAkhir":85}'
+          aria-label="Konten Perubahan (opsional)"
           className="h-9 rounded-md border border-input bg-background px-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         />
       </div>

@@ -31,22 +31,20 @@ describe("KartuKuota (#12 / T7 — AC#5)", () => {
   });
 
   it("renders a progress bar reflecting the terpakai/batas ratio", () => {
-    const { container } = render(
+    render(
       <KartuKuota kuota={kuota({ terpakai: 5, batas: 10, tersisa: 5 })} />
     );
-    const bar = container.querySelector('[role="progressbar"]');
-    expect(bar).not.toBeNull();
+    const bar = screen.getByRole("progressbar");
     // 5/10 = 50%
-    expect(bar).toHaveAttribute("aria-valuenow", "50");
-    expect(bar).toHaveAttribute("aria-valuemin", "0");
-    expect(bar).toHaveAttribute("aria-valuemax", "100");
+    expect(bar).toHaveAttribute("value", "50");
+    expect(bar).toHaveAttribute("max", "100");
   });
 
   it("clamps the progress bar at 100% when terpakai exceeds batas", () => {
-    const { container } = render(
+    render(
       <KartuKuota kuota={kuota({ terpakai: 12, batas: 10, tersisa: -2 })} />
     );
-    const bar = container.querySelector('[role="progressbar"]')!;
-    expect(bar).toHaveAttribute("aria-valuenow", "100");
+    const bar = screen.getByRole("progressbar");
+    expect(bar).toHaveAttribute("value", "100");
   });
 });

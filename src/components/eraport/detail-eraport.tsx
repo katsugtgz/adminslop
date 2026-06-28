@@ -8,11 +8,18 @@ import type { DrafEraport } from "@/db/schema";
 import { FormRevisi } from "./form-revisi";
 import type { ServerAksi } from "./form-draf";
 
+// Module-scope formatter — Intl.DateTimeFormat is expensive to construct.
+const formatterTanggalMedium = new Intl.DateTimeFormat("id-ID", {
+  dateStyle: "medium",
+  timeStyle: "short",
+});
+
 /** Compact revision-history row view (append-only, newest-first). */
 function RiwayatRevisi({
   revisiList,
 }: {
   revisiList: readonly {
+    id: string;
     alasan: string;
     dibuatPada: Date;
     dibuatOleh: string | null;
@@ -25,11 +32,11 @@ function RiwayatRevisi({
         Riwayat Revisi
       </span>
       <ul className="flex flex-col gap-1.5">
-        {revisiList.map((r, i) => (
-          <li key={i} className="flex flex-col gap-0.5 text-xs">
+        {revisiList.map((r) => (
+          <li key={r.id} className="flex flex-col gap-0.5 text-xs">
             <span className="font-medium text-foreground">Alasan Revisi: {r.alasan}</span>
             <span className="font-mono text-[0.7rem] text-muted-foreground">
-              {new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short" }).format(r.dibuatPada)}
+              {formatterTanggalMedium.format(r.dibuatPada)}
               {r.dibuatOleh ? ` · ${r.dibuatOleh}` : ""}
             </span>
           </li>
@@ -54,6 +61,7 @@ export function DetailEraport({
 }: {
   eraport: DrafEraport;
   revisiList: readonly {
+    id: string;
     alasan: string;
     dibuatPada: Date;
     dibuatOleh: string | null;

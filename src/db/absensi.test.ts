@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg, { DatabaseError } from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db, type Tx } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import { cleanupTestTenants } from "./test-cleanup";
 
 // Load .env (Node native; no-op if missing).
 try {
@@ -108,6 +109,10 @@ describeOrSkip("absensi_harian table (#15, Wave 1 / T1)", () => {
 
     // 3. Client: app_user so RLS is enforced (no GLOBAL table dependency here).
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
   });
 
   /**

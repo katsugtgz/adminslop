@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
 import {
@@ -31,8 +30,12 @@ import { DaftarKomponenNilai } from "@/components/penilaian/daftar-komponen-nila
 import { DaftarNilaiAkhir } from "@/components/penilaian/daftar-nilai-akhir";
 import { DaftarPenilaian } from "@/components/penilaian/daftar-penilaian";
 import { FormKomponenNilai } from "@/components/penilaian/form-komponen-nilai";
-import { FormNilai, type NilaiExisting } from "@/components/penilaian/form-nilai";
+import { FormNilai } from "@/components/penilaian/form-nilai";
 import { FormPenilaian } from "@/components/penilaian/form-penilaian";
+import { BreadcrumbPenilaian } from "@/components/penilaian/breadcrumb-penilaian";
+import { HeaderPenilaian } from "@/components/penilaian/header-penilaian";
+import { KosongTahunAjaran } from "@/components/penilaian/kosong-tahun-ajaran";
+import { bangunLookupPenilaian } from "@/components/penilaian/lookup";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
 import { PageReveal } from "@/components/motion";
@@ -181,154 +184,42 @@ export default async function Page({
 
   if (!data.taAktif || !data.semester) {
     return (
-      <div className="flex flex-col gap-8">
-        <PageReveal
-          as="header"
-          className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
-        >
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
-            02 — Penilaian
-          </p>
-          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
-            Penilaian
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Satuan Pendidikan Aktif: {akses.membership.orgName} · Peran Anda:{" "}
-            {akses.membership.roleSlug}
-          </p>
-        </PageReveal>
-        <PageReveal delay={2}>
-          <p className="rounded-2xl border border-dashed border-accent/30 bg-accent/[0.03] p-6 text-center text-sm text-muted-foreground">
-            Aktifkan Tahun Ajaran terlebih dahulu.{" "}
-            <Link
-              href="/dashboard/tahun-ajaran"
-              className="font-medium text-accent underline-offset-4 hover:underline"
-            >
-              Buka Pengaturan Tahun Ajaran
-            </Link>
-          </p>
-        </PageReveal>
-      </div>
+      <KosongTahunAjaran
+        orgName={akses.membership.orgName}
+        roleSlug={akses.membership.roleSlug}
+      />
     );
   }
 
-  const ptkNama = new Map(data.ptks.map((p) => [p.id, p.nama]));
-  const mapelNama = new Map(data.mapel.map((m) => [m.id, m.nama]));
-  const rombelNama = new Map(data.rombels.map((r) => [r.id, r.nama]));
-  const tingkatNama = new Map(data.tingkats.map((t) => [t.id, t.nama]));
-  const pesertaNama = new Map(data.peserta.map((p) => [p.id, p.nama]));
-  const nilaiMap = new Map<string, NilaiExisting>(
-    data.nilaiRows.map((n) => [
-      n.pesertaDidikId,
-      { nilai: n.nilai, catatan: n.catatan },
-    ])
-  );
-
-  const barisBeban = data.beban.map((b) => ({
-    id: b.id,
-    ptkNama: ptkNama.get(b.ptkId) ?? "—",
-    mataPelajaranNama: mapelNama.get(b.mataPelajaranId) ?? "—",
-    targetNama: b.rombonganBelajarId
-      ? rombelNama.get(b.rombonganBelajarId) ?? "—"
-      : b.tingkatId
-        ? tingkatNama.get(b.tingkatId) ?? "—"
-        : "—",
-  }));
-
-  const bebanTerpilih = sp.bebanId
-    ? barisBeban.find((b) => b.id === sp.bebanId)
-    : undefined;
-  const komponenTerpilih = sp.komponenId
-    ? data.komponen.find((k) => k.id === sp.komponenId)
-    : undefined;
-  const penilaianTerpilih = sp.penilaianId
-    ? data.penilaian.find((p) => p.id === sp.penilaianId)
-    : undefined;
-
-  const labelSemester = data.semester === "ganjil" ? "Ganjil" : "Genap";
-  const tampilkanBreadcrumb = Boolean(
-    bebanTerpilih || komponenTerpilih || penilaianTerpilih
-  );
+  const {
+    barisBeban,
+    pesertaNama,
+    nilaiMap,
+    bebanTerpilih,
+    komponenTerpilih,
+    penilaianTerpilih,
+    labelSemester,
+    tampilkanBreadcrumb,
+  } = bangunLookupPenilaian(data, sp);
 
   return (
     <div className="flex flex-col gap-8 md:gap-10">
-      <PageReveal
-        as="header"
-        className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
-          }}
-        />
-        <div className="relative">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
-            02 — Penilaian
-          </p>
-          <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">
-            Penilaian
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Satuan Pendidikan Aktif: {akses.membership.orgName} · Periode Aktif:{" "}
-            {data.taAktif.nama} · Semester {labelSemester} · Peran Anda:{" "}
-            {akses.membership.roleSlug}
-            {bolehTulis ? "" : " (hanya baca)"}
-          </p>
-        </div>
-      </PageReveal>
+      <HeaderPenilaian
+        orgName={akses.membership.orgName}
+        taNama={data.taAktif.nama}
+        semester={labelSemester}
+        roleSlug={akses.membership.roleSlug}
+        bolehTulis={bolehTulis}
+      />
 
       {tampilkanBreadcrumb && (
-        <PageReveal delay={2}>
-          <nav
-            aria-label="breadcrumb"
-            className="flex flex-wrap items-center gap-1 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm text-muted-foreground shadow-warm"
-          >
-            <Link
-              href="/dashboard/penilaian"
-              className="font-medium text-foreground underline-offset-4 hover:text-accent hover:underline"
-            >
-              Penilaian
-            </Link>
-            {bebanTerpilih && (
-              <>
-                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
-                <Link
-                  href={`/dashboard/penilaian?bebanId=${encodeURIComponent(bebanTerpilih.id)}`}
-                  className="underline-offset-4 hover:text-accent hover:underline"
-                >
-                  {isAdmin
-                    ? `${bebanTerpilih.ptkNama} · ${bebanTerpilih.mataPelajaranNama}`
-                    : bebanTerpilih.mataPelajaranNama}
-                </Link>
-              </>
-            )}
-            {komponenTerpilih && (
-              <>
-                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
-                <Link
-                  href={`/dashboard/penilaian?bebanId=${encodeURIComponent(sp.bebanId!)}&komponenId=${encodeURIComponent(komponenTerpilih.id)}`}
-                  className="underline-offset-4 hover:text-accent hover:underline"
-                >
-                  {komponenTerpilih.nama}
-                </Link>
-              </>
-            )}
-            {penilaianTerpilih && (
-              <>
-                <ChevronRight className="h-4 w-4 text-accent/60" aria-hidden="true" />
-                <span
-                  className="font-medium text-accent"
-                  aria-current="page"
-                >
-                  {penilaianTerpilih.nama}
-                </span>
-              </>
-            )}
-          </nav>
-        </PageReveal>
+        <BreadcrumbPenilaian
+          bebanTerpilih={bebanTerpilih}
+          komponenTerpilih={komponenTerpilih}
+          penilaianTerpilih={penilaianTerpilih}
+          bebanId={sp.bebanId}
+          isAdmin={isAdmin}
+        />
       )}
 
       <PageReveal delay={2} className="flex flex-col gap-3">

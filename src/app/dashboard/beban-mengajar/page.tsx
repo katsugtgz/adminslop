@@ -301,7 +301,7 @@ export default async function Page() {
       )}
 
       {bolehKelola && (
-        <PageReveal>
+        <PageReveal id="form-beban-mengajar">
           <FormBebanMengajarBaru
             action={simpanBebanMengajarBaruAction}
             ptks={data.ptks}

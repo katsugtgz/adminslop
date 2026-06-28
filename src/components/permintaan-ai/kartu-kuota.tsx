@@ -32,22 +32,12 @@ export function KartuKuota({ kuota }: { kuota: InfoKuotaAi }) {
         </p>
       </div>
 
-      <div
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={persen}
+      <progress
+        value={persen}
+        max={100}
         aria-label={`Kuota AI: ${kuota.terpakai} dari ${kuota.batas}`}
-        className="h-2.5 w-full overflow-hidden rounded-full bg-muted"
-      >
-        <div
-          className="h-full rounded-full transition-[width]"
-          style={{
-            width: `${persen}%`,
-            backgroundImage: "var(--gradient-warm)",
-          }}
-        />
-      </div>
+        className="progress-warm"
+      />
       <p className="text-xs text-muted-foreground">
         Kuota dipakai setiap kali Permintaan AI selesai diproses.
       </p>
