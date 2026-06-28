@@ -1,0 +1,59 @@
+docs/adr/0003-mvp-ai-strategy.md
+  s_9cb7e4515f148c::t_2f0501e86d7523 12-14
+src/components/bank-soal/prompt-ai-eksternal.tsx
+  s_c6bbbdadbe2665::t_1feffa082cb47d 1-2,4-20,29-35,50-51,54-57,59,61-70,72-90,93-108,111-127,132-150,153-165,168-169,171-174
+  s_c6bbbdadbe2665::t_3f432551026a8a 3,36,41-49,52-53,58,60,71,91-92,109-110,128-131,151-152,166-167,170
+  s_c6bbbdadbe2665::t_917daf380b2a79 21-28,37-40
+src/app/dashboard/bank-soal/actions.ts
+  s_c6bbbdadbe2665::t_8bbb58bb0b955f 48-55,57-112,114-125,413-461,500-506
+  s_c6bbbdadbe2665::t_e5d3ecc3d66940 56,113,462-463,492-499
+  s_c6bbbdadbe2665::t_4328ba85e81108 464-491
+src/components/bank-soal/tempel-json-butir-soal.tsx
+  s_c6bbbdadbe2665::t_da11e06bcf9ebb 1-24,26-93
+  s_c6bbbdadbe2665::t_4405b711bb6943 25
+docs/adr/0007-byo-llm-clipboard-strategy.md
+  s_9cb7e4515f148c::t_2f0501e86d7523 1-40,46-54,60,66-143,149-183,186-187,190-223,225-226,229-265,273-300,304-335,339-340,343-344,357-385
+  s_9cb7e4515f148c::t_a4c18798e825e1 41-45,55-59,144-148,188-189,266-272,301-303
+  s_9cb7e4515f148c::t_b2d7e696d4ee63 61-65,184-185,224,227-228,336-338,341-342,345-356
+src/app/dashboard/bank-soal/actions.test.ts
+  s_c6bbbdadbe2665::t_27f508c8414fb3 710
+  s_c6bbbdadbe2665::t_1140f45c25e33c 706-709
+  s_c6bbbdadbe2665::t_8de22f83a516af 17,41,58-60,81,162,173,613-705,711-786
+  s_c9ad5b95723903::t_ca39c8c2d56d30 787
+src/app/dashboard/bank-soal/page.tsx
+  s_c6bbbdadbe2665::t_f5f655f8486285 20-21,28,244-255,257-267
+  s_c6bbbdadbe2665::t_2b25f03594f49b 256
+  s_c9ad5b95723903::t_bf8713a9aad6b1 268-269
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "fbbe836c9cdf43669e731e54695face3354d7412",
+  "prompts": {},
+  "sessions": {
+    "s_9cb7e4515f148c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2bbdab7ffeOg88XBhMXzH6a2",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_c6bbbdadbe2665": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2bbdaaeffeRHH1srhxQhjzco",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_c9ad5b95723903": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f0d11-be5b-7ad0-8493-cad7a19f3a02",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
