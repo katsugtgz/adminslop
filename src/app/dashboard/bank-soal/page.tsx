@@ -17,12 +17,15 @@ import { DaftarPaketSoal } from "@/components/bank-soal/daftar-paket-soal";
 import { FormButirSoal } from "@/components/bank-soal/form-butir-soal";
 import { FormPaketSoal } from "@/components/bank-soal/form-paket-soal";
 import { FormTambahButir } from "@/components/bank-soal/form-tambah-butir";
+import { PromptAiEksternal } from "@/components/bank-soal/prompt-ai-eksternal";
+import { TempelJsonButirSoal } from "@/components/bank-soal/tempel-json-butir-soal";
 
 import {
   arsipkanButirSoalAction,
   buatButirSoalAction,
   buatPaketSoalAction,
   hapusButirDariPaketAction,
+  imporButirSoalJsonAction,
   tambahButirKePaketAction,
 } from "./actions";
 
@@ -236,6 +239,32 @@ export default async function Page({
               tingkat={data.tingkatAll}
             />
           </div>
+        ) : null}
+
+        {bolehBuatButir ? (
+          <section
+            id="ai-eksternal"
+            className="mt-8 flex flex-col gap-4 rounded-2xl border border-border/60 bg-muted/20 p-5"
+          >
+            <div className="flex flex-col gap-1">
+              <h2 className="font-display text-2xl tracking-tight text-foreground">
+                AI Eksternal (Beta)
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Buat prompt, salin, jalankan di ChatGPT/Gemini/Claude Anda
+                sendiri, lalu tempel hasil JSON kembali ke sini. Platform tidak
+                mengirim data ke layanan AI eksternal, Anda yang mengontrol
+                transfer.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <PromptAiEksternal
+                mataPelajaran={mataPelajaran}
+                tingkat={data.tingkatAll}
+              />
+              <TempelJsonButirSoal action={imporButirSoalJsonAction} />
+            </div>
+          </section>
         ) : null}
 
         {butirIdFocus && data.butirFocus ? (

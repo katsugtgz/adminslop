@@ -14,6 +14,7 @@ const mocks = vi.hoisted(() => {
   const fakeTxLocal = { __tx: true };
   return {
     getAksesSaya: vi.fn(),
+    requireAuth: vi.fn(async () => ({ userId: "workos_u_1" })),
     getDb: vi.fn(() => ({ db: { __db: true } })),
     withTenant: vi.fn(
       async (
@@ -37,6 +38,7 @@ const mocks = vi.hoisted(() => {
 
 const {
   getAksesSaya,
+  requireAuth,
   getDb,
   withTenant,
   catatAudit,
@@ -52,6 +54,9 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+}));
+vi.mock("@/lib/auth/server", () => ({
+  requireAuth: mocks.requireAuth,
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
@@ -73,6 +78,7 @@ import {
   buatButirSoalAction,
   buatPaketSoalAction,
   hapusButirDariPaketAction,
+  imporButirSoalJsonAction,
   tambahButirKePaketAction,
   ubahButirSoalAction,
 } from "./actions";
@@ -153,6 +159,7 @@ function aksesAktif(
 
 beforeEach(() => {
   getAksesSaya.mockReset();
+  requireAuth.mockReset();
   getDb.mockReset();
   withTenant.mockReset();
   catatAudit.mockReset();
@@ -163,6 +170,7 @@ beforeEach(() => {
   tambahButirKePaket.mockReset();
   hapusButirDariPaket.mockReset();
   revalidatePath.mockReset();
+  requireAuth.mockResolvedValue({ userId: "workos_u_1" });
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(
     async (
@@ -600,5 +608,180 @@ describe("F. context resolution — non-active branches throw", () => {
       )
     ).rejects.toThrow(/Satuan Pendidikan Aktif belum dipilih/i);
     expect(buatPaketSoal).not.toHaveBeenCalled();
+  });
+});
+
+describe("G. imporButirSoalJsonAction", () => {
+  const validButir = {
+    mataPelajaranId: "mp_1",
+    tingkatId: "t_1",
+    jenis: "pg",
+    pertanyaan: "Berapakah 2+2?",
+    pilihan: { A: "3", B: "4", C: "5", D: "6" },
+    kunciJawaban: "B",
+    pembahasan: "2+2=4.",
+  };
+
+  it("rejects unauthenticated before context resolution", async () => {
+    requireAuth.mockRejectedValueOnce(new Error("Belum terautentikasi."));
+
+    await expect(
+      imporButirSoalJsonAction(null, formData({ jsonButir: "[]" }))
+    ).rejects.toThrow(/Belum terautentikasi/i);
+    expect(getAksesSaya).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("rejects no active tenant", async () => {
+    getAksesSaya.mockResolvedValue({ status: "denied" } as AksesSaya);
+
+    await expect(
+      imporButirSoalJsonAction(null, formData({ jsonButir: "[]" }))
+    ).rejects.toThrow(/Satuan Pendidikan Aktif belum dipilih/i);
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("rejects without bank_soal:buat permission", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("wali_kelas"));
+
+    await expect(
+      imporButirSoalJsonAction(null, formData({ jsonButir: "[]" }))
+    ).rejects.toThrow(/izin/i);
+    expect(buatButirSoal).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid JSON", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: "{" })
+    );
+
+    expect(hasil.ok).toBe(false);
+    expect(hasil.errors[0]).toMatch(/JSON tidak valid/i);
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-array JSON", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify(validButir) })
+    );
+
+    expect(hasil).toEqual({
+      ok: false,
+      tersimpan: 0,
+      gagal: 0,
+      errors: ["JSON harus berupa array butir soal."],
+    });
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("imports valid array successfully", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+    buatButirSoal
+      .mockResolvedValueOnce({ id: "bs_1" })
+      .mockResolvedValueOnce({ id: "bs_2" });
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify([validButir, validButir]) })
+    );
+
+    expect(hasil).toEqual({ ok: true, tersimpan: 2, gagal: 0, errors: [] });
+    expect(buatButirSoal).toHaveBeenCalledTimes(2);
+    expect(buatButirSoal).toHaveBeenCalledWith(
+      fakeTxRef,
+      expect.objectContaining({
+        mataPelajaranId: "mp_1",
+        tingkatId: "t_1",
+        jenis: "pg",
+        dibuatOleh: "workos_u_1",
+      })
+    );
+    const calls = buatButirSoal.mock.calls as unknown as [
+      unknown,
+      Record<string, unknown>,
+    ][];
+    expect(calls[0][1]).not.toHaveProperty("drafAiId");
+    expect(revalidatePath).toHaveBeenCalledWith("/dashboard/bank-soal");
+  });
+
+  it("skips invalid items and still imports valid ones", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({
+        jsonButir: JSON.stringify([
+          { ...validButir, pertanyaan: "" },
+          { ...validButir, jenis: "essay", pilihan: null },
+        ]),
+      })
+    );
+
+    expect(hasil.ok).toBe(true);
+    expect(hasil.tersimpan).toBe(1);
+    expect(hasil.gagal).toBe(1);
+    expect(hasil.errors).toContain("Butir 1: pertanyaan wajib diisi.");
+    expect(buatButirSoal).toHaveBeenCalledTimes(1);
+    expect(buatButirSoal).toHaveBeenCalledWith(
+      fakeTxRef,
+      expect.objectContaining({ jenis: "essay", pilihan: null })
+    );
+  });
+
+  it("records audit per import", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+    buatButirSoal
+      .mockResolvedValueOnce({ id: "bs_1" })
+      .mockResolvedValueOnce({ id: "bs_2" });
+
+    await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify([validButir, validButir]) })
+    );
+
+    expect(catatAudit).toHaveBeenCalledTimes(2);
+    expect(catatAudit).toHaveBeenNthCalledWith(
+      1,
+      TX,
+      expect.objectContaining({
+        aktor: "workos_u_1",
+        aksi: "impor-ai-eksternal",
+        target: "butir_soal:bs_1",
+        beban: {
+          provenance: expect.stringMatching(
+            /^eksternal-pengguna:workos_u_1:pg:/
+          ),
+        },
+      })
+    );
+  });
+
+  it("enforces tenant isolation through active membership orgId", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    await imporButirSoalJsonAction(
+      null,
+      formData({
+        tenantId: "org_B",
+        jsonButir: JSON.stringify([{ ...validButir, tenantId: "org_B" }]),
+      })
+    );
+
+    expect(withTenant).toHaveBeenCalledWith(
+      expect.anything(),
+      "org_A",
+      expect.any(Function)
+    );
+    expect(buatButirSoal).toHaveBeenCalledWith(
+      fakeTxRef,
+      expect.not.objectContaining({ tenantId: "org_B" })
+    );
   });
 });

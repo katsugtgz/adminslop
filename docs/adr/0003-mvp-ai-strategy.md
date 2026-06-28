@@ -9,7 +9,9 @@ real LLM call may be wired** until the owner accepts a provider, a key-managemen
 posture, and the data-handling terms in this ADR. This ADR must be moved to
 **Accepted** (real provider chosen, Option C) or superseded before any
 production tenant is invited to use the Permintaan AI module against a live
-model.
+model. Option D's reasoning is partially superseded by ADR 0007 for the
+BYO-LLM-via-Clipboard sub-pattern, but remains in force for any direct API call
+/ BYO-key model.
 
 ## Date
 
