@@ -65,14 +65,12 @@ describeOrSkip("seed dev (e2e fixture)", () => {
     }
   }, 60_000);
 
+  // afterAll: pertahankan data seed demo. cleanupTenant + DELETE satuan
+  // sebelumnya menghapus demo tenant setelah test, tapi data dev runtime
+  // (DEV_MEMBERSHIP_ALL + login pengguna) bergantung padanya. seed.test.ts
+  // idempoten: beforeAll already calls cleanupTenant+insert, jadi re-run
+  // tetap bersih. Hanya tutup pool.
   afterAll(async () => {
-    for (const demo of DEMO_TENANTS) {
-      await cleanupTenant(mig, demo.id);
-    }
-    await mig?.query(
-      "DELETE FROM satuan_pendidikan WHERE id IN ($1, $2)",
-      DEMO_TENANTS.map((demo) => demo.id),
-    );
     await mig?.end();
   });
 
