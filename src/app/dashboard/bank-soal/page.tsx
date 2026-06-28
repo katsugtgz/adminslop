@@ -229,11 +229,13 @@ export default async function Page({
           Butir Soal
         </h2>
         {bolehBuatButir && !butirIdFocus && !paketIdFocus ? (
-          <FormButirSoal
-            action={buatButirSoalAction}
-            mataPelajaran={mataPelajaran}
-            tingkat={data.tingkatAll}
-          />
+          <div id="form-butir-soal">
+            <FormButirSoal
+              action={buatButirSoalAction}
+              mataPelajaran={mataPelajaran}
+              tingkat={data.tingkatAll}
+            />
+          </div>
         ) : null}
 
         {butirIdFocus && data.butirFocus ? (
@@ -242,6 +244,7 @@ export default async function Page({
 
         <DaftarButirSoal
           butir={data.butirList}
+          bolehBuat={bolehBuatButir}
           bolehUbah={bolehUbahButir}
           arsipkanAction={arsipkanButirSoalAction}
           baseHref={baseHref}
@@ -263,17 +266,20 @@ export default async function Page({
           Paket Soal
         </h2>
         {bolehBuatPaket && !paketIdFocus ? (
-          <FormPaketSoal
-            action={buatPaketSoalAction}
-            mataPelajaran={mataPelajaran}
-            tingkat={data.tingkatAll}
-            tahunAjaran={data.tahunAjaranAll}
-          />
+          <div id="form-paket-soal">
+            <FormPaketSoal
+              action={buatPaketSoalAction}
+              mataPelajaran={mataPelajaran}
+              tingkat={data.tingkatAll}
+              tahunAjaran={data.tahunAjaranAll}
+            />
+          </div>
         ) : null}
 
         <DaftarPaketSoal
           paket={data.paketList}
           mapelMap={mapelMap}
+          bolehBuat={bolehBuatPaket}
           baseHref={baseHref}
         />
 

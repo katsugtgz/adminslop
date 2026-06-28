@@ -1,5 +1,6 @@
 import { Trash2 } from "lucide-react";
 
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import { Button } from "@/components/ui/button";
 import type { Semester } from "@/db/queries/beban-mengajar";
 
@@ -47,9 +48,11 @@ export function DaftarBebanMengajar({
 }) {
   if (beban.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Beban Mengajar.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Beban Mengajar."
+        href={bolehKelola ? "#form-beban-mengajar" : "/dashboard/akses"}
+        labelTautan={bolehKelola ? "Tambah Beban Mengajar" : "Buka Akses"}
+      />
     );
   }
 

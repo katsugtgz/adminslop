@@ -1,10 +1,11 @@
 import path from "node:path";
 
 import pg from "pg";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db } from "../client";
 import { runMigrations } from "../migrate";
+import { cleanupTestTenants } from "../test-cleanup";
 
 import {
   buatRombonganBelajar,
@@ -103,6 +104,10 @@ describeOrSkip(
 
       // 3. App client uses the non-superuser role — RLS enforced.
       db = createDb(APP_URL!).db;
+    });
+
+    afterAll(async () => {
+      await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
     });
 
     // 1. buatRombonganBelajar round-trip: insert referencing tingkat + TA, then

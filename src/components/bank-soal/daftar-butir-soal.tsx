@@ -1,6 +1,7 @@
 import { Archive } from "lucide-react";
 import Link from "next/link";
 
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import { Button } from "@/components/ui/button";
 import { CardHover } from "@/components/motion";
 import type { ButirSoal } from "@/db/schema";
@@ -27,11 +28,13 @@ const BADGE_STATUS: Record<string, string> = {
  */
 export function DaftarButirSoal({
   butir,
+  bolehBuat,
   bolehUbah,
   arsipkanAction,
   baseHref,
 }: {
   butir: readonly ButirSoal[];
+  bolehBuat: boolean;
   bolehUbah: boolean;
   arsipkanAction: ServerAksi;
   /** Prefix for the per-row drill-down link (searchParams-based routing). */
@@ -39,9 +42,11 @@ export function DaftarButirSoal({
 }) {
   if (butir.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/30 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Butir Soal.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Butir Soal."
+        href={bolehBuat ? "#form-butir-soal" : undefined}
+        labelTautan={bolehBuat ? "Tambah Soal" : undefined}
+      />
     );
   }
 

@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg, { DatabaseError } from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db, type Tx } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import { cleanupTestTenants } from "./test-cleanup";
 
 // Load .env (Node native; no-op if missing).
 try {
@@ -120,6 +121,10 @@ describeOrSkip("penilaian + nilai tables (#11, Wave 1 / T1)", () => {
     // 3. Clients: migrator (GLOBAL mata_pelajaran writes) + app_user (RLS).
     migDb = createDb(MIG_URL!).db;
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
   });
 
   /** Seed a GLOBAL mata_pelajaran with a unique nama (migDb — SELECT-only for app). */

@@ -1,3 +1,4 @@
+import { KosongDenganTautan } from "@/components/kosong-dengan-tautan";
 import type { Tingkat } from "@/db/schema";
 
 /**
@@ -17,9 +18,11 @@ export function DaftarTingkat({
 }) {
   if (tingkat.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-border bg-muted/40 p-8 text-center text-sm text-muted-foreground">
-        Belum ada Tingkat.
-      </p>
+      <KosongDenganTautan
+        pesan="Belum ada Tingkat."
+        href="/dashboard/kurikulum"
+        labelTautan="Buka Kurikulum"
+      />
     );
   }
 

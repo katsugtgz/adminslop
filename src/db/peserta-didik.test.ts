@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg, { DatabaseError } from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import { cleanupTestTenants } from "./test-cleanup";
 
 // Load .env (Node native; no-op if missing).
 try {
@@ -94,6 +95,10 @@ describeOrSkip("peserta didik tables (#7, Wave 1 / T2)", () => {
 
     // 3. App client uses the non-superuser role — RLS enforced.
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
   });
 
   // 1. CRUD + seed: peserta_didik + riwayat_status round-trip, all fields.

@@ -66,6 +66,13 @@ describeOrSkip("seed dev (e2e fixture)", () => {
   }, 60_000);
 
   afterAll(async () => {
+    for (const demo of DEMO_TENANTS) {
+      await cleanupTenant(mig, demo.id);
+    }
+    await mig?.query(
+      "DELETE FROM satuan_pendidikan WHERE id IN ($1, $2)",
+      DEMO_TENANTS.map((demo) => demo.id),
+    );
     await mig?.end();
   });
 

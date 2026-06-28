@@ -2,11 +2,12 @@ import path from "node:path";
 
 import pg from "pg";
 import { eq } from "drizzle-orm";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createDb, withTenant, type Db, type Tx } from "../client";
 import { runMigrations } from "../migrate";
 import * as schema from "../schema";
+import { cleanupTestTenants } from "../test-cleanup";
 
 import {
   catatAbsensi,
@@ -137,6 +138,10 @@ describeOrSkip(
       _tingkatBId = bIds.tingkatId;
       _taBId = bIds.taId;
       rombelBId = bIds.rombelId;
+    });
+
+    afterAll(async () => {
+      await cleanupTestTenants(MIG_URL!, [SEED_A, SEED_B]);
     });
 
     /** Mint a fresh peserta_didik in SEED_A — keeps cases isolated. */

@@ -1,6 +1,8 @@
 import { getWorkOS } from "@workos-inc/authkit-nextjs";
+import { inArray } from "drizzle-orm";
 
 import { getDb } from "@/db/client";
+import { DEMO_TENANTS } from "@/db/seed/tenant";
 import * as schema from "@/db/schema";
 import type { Membership, RoleSlug } from "./types";
 
@@ -78,7 +80,10 @@ class WorkOSMembershipProvider implements MembershipProvider {
 class DevMembershipProvider implements MembershipProvider {
   async listForUser(): Promise<Membership[]> {
     const { db } = getDb();
-    const rows = await db.select().from(schema.satuanPendidikan);
+    const rows = await db
+      .select()
+      .from(schema.satuanPendidikan)
+      .where(inArray(schema.satuanPendidikan.id, DEMO_TENANTS.map((t) => t.id)));
     return rows.map((row) => ({
       orgId: row.id,
       orgName: row.nama,

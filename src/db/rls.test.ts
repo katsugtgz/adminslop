@@ -3,11 +3,12 @@ import path from "node:path";
 
 import pg from "pg";
 import { eq, sql } from "drizzle-orm";
-import { beforeAll, describe, expect, expectTypeOf, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, expectTypeOf, it } from "vitest";
 
 import { catatAudit, createDb, withTenant, type Db } from "./client";
 import { runMigrations } from "./migrate";
 import * as schema from "./schema";
+import { cleanupTestTenants } from "./test-cleanup";
 import type { RoleSlug } from "../lib/auth/types";
 
 // Load .env (Node native; no-op if missing).
@@ -44,6 +45,10 @@ describeOrSkip("tenant DB/RLS spine (#3)", () => {
 
     // 3. App client uses the non-superuser role — RLS enforced.
     db = createDb(APP_URL!).db;
+  });
+
+  afterAll(async () => {
+    await cleanupTestTenants(MIG_URL!, ["org_A", "org_B"]);
   });
 
   itOrSkip("no tenant context -> read returns zero rows (RLS blocks)", async () => {
