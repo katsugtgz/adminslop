@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { BadanEraport } from "@/components/cetak/badan-eraport";
 import { Button } from "@/components/ui/button";
 import type { DrafEraport } from "@/db/schema";
 
@@ -86,13 +87,11 @@ export function DetailEraport({
 
       {terbuka ? (
         <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-background p-4">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
               Konten
             </span>
-            <pre className="overflow-x-auto rounded-lg bg-muted/40 p-2 text-xs">
-              {JSON.stringify(eraport.konten, null, 2)}
-            </pre>
+            <BadanEraport konten={eraport.konten} varian="layar" />
           </div>
 
           {eraport.drafAiId ? (

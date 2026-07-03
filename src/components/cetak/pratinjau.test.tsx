@@ -8,12 +8,32 @@ import {
 } from "./pratinjau-eraport";
 import { hitungPengaturanEfektif } from "./pengaturan-eraport";
 
+// Audit-mandated konten contract — fixtures must use this realistic E-Raport
+// shape so the regression tests prove the report body is polished, not a
+// `<pre>{JSON.stringify(...)}</pre>` dump.
+function kontenEraportRealistis() {
+  return {
+    peserta_didik: {
+      nama: "Ahmad Budi Santoso",
+      nisn: "0012345678",
+      kelas: "VIII-A",
+    },
+    mata_pelajaran: [
+      { nama: "Matematika", nilai: 92.5, predikat: "A", catatan: "Sangat baik" },
+      { nama: "Bahasa Indonesia", nilai: 88.0, predikat: "B+", catatan: "Baik" },
+    ],
+    ekstrakurikuler: "Pramuka (Penegak)",
+    kehadiran: { sakit: 1, izin: 0, alpa: 0 },
+    catatan_wali_kelas: "Menunjukkan kemajuan yang konsisten semester ini.",
+  };
+}
+
 function fixture(over: Partial<KontenCetak> = {}): KontenCetak {
   return {
     eraportId: "er_1",
     semester: "ganjil",
     status: "terbit",
-    konten: { nilaiAkhir: 87.5, sumber: "nilai_akhir" },
+    konten: kontenEraportRealistis(),
     namaSatuanPendidikan: "Sekolah Unggul Nusantara",
     npsn: "20100001",
     alamat: "Jl. Merdeka No. 17",
@@ -117,5 +137,75 @@ describe("PratinjauEraport — AC#3 golden visual check", () => {
     );
     expect(screen.getAllByText(/Budi Santoso/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Kepala Sekolah/i)).toBeInTheDocument();
+  });
+});
+
+// Regression: raw-JSON rendering bug. The `[data-cetak-konten]` section must
+// render a polished E-Raport body — student identity, subject rows, attendance,
+// wali-kelas notes — and MUST NOT dump `<pre>{JSON.stringify(konten)}</pre>`.
+// These assertions FAIL against the current implementation (lines 89-91 of
+// pratinjau-eraport.tsx) and drive the polished-render fix.
+describe("PratinjauEraport — konten body is a polished report, not JSON", () => {
+  it("renders student identity labels + values inside [data-cetak-konten]", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    expect(body!.textContent).toMatch(/Ahmad Budi Santoso/);
+    expect(body!.textContent).toMatch(/0012345678/);
+    expect(body!.textContent).toMatch(/VIII-A/);
+    expect(body!.textContent).toMatch(/Nama/i);
+    expect(body!.textContent).toMatch(/NISN/i);
+    expect(body!.textContent).toMatch(/Kelas/i);
+  });
+
+  it("renders each mata_pelajaran row (nama + nilai + predikat) inside [data-cetak-konten]", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    expect(body!.textContent).toMatch(/Matematika/);
+    expect(body!.textContent).toMatch(/Bahasa Indonesia/);
+    expect(body!.textContent).toMatch(/92\.5/);
+    expect(body!.textContent).toMatch(/88/);
+    expect(body!.textContent).toMatch(/Predikat/i);
+  });
+
+  it("renders kehadiran labels (Sakit/Izin/Alpa) + values inside [data-cetak-konten]", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    expect(body!.textContent).toMatch(/Sakit/i);
+    expect(body!.textContent).toMatch(/Izin/i);
+    expect(body!.textContent).toMatch(/Alpa/i);
+  });
+
+  it("renders catatan_wali_kelas as readable note text inside [data-cetak-konten]", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    expect(body!.textContent).toMatch(
+      /Menunjukkan kemajuan yang konsisten/
+    );
+  });
+
+  it("does NOT render a <pre> element inside [data-cetak-konten]", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    expect(body!.querySelector("pre")).toBeNull();
+  });
+
+  it("does NOT leak raw JSON syntax (quoted keys, braces) into [data-cetak-konten] text", () => {
+    const { container } = render(<PratinjauEraport konten={fixture()} />);
+    const body = container.querySelector("[data-cetak-konten]");
+    expect(body).not.toBeNull();
+    const teks = body!.textContent ?? "";
+    // JSON-stringify leaks `"peserta_didik":`, `"nama":`, `{`, `}` — none belong
+    // in a polished report body.
+    expect(teks).not.toMatch(/"peserta_didik":/);
+    expect(teks).not.toMatch(/"mata_pelajaran":/);
+    expect(teks).not.toMatch(/"nama":/);
+    expect(teks).not.toMatch(/"catatan_wali_kelas":/);
+    expect(teks).not.toMatch(/"kehadiran":/);
+    expect(teks).not.toMatch(/[{}]/);
   });
 });

@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import type { KontenCetak } from "@/db/queries/cetak";
 
+import { BadanEraport } from "./badan-eraport";
 import { hitungPengaturanEfektif } from "./pengaturan-eraport";
 
 /**
@@ -86,9 +87,7 @@ export function PratinjauEraport({
           data-cetak-konten
           className="flex flex-col gap-3 text-sm leading-relaxed"
         >
-          <pre className="whitespace-pre-wrap break-words font-sans text-sm">
-            {JSON.stringify(konten.konten, null, 2)}
-          </pre>
+          <BadanEraport konten={konten.konten} varian="cetak" />
         </section>
 
         <footer

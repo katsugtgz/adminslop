@@ -268,7 +268,7 @@ describe("C. namaFilePdf — ASCII filename derivation", () => {
 });
 
 describe("D. kontenKeBarisPdf — payload → body lines", () => {
-  it("14. emits header label, optional NPSN/alamat, semester, status, format, and konten JSON lines", () => {
+  it("14. emits header label, optional NPSN/alamat, semester, status, format, and polished report lines (NOT raw JSON)", () => {
     const baris = kontenKeBarisPdf(KONTEN_A);
     const joined = baris.map((b) => b.teks).join("\n");
     expect(joined).toContain("E-Raport (Pratinjau Cetak)");
@@ -277,9 +277,25 @@ describe("D. kontenKeBarisPdf — payload → body lines", () => {
     expect(joined).toContain("Semester: 2024/1 (Ganjil)");
     expect(joined).toContain("Status: terbit");
     expect(joined).toContain("Format: A4");
-    expect(joined).toContain('"nama": "Ahmad Budi Santoso"');
-    expect(joined).toContain('"nama": "Matematika"');
-    expect(joined).toContain('"catatan_wali_kelas"');
+    // Polished report body — student identity, subjects, attendance, notes must
+    // appear as readable Bahasa lines, NOT as `"key": value` JSON.
+    expect(joined).toContain("Ahmad Budi Santoso");
+    expect(joined).toContain("0012345678");
+    expect(joined).toContain("VIII-A");
+    expect(joined).toContain("Matematika");
+    expect(joined).toContain("Bahasa Indonesia");
+    expect(joined).toContain("Sakit");
+    expect(joined).toContain("Izin");
+    expect(joined).toContain("Alpa");
+    expect(joined).toContain("Menunjukkan kemajuan yang konsisten");
+    // Regression guards — raw JSON syntax MUST NOT leak into the PDF body.
+    expect(joined).not.toMatch(/"peserta_didik":/);
+    expect(joined).not.toMatch(/"mata_pelajaran":/);
+    expect(joined).not.toMatch(/"nama":/);
+    expect(joined).not.toMatch(/"catatan_wali_kelas":/);
+    expect(joined).not.toMatch(/"kehadiran":/);
+    expect(joined).not.toMatch(/^{/m);
+    expect(joined).not.toMatch(/}$/m);
   });
 
   it("15. omits NPSN/Alamat lines when those fields are null", () => {
