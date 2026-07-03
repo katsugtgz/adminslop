@@ -97,6 +97,89 @@ order in `hyperplan/plan.md`. `src/middleware.ts` matchers already gate
   `test:`) — see `hyperplan/plan.md` §5.
 - Never commit secrets; `.env` is gitignored. Use `.env.example` for placeholders.
 
+## Browser QA
+
+- All browser-visible QA in this repo must use **`agent-browser`**. No other
+  browser driver is approved by default.
+- Before any QA pass, run **`agent-browser skills get --all`** as the first
+  tooling check to confirm available skills and capabilities.
+- When a browser binary is required, use a **verified** exec path. On this
+  machine the normal Chrome binary is a universal/arm64 Mach-O at:
+  - `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
+  - Chrome-for-Testing is also allowed if installed; confirm the path exists
+    before invoking either binary.
+- A complete browser QA pass produces **four kinds of evidence**, not
+  screenshots alone:
+  1. **Screenshot** — visual capture via `agent-browser screenshot`.
+  2. **Accessibility/semantic snapshot** — `agent-browser snapshot` (the
+     a11y tree with element refs). Required for every UI change so roles,
+     labels, names, and ref targets are verified, not just pixels.
+  3. **Interaction smoke path:** a real user interaction via
+     `agent-browser click` / `type` / `fill` / `press` against live
+     elements found in the a11y snapshot. Direct navigation, opening a
+     URL (`agent-browser open`, `goto`, address-bar entry), or a
+     successful page load is **not** interaction evidence and never
+     counts as a pass on its own. "Looks right" from markup alone is
+     also not a pass. If the real interaction is blocked or fails
+     (element missing, click refused, auth wall, timeout), report that
+     interaction as **blocked/failed** with the screenshot, snapshot,
+     and console evidence of the failure. Do not substitute direct
+     navigation or a page-load for the required interaction.
+  4. **Console and network observations** when relevant — capture
+      `agent-browser eval` output, console errors/warnings, and failing
+      network requests (4xx/5xx) that bear on the change.
+- **QA evidence artifacts default to `/tmp`** (or another external temp
+  path), not inside the repo. Read-only QA tasks must not create
+  artifact directories in the working tree (e.g. `.qa-smoke-artifacts/`,
+  `qa-output/`, per-run screenshot folders under `src/`, `docs/`, or any
+  repo path). Write QA artifacts into the repo only when the user
+  explicitly asks to keep them there. Note: `scrape/` is owner-approved
+  product recon, not a QA artifact dump.
+- Subagents that perform visual inspection of screenshots **must** load the
+  `vision-9router` skill. Vision-blind models cannot judge screenshots
+  reliably without vision tooling, so do not attempt visual verdicts without
+  it.
+- **Do not use Playwright** for this repo's browser QA. Playwright is not an
+  approved option here. This rule holds unless a human explicitly overrides
+  it in a later message.
+
+## Implementation verification (TDD)
+
+- After implementing code, **trigger the `tdd` skill** and run the relevant
+  tests for the behavior you changed. Untested code is not done.
+- Implementations must be **clickable, tryable, and tested** where applicable.
+  Anything shipping a UI, an API route, a server action, or any user-facing
+  path must be exercised end-to-end before claiming completion.
+- For browser-visible changes, verify the click/interaction path through the
+  approved **Browser QA** workflow above (`agent-browser` + `vision-9router`),
+  not by reading markup alone. No visual verdict without `vision-9router`.
+- Pure docs or config changes carry no test suite. When skipping verification
+  for that reason, say so explicitly.
+
+## Workflow preferences
+
+Persistent defaults for AI-assisted (vibe-coding) prompts. Hold across every
+task unless the user overrides them inline.
+
+- **Delegate-first.** For non-trivial implementation, fan out exploration
+  and parallelizable work to background sub-agents (`explore`, `librarian`,
+  feature specialists) and synthesize their results. Don't serially do what
+  can run in parallel. Don't re-search what a delegated agent is already
+  investigating.
+- **No implementation without explicit instruction.** Default action for
+  "look into X" / "review Y" / "plan Z" is analysis and a recommendation,
+  not code edits. Do not write or modify app source, tests, configs, or env
+  unless the user asked for that change.
+- **TDD after implementation.** Once code lands, follow the
+  `Implementation verification (TDD)` workflow above. Untested code is not
+  done; green tests are required before claiming completion.
+- **UI/browser-visible work must be clickable, tryable, and tested** end to
+  end through the Browser QA workflow, not just compiled or lint-clean.
+- **Report blockers honestly.** If work cannot proceed because of auth,
+  missing data, missing env, or any external dependency, stop and say so
+  explicitly. Don't paper over blockers with partial output, silent
+  fallbacks, or guesses.
+
 ## Agent skills
 
 ### Issue tracker
