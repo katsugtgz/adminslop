@@ -1,0 +1,47 @@
+AGENTS.md
+  s_e27c864b779199::t_1c5ba2731a07c1 106-116,128
+  s_19f07f51bf4cf5::t_56192284b79349 117-127,129-137
+  s_4155d359508a03::t_f046658bb2dd87 100-105,138-145
+  s_cf2e0b0f314f01::t_9c926977ae14a6 146-158
+  s_e27c864b779199::t_6b3d865b491018 159-182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "d18d411a4885be7c6c82a5c71f009dd60d8c011d",
+  "prompts": {},
+  "sessions": {
+    "s_19f07f51bf4cf5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ed4299edffeaoT8zqt6fV35Um",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_4155d359508a03": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2839595ffextlNV42TiZj700",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_cf2e0b0f314f01": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f1c5855effeoMtHUIcSRXUSBc",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_e27c864b779199": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0ed53e0f1ffek3bcpt6OF0YmQq",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
