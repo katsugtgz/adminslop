@@ -1,0 +1,64 @@
+src/components/eraport/detail-eraport.test.tsx
+  s_df42a797610f1f::t_aa5e4e4775f0e3 1-142,145-149,151-152
+  s_df42a797610f1f::t_4531ab051c1672 143-144,150
+src/components/cetak/pratinjau-eraport.tsx
+  s_803a53ac83dfd3::t_4c24dbc5716dcc 90
+  s_803a53ac83dfd3::t_feaa874da98dba 5
+src/components/cetak/badan-eraport.tsx
+  s_803a53ac83dfd3::t_a7717e5a37e491 1-441
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/pdf/helpers.ts
+  s_18ad4022ecb4df::t_fdefbbf1f3690c 17-43,45-48,60-102,104-124
+  s_18ad4022ecb4df::t_9a3ce986327400 44
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/pdf/route.test.ts
+  s_df42a797610f1f::t_0330d53c32e22d 271,280-298
+src/components/cetak/pratinjau.test.tsx
+  s_df42a797610f1f::t_35ab8ef200ffeb 14-30,36
+  s_df42a797610f1f::t_c980e8dc7c6a72 185-187
+  s_df42a797610f1f::t_2d93dac2bb9dd9 142-184,188-208,210
+  s_df42a797610f1f::t_e576fdfc458fc2 209
+  s_df42a797610f1f::t_d72a418714a9fb 11-13
+  s_c9ad5b95723903::t_1605174e0c3be1 211
+src/components/eraport/detail-eraport.tsx
+  s_803a53ac83dfd3::t_cc72713ce39245 5
+  s_803a53ac83dfd3::t_fe522e5000318a 90,94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c372cdff143f39555345bad41401b7cd64b108a7",
+  "prompts": {},
+  "sessions": {
+    "s_18ad4022ecb4df": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2772eb2ffemIiverP7jsHV03",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_803a53ac83dfd3": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f2772ee0ffeytHneSULBZXjGB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_c9ad5b95723903": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f0d11-be5b-7ad0-8493-cad7a19f3a02",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_df42a797610f1f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0f28048a1ffeE1P5oeIUl9o7ZN",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
