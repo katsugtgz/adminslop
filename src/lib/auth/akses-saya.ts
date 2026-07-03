@@ -3,7 +3,11 @@ import { cariPenggunaByUserId, loadAksesPengguna } from "@/db/queries/akses";
 import type { Pengguna } from "@/db/schema";
 
 import { evaluasiAkses, type KeputusanAkses } from "./otorisasi";
-import { getActiveTenantContext, getAuthenticatedUserId } from "./server";
+import {
+  getActiveTenantContext,
+  getAuthenticatedUserId,
+  requireAuth,
+} from "./server";
 import type { IzinSlug, Membership } from "./types";
 
 /**
@@ -18,7 +22,7 @@ import type { IzinSlug, Membership } from "./types";
  * (T5) re-invoke it server-side. Never trust client-supplied claims.
  */
 export type AksesSaya =
-  | { readonly status: "denied" }
+  | { readonly status: "denied"; readonly authenticated: boolean }
   | {
       readonly status: "choose";
       readonly memberships: readonly Membership[];
@@ -40,6 +44,13 @@ export type AksesSaya =
     };
 
 /**
+ * The active (tenant-resolved, pengguna-loaded) branch of {@linkcode AksesSaya}.
+ * Extracted as a named alias so {@linkcode requireAksesAktif} and callers can
+ * annotate the narrowed form without restating the full union.
+ */
+export type AksesAktif = Extract<AksesSaya, { status: "active" }>;
+
+/**
  * Server-side authorization composition point (T4, Wave 3 of #6). Composes the
  * Wave 1-2 layers — tenant resolution + authenticated user + the akses
  * repository + the pure evaluator — into one answer consumed by server actions
@@ -52,7 +63,9 @@ export type AksesSaya =
  */
 export async function getAksesSaya(): Promise<AksesSaya> {
   const ctx = await getActiveTenantContext();
-  if (ctx.status === "denied") return { status: "denied" };
+  if (ctx.status === "denied") {
+    return { status: "denied", authenticated: ctx.authenticated };
+  }
   if (ctx.status === "choose") {
     return { status: "choose", memberships: ctx.memberships };
   }
@@ -62,10 +75,11 @@ export async function getAksesSaya(): Promise<AksesSaya> {
 
   const userId = await getAuthenticatedUserId();
   if (userId === null) {
-    // Session vanished between getActiveTenantContext and now (clock boundary
-    // between two withAuth reads). Treat as denied rather than throwing — a
-    // missing session is never a 500, it is an authorization outcome.
-    return { status: "denied" };
+    // Clock boundary: session vanished between getActiveTenantContext's
+    // withAuth read and this one. Treat as denied (never a 500) and report
+    // authenticated=false — the newer read wins, and offering "Keluar" for a
+    // session that no longer exists would be a dead button.
+    return { status: "denied", authenticated: false };
   }
 
   const { db } = getDb();
@@ -112,4 +126,27 @@ export async function getAksesSaya(): Promise<AksesSaya> {
     pembatasan,
     boleh,
   };
+}
+
+/**
+ * Server-action authorization prologue (Decision 6). Composes
+ * {@linkcode requireAuth} + {@linkcode getAksesSaya} + the izin check, returning
+ * the narrowed {@linkcode AksesAktif}. Throws on the two deny outcomes
+ * (identity doc §12 — the action is the boundary, not the UI):
+ *  - "Satuan Pendidikan Aktif belum dipilih." when status is `denied`/`choose`.
+ *  - "Anda tidak memiliki izin untuk aksi ini." when `boleh(izin)` denies.
+ *
+ * Callers needing the {@linkcode KeputusanAkses} object (not just pass/fail)
+ * call `akses.boleh(...)` on the returned value; `evaluasiAkses` is pure.
+ */
+export async function requireAksesAktif(izin: IzinSlug): Promise<AksesAktif> {
+  await requireAuth();
+  const akses = await getAksesSaya();
+  if (akses.status !== "active") {
+    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+  }
+  if (!akses.boleh(izin).diizinkan) {
+    throw new Error("Anda tidak memiliki izin untuk aksi ini.");
+  }
+  return akses;
 }

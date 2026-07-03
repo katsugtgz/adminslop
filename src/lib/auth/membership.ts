@@ -24,9 +24,25 @@ const KNOWN_ROLES: ReadonlySet<string> = new Set([
  * `"guru"` — the least-privilege role (empty default izin) — rather than
  * bypassing the type system via `as RoleSlug`. This is defense-in-depth: an
  * unknown slug never silently gains admin powers. (Identity doc §6/§13.)
+ *
+ * `dev` belt-to-suspenders guard (ADR-0004 D1): the `dev` slug is a local-only
+ * shim gated by `DEV_MEMBERSHIP_ALL=true` and forbidden in production. The
+ * provider switch in `membershipProvider()` already throws if that env is set
+ * under `NODE_ENV=production`; this guard adds a second layer by refusing to
+ * surface `dev` from a membership row unless the same env gate is on. Without
+ * it, a stray `dev` role.slug on a real WorkOS OrganizationMembership (a
+ * misconfiguration or a transplanted row) would silently grant admin powers in
+ * any non-production environment.
  */
 function safeRoleSlug(slug: string | undefined | null): RoleSlug {
-  if (slug && KNOWN_ROLES.has(slug)) return slug as RoleSlug;
+  if (slug && KNOWN_ROLES.has(slug)) {
+    if (slug === "dev" && process.env.DEV_MEMBERSHIP_ALL !== "true") {
+      throw new Error(
+        "role.slug 'dev' ditolak: aktifkan DEV_MEMBERSHIP_ALL=true untuk menggunakan shim dev (ADR-0004 D1).",
+      );
+    }
+    return slug as RoleSlug;
+  }
   return "guru";
 }
 

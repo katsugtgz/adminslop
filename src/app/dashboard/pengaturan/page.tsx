@@ -20,7 +20,7 @@ export default async function PengaturanPage() {
   const ctx = await getActiveTenantContext();
 
   if (ctx.status === "denied") {
-    return <PembatasanAkses />;
+    return <PembatasanAkses authenticated={ctx.authenticated} />;
   }
 
   if (ctx.status === "choose") {

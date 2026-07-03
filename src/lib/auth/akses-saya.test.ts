@@ -77,17 +77,32 @@ beforeEach(() => {
 });
 
 describe("getAksesSaya (#6, T4 — authorization composition)", () => {
-  it("denied context -> {status:'denied'}; does not call userId resolver or repo", async () => {
-    mocks.getActiveTenantContext.mockResolvedValue({ status: "denied" });
+  it("denied context -> {status:'denied', authenticated}; does not call userId resolver or repo", async () => {
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "denied",
+      authenticated: false,
+    });
 
     const res = await getAksesSaya();
 
-    expect(res).toEqual({ status: "denied" });
+    expect(res).toEqual({ status: "denied", authenticated: false });
     expect(mocks.getAuthenticatedUserId).not.toHaveBeenCalled();
     expect(mocks.cariPenggunaByUserId).not.toHaveBeenCalled();
     expect(mocks.loadAksesPengguna).not.toHaveBeenCalled();
     expect(mocks.withTenant).not.toHaveBeenCalled();
     expect(mocks.evaluasiAkses).not.toHaveBeenCalled();
+  });
+
+  it("denied context threads authenticated=true through unchanged", async () => {
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "denied",
+      authenticated: true,
+    });
+
+    const res = await getAksesSaya();
+
+    expect(res).toEqual({ status: "denied", authenticated: true });
+    expect(mocks.getAuthenticatedUserId).not.toHaveBeenCalled();
   });
 
   it("choose context -> {status:'choose', memberships}; does not resolve user or repo", async () => {
@@ -284,6 +299,7 @@ describe("getAksesSaya (#6, T4 — authorization composition)", () => {
   it("active but getAuthenticatedUserId returns null mid-request -> denied (no throw)", async () => {
     // Defensive: session vanished between getActiveTenantContext and the
     // second withAuth read. Must not 500, must not load any tenant data.
+    // authenticated=false: the newer read wins, "Keluar" would be a dead button.
     const membership = m("org_A", "guru");
     mocks.getActiveTenantContext.mockResolvedValue({
       status: "active",
@@ -293,7 +309,7 @@ describe("getAksesSaya (#6, T4 — authorization composition)", () => {
 
     const res = await getAksesSaya();
 
-    expect(res).toEqual({ status: "denied" });
+    expect(res).toEqual({ status: "denied", authenticated: false });
     expect(mocks.cariPenggunaByUserId).not.toHaveBeenCalled();
     expect(mocks.loadAksesPengguna).not.toHaveBeenCalled();
     expect(mocks.withTenant).not.toHaveBeenCalled();

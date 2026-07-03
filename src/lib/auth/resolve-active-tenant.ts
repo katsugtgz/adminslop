@@ -6,6 +6,11 @@ import type { Membership, TenantResolution } from "./types";
  * (httpOnly cookie), re-validated against actual memberships on every call —
  * never trusted blindly.
  *
+ * `authenticated` is threaded straight through to the `denied` branch — the
+ * resolver itself is pure and has no I/O, so the caller (which already ran
+ * `withAuth`) supplies the bit. This keeps the "no session" vs "no Keanggotaan"
+ * disambiguation free of a second auth round-trip.
+ *
  * Rules:
  *   - no memberships            -> denied (Pembatasan Akses)
  *   - exactly one membership    -> active (auto-select)
@@ -15,11 +20,12 @@ import type { Membership, TenantResolution } from "./types";
 export function resolveActiveTenant(input: {
   memberships: Membership[];
   requestedOrgId?: string | null;
+  authenticated: boolean;
 }): TenantResolution {
-  const { memberships, requestedOrgId } = input;
+  const { memberships, requestedOrgId, authenticated } = input;
 
   if (memberships.length === 0) {
-    return { status: "denied" };
+    return { status: "denied", authenticated };
   }
 
   if (memberships.length === 1) {

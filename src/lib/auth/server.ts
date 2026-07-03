@@ -18,19 +18,35 @@ export const ACTIVE_TENANT_MAX_AGE = 60 * 60 * 24 * 30; // 30 hari
  * tenant boundary is never derived from the browser.
  *
  * Must run on a route covered by `src/middleware.ts` (so `withAuth` works).
+ * The `denied` outcome carries an `authenticated` bit so the page layer can
+ * disambiguate "no session" from "signed in but no Keanggotaan" without a
+ * second `withAuth` round-trip.
  */
 export async function getActiveTenantContext(): Promise<TenantResolution> {
   const auth = await withAuth();
-  if (!auth.user) return { status: "denied" };
+  if (!auth.user) return { status: "denied", authenticated: false };
 
   const memberships = await listMembershipsForUser(auth.user.id);
   const requested =
     (await cookies()).get(ACTIVE_TENANT_COOKIE)?.value ?? null;
 
-  return resolveActiveTenant({ memberships, requestedOrgId: requested });
+  return resolveActiveTenant({
+    memberships,
+    requestedOrgId: requested,
+    authenticated: true,
+  });
 }
 
-/** The authenticated Pengguna's WorkOS user id, or null. */
+/**
+ * Thin session-only escape hatch — returns the authenticated Pengguna's WorkOS
+ * user id, or null. Narrow scope: this is NOT an authorization resolver. It
+ * does not touch Keanggotaan, tenant context, or izin. Use it only when you
+ * need the bare authenticated identity outside the composed `getAksesSaya`
+ * flow — e.g. the `signOutAction` audit row, a pre-tenant audit `aktor` field
+ * before membership is resolved, or a "is this session even real?" check that
+ * must not depend on tenant state. For any tenant-scoped decision, call
+ * {@linkcode getAksesSaya} or {@linkcode getActiveTenantContext} instead.
+ */
 export async function getAuthenticatedUserId(): Promise<string | null> {
   const auth = await withAuth();
   return auth.user?.id ?? null;

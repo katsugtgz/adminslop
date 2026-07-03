@@ -1,9 +1,8 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 
-const { getActiveTenantContext, getAuthenticatedUserId } = vi.hoisted(() => ({
+const { getActiveTenantContext } = vi.hoisted(() => ({
   getActiveTenantContext: vi.fn(),
-  getAuthenticatedUserId: vi.fn(),
 }));
 
 // Stop transitive authkit/next server-module loads (resolvable only inside Next).
@@ -28,7 +27,6 @@ vi.mock("@/components/dashboard-aktif", () => ({
 
 vi.mock("@/lib/auth/server", () => ({
   getActiveTenantContext,
-  getAuthenticatedUserId,
   ACTIVE_TENANT_COOKIE: "eapp_active_org",
   ACTIVE_TENANT_MAX_AGE: 2592000,
 }));
@@ -43,14 +41,14 @@ async function renderPage() {
 
 beforeEach(() => {
   getActiveTenantContext.mockReset();
-  getAuthenticatedUserId.mockReset();
 });
 
 describe("DashboardPage — render by tenant context (#4)", () => {
   it("denied (unauthenticated) -> Pembatasan Akses with a Masuk affordance", async () => {
-    getActiveTenantContext.mockResolvedValue({ status: "denied" });
-    // No session server-side -> the page must surface a login action.
-    getAuthenticatedUserId.mockResolvedValue(null);
+    getActiveTenantContext.mockResolvedValue({
+      status: "denied",
+      authenticated: false,
+    });
     await renderPage();
     expect(
       screen.getByRole("heading", { name: /Pembatasan Akses/i })
@@ -59,8 +57,10 @@ describe("DashboardPage — render by tenant context (#4)", () => {
   });
 
   it("denied (authenticated, no membership) -> Pembatasan Akses with Keluar", async () => {
-    getActiveTenantContext.mockResolvedValue({ status: "denied" });
-    getAuthenticatedUserId.mockResolvedValue("user_123");
+    getActiveTenantContext.mockResolvedValue({
+      status: "denied",
+      authenticated: true,
+    });
     await renderPage();
     expect(
       screen.getByRole("heading", { name: /Pembatasan Akses/i })

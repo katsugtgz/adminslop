@@ -132,6 +132,43 @@ admin_satuan_pendidikan | guru | wali_kelas | kepala_sekolah | dev
   vocabulary) via an owner-approved migration. This ADR records the gap; it
   does not close it.
 
+#### Amendment 2026-07-03 — Mechanical enforcement of the `dev` boundary
+
+The original text above describes the `dev` shim as "Enabled only by
+`DEV_MEMBERSHIP_ALL=true`; throws if set in `NODE_ENV=production`," citing the
+provider-switch guard at `membership.ts:44-54`. That guard alone is necessary
+but not sufficient: it only fires when the dev provider is *selected*. A
+`"dev"` slug arriving through any other path — a misconfigured staging env,
+a hand-edited `OrganizationMembership.role.slug`, a future code path that
+bypasses `membershipProvider()` — would pass through `safeRoleSlug`
+uncontested and silently mint **Peran Akses dev** for a real **Pengguna**.
+
+The mechanical-enforcement text is therefore tightened (see ADR 0008,
+Decision 3). `safeRoleSlug` in `src/lib/auth/membership.ts` now **throws**
+when `slug === "dev"` in **any** environment unless
+`process.env.DEV_MEMBERSHIP_ALL === "true"`, with the message:
+
+> Peran 'dev' hanya diizinkan saat DEV_MEMBERSHIP_ALL=true — kemungkinan
+> misconfiguration.
+
+The existing `"guru"` least-privilege fallback is **kept** for genuinely
+unknown slugs; the throw is scoped to `"dev"` only, because `"dev"` is the
+one slug whose presence outside the dev shim is always a misconfiguration,
+never a benign WorkOS role.
+
+This is **belt and suspenders** with the provider-switch guard at
+`membership.ts:44-54`. The two guards cover complementary failure modes:
+
+| Guard | Location | Fires when | Catches |
+|---|---|---|---|
+| Provider-switch | `membership.ts:44-54` | `DEV_MEMBERSHIP_ALL=true` selected under `NODE_ENV=production` | A production deploy that accidentally inherits the dev env var. |
+| Slug-level | `safeRoleSlug` (`membership.ts:28-31`) | Any `"dev"` slug observed without `DEV_MEMBERSHIP_ALL=true` | A `"dev"` slug arriving through any **other** path: misconfigured non-prod env, hand-edited WorkOS membership, or a future bypass of `membershipProvider()`. |
+
+Either guard alone leaves a hole; together they close both. Status of
+Decision 1 is unchanged (**Accepted**) — this amendment tightens the
+mechanism, not the policy. The closed-vocabulary CHECK-constraint follow-up
+above remains open and is unaffected.
+
 ### Decision 2 — Membership-change invalidation: per-request re-resolution — **Accepted (current behavior)**
 
 When a `tenant_role` changes or a membership is removed in WorkOS, the change

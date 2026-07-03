@@ -128,8 +128,15 @@ export interface Membership {
 /**
  * Outcome of resolving the active Satuan Pendidikan for an authenticated
  * Pengguna.
+ *
+ * The `denied` branch carries an `authenticated` disambiguation bit so callers
+ * (e.g. {@linkcode PembatasanAkses}) can branch between "no session at all"
+ * (offer Masuk) and "signed in but no Keanggotaan" (offer Keluar). The composed
+ * resolver ({@linkcode getActiveTenantContext}) already knows the answer — it
+ * called `withAuth` + `listOrganizationMemberships` — so threading the bit
+ * avoids a second `withAuth` round-trip at the page layer.
  */
 export type TenantResolution =
-  | { status: "denied" }
+  | { status: "denied"; authenticated: boolean }
   | { status: "choose"; memberships: Membership[] }
   | { status: "active"; membership: Membership };

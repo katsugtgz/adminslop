@@ -63,7 +63,7 @@ export default async function Page({
   const [{ id }, akses] = await Promise.all([params, getAksesSaya()]);
 
   if (akses.status === "denied") {
-    return <PembatasanAkses />;
+    return <PembatasanAkses authenticated={akses.authenticated} />;
   }
   if (akses.status === "choose") {
     return (

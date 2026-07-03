@@ -37,7 +37,7 @@ export default async function Page() {
   const akses = await getAksesSaya();
 
   if (akses.status === "denied") {
-    return <PembatasanAkses />;
+    return <PembatasanAkses authenticated={akses.authenticated} />;
   }
   if (akses.status === "choose") {
     return <PilihSatuanPendidikan memberships={[...akses.memberships]} />;

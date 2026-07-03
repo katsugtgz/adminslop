@@ -39,7 +39,7 @@ export default async function Page({
   ]);
 
   if (akses.status === "denied") {
-    return <PembatasanAkses />;
+    return <PembatasanAkses authenticated={akses.authenticated} />;
   }
   if (akses.status === "choose") {
     return <PilihSatuanPendidikan memberships={[...akses.memberships]} />;
