@@ -1,0 +1,96 @@
+src/app/dashboard/akses/page.tsx
+  s_ff25b47ef29922::t_10323eda22bc19 44
+src/app/dashboard/permintaan-ai/page.tsx
+  s_ff25b47ef29922::t_a46be4743229ae 51
+src/app/dashboard/perangkat-ajar/page.tsx
+  s_ff25b47ef29922::t_0bbcc85e02cee3 60
+src/app/dashboard/cetak/page.tsx
+  s_ff25b47ef29922::t_e023f3f955a9e3 40
+src/lib/auth/membership.ts
+  s_ff25b47ef29922::t_908674f3507a2e 27-35,38-45
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_ff25b47ef29922::t_c8a7ab4a368af5 38
+src/app/dashboard/notifikasi/page.tsx
+  s_ff25b47ef29922::t_1aeaa078d02907 44
+src/app/dashboard/penilaian/page.tsx
+  s_ff25b47ef29922::t_774d426c4267dd 93
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_ff25b47ef29922::t_49d09ff789f0f3 57
+src/lib/auth/akses-saya.test.ts
+  s_ff25b47ef29922::t_0a6a0a0126f543 302,312
+  s_ff25b47ef29922::t_0bc6529c337e47 80-84,88,96-105
+  s_ff25b47ef29922::t_3dcb2bc3b8d127 106-107
+src/app/dashboard/bank-soal/page.tsx
+  s_ff25b47ef29922::t_6154b5acceb387 62
+src/app/dashboard/beban-mengajar/page.tsx
+  s_ff25b47ef29922::t_64a0adec1fc5d8 68
+src/app/dashboard/peserta-didik/page.tsx
+  s_ff25b47ef29922::t_9b92529ab09e1e 40
+docs/adr/0004-workos-role-session-strategy.md
+  s_63910a8997a822::t_436123f714259a 142
+  s_63910a8997a822::t_1f19fc21eeb76f 135-141,143-171
+src/lib/auth/types.ts
+  s_ff25b47ef29922::t_9a22cf31d9a064 131-137,140
+src/lib/auth/server.ts
+  s_ff25b47ef29922::t_6d563fee701d5b 21-23,27,33-37,40-49
+src/lib/auth/resolve-active-tenant.test.ts
+  s_ff25b47ef29922::t_be756748a11205 13-19,23-25,33,40-42,51-55,62-66
+src/app/dashboard/peserta-didik/[id]/page.tsx
+  s_ff25b47ef29922::t_ecd44170abe0aa 66
+src/lib/auth/akses-saya.ts
+  s_ff25b47ef29922::t_d7a705354f3b34 82
+  s_ff25b47ef29922::t_b59749ab91392b 130-132,136-138,141-152
+  s_ff25b47ef29922::t_d82910cde6eda8 66-68
+  s_ff25b47ef29922::t_d34ea54203bee0 133-135,139-140
+  s_ff25b47ef29922::t_c46b49a0206a22 78-81
+  s_ff25b47ef29922::t_1a954dc568ce49 6-10,25,46-51
+  s_ff25b47ef29922::t_1ab05bcaafca36 52
+src/app/dashboard/eraport/page.tsx
+  s_ff25b47ef29922::t_9b7eb6f4a5259c 45
+docs/adr/0008-akses-module-deepening.md
+  s_63910a8997a822::t_4d55c3d75b9420 375-376
+  s_63910a8997a822::t_b2203192cea6d4 167
+  s_63910a8997a822::t_dc2858aaf2d8ce 1-166,168-374,377-379
+src/app/dashboard/page.tsx
+  s_ff25b47ef29922::t_339a285401a720 1,13-16
+src/app/dashboard/absensi/page.tsx
+  s_ff25b47ef29922::t_97d12803139bcd 121
+src/lib/auth/resolve-active-tenant.ts
+  s_ff25b47ef29922::t_50ce8248bc4eaf 9-13,23,25,28
+src/app/dashboard/cetak/pratinjau/[drafEraportId]/page.tsx
+  s_ff25b47ef29922::t_e6c926624979fc 42
+src/app/dashboard/tahun-ajaran/page.tsx
+  s_ff25b47ef29922::t_92db7cb96ca0bd 42
+src/app/dashboard/arsip/page.tsx
+  s_ff25b47ef29922::t_7e18473f9e4548 52
+src/app/dashboard/kurikulum/page.tsx
+  s_ff25b47ef29922::t_c4f822f843ff4c 66
+src/app/dashboard/page.test.tsx
+  s_ff25b47ef29922::t_8a40aa174a8a7d 4,48-51,60-63
+src/app/dashboard/pengaturan/page.tsx
+  s_ff25b47ef29922::t_61b85c0dc66b04 23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "66fa512049a19573d1198a7cd9cf3c0204b5887f",
+  "prompts": {},
+  "sessions": {
+    "s_63910a8997a822": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0d71666d3ffeKvzDPQZRf2eKUD",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_ff25b47ef29922": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0d71666ccffeUwIEf5KhYR6Tvu",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
