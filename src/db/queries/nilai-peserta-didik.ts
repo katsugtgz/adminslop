@@ -26,6 +26,7 @@ import { eq, inArray, sql } from "drizzle-orm";
 import type { Db, Tx } from "../client";
 import { komponenNilai, nilaiPesertaDidik, penilaian } from "../schema";
 import type { NilaiPesertaDidik } from "../schema";
+import { assertReturnedRow } from "@/lib/validation";
 
 export interface InputNilai {
   readonly penilaianId: string;
@@ -99,15 +100,19 @@ export async function upsertNilai(
       },
     })
     .returning();
-  return row;
+  return assertReturnedRow(row, "Nilai gagal disimpan");
 }
 
 /**
- * Delete a nilai row by id. RLS scopes to the current tenant — a cross-tenant
- * delete is a silent no-op (zero rows affected).
+ * Delete a nilai row by id. Throws on missing/RLS-hidden rows so callers do
+ * not audit a write that never happened.
  */
 export async function hapusNilai(db: Db | Tx, id: string): Promise<void> {
-  await db.delete(nilaiPesertaDidik).where(eq(nilaiPesertaDidik.id, id));
+  const [row] = await db
+    .delete(nilaiPesertaDidik)
+    .where(eq(nilaiPesertaDidik.id, id))
+    .returning({ id: nilaiPesertaDidik.id });
+  assertReturnedRow(row, "Nilai tidak ditemukan");
 }
 
 /**

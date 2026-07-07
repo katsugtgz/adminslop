@@ -25,8 +25,10 @@ import { requireAuth } from "@/lib/auth/server";
 import { parseCsv } from "@/lib/impor/parse-csv";
 import { validasiBatch } from "@/lib/impor/validasi-peserta-didik";
 import type { JenisKelamin } from "@/db/queries/peserta-didik";
+import { requireFileSize, requireTextSize } from "@/lib/validation";
 
 const REVALIDATE_TARGET = "/dashboard/impor-peserta-didik";
+const MAX_CSV_BYTES = 1_000_000;
 
 /**
  * Impor Peserta Didik via CSV (AC#1–#5). Reads a CSV `file` field, parses it,
@@ -52,8 +54,13 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
   if (fileField === null) {
     throw new Error("Berkas CSV wajib diisi.");
   }
-  const content =
-    typeof fileField === "string" ? fileField : await fileField.text();
+  const content = requireTextSize(
+    typeof fileField === "string"
+      ? fileField
+      : await requireFileSize(fileField, MAX_CSV_BYTES, "Berkas CSV maksimal 1 MB.").text(),
+    MAX_CSV_BYTES,
+    "Berkas CSV maksimal 1 MB."
+  );
 
   // parseCsv throws on malformed CSV / missing header — propagate to the user.
   const baris = parseCsv(content);

@@ -54,6 +54,7 @@ import {
   bebanIdDariPenilaian,
 } from "@/lib/auth/kepemilikan";
 import { requireAuth } from "@/lib/auth/server";
+import { parseFiniteNumber, requireIsoDate } from "@/lib/validation";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -94,8 +95,7 @@ export async function simpanKomponenNilaiBaruAction(
   if (!nama) throw new Error("Nama Komponen wajib diisi.");
   const bobotRaw = String(formData.get("bobot") ?? "").trim();
   if (!bobotRaw) throw new Error("Bobot wajib diisi.");
-  const bobot = Number(bobotRaw);
-  if (Number.isNaN(bobot)) throw new Error("Bobot harus berupa angka.");
+  const bobot = parseFiniteNumber(bobotRaw, "Bobot harus berupa angka.");
   if (bobot <= 0) throw new Error("Bobot harus lebih besar dari 0.");
 
   const { db } = getDb();
@@ -139,6 +139,7 @@ export async function simpanPenilaianBaruAction(
   if (!nama) throw new Error("Nama Penilaian wajib diisi.");
   const tanggal = String(formData.get("tanggal") ?? "").trim();
   if (!tanggal) throw new Error("Tanggal Penilaian wajib diisi.");
+  requireIsoDate(tanggal, "Tanggal harus berformat YYYY-MM-DD.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -189,8 +190,7 @@ export async function upsertNilaiAction(formData: FormData): Promise<void> {
   const nilaiRaw = String(formData.get("nilai") ?? "").trim();
   let nilai: number | null = null;
   if (nilaiRaw) {
-    const parsed = Number(nilaiRaw);
-    if (Number.isNaN(parsed)) throw new Error("Nilai harus berupa angka.");
+    const parsed = parseFiniteNumber(nilaiRaw, "Nilai harus berupa angka.");
     nilai = parsed;
   }
   const catatanRaw = String(formData.get("catatan") ?? "").trim();

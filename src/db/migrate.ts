@@ -26,6 +26,7 @@ export async function runMigrations(
         applied_at  timestamptz not null default now()
       );
     `);
+    await client.query("select pg_advisory_lock(hashtext('eduadmin:schema_migrations'))");
 
     const files = (await fs.readdir(migrationsDir))
       .filter((f) => f.endsWith(".sql"))
@@ -60,6 +61,11 @@ export async function runMigrations(
     }
     return applied;
   } finally {
+    try {
+      await client.query("select pg_advisory_unlock(hashtext('eduadmin:schema_migrations'))");
+    } catch {
+      /* connection already failed */
+    }
     client.release();
     await pool.end();
   }
