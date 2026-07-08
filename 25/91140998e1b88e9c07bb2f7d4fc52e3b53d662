@@ -1,0 +1,36 @@
+src/app/onboarding/page.test.tsx
+  s_0916d6cc0f325d::t_846098575e2331 1-100
+src/app/onboarding/actions.ts
+  s_0916d6cc0f325d::t_3c59c31a1b6bb2 110,117
+  s_0916d6cc0f325d::t_66a361dd914ece 9
+  s_0916d6cc0f325d::t_3d88a8eb37ba41 1-8,10-109,111-113,115-116,118-145
+  s_0916d6cc0f325d::t_5e5e0c49bbcbd9 114
+src/components/onboarding/form-satuan-pendidikan-baru.tsx
+  s_0916d6cc0f325d::t_74b002f33f1a41 1-117
+src/app/onboarding/schemas.ts
+  s_0916d6cc0f325d::t_d0002b95edcc8f 1-33
+src/app/onboarding/actions.test.ts
+  s_0916d6cc0f325d::t_5a5a3d8cd6f7f3 204
+  s_0916d6cc0f325d::t_c2cfc165b2e049 1-20,41-63,66-74,86-150,152-153,156-171,176-203,205-276,281,285-293,298-308,315-328,335-346
+  s_0916d6cc0f325d::t_9070ed17bf236f 21-40,64-65,75-85,151,154-155,172-175,277-280,282-284,294-297,309-314,329-334
+src/middleware.ts
+  s_0916d6cc0f325d::t_72d726dfa2afc2 10-12
+src/app/onboarding/page.tsx
+  s_0916d6cc0f325d::t_3c7e5dab4c8733 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2591140998e1b88e9c07bb2f7d4fc52e3b53d662",
+  "prompts": {},
+  "sessions": {
+    "s_0916d6cc0f325d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be841e7dffetbwLVGWj2jcncA",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
