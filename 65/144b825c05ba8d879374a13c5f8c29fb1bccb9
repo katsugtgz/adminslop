@@ -1,0 +1,19 @@
+.github/workflows/ci.yml
+  s_d7c107f7443003::t_f22b93a3e12b77 74-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "65144b825c05ba8d879374a13c5f8c29fb1bccb9",
+  "prompts": {},
+  "sessions": {
+    "s_d7c107f7443003": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f45bffeOz6iTi9mq0Vipi",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
