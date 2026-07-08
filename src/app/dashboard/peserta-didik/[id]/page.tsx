@@ -27,6 +27,7 @@ import {
   tambahWaliAction,
   ubahPesertaDidikAction,
 } from "../actions";
+import { type StyleWithVars } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -99,11 +100,8 @@ export default async function Page({
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.3) 0%, transparent 70%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-3xl"
+          style={{ "--glow-opacity": 0.3, "--glow-extent": "70%" } as StyleWithVars}
         />
         <p className="relative font-mono text-xs uppercase tracking-[0.22em] text-accent">
           404
@@ -128,11 +126,8 @@ export default async function Page({
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+          style={{ "--glow-opacity": 0.4, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative">
           <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
@@ -156,31 +151,31 @@ export default async function Page({
         ) : (
           <dl className="grid grid-cols-1 gap-3 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm sm:grid-cols-2">
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Nama
               </dt>
               <dd className="text-sm font-semibold">{peserta.nama}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 NISN
               </dt>
               <dd className="text-sm">{peserta.nisn ? peserta.nisn : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 NIS
               </dt>
               <dd className="text-sm">{peserta.nis ? peserta.nis : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Tanggal Lahir
               </dt>
               <dd className="text-sm">{peserta.tanggalLahir}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Jenis Kelamin
               </dt>
               <dd className="text-sm">

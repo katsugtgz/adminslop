@@ -225,7 +225,7 @@ const KELAS_CETAK: KelasBadan = {
 const KELAS_LAYAR: KelasBadan = {
   bingkai: "flex flex-col gap-3",
   judulBagian:
-    "font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground",
+    "eyebrow text-muted-foreground",
   pasanganLabel: "flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-6",
   label: "text-muted-foreground",
   nilai: "font-medium text-foreground",

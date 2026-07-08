@@ -42,7 +42,7 @@ export function KontrolVerifikasiAi({
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="eyebrow text-muted-foreground">
           Dokumen AI Belum Diverifikasi
         </span>
         {statusDokumenAi === "menunggu" ? (

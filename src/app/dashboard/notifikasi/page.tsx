@@ -19,6 +19,7 @@ import {
   tandaiDibacaAction,
   tandaiSemuaDibacaAction,
 } from "./actions";
+import { type StyleWithVars } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -64,11 +65,8 @@ export default async function Page() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
-            }}
+            className="hero-glow pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+            style={{ "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
           />
           <div className="relative flex flex-col gap-3">
             <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
@@ -112,11 +110,8 @@ export default async function Page() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+          style={{ "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative flex flex-col gap-3">
           <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">

@@ -55,7 +55,7 @@ export function DaftarButirPaket({
                 <span className="text-sm font-medium text-foreground">
                   {butir ? butir.pertanyaan : "(Butir hilang)"}
                 </span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                <span className="eyebrow text-muted-foreground">
                   {jenis ? LABEL_JENIS_BUTIR[jenis] : ""}
                   {butir ? ` · Kunci: ${butir.kunciJawaban}` : ""}
                 </span>

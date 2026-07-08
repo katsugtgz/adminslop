@@ -53,7 +53,7 @@ export function KartuDraf({
   return (
     <div className="mt-3 flex flex-col gap-3 rounded-xl border border-dashed border-border bg-muted/30 p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <span className="eyebrow text-muted-foreground">
           Draf AI
         </span>
         {menunggu ? (

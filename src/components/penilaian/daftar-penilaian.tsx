@@ -57,7 +57,7 @@ export function DaftarPenilaian({
               className="flex flex-col gap-0.5 hover:text-accent"
             >
               <span className="text-sm font-semibold">{p.nama}</span>
-              <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 Tanggal: {p.tanggal}
               </span>
             </Link>

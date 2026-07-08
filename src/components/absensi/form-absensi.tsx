@@ -67,7 +67,7 @@ export function FormAbsensi({
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <span className="text-sm font-semibold text-foreground">{p.nama}</span>
                 {row && (
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <span className="eyebrow text-muted-foreground">
                     Metode Input:{" "}
                     {row.metodeInput === "qr" ? "QR" : "Manual"}
                     {row.sumberQr ? " (koreksi)" : ""}
@@ -78,7 +78,7 @@ export function FormAbsensi({
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor={`status-${p.id}`}
-                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+                  className="eyebrow text-muted-foreground"
                 >
                   Status Kehadiran
                 </label>
@@ -98,7 +98,7 @@ export function FormAbsensi({
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor={`catatan-${p.id}`}
-                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+                  className="eyebrow text-muted-foreground"
                 >
                   Catatan
                 </label>

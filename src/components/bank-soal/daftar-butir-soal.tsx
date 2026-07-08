@@ -66,7 +66,7 @@ export function DaftarButirSoal({
                   {b.pertanyaan}
                 </span>
                 <span className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <span className="eyebrow text-muted-foreground">
                     {LABEL_JENIS_BUTIR[jenis]}
                   </span>
                   <span

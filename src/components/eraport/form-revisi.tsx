@@ -22,7 +22,7 @@ export function FormRevisi({
       className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-3"
     >
       <input type="hidden" name="id" value={eraportId} />
-      <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
+      <span className="eyebrow text-muted-foreground">
         Catat Revisi
       </span>
       <div className="flex flex-col gap-1">

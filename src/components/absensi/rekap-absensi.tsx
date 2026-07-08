@@ -38,7 +38,7 @@ export function RekapAbsensiTable({
     <div className="overflow-x-auto rounded-2xl border border-border bg-card text-card-foreground shadow-warm">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-border text-left font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+          <tr className="border-b border-border text-left eyebrow text-muted-foreground">
             <th scope="col" className="p-3.5 font-medium">
               Nama
             </th>

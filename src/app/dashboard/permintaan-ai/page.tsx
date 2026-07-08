@@ -20,6 +20,7 @@ import {
   retryPermintaanAiAction,
   verifikasiDrafAiAction,
 } from "./actions";
+import { type StyleWithVars } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -103,11 +104,8 @@ export default async function Page() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-50 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.5) 0%, transparent 65%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-50 blur-3xl"
+          style={{ "--glow-opacity": 0.5, "--glow-extent": "65%" } as StyleWithVars}
         />
         <span
           aria-hidden="true"

@@ -7,6 +7,7 @@ import { DaftarPerubahanTertunda } from "@/components/offline/daftar-perubahan-t
 import { IndikatorOffline } from "@/components/offline/indikator-offline";
 import { PageReveal } from "@/components/motion";
 import { Button } from "@/components/ui/button";
+import { type StyleWithVars } from "@/lib/utils";
 
 /**
  * Mode Offline (#21) — the Sinkronisasi Data page. Reachable from the
@@ -26,11 +27,8 @@ export default function SinkronisasiPage() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.35) 0%, transparent 70%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
+          style={{ "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative flex flex-col gap-3">
           <Button asChild variant="ghost" size="sm" className="w-fit -ml-2">

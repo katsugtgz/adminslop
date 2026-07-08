@@ -252,7 +252,7 @@ export default async function Page({
                     <span
                       className={
                         isAdmin
-                          ? "font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground"
+                          ? "eyebrow text-muted-foreground"
                           : "text-sm font-semibold"
                       }
                     >

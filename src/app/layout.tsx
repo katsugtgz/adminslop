@@ -7,6 +7,7 @@ import {
 import { AuthKitProvider } from "@workos-inc/authkit-nextjs/components";
 
 import { AppShell } from "@/components/app-shell";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -47,13 +48,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" dir="ltr">
+    <html lang="id" dir="ltr" suppressHydrationWarning>
       <body
         className={`${bricolage.variable} ${jakarta.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        <AuthKitProvider>
-          <AppShell>{children}</AppShell>
-        </AuthKitProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthKitProvider>
+            <AppShell>{children}</AppShell>
+          </AuthKitProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -57,7 +57,7 @@ export function DaftarTemplateCetak({
                 Default
               </span>
             ) : null}
-            <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+            <span className="eyebrow text-muted-foreground">
               Jenis: {t.jenis}
             </span>
           </span>

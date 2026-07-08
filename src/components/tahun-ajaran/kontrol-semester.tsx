@@ -27,7 +27,7 @@ export function KontrolSemester({
       className="flex flex-1 flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+        <p className="eyebrow-accent">
           <CalendarRange
             className="mr-1.5 inline h-3 w-3"
             aria-hidden="true"

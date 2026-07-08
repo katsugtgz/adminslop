@@ -1,4 +1,5 @@
 import { PageReveal } from "@/components/motion";
+import { type StyleWithVars } from "@/lib/utils";
 
 /**
  * Header modul Manajemen Penilaian. Menampilkan nomor modul (02 — Penilaian),
@@ -27,11 +28,8 @@ export function HeaderPenilaian({
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.68 0.16 42 / 0.4) 0%, transparent 70%)",
-        }}
+        className="hero-glow pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+        style={{ "--glow-opacity": 0.4, "--glow-extent": "70%" } as StyleWithVars}
       />
       <div className="relative">
         <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">

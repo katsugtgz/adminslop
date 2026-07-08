@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CircleHelp, LifeBuoy, MessagesSquare } from "lucide-react";
 
 import { CardHover, PageReveal, TextStagger } from "@/components/motion";
+import { type StyleWithVars } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Pusat Bantuan",
@@ -45,19 +46,13 @@ export default function DashboardBantuanPage() {
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-40 -top-32 h-[28rem] w-[28rem] rounded-full opacity-50 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.55) 0%, transparent 65%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-40 -top-32 h-[28rem] w-[28rem] rounded-full opacity-50 blur-3xl"
+          style={{ "--glow-opacity": 0.55, "--glow-extent": "65%" } as StyleWithVars}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.5 0.18 305 / 0.35) 0%, transparent 70%)",
-          }}
+          className="hero-glow pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full opacity-40 blur-3xl"
+          style={{ "--glow-color": "var(--chart-5)", "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
         />
 
         <span

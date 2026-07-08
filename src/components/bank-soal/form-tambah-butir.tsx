@@ -41,7 +41,7 @@ export function FormTambahButir({
       <div className="flex min-w-[14rem] flex-1 flex-col gap-1">
         <label
           htmlFor={`tambah-butir-${paketSoalId}`}
-          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+          className="eyebrow text-muted-foreground"
         >
           Tambah ke Paket
         </label>
@@ -65,7 +65,7 @@ export function FormTambahButir({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`tambah-urutan-${paketSoalId}`}
-          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+          className="eyebrow text-muted-foreground"
         >
           Urutan
         </label>
@@ -83,7 +83,7 @@ export function FormTambahButir({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`tambah-bobot-${paketSoalId}`}
-          className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+          className="eyebrow text-muted-foreground"
         >
           Bobot
         </label>

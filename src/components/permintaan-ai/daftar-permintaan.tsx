@@ -103,7 +103,7 @@ export function DaftarPermintaan({
                   </span>
                 )}
               </span>
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 Dibuat {formatTanggal(p.dibuatPada)}
               </span>
             </div>

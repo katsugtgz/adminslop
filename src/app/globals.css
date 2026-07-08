@@ -12,14 +12,12 @@
    ============================================================ */
 
 :root {
-  /* Typography */
-  --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-display: var(--font-bricolage-grotesque), Georgia, serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-
   /* Radii — slightly larger than default for warm, soft feel */
   --radius: 0.75rem;
+
+  /* Eyebrow/kicker typography tokens */
+  --tracking-eyebrow: 0.16em;
+  --text-eyebrow: 0.6875rem;
 
   /* Surfaces — warm cream, not cold white */
   --background: oklch(0.985 0.008 95);
@@ -179,9 +177,11 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
-  --font-sans: var(--font-sans);
-  --font-display: var(--font-display);
-  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), Georgia, serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --tracking-eyebrow: var(--tracking-eyebrow);
+  --text-eyebrow: var(--text-eyebrow);
 }
 
 @layer base {
@@ -238,77 +238,71 @@
   }
 }
 
-@layer utilities {
-  .font-display {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.05;
-  }
+@utility font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
 
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Signature gradient text — sparingly, for hero moments */
+@utility text-gradient-warm {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 
-  .text-pretty {
-    text-wrap: pretty;
-  }
+/* Native <progress> styled with the warm gradient fill (used by KartuKuota).
+   Keeps native progressbar semantics without an ARIA role override. */
+@utility progress-warm {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 0.625rem;
+  width: 100%;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: var(--muted);
 
-  /* Signature gradient text — sparingly, for hero moments */
-  .text-gradient-warm {
-    background: var(--gradient-warm);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Native <progress> styled with the warm gradient fill (used by KartuKuota).
-     Keeps native progressbar semantics without an ARIA role override. */
-  .progress-warm {
-    appearance: none;
-    -webkit-appearance: none;
-    height: 0.625rem;
-    width: 100%;
-    border-radius: 9999px;
-    overflow: hidden;
-    background: var(--muted);
-  }
-  .progress-warm::-webkit-progress-bar {
+  &::-webkit-progress-bar {
     background: transparent;
     border-radius: 9999px;
   }
-  .progress-warm::-webkit-progress-value {
+
+  &::-webkit-progress-value {
     background-image: var(--gradient-warm);
     border-radius: 9999px;
     transition: width 0.3s ease;
   }
-  .progress-warm::-moz-progress-bar {
+
+  &::-moz-progress-bar {
     background-image: var(--gradient-warm);
     border-radius: 9999px;
     transition: width 0.3s ease;
   }
+}
 
-  /* Warm card treatment — soft shadow + warm tint */
-  .shadow-warm {
-    box-shadow:
-      0 1px 2px oklch(0.4 0.05 60 / 0.06),
-      0 4px 12px oklch(0.4 0.05 60 / 0.08),
-      0 0 0 1px oklch(0.4 0.05 60 / 0.04);
-  }
+/* Warm card treatment — soft shadow + warm tint */
+@utility shadow-warm {
+  box-shadow:
+    0 1px 2px oklch(0.4 0.05 60 / 0.06),
+    0 4px 12px oklch(0.4 0.05 60 / 0.08),
+    0 0 0 1px oklch(0.4 0.05 60 / 0.04);
+}
 
-  .shadow-warm-lg {
-    box-shadow:
-      0 2px 4px oklch(0.4 0.05 60 / 0.08),
-      0 12px 32px oklch(0.4 0.05 60 / 0.12),
-      0 0 0 1px oklch(0.4 0.05 60 / 0.04);
-  }
+@utility shadow-warm-lg {
+  box-shadow:
+    0 2px 4px oklch(0.4 0.05 60 / 0.08),
+    0 12px 32px oklch(0.4 0.05 60 / 0.12),
+    0 0 0 1px oklch(0.4 0.05 60 / 0.04);
+}
 
-  /* Decorative grain overlay — apply to hero sections */
-  .bg-grain {
-    position: relative;
-  }
-  .bg-grain::after {
+/* Decorative grain overlay — apply to hero sections */
+@utility bg-grain {
+  position: relative;
+
+  &::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -317,6 +311,38 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     mix-blend-mode: multiply;
   }
+}
+
+/* Hero glow — decorative radial gradient referencing design tokens.
+   Override --glow-color for non-accent variants (e.g. plum via --chart-5). */
+@utility hero-glow {
+  --glow-color: var(--accent);
+  --glow-opacity: 0.4;
+  --glow-extent: 70%;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--glow-color) calc(var(--glow-opacity) * 100%), transparent)
+      0%,
+    transparent var(--glow-extent)
+  );
+}
+
+/* Eyebrow / kicker — mono uppercase label for section headers */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+}
+
+@utility eyebrow-accent {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--accent);
 }
 
 /* ============================================================

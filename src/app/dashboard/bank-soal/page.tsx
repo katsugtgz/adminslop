@@ -28,6 +28,7 @@ import {
   imporButirSoalJsonAction,
   tambahButirKePaketAction,
 } from "./actions";
+import { type StyleWithVars } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -155,11 +156,8 @@ export default async function Page({
       >
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 65%)",
-          }}
+          className="hero-glow pointer-events-none absolute -right-32 -top-24 h-72 w-72 rounded-full opacity-40 blur-3xl"
+          style={{ "--glow-opacity": 0.45, "--glow-extent": "65%" } as StyleWithVars}
         />
         <span
           aria-hidden="true"
@@ -190,7 +188,7 @@ export default async function Page({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="bank-search"
-              className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+              className="eyebrow text-muted-foreground"
             >
               Cari
             </label>
@@ -347,7 +345,7 @@ export default async function Page({
 function ButirDetail({ butir }: { butir: ButirSoal }) {
   return (
     <article className="bg-grain flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm">
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="eyebrow text-muted-foreground">
         Detail Butir Soal
       </span>
       <p className="font-display text-lg tracking-tight text-foreground">

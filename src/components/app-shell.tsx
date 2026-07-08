@@ -3,6 +3,7 @@ import { GraduationCap } from "lucide-react";
 
 import { DesktopNav, MobileTabBar } from "@/components/main-nav";
 import { NavAuth } from "@/components/nav-auth";
+import { TombolTema } from "@/components/tombol-tema";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const tahunSekarang = new Date().getFullYear();
@@ -39,6 +40,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <DesktopNav />
 
           <div className="ml-auto flex items-center gap-2">
+            <TombolTema />
             <NavAuth />
           </div>
         </div>
