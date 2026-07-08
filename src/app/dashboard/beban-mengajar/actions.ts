@@ -43,8 +43,7 @@ import {
 import type { Semester } from "@/db/queries/beban-mengajar";
 import { hapusWaliKelas, upsertWaliKelas } from "@/db/queries/wali-kelas";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 
 const REVALIDATE_TARGET = "/dashboard/beban-mengajar";
 
@@ -102,15 +101,7 @@ export async function simpanBebanMengajarBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanBuat = akses.boleh("beban_mengajar:buat");
-  if (!keputusanBuat.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menambah Beban Mengajar.");
-  }
+  const akses = await requireAksesAktif("beban_mengajar:buat", "Anda tidak memiliki izin untuk menambah Beban Mengajar.");
 
   // 2. Manual validation (no zod)
   const ptkId = requiredString(
@@ -178,15 +169,7 @@ export async function simpanBebanMengajarBaruAction(
 export async function ubahBebanMengajarAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanUbah = akses.boleh("beban_mengajar:ubah");
-  if (!keputusanUbah.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Beban Mengajar.");
-  }
+  const akses = await requireAksesAktif("beban_mengajar:ubah", "Anda tidak memiliki izin untuk mengubah Beban Mengajar.");
 
   const id = requiredString(formData, "id", "ID Beban Mengajar tidak valid.");
   const input: {
@@ -238,15 +221,7 @@ export async function ubahBebanMengajarAction(
 export async function hapusBebanMengajarAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanUbah = akses.boleh("beban_mengajar:ubah");
-  if (!keputusanUbah.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menghapus Beban Mengajar.");
-  }
+  const akses = await requireAksesAktif("beban_mengajar:ubah", "Anda tidak memiliki izin untuk menghapus Beban Mengajar.");
 
   const id = requiredString(formData, "id", "ID Beban Mengajar tidak valid.");
 
@@ -276,15 +251,7 @@ export async function hapusBebanMengajarAction(
 export async function upsertWaliKelasAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanBuat = akses.boleh("wali_kelas:buat");
-  if (!keputusanBuat.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengatur Wali Kelas.");
-  }
+  const akses = await requireAksesAktif("wali_kelas:buat", "Anda tidak memiliki izin untuk mengatur Wali Kelas.");
 
   const ptkId = requiredString(formData, "ptkId", "ID PTK wajib diisi.");
   const rombonganBelajarId = requiredString(
@@ -330,15 +297,7 @@ export async function upsertWaliKelasAction(
 export async function hapusWaliKelasAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanUbah = akses.boleh("wali_kelas:ubah");
-  if (!keputusanUbah.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menghapus Wali Kelas.");
-  }
+  const akses = await requireAksesAktif("wali_kelas:ubah", "Anda tidak memiliki izin untuk menghapus Wali Kelas.");
 
   const id = requiredString(formData, "id", "ID Wali Kelas tidak valid.");
 

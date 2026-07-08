@@ -28,8 +28,7 @@ import {
   ubahSemesterAktif,
   type Semester,
 } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 
 const REVALIDATE_TARGET = "/dashboard/tahun-ajaran";
 
@@ -49,15 +48,7 @@ export async function simpanTahunAjaranBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("tahun_ajaran:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
-  }
+  const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
   // 2. Manual validation (no zod)
   const nama = String(formData.get("nama") ?? "").trim();
@@ -90,15 +81,7 @@ export async function simpanTahunAjaranBaruAction(
 export async function aktifkanTahunAjaranAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("tahun_ajaran:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
-  }
+  const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Tahun Ajaran wajib diisi.");
@@ -128,15 +111,7 @@ export async function aktifkanTahunAjaranAction(
 export async function ubahSemesterAktifAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("tahun_ajaran:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
-  }
+  const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
   const semesterRaw = String(formData.get("semester") ?? "").trim();
   if (!isValidSemester(semesterRaw)) {

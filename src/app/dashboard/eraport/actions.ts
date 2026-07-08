@@ -45,9 +45,8 @@ import {
 } from "@/db/queries/eraport";
 import type { SemesterEraport } from "@/db/queries/eraport";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikBeban } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/eraport";
 
@@ -64,14 +63,10 @@ const REVALIDATE_TARGET = "/dashboard/eraport";
  */
 export async function buatDrafEraportAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk membuat Draf E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:buat",
+    "Anda tidak memiliki izin untuk membuat Draf E-Raport."
+  );
 
   // 2. Manual validation (no zod).
   const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
@@ -146,14 +141,10 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
  * throws (RLS hides it).
  */
 export async function terbitkanEraportAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:terbit").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menerbitkan E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:terbit",
+    "Anda tidak memiliki izin untuk menerbitkan E-Raport."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID E-Raport wajib diisi.");
@@ -183,14 +174,10 @@ export async function terbitkanEraportAction(formData: FormData): Promise<void> 
 export async function catatRevisiEraportAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:revisi").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mencatat revisi E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:revisi",
+    "Anda tidak memiliki izin untuk mencatat revisi E-Raport."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID E-Raport wajib diisi.");

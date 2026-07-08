@@ -47,9 +47,8 @@ import {
 } from "@/db/queries/permintaan-ai";
 import type { JenisPermintaanAi, StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikPermintaan } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/permintaan-ai";
 
@@ -164,14 +163,10 @@ async function prosesPermintaanAi(
  */
 export async function buatPermintaanAiAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
   // 2. Manual validation (no zod).
   const jenisRaw = String(formData.get("jenis") ?? "").trim();
@@ -227,14 +222,10 @@ export async function buatPermintaanAiAction(formData: FormData): Promise<void> 
 export async function batalkanPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Permintaan AI wajib diisi.");
@@ -274,14 +265,10 @@ export async function batalkanPermintaanAiAction(
 export async function verifikasiDrafAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("draf_ai:verifikasi").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk verifikasi Draf AI.");
-  }
+  const akses = await requireAksesAktif(
+    "draf_ai:verifikasi",
+    "Anda tidak memiliki izin untuk verifikasi Draf AI."
+  );
 
   const drafId = String(formData.get("drafId") ?? "").trim();
   if (!drafId) throw new Error("ID Draf AI wajib diisi.");
@@ -317,14 +304,10 @@ export async function verifikasiDrafAiAction(
 export async function retryPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Permintaan AI wajib diisi.");

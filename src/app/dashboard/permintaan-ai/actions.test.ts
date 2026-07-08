@@ -66,6 +66,19 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+  // Mirror the real requireAksesAktif: delegate to the mocked getAksesSaya so
+  // every existing getAksesSaya.mockResolvedValue(...) setup continues to drive
+  // both the status branch and the boleh() branch unchanged.
+  requireAksesAktif: async (izin: IzinSlug, pesanTolak?: string) => {
+    const akses = await mocks.getAksesSaya();
+    if (akses.status !== "active") {
+      throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+    }
+    if (!akses.boleh(izin).diizinkan) {
+      throw new Error(pesanTolak ?? "Anda tidak memiliki izin untuk aksi ini.");
+    }
+    return akses;
+  },
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,

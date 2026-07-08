@@ -25,6 +25,7 @@ const mocks = vi.hoisted(() => {
   };
   return {
     getAksesSaya: vi.fn(),
+    requireAksesAktif: vi.fn(),
     requireAuth: vi.fn(async () => ({ userId: "workos_u_1" })),
     getDb: vi.fn(() => ({ db: { __db: true } })),
     withTenant: vi.fn(
@@ -49,6 +50,7 @@ const mocks = vi.hoisted(() => {
 
 const {
   getAksesSaya,
+  requireAksesAktif,
   requireAuth,
   getDb,
   withTenant,
@@ -65,6 +67,7 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+  requireAksesAktif: mocks.requireAksesAktif,
 }));
 vi.mock("@/lib/auth/server", () => ({
   requireAuth: mocks.requireAuth,
@@ -170,6 +173,7 @@ function aksesAktif(
 
 beforeEach(() => {
   getAksesSaya.mockReset();
+  requireAksesAktif.mockReset();
   requireAuth.mockReset();
   getDb.mockReset();
   withTenant.mockReset();
@@ -182,6 +186,20 @@ beforeEach(() => {
   hapusButirDariPaket.mockReset();
   revalidatePath.mockReset();
   requireAuth.mockResolvedValue({ userId: "workos_u_1" });
+  requireAksesAktif.mockImplementation(
+    async (izin: string, pesanTolak?: string) => {
+      const akses = await getAksesSaya();
+      if (!akses || akses.status !== "active") {
+        throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+      }
+      if (!akses.boleh(izin).diizinkan) {
+        throw new Error(
+          pesanTolak ?? "Anda tidak memiliki izin untuk aksi ini."
+        );
+      }
+      return akses;
+    }
+  );
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(
     async (
@@ -633,13 +651,12 @@ describe("G. imporButirSoalJsonAction", () => {
     pembahasan: "2+2=4.",
   };
 
-  it("rejects unauthenticated before context resolution", async () => {
-    requireAuth.mockRejectedValueOnce(new Error("Belum terautentikasi."));
+  it("rejects when requireAksesAktif throws (prologue propagates, no DB work)", async () => {
+    requireAksesAktif.mockRejectedValueOnce(new Error("Belum terautentikasi."));
 
     await expect(
       imporButirSoalJsonAction(null, formData({ jsonButir: "[]" }))
     ).rejects.toThrow(/Belum terautentikasi/i);
-    expect(getAksesSaya).not.toHaveBeenCalled();
     expect(withTenant).not.toHaveBeenCalled();
   });
 

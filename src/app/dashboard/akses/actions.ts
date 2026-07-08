@@ -30,8 +30,7 @@ import {
   hapusPtk,
   linkPtk,
 } from "@/db/queries/akses";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import type { IzinSlug } from "@/lib/auth/types";
 
 /** Closed vocabulary of valid IzinSlug literals (single source of truth). */
@@ -109,15 +108,7 @@ const REVALIDATE_TARGET = "/dashboard/akses";
  */
 export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanBuat = akses.boleh("ptk:buat");
-  if (!keputusanBuat.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menambah PTK.");
-  }
+  const akses = await requireAksesAktif("ptk:buat", "Anda tidak memiliki izin untuk menambah PTK.");
 
   // 2. Manual validation (no zod)
   const nama = String(formData.get("nama") ?? "").trim();
@@ -152,15 +143,7 @@ export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
  * the active tenant — a cross-tenant ptkId is a silent no-op.
  */
 export async function hapusPtkAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanHapus = akses.boleh("ptk:hapus");
-  if (!keputusanHapus.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menghapus PTK.");
-  }
+  const akses = await requireAksesAktif("ptk:hapus", "Anda tidak memiliki izin untuk menghapus PTK.");
 
   const ptkId = String(formData.get("ptkId") ?? "").trim();
   if (!ptkId) throw new Error("ID PTK tidak valid.");
@@ -186,15 +169,7 @@ export async function hapusPtkAction(formData: FormData): Promise<void> {
  * `ptkId` unlinks (sets ptk_id = null).
  */
 export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("akses:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola akses.");
-  }
+  const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
   const penggunaId = String(formData.get("penggunaId") ?? "").trim();
   if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");
@@ -222,15 +197,7 @@ export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
  * `aktif` checkbox: `formData.get("aktif") === "on"` → grant; otherwise revoke.
  */
 export async function aturIzinAksesAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("akses:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola akses.");
-  }
+  const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
   const penggunaId = String(formData.get("penggunaId") ?? "").trim();
   if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");
@@ -264,15 +231,7 @@ export async function aturIzinAksesAction(formData: FormData): Promise<void> {
 export async function aturPembatasanAksesAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  const keputusanKelola = akses.boleh("akses:kelola");
-  if (!keputusanKelola.diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola akses.");
-  }
+  const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
   const penggunaId = String(formData.get("penggunaId") ?? "").trim();
   if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");

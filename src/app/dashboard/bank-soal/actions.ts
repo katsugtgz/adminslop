@@ -38,9 +38,8 @@ import {
   ubahButirSoal,
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { KepemilikanError } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
@@ -139,14 +138,10 @@ function validasiKandidatImpor(
  * throws, propagating to the client as a Bahasa error).
  */
 export async function buatButirSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:buat",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
   const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
   if (!mataPelajaranId) throw new Error("Mata Pelajaran wajib diisi.");
@@ -202,14 +197,10 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
  * ditemukan".
  */
 export async function ubahButirSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:ubah",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
@@ -259,14 +250,10 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
 export async function arsipkanButirSoalAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:ubah",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
@@ -292,14 +279,10 @@ export async function arsipkanButirSoalAction(
  * to a Tahun Ajaran (required) + optional semester + optional Tingkat.
  */
 export async function buatPaketSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:buat",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
   const nama = String(formData.get("nama") ?? "").trim();
   if (!nama) throw new Error("Nama Paket wajib diisi.");
@@ -342,14 +325,10 @@ export async function buatPaketSoalAction(formData: FormData): Promise<void> {
 export async function tambahButirKePaketAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:ubah",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
   const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
@@ -390,14 +369,10 @@ export async function tambahButirKePaketAction(
 export async function hapusButirDariPaketAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:ubah",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
   const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
@@ -422,14 +397,10 @@ export async function imporButirSoalJsonAction(
   _prevState: HasilImpor | null,
   formData: FormData
 ): Promise<HasilImpor> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:buat",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
   const jsonText = String(formData.get("jsonButir") ?? "").trim();
   let parsed: unknown;

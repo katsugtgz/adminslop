@@ -39,8 +39,7 @@ import {
   type JenisKelamin,
   type StatusPesertaDidik,
 } from "@/db/queries/peserta-didik";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 
 const REVALIDATE_TARGET = "/dashboard/peserta-didik";
 
@@ -96,14 +95,7 @@ export async function simpanPesertaDidikBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menambah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:buat", "Anda tidak memiliki izin untuk menambah Peserta Didik.");
 
   // 2. Manual validation (no zod)
   const nama = trimField(formData, "nama");
@@ -161,14 +153,7 @@ export async function simpanPesertaDidikBaruAction(
 export async function ubahPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const id = trimField(formData, "id");
   if (!id) throw new Error("ID Peserta Didik wajib diisi.");
@@ -242,14 +227,7 @@ export async function ubahPesertaDidikAction(
 export async function ubahStatusPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const id = trimField(formData, "id");
   if (!id) throw new Error("ID Peserta Didik wajib diisi.");
@@ -303,14 +281,7 @@ export async function ubahStatusPesertaDidikAction(
 export async function catatMutasiPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const id = trimField(formData, "id");
   if (!id) throw new Error("ID Peserta Didik wajib diisi.");
@@ -372,14 +343,7 @@ export async function catatMutasiPesertaDidikAction(
  * Pengguna and cannot sign in. No user_id/auth columns are touched here.
  */
 export async function tambahWaliAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
@@ -420,14 +384,7 @@ export async function tambahWaliAction(formData: FormData): Promise<void> {
  * delete to the active tenant — a cross-tenant id is a silent no-op.
  */
 export async function hapusWaliAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const id = trimField(formData, "id");
   if (!id) throw new Error("ID wali wajib diisi.");
@@ -455,14 +412,7 @@ export async function hapusWaliAction(formData: FormData): Promise<void> {
 export async function tambahKontakDaruratAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
@@ -503,14 +453,7 @@ export async function tambahKontakDaruratAction(
 export async function hapusKontakDaruratAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("peserta_didik:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("peserta_didik:ubah", "Anda tidak memiliki izin untuk mengubah Peserta Didik.");
 
   const id = trimField(formData, "id");
   if (!id) throw new Error("ID kontak darurat wajib diisi.");
