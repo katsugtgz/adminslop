@@ -1,0 +1,20 @@
+src/db/queries/notifikasi.ts
+  s_62c10a2ea2b094::t_72696bd27a9a0f 232-236,242-244,246,249-254
+  s_62c10a2ea2b094::t_6c8deb67d153bd 22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7ebd9d4fa7ef83e8951471db17debfc4a49e1865",
+  "prompts": {},
+  "sessions": {
+    "s_62c10a2ea2b094": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0f769affe3KySD08qNP542L",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
