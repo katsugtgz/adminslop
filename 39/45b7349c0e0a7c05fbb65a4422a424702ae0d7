@@ -1,0 +1,19 @@
+next.config.ts
+  s_e2911f1fd4ccf9::t_386a1931ece6e7 3-53,55-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "3945b7349c0e0a7c05fbb65a4422a424702ae0d7",
+  "prompts": {},
+  "sessions": {
+    "s_e2911f1fd4ccf9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0c87dcffeBHpDEH8dExZmEO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
