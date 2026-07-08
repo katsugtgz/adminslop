@@ -1,0 +1,20 @@
+src/db/queries/nilai-peserta-didik.ts
+  s_62c10a2ea2b094::t_be20216573ebf3 24,27
+  s_62c10a2ea2b094::t_870a6638bf1b49 116-120,122-123,125-126,132-190,192-210,213
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6065b21e3e7447f4cece11f3e36320854287c943",
+  "prompts": {},
+  "sessions": {
+    "s_62c10a2ea2b094": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0f769affe3KySD08qNP542L",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
