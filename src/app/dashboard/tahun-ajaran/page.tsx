@@ -61,7 +61,7 @@ export default async function Page() {
     akses.membership.orgId,
     async (tx) => {
       const [daftarTa, sem] = await Promise.all([
-        listTahunAjaran(tx),
+        listTahunAjaran(tx, 200),
         getSemesterAktif(tx),
       ]);
       return { tahunAjaran: daftarTa, semester: sem };

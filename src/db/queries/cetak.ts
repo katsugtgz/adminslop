@@ -75,6 +75,7 @@ export interface InputBuatTemplateCetak {
 /** Optional filter for `listTemplateCetak` (independent). */
 export interface OpsiListTemplateCetak {
   readonly jenis?: JenisTemplateCetak;
+  readonly limit?: number;
 }
 
 /** Input for `buatDokumenCetak`. */
@@ -91,6 +92,7 @@ export interface InputBuatDokumenCetak {
 /** Optional filter for `listDokumenCetak` (independent). */
 export interface OpsiListDokumenCetak {
   readonly drafEraportId?: string;
+  readonly limit?: number;
 }
 
 // Template Cetak CRUD --------------------------------------------------------
@@ -137,7 +139,8 @@ export async function listTemplateCetak(
     .select()
     .from(templateCetak)
     .where(opts?.jenis ? eq(templateCetak.jenis, opts.jenis) : undefined)
-    .orderBy(desc(templateCetak.dibuatPada));
+    .orderBy(desc(templateCetak.dibuatPada))
+    .limit(opts?.limit ?? 200);
 }
 
 /**
@@ -222,7 +225,8 @@ export async function listDokumenCetak(
     .where(
       opts?.drafEraportId ? eq(dokumenCetak.drafEraportId, opts.drafEraportId) : undefined
     )
-    .orderBy(desc(dokumenCetak.dibuatPada));
+    .orderBy(desc(dokumenCetak.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 // Konten Cetak composition (AC#1 preview) ------------------------------------

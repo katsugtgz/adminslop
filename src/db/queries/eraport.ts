@@ -65,6 +65,7 @@ export interface OpsiListDrafEraport {
   readonly pesertaDidikId?: string;
   readonly tahunAjaranId?: string;
   readonly semester?: SemesterEraport;
+  readonly limit?: number;
 }
 
 /** Input for `catatRevisi`. `alasan` is required (AC#3 accountability). */
@@ -169,7 +170,8 @@ export async function listDrafEraport(
     .select()
     .from(drafEraport)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(desc(drafEraport.dibuatPada));
+    .orderBy(desc(drafEraport.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 /**
@@ -252,11 +254,13 @@ export async function catatRevisi(
  */
 export async function listRevisiByEraport(
   db: Db | Tx,
-  eraportId: string
+  eraportId: string,
+  limit: number = 500
 ): Promise<RevisiEraport[]> {
   return db
     .select()
     .from(revisiEraport)
     .where(eq(revisiEraport.eraportId, eraportId))
-    .orderBy(desc(revisiEraport.dibuatPada));
+    .orderBy(desc(revisiEraport.dibuatPada))
+    .limit(limit);
 }

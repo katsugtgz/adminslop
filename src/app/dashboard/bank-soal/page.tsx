@@ -91,9 +91,9 @@ export default async function Page({
       const [tingkatAll, tahunAjaranAll, butirList, paketList] =
         await Promise.all([
           listTingkat(tx),
-          listTahunAjaran(tx),
-          listButirSoal(tx, { search }),
-          listPaketSoal(tx),
+          listTahunAjaran(tx, 200),
+          listButirSoal(tx, { search, limit: 500 }),
+          listPaketSoal(tx, { limit: 500 }),
         ] as const);
 
       // Drill-down: paket assembly view.

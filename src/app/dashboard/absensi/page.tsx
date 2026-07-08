@@ -156,7 +156,7 @@ export default async function Page({
 
       if (!taAktif || !semester) return empty;
 
-      const rombel = await listRombonganBelajar(tx, taAktif.id);
+      const rombel = await listRombonganBelajar(tx, taAktif.id, 500);
 
       // No drill-down: just the rombel list.
       if (!sp.rombonganBelajarId) {
@@ -178,7 +178,7 @@ export default async function Page({
           taAktif.id,
           semester
         ),
-        listPesertaDidik(tx),
+        listPesertaDidik(tx, 500),
       ]);
 
       // Roster is the set of peserta_didik ids placed in this rombel for the

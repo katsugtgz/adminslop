@@ -48,6 +48,7 @@ export interface OpsiListBebanMengajar {
   readonly ptkId?: string;
   readonly tahunAjaranId?: string;
   readonly semester?: Semester;
+  readonly limit?: number;
 }
 
 // CRUD ---------------------------------------------------------------------
@@ -72,7 +73,8 @@ export async function listBebanMengajar(
     .select()
     .from(bebanMengajar)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(asc(bebanMengajar.dibuatPada));
+    .orderBy(asc(bebanMengajar.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 /**

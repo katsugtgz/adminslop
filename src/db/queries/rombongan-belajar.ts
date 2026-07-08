@@ -54,7 +54,8 @@ export async function buatRombonganBelajar(
  */
 export async function listRombonganBelajar(
   db: Db | Tx,
-  tahunAjaranId?: string
+  tahunAjaranId?: string,
+  limit: number = 500
 ): Promise<RombonganBelajar[]> {
   return db
     .select()
@@ -64,7 +65,8 @@ export async function listRombonganBelajar(
         ? eq(rombonganBelajar.tahunAjaranId, tahunAjaranId)
         : undefined
     )
-    .orderBy(asc(rombonganBelajar.nama));
+    .orderBy(asc(rombonganBelajar.nama))
+    .limit(limit);
 }
 
 /**

@@ -60,7 +60,7 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
 
   const { db } = getDb();
   const ringkasan = await withTenant(db, akses.membership.orgId, async (tx) => {
-    const existing = await listPesertaDidik(tx);
+    const existing = await listPesertaDidik(tx, 100000);
     const existingNisn = existing
       .map((p) => p.nisn)
       .filter((v): v is string => v !== null);

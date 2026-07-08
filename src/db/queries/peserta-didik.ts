@@ -14,11 +14,14 @@
  * AND updates the cache inside the caller's transaction — history is
  * append-only, never rewritten or deleted.
  */
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { pesertaDidik, riwayatStatusPesertaDidik } from "../schema";
 import type { PesertaDidik, RiwayatStatusPesertaDidik } from "../schema";
+
+/** Default row cap for list queries — prevents unbounded tenant scans. */
+const DEFAULT_LIMIT = 500;
 
 // Status + jenis-kelamin unions mirror the schema CHECK constraints.
 export type StatusPesertaDidik = "aktif" | "pindah" | "lulus" | "keluar";
@@ -52,9 +55,21 @@ export interface InputUbahStatus {
 
 // Peserta Didik CRUD -------------------------------------------------------
 
-/** List all peserta_didik visible under the current tenant (RLS-scoped). */
-export async function listPesertaDidik(db: Db | Tx): Promise<PesertaDidik[]> {
-  return db.select().from(pesertaDidik);
+/**
+ * List all peserta_didik visible under the current tenant (RLS-scoped), newest
+ * first. `limit` caps the result set to prevent unbounded tenant scans (default
+ * 500). Pass a higher limit when a caller legitimately needs more rows (e.g.
+ * CSV-import duplicate detection).
+ */
+export async function listPesertaDidik(
+  db: Db | Tx,
+  limit: number = DEFAULT_LIMIT
+): Promise<PesertaDidik[]> {
+  return db
+    .select()
+    .from(pesertaDidik)
+    .orderBy(desc(pesertaDidik.dibuatPada))
+    .limit(limit);
 }
 
 /**

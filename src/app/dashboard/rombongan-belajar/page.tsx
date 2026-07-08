@@ -90,11 +90,11 @@ export default async function Page() {
       const [daftarTingkat, daftarRombel, ta, daftarPeserta] =
         await Promise.all([
           listTingkat(tx),
-          listRombonganBelajar(tx),
+          listRombonganBelajar(tx, undefined, 500),
           getTahunAjaranAktif(tx),
           // Roster only when peserta_didik:baca is held; otherwise skip the
           // query entirely so no student row crosses the boundary.
-          bolehBacaPeserta ? listPesertaDidik(tx) : Promise.resolve([]),
+          bolehBacaPeserta ? listPesertaDidik(tx, 500) : Promise.resolve([]),
         ]);
       return {
         tingkat: daftarTingkat,

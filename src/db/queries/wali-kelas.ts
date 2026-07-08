@@ -51,6 +51,7 @@ export interface OpsiListWaliKelas {
   readonly rombonganBelajarId?: string;
   readonly tahunAjaranId?: string;
   readonly semester?: Semester;
+  readonly limit?: number;
 }
 
 /**
@@ -75,7 +76,8 @@ export async function listWaliKelas(
     .select()
     .from(waliKelas)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(asc(waliKelas.dibuatPada));
+    .orderBy(asc(waliKelas.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 /**

@@ -197,6 +197,7 @@ export async function listButirSoal(
     readonly mataPelajaranId?: string;
     readonly tingkatId?: string;
     readonly search?: string;
+    readonly limit?: number;
   }
 ): Promise<ButirSoal[]> {
   const filters = [];
@@ -213,7 +214,8 @@ export async function listButirSoal(
     .select()
     .from(butirSoal)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(asc(butirSoal.dibuatPada));
+    .orderBy(asc(butirSoal.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 // ---------------------------------------------------------------------------
@@ -235,6 +237,7 @@ export interface OptsListPaketSoal {
   readonly mataPelajaranId?: string;
   readonly tahunAjaranId?: string;
   readonly semester?: string;
+  readonly limit?: number;
 }
 
 /**
@@ -293,7 +296,8 @@ export async function listPaketSoal(
     .select()
     .from(paketSoal)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(asc(paketSoal.dibuatPada));
+    .orderBy(asc(paketSoal.dibuatPada))
+    .limit(opts?.limit ?? 500);
 }
 
 // ---------------------------------------------------------------------------
