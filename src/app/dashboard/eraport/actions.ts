@@ -46,6 +46,7 @@ import {
 import type { SemesterEraport } from "@/db/queries/eraport";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { assertPemilikBeban } from "@/lib/auth/kepemilikan";
 import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/eraport";
@@ -101,6 +102,7 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
       pesertaDidikId,
     };
     if (bebanMengajarIdRaw) {
+      await assertPemilikBeban(tx, akses, async () => bebanMengajarIdRaw);
       const semua = await getNilaiAkhir(tx, bebanMengajarIdRaw);
       const milikSiswa = semua.find((n) => n.pesertaDidikId === pesertaDidikId);
       if (milikSiswa) {

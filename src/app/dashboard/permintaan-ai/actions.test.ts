@@ -384,6 +384,7 @@ describe("D. cancel (batalkanPermintaanAiAction)", () => {
       id: "pa_1",
       jenis: "deskripsi_cp",
       status: "dibuat",
+      dibuatOleh: "workos_u_1",
     });
     await batalkanPermintaanAiAction(formData({ id: "pa_1" }));
     expect(batalkanPermintaanAi).toHaveBeenCalledWith(TX, "pa_1");
@@ -401,12 +402,63 @@ describe("D. cancel (batalkanPermintaanAiAction)", () => {
       id: "pa_1",
       jenis: "deskripsi_cp",
       status: "selesai",
+      dibuatOleh: "workos_u_1",
     });
     await expect(
       batalkanPermintaanAiAction(formData({ id: "pa_1" }))
     ).rejects.toThrow(/tidak dapat dibatalkan/i);
     expect(batalkanPermintaanAi).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// D2. Ownership gate (gate 2) — only the creator (or admin) may cancel/retry.
+// ===========================================================================
+
+describe("D2. ownership gate — guru cannot cancel/retry another user's permintaan", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+  });
+
+  it("9a. batalkanPermintaanAiAction + dibuatOleh=other_user -> throws KepemilikanError; batalkan NOT called", async () => {
+    cariPermintaanAiById.mockResolvedValueOnce({
+      id: "pa_1",
+      jenis: "deskripsi_cp",
+      status: "dibuat",
+      dibuatOleh: "workos_u_OTHER",
+    });
+    await expect(
+      batalkanPermintaanAiAction(formData({ id: "pa_1" }))
+    ).rejects.toThrow(/tidak memiliki izin untuk Permintaan AI/i);
+    expect(batalkanPermintaanAi).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("9b. retryPermintaanAiAction + dibuatOleh=other_user -> throws KepemilikanError; buatPermintaanAi NOT called", async () => {
+    cariPermintaanAiById.mockResolvedValueOnce({
+      id: "pa_orig",
+      jenis: "deskripsi_atp",
+      konteks: {},
+      status: "gagal",
+      dibuatOleh: "workos_u_OTHER",
+    });
+    await expect(
+      retryPermintaanAiAction(formData({ id: "pa_orig" }))
+    ).rejects.toThrow(/tidak memiliki izin untuk Permintaan AI/i);
+    expect(buatPermintaanAi).not.toHaveBeenCalled();
+  });
+
+  it("9c. admin can cancel ANY user's permintaan (admin bypass)", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    cariPermintaanAiById.mockResolvedValueOnce({
+      id: "pa_1",
+      jenis: "deskripsi_cp",
+      status: "dibuat",
+      dibuatOleh: "workos_u_OTHER",
+    });
+    await batalkanPermintaanAiAction(formData({ id: "pa_1" }));
+    expect(batalkanPermintaanAi).toHaveBeenCalledWith(TX, "pa_1");
   });
 });
 
@@ -480,6 +532,7 @@ describe("F. retry (retryPermintaanAiAction)", () => {
       jenis: "deskripsi_atp",
       konteks: { fase: "C" },
       status: "gagal",
+      dibuatOleh: "workos_u_1",
     });
     await retryPermintaanAiAction(formData({ id: "pa_orig" }));
 

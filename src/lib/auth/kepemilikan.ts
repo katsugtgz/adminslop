@@ -307,3 +307,33 @@ export async function assertPemilikRombongan(
     throw new KepemilikanError("Anda tidak memiliki izin untuk Rombongan Belajar ini.");
   }
 }
+
+// ---------------------------------------------------------------------------
+// Permintaan AI ownership (per-user surface).
+//
+// Unlike Beban Mengajar and Rombongan Belajar (which are PTK-owned), a
+// permintaan_ai is per-user: row.dibuatOleh === akses.userId. Admin
+// (`akses:kelola`) manages all requests school-wide and short-circuits.
+// ---------------------------------------------------------------------------
+
+/**
+ * Ownership gate for per-user resources (Permintaan AI). Confirms the
+ * resource was created by the active Pengguna. Admin (`akses:kelola`)
+ * short-circuits without calling the resolver.
+ *
+ * `pemilikResolver` returns the `dibuatOleh` value from the already-loaded
+ * row (the caller loads it for status checks anyway — no extra DB hit).
+ */
+export async function assertPemilikPermintaan(
+  _tx: Tx,
+  akses: AksesAktif,
+  pemilikResolver: () => Promise<string>
+): Promise<void> {
+  if (akses.boleh("akses:kelola").diizinkan) return;
+
+  const myUserId = akses.userId;
+  const dibuatOleh = await pemilikResolver();
+  if (dibuatOleh !== myUserId) {
+    throw new KepemilikanError("Anda tidak memiliki izin untuk Permintaan AI ini.");
+  }
+}

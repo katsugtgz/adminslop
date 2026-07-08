@@ -44,6 +44,7 @@ export async function pilihSatuanPendidikanAction(formData: FormData) {
     sameSite: "lax",
     path: "/",
     maxAge: ACTIVE_TENANT_MAX_AGE,
+    secure: process.env.NODE_ENV === "production",
   });
 
   revalidatePath("/dashboard");

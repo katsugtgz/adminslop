@@ -15,6 +15,12 @@
 // `app.tenant_id`, so every repo lookup is already scoped to the active
 // tenant — a cross-tenant id simply resolves to "not found" (a deny).
 //
+// OWNERSHIP MODEL: Bank Soal (Butir Soal + Paket Soal) is a SCHOOL-WIDE shared
+// resource — any guru with `bank_soal:buat`/`:ubah` may create/edit any Butir
+// or Paket in the tenant. No gate-2 ownership check is applied (unlike Beban
+// Mengajar / Rombongan Belajar which are PTK-owned). RLS + the role gate are
+// the boundary.
+//
 // AC#2 (AI provenance + verification gate): `buatButirSoalAction` passes
 // `drafAiId` through to the repo, which REJECTS any non-null value whose
 // draf_ai.status_verifikasi is not 'disetujui'. Unverified AI content cannot
