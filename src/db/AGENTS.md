@@ -5,8 +5,13 @@ seed, and DB tests.
 
 ## Shape
 
-- `schema.ts` is one flat schema file. DB names are `snake_case`; TypeScript
-  properties are camelCase.
+- `schema.ts` is a pure barrel re-export. Table definitions live in 15 domain
+  files under `src/db/schema/` (core, kurikulum, akses, peserta-didik, akademik,
+  beban-mengajar, penilaian, ai, absensi, notifikasi, eraport, bank-soal,
+  perangkat-ajar, arsip, cetak). Importing consumers continue to use
+  `@/db/schema` unchanged. DB names are `snake_case`; TypeScript properties are
+  camelCase. Cross-domain FK references resolve via explicit imports between
+  domain files in topological order; never add a cycle.
 - `client.ts` exports `createDb`, `getDb`, `withTenant`, `catatAudit`, and DB
   types. Tenant-scoped app reads/writes go through `withTenant`.
 - Query modules in `queries/` are pure repositories: `(db: Db | Tx, input) =>
