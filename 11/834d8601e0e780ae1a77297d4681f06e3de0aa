@@ -1,0 +1,124 @@
+src/app/dashboard/akses/actions.ts
+  s_0c16fabcc5be74::t_1120daddbb55eb 115-117
+  s_0c16fabcc5be74::t_ac1cdfa5678f26 173-174
+  s_0c16fabcc5be74::t_13cebbd428948e 35
+  s_0c16fabcc5be74::t_a41c09f55cb7b3 232-233,238-239
+  s_0c16fabcc5be74::t_e1763bd2aa7d28 199-200,205
+  s_0c16fabcc5be74::t_697c3e0b050b0a 148
+src/app/dashboard/notifikasi/actions.test.ts
+  s_0c16fabcc5be74::t_53cee312016ccc 55-64
+src/app/dashboard/permintaan-ai/actions.ts
+  s_113c931fbdd1ae::t_06ebd62a63be56 173,179
+  s_113c931fbdd1ae::t_9996cc6ee57322 311
+  s_113c931fbdd1ae::t_1e86c981f84aa9 273-274
+  s_113c931fbdd1ae::t_e1b149ea165b16 52
+  s_113c931fbdd1ae::t_78e1c98b538c89 231
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_695fd03b05db6a::t_8ddde257789c56 50
+src/app/dashboard/cetak/actions.test.ts
+  s_0c16fabcc5be74::t_baabd9e5ad425f 44-53
+src/app/dashboard/eraport/actions.ts
+  s_af5b3b95b705a5::t_841655ef7657a1 73,77-79
+  s_af5b3b95b705a5::t_343f0cf1198327 183,185,189
+  s_af5b3b95b705a5::t_3d49e3b98145c5 50
+  s_af5b3b95b705a5::t_5be36a88094c80 150
+src/app/dashboard/cetak/actions.ts
+  s_0c16fabcc5be74::t_34e49a4cd6817b 113,115-116,118,125-127
+  s_0c16fabcc5be74::t_dd18f036f359d7 44,49,54,56,58-59
+  s_0c16fabcc5be74::t_f83e53c64baac6 73,75,77
+  s_0c16fabcc5be74::t_a8b5758f5ca5c0 28-29
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_113c931fbdd1ae::t_d65546cf03f8e8 64-76
+src/app/dashboard/perangkat-ajar/actions.test.ts
+  s_af5b3b95b705a5::t_2d8c8838fa1c16 70-82
+src/app/dashboard/peserta-didik/actions.ts
+  s_695fd03b05db6a::t_e696691f28d01a 43
+src/app/dashboard/arsip/actions.ts
+  s_113c931fbdd1ae::t_2dda3362ea839c 92,97
+  s_113c931fbdd1ae::t_b2d5f80fd5fcc3 54,59
+  s_113c931fbdd1ae::t_2b279b7c47899c 129,134,142
+  s_113c931fbdd1ae::t_224d7e369836b2 36
+src/app/dashboard/bank-soal/actions.ts
+  s_695fd03b05db6a::t_27acd2ab774212 406
+  s_695fd03b05db6a::t_66be928dbdb9fa 334,336,338,342
+  s_695fd03b05db6a::t_66c34d421fed9b 206,210,212,214,221,223,225,228
+  s_695fd03b05db6a::t_4a6b2dc57a06f1 259
+  s_695fd03b05db6a::t_7fca245df8dcdc 147,149,151,156,158,160,162,166
+  s_695fd03b05db6a::t_e011f8ef145490 43
+  s_695fd03b05db6a::t_7a2d8f2fef56d9 378,380
+  s_695fd03b05db6a::t_afe32285be4d4f 288,290,292,294,296
+src/app/dashboard/absensi/actions.ts
+  s_113c931fbdd1ae::t_01ba63fee257ef 171,173,184,193
+  s_113c931fbdd1ae::t_c22b96682a8006 30,35
+  s_113c931fbdd1ae::t_fa72c1c98ba543 80,83-85,89,94,104-105
+src/app/dashboard/absensi/actions.test.ts
+  s_113c931fbdd1ae::t_5dd6c29b416d13 108-120
+src/app/dashboard/tahun-ajaran/actions.ts
+  s_113c931fbdd1ae::t_a1d6247d92437f 86
+  s_113c931fbdd1ae::t_5765f14ff98988 115
+  s_113c931fbdd1ae::t_3795a7d4c91b9e 55
+  s_113c931fbdd1ae::t_4dad0df654d705 32
+src/app/dashboard/perangkat-ajar/actions.ts
+  s_af5b3b95b705a5::t_f0438f71639593 167-170,172,177,180,183,186
+  s_af5b3b95b705a5::t_558d59f6d3c101 221-224,226,228
+  s_af5b3b95b705a5::t_0632ae05835e5c 49-50
+  s_af5b3b95b705a5::t_5693fe43204ccc 93-96,99,105,110,113,115,118
+src/app/dashboard/penilaian/actions.ts
+  s_af5b3b95b705a5::t_29f146c229fd0d 164,166,168,175
+  s_af5b3b95b705a5::t_c083414d05c901 214
+  s_af5b3b95b705a5::t_5a1c20d522a9f1 274
+  s_af5b3b95b705a5::t_beae2c03e98c1d 56
+  s_af5b3b95b705a5::t_baf9fde2d4dad4 244
+  s_af5b3b95b705a5::t_f4235b828ea9c7 122,124,126
+  s_af5b3b95b705a5::t_85be1e88b2b298 84,86,88
+src/app/dashboard/beban-mengajar/actions.ts
+  s_113c931fbdd1ae::t_bb6f693f2e5627 47
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_113c931fbdd1ae::t_4a354af16b0c52 42
+  s_113c931fbdd1ae::t_f38d9f068f9d8c 24
+src/app/dashboard/notifikasi/actions.ts
+  s_0c16fabcc5be74::t_6dd91f58ee3a90 70
+  s_0c16fabcc5be74::t_3b2da14254f691 50-51
+  s_0c16fabcc5be74::t_018657d196b54d 112
+  s_0c16fabcc5be74::t_a4388e70f9290f 147,153,158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "11834d8601e0e780ae1a77297d4681f06e3de0aa",
+  "prompts": {},
+  "sessions": {
+    "s_0c16fabcc5be74": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be0b964cffedVopscDL0K4Yh6",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_113c931fbdd1ae": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be0b95f3ffeKsUAq485Teixck",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_695fd03b05db6a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be0b9667ffeRvuwoUxTkiyuiP",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_af5b3b95b705a5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be0b9620ffesSgWNg0W8cZGjc",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
