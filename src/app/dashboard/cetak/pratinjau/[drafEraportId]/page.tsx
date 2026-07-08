@@ -71,7 +71,7 @@ export default async function Page({
           style={{ "--glow-opacity": 0.4, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          <p className="eyebrow-accent">
             04 — Cetak · Pratinjau
           </p>
           <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">

@@ -114,7 +114,7 @@ export default async function Page() {
           12
         </span>
         <div className="relative px-6 py-10 sm:px-10 sm:py-14">
-          <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          <p className="inline-flex items-center gap-2 eyebrow-accent">
             <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
             Modul · Permintaan AI
           </p>
@@ -151,7 +151,7 @@ export default async function Page() {
             <div className="flex items-center gap-3">
               <span
                 aria-hidden="true"
-                className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+                className="eyebrow-accent"
               >
                 01
               </span>

@@ -74,7 +74,7 @@ export function DaftarTahunAjaran({
             </div>
 
             {aktif ? (
-              <span className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 Sedang Aktif
               </span>
             ) : bolehKelola ? (

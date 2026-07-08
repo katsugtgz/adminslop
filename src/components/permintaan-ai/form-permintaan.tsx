@@ -25,7 +25,7 @@ export function FormPermintaan({ action }: { action: ServerAksi }) {
       <div className="flex flex-col gap-1">
         <h2 className="font-display text-2xl tracking-tight text-foreground">
           Permintaan AI Baru{" "}
-          <span className="align-middle font-mono text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+          <span className="align-middle eyebrow-accent">
             (mode demo)
           </span>
         </h2>

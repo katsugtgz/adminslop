@@ -69,7 +69,7 @@ export default async function Page() {
             style={{ "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
           />
           <div className="relative flex flex-col gap-3">
-            <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+            <p className="inline-flex items-center gap-2 eyebrow-accent">
               <Bell className="h-3.5 w-3.5" aria-hidden="true" />
               Pusat Pengingat
             </p>
@@ -114,7 +114,7 @@ export default async function Page() {
           style={{ "--glow-opacity": 0.35, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative flex flex-col gap-3">
-          <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+          <p className="inline-flex items-center gap-2 eyebrow-accent">
             <Bell className="h-3.5 w-3.5" aria-hidden="true" />
             Pusat Pengingat
           </p>

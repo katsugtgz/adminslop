@@ -148,7 +148,7 @@ export default async function Page() {
 
       <PageReveal className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow-accent">
             01 — Tingkat
           </p>
           <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
@@ -160,7 +160,7 @@ export default async function Page() {
 
       <PageReveal className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow-accent">
             02 — Kelas
           </p>
           <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
@@ -175,7 +175,7 @@ export default async function Page() {
         (taAktif ? (
           <PageReveal className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+              <p className="eyebrow-accent">
                 03 — Penempatan
               </p>
               <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">

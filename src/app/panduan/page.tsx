@@ -137,7 +137,7 @@ export default function PanduanPage() {
           >
             <Compass className="h-5 w-5" />
           </span>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow-accent">
             02 — Onboarding
           </p>
           <h2

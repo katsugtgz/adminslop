@@ -177,7 +177,7 @@ export default function BerandaPage() {
             >
               <Compass className="h-5 w-5" />
             </span>
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="eyebrow text-muted-foreground">
               02 — Onboarding
             </span>
           </div>
@@ -214,7 +214,7 @@ export default function BerandaPage() {
       <section aria-labelledby="modul-judul" className="flex flex-col gap-8">
         <PageReveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            <p className="eyebrow-accent">
               <LayoutGrid
                 className="mr-2 inline h-3.5 w-3.5"
                 aria-hidden="true"
