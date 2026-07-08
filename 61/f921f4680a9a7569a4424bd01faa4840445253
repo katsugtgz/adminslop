@@ -1,0 +1,24 @@
+e2e/ci-smoke.spec.ts
+  s_e2911f1fd4ccf9::t_ed024499653fad 14-18,27,30-35,37-39,41-43
+  s_e2911f1fd4ccf9::t_084c2c15e467f4 1-13,19-26,28-29,36,40,44
+.github/workflows/ci.yml
+  s_e2911f1fd4ccf9::t_cb9a45aac9bf24 69-73
+  s_e2911f1fd4ccf9::t_00519439e115e0 60-62,67-68,74-91
+  s_e2911f1fd4ccf9::t_47310924b79168 63-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "61f921f4680a9a7569a4424bd01faa4840445253",
+  "prompts": {},
+  "sessions": {
+    "s_e2911f1fd4ccf9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0c87dcffeBHpDEH8dExZmEO",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
