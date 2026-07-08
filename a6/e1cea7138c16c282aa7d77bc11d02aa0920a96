@@ -1,0 +1,27 @@
+src/app/dashboard/permintaan-ai/actions.ts
+  s_9c1dce04449b52::t_5d1b510b37749e 110-114
+src/db/queries/kuota-ai.test.ts
+  s_9c1dce04449b52::t_4ec4e8b959ebcb 207-213,217,219,222-227,229-236
+  s_9c1dce04449b52::t_56fd4a40563669 169-170
+  s_9c1dce04449b52::t_d53e52daffdd67 239-272
+  s_9c1dce04449b52::t_e773f9164e1cc2 237-238
+src/db/queries/kuota-ai.ts
+  s_9c1dce04449b52::t_f30c785a904e71 11-18
+  s_9c1dce04449b52::t_cf8f5e6ef035db 100-113,120-121,128-129,135-152
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a6e1cea7138c16c282aa7d77bc11d02aa0920a96",
+  "prompts": {},
+  "sessions": {
+    "s_9c1dce04449b52": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be3ee518ffejCgJFbms2YNTxy",
+        "model": "glm-5.2"
+      },
+      "human_author": null
+    }
+  }
+}
