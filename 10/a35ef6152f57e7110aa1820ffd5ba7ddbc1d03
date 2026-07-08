@@ -1,0 +1,25 @@
+e2e/mvp-tracer.spec.ts
+  s_894626a0366ffb::t_0d63b331b5c4b7 166-171
+  s_894626a0366ffb::t_43c6c26caf7cd8 155-158,160-162,164
+  s_894626a0366ffb::t_18ed7e0c03834e 150-153
+  s_894626a0366ffb::t_61a9fd89236c2c 139-146,149
+  s_894626a0366ffb::t_691a9413e0b37b 154
+e2e/lib/console-guard.ts
+  s_894626a0366ffb::t_ae5a01e94efdc0 16-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "10a35ef6152f57e7110aa1820ffd5ba7ddbc1d03",
+  "prompts": {},
+  "sessions": {
+    "s_894626a0366ffb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be841e95ffdjfsDSPPWbTGaBE",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
