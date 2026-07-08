@@ -1,0 +1,23 @@
+scripts/provision-e2e-user.ts
+  s_894626a0366ffb::t_97fcc357e24846 377
+  s_894626a0366ffb::t_c397937600674f 103-111,113,116-117,119,123
+  s_894626a0366ffb::t_d473d4cf555656 1-102,112,114-115,118,120-122,124-376,378-409
+.github/workflows/ci.yml
+  s_894626a0366ffb::t_58f316ec180fc3 101-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "1c309f1fec8851a80a7b72ad18f5e7a081c92d6c",
+  "prompts": {},
+  "sessions": {
+    "s_894626a0366ffb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be841e95ffdjfsDSPPWbTGaBE",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
