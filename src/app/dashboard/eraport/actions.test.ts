@@ -265,7 +265,7 @@ describe("B. guru success — buatDrafEraportAction (AC#1 draf from Nilai Akhir)
       {
         pesertaDidikId: "pd_1",
         nilaiAkhir: 87.5,
-        rincian: [{ nama: "UTS", bobot: 1, rataRata: 87.5, jumlahPenilaian: 1 }],
+        rincian: [{ nama: "UTS", bobot: 1, rataRata: 87.5 }],
       },
     ]);
 
@@ -276,7 +276,7 @@ describe("B. guru success — buatDrafEraportAction (AC#1 draf from Nilai Akhir)
     // Period resolved server-side (not from formData).
     expect(getTahunAjaranAktif).toHaveBeenCalledWith(TX);
     expect(getSemesterAktif).toHaveBeenCalledWith(TX);
-    expect(getNilaiAkhir).toHaveBeenCalledWith(TX, "bm_1");
+    expect(getNilaiAkhir).toHaveBeenCalledWith(TX, "bm_1", "pd_1");
 
     // konten snapshot built from Nilai Akhir.
     expect(buatDrafEraport).toHaveBeenCalledWith(
@@ -313,7 +313,7 @@ describe("B. guru success — buatDrafEraportAction (AC#1 draf from Nilai Akhir)
       expect.objectContaining({ userId: "workos_u_1", status: "active" }),
       expect.any(Function)
     );
-    expect(getNilaiAkhir).toHaveBeenCalledWith(TX, "bm_1");
+    expect(getNilaiAkhir).toHaveBeenCalledWith(TX, "bm_1", "pd_1");
   });
 
   it("5. no bebanMengajarId -> konten carries only period+student context (no nilaiAkhir)", async () => {

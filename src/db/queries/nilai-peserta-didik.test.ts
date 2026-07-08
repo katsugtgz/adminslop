@@ -426,7 +426,6 @@ describeOrSkip(
       expect(utsRincian!.nama).toContain("UTS");
       expect(utsRincian!.bobot).toBe(40);
       expect(utsRincian!.rataRata).toBeCloseTo(85, 5);
-      expect(utsRincian!.jumlahPenilaian).toBe(2);
 
       const tugasRincian = pd1!.rincian.find(
         (r) => r.komponenNilaiId === tugas.komponenId
@@ -434,7 +433,6 @@ describeOrSkip(
       expect(tugasRincian).toBeDefined();
       expect(tugasRincian!.bobot).toBe(60);
       expect(tugasRincian!.rataRata).toBeCloseTo(75, 5);
-      expect(tugasRincian!.jumlahPenilaian).toBe(2);
     });
 
     // 5. AC#3 with NULL nilai (absent): student has nilai=80 in UTS only and
@@ -442,7 +440,7 @@ describeOrSkip(
     //    weighted-average denominator, so:
     //      Nilai Akhir = (80 × 40) / 40 = 80
     //    The Tugas rincian entry still appears (student has a row there) with
-    //    rataRata=null + jumlahPenilaian=0 — auditable absence.
+    //    rataRata=null — auditable absence.
     itOrSkip("getNilaiAkhir excludes components with all-null nilai from the weighted avg", async () => {
       const { bebanId, uts, tugas, pd1Id } = await seedGradingChain("null");
 
@@ -469,19 +467,17 @@ describeOrSkip(
       // (80×40) / 40 = 80 — Tugas excluded from denom.
       expect(pd1!.nilaiAkhir).toBeCloseTo(80, 5);
 
-      // Tugas rincian: present (the student has a row), but avg=null + count=0.
+      // Tugas rincian: present (the student has a row), but avg=null.
       const tugasR = pd1!.rincian.find(
         (r) => r.komponenNilaiId === tugas.komponenId
       );
       expect(tugasR).toBeDefined();
       expect(tugasR!.rataRata).toBeNull();
-      expect(tugasR!.jumlahPenilaian).toBe(0);
 
       // UTS rincian: the contributing component.
       const utsR = pd1!.rincian.find((r) => r.komponenNilaiId === uts.komponenId);
       expect(utsR).toBeDefined();
       expect(utsR!.rataRata).toBeCloseTo(80, 5);
-      expect(utsR!.jumlahPenilaian).toBe(1);
     });
 
     // 6. AC#3 with no nilai rows at all: the beban has komponen + penilaian
@@ -554,6 +550,48 @@ describeOrSkip(
         getNilaiAkhir(tx, bBebanId)
       );
       expect(aHasil).toEqual([]);
+    });
+
+    // 8. pesertaDidikId filter: when the third arg is supplied, the query
+    //    returns ONLY the rows for that student — over-fetch is eliminated for
+    //    single-student callers (e.g. buatDrafEraportAction).
+    itOrSkip("getNilaiAkhir(pesertaDidikId) returns only that student's derivation", async () => {
+      const { bebanId, uts, tugas, pd1Id, pd2Id } =
+        await seedGradingChain("filter");
+
+      await withTenant(db, SEED_A, async (tx: Tx) => {
+        await upsertNilai(tx, {
+          penilaianId: uts.penilaian1Id,
+          pesertaDidikId: pd1Id,
+          nilai: 80,
+        });
+        await upsertNilai(tx, {
+          penilaianId: tugas.penilaian1Id,
+          pesertaDidikId: pd1Id,
+          nilai: 90,
+        });
+        await upsertNilai(tx, {
+          penilaianId: uts.penilaian1Id,
+          pesertaDidikId: pd2Id,
+          nilai: 60,
+        });
+        await upsertNilai(tx, {
+          penilaianId: tugas.penilaian1Id,
+          pesertaDidikId: pd2Id,
+          nilai: 70,
+        });
+      });
+
+      const filtered = await withTenant(db, SEED_A, (tx) =>
+        getNilaiAkhir(tx, bebanId, pd1Id)
+      );
+      expect(filtered).toHaveLength(1);
+      expect(filtered[0].pesertaDidikId).toBe(pd1Id);
+
+      const unfiltered = await withTenant(db, SEED_A, (tx) =>
+        getNilaiAkhir(tx, bebanId)
+      );
+      expect(unfiltered).toHaveLength(2);
     });
   }
 );

@@ -99,8 +99,11 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
     };
     if (bebanMengajarIdRaw) {
       await assertPemilikBeban(tx, akses, () => Promise.resolve(bebanMengajarIdRaw));
-      const semua = await getNilaiAkhir(tx, bebanMengajarIdRaw);
-      const milikSiswa = semua.find((n) => n.pesertaDidikId === pesertaDidikId);
+      const [milikSiswa] = await getNilaiAkhir(
+        tx,
+        bebanMengajarIdRaw,
+        pesertaDidikId
+      );
       if (milikSiswa) {
         konten = {
           ...konten,

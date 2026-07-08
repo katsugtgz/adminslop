@@ -254,7 +254,6 @@ const NILAI_AKHIR_ANDI: NilaiAkhirPesertaDidik = {
       nama: "UTS",
       bobot: 30,
       rataRata: 80,
-      jumlahPenilaian: 1,
     },
   ],
 };

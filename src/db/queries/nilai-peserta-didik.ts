@@ -50,8 +50,6 @@ export interface NilaiAkhirPesertaDidik {
     readonly bobot: number;
     /** Avg of non-null nilai in this component for this student; null when all absent. */
     readonly rataRata: number | null;
-    /** Count of penilaian with a non-null nilai in this component for this student. */
-    readonly jumlahPenilaian: number;
   }[];
 }
 
@@ -116,8 +114,8 @@ export async function hapusNilai(db: Db | Tx, id: string): Promise<void> {
  * PURELY DERIVED — NEVER STORED. Single SQL query joins komponen_nilai →
  * penilaian → nilai_peserta_didik, aggregates per (student, component) in a
  * CTE, then computes the weighted average via window functions. NULL nilai
- * (absent) are excluded from the average — AVG ignores NULLs and COUNT(n.nilai)
- * counts only non-NULL values. RLS scopes every table to the current tenant.
+ * (absent) are excluded from the average — AVG ignores NULLs. RLS scopes
+ * every table to the current tenant.
  *
  * Output shape (NilaiAkhirPesertaDidik) is preserved: the flat SQL rows are
  * grouped by peserta_didik_id into nested `rincian` arrays in TS.
@@ -127,7 +125,8 @@ export async function hapusNilai(db: Db | Tx, id: string): Promise<void> {
  */
 export async function getNilaiAkhir(
   db: Db | Tx,
-  bebanMengajarId: string
+  bebanMengajarId: string,
+  pesertaDidikId?: string
 ): Promise<NilaiAkhirPesertaDidik[]> {
   const result = await db.execute<{
     peserta_didik_id: string;
@@ -135,7 +134,6 @@ export async function getNilaiAkhir(
     komponen_nama: string;
     komponen_bobot: number;
     rata_rata: number | null;
-    jumlah_penilaian: number;
     nilai_akhir: number;
   }>(sql`
     WITH per_component AS (
@@ -144,12 +142,12 @@ export async function getNilaiAkhir(
         k.nama AS komponen_nama,
         k.bobot::float8 AS komponen_bobot,
         n.peserta_didik_id,
-        AVG(n.nilai::float8) AS rata_rata,
-        COUNT(n.nilai)::int AS jumlah_penilaian
+        AVG(n.nilai::float8) AS rata_rata
       FROM komponen_nilai k
       JOIN penilaian p ON p.komponen_nilai_id = k.id
       JOIN nilai_peserta_didik n ON n.penilaian_id = p.id
       WHERE k.beban_mengajar_id = ${bebanMengajarId}
+        ${pesertaDidikId !== undefined ? sql`AND n.peserta_didik_id = ${pesertaDidikId}` : sql``}
       GROUP BY k.id, k.nama, k.bobot, n.peserta_didik_id
     )
     SELECT
@@ -158,7 +156,6 @@ export async function getNilaiAkhir(
       komponen_nama,
       komponen_bobot,
       rata_rata,
-      jumlah_penilaian,
       COALESCE(
         SUM(CASE WHEN rata_rata IS NOT NULL THEN rata_rata * komponen_bobot ELSE 0 END)
           OVER (PARTITION BY peserta_didik_id)
@@ -186,7 +183,6 @@ export async function getNilaiAkhir(
         nama: string;
         bobot: number;
         rataRata: number | null;
-        jumlahPenilaian: number;
       }[];
     }
   >();
@@ -206,7 +202,6 @@ export async function getNilaiAkhir(
       nama: row.komponen_nama,
       bobot: row.komponen_bobot,
       rataRata: row.rata_rata,
-      jumlahPenilaian: row.jumlah_penilaian,
     });
   }
 
