@@ -1,0 +1,21 @@
+src/components/ui/input.tsx
+  s_56046cdc6e3e8b::t_ef12bf9623be07 1-37
+src/components/ui/badge.tsx
+  s_56046cdc6e3e8b::t_e7f97a29b618fd 1-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "a54f8915a2aba24ca025547468479e55a864b106",
+  "prompts": {},
+  "sessions": {
+    "s_56046cdc6e3e8b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b548cffeyW94sOp91wxaBe",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
