@@ -37,8 +37,9 @@ export const satuanPendidikan = pgTable("satuan_pendidikan", {
   tahunAjaranAktif: text("tahun_ajaran_aktif"),
   semesterAktif: text("semester_aktif"),
   zonaWaktu: text("zona_waktu").notNull().default("Asia/Jakarta"),
-  // Preferensi Cetak (issue #5)
-  cetakPaperSize: text("cetak_paper_size").notNull().default("A4"),
+  // Preferensi Cetak (issue #5) — lowercase to match dokumen_cetak.format
+  // (0012_template_cetak.sql) and the FormatCetak type in queries/cetak.ts.
+  cetakPaperSize: text("cetak_paper_size").notNull().default("a4"),
   cetakTampilkanLogo: boolean("cetak_tampilkan_logo").notNull().default(true),
   cetakTampilkanHeader: boolean("cetak_tampilkan_header")
     .notNull()

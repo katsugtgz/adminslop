@@ -88,7 +88,7 @@ const pengaturanPayload = (over: Record<string, string> = {}) => ({
   tahunAjaran: "2024/2025",
   semester: "ganjil",
   zonaWaktu: "Asia/Jakarta",
-  cetakPaperSize: "A4",
+  cetakPaperSize: "a4",
   ...over,
 });
 
@@ -299,9 +299,9 @@ describe("simpanPengaturanSatuanPendidikanAction (#5)", () => {
     mocks.getActiveTenantContext.mockResolvedValue(adminCtx());
     mocks.getAuthenticatedUserId.mockResolvedValue("user_A");
 
-    // checkboxes absent (no "on"), paper size overridden to F4
+    // checkboxes absent (no "on"), paper size overridden to f4
     await simpanPengaturanSatuanPendidikanAction(
-      formData(pengaturanPayload({ cetakPaperSize: "F4" })),
+      formData(pengaturanPayload({ cetakPaperSize: "f4" })),
     );
 
     expect(mocks.updatePengaturan).toHaveBeenCalledWith(
@@ -310,7 +310,7 @@ describe("simpanPengaturanSatuanPendidikanAction (#5)", () => {
       expect.objectContaining({
         cetakTampilkanLogo: false,
         cetakTampilkanHeader: false,
-        cetakPaperSize: "F4",
+        cetakPaperSize: "f4",
         zonaWaktu: "Asia/Jakarta",
       }),
     );

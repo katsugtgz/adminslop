@@ -170,7 +170,7 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
       tahunAjaran: "2026/2027",
       semester: "ganjil",
       zonaWaktu: "Asia/Jakarta",
-      cetakPaperSize: "F4",
+      cetakPaperSize: "f4",
       cetakTampilkanLogo: false,
       cetakTampilkanHeader: true,
     });
@@ -179,7 +179,7 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
     expect(a?.tahunAjaranAktif).toBe("2026/2027");
     expect(a?.semesterAktif).toBe("ganjil");
     expect(a?.zonaWaktu).toBe("Asia/Jakarta");
-    expect(a?.cetakPaperSize).toBe("F4");
+    expect(a?.cetakPaperSize).toBe("f4");
     expect(a?.cetakTampilkanLogo).toBe(false);
     expect(a?.cetakTampilkanHeader).toBe(true);
 
@@ -188,7 +188,7 @@ describeOrSkip("Profil/Pengaturan tenant isolation (#5, real DB)", () => {
     expect(b?.tahunAjaranAktif).toBeNull();
     expect(b?.semesterAktif).toBeNull();
     expect(b?.zonaWaktu).toBe("Asia/Jakarta"); // NOT NULL default
-    expect(b?.cetakPaperSize).toBe("A4"); // NOT NULL default
+    expect(b?.cetakPaperSize).toBe("a4"); // NOT NULL default
     expect(b?.cetakTampilkanLogo).toBe(true); // NOT NULL default
   });
 

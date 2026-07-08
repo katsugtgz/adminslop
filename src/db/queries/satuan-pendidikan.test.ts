@@ -59,7 +59,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
         tahunAjaranAktif: "2026/2027",
         semesterAktif: "ganjil",
         zonaWaktu: "Asia/Jakarta",
-        cetakPaperSize: "A4",
+        cetakPaperSize: "a4",
         cetakTampilkanLogo: true,
         cetakTampilkanHeader: true,
       },
@@ -138,7 +138,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
       tahunAjaran: "2026/2027",
       semester: "ganjil",
       zonaWaktu: "Asia/Jakarta",
-      cetakPaperSize: "F4",
+      cetakPaperSize: "f4",
       cetakTampilkanLogo: false,
       cetakTampilkanHeader: true,
     };
@@ -150,7 +150,7 @@ describe("Satuan Pendidikan query helpers (#5)", () => {
       tahunAjaranAktif: "2026/2027",
       semesterAktif: "ganjil",
       zonaWaktu: "Asia/Jakarta",
-      cetakPaperSize: "F4",
+      cetakPaperSize: "f4",
       cetakTampilkanLogo: false,
       cetakTampilkanHeader: true,
     });

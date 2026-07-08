@@ -26,7 +26,7 @@ function fakeRow(
     tahunAjaranAktif: "2026/2027",
     semesterAktif: "ganjil",
     zonaWaktu: "Asia/Jakarta",
-    cetakPaperSize: "A4",
+    cetakPaperSize: "a4",
     cetakTampilkanLogo: true,
     cetakTampilkanHeader: true,
     ...overrides,
