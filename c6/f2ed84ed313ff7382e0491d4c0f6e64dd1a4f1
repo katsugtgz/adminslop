@@ -1,0 +1,23 @@
+src/app/dashboard/bank-soal/actions.test.ts
+  s_7a98471a159e96::t_bdab04781e9ba6 798-879
+  s_7a98471a159e96::t_30ca9f6aa4f694 14-25
+src/app/dashboard/bank-soal/actions.ts
+  s_7a98471a159e96::t_846ddeb8be05ba 469-482,492,500,502,504-518
+  s_7a98471a159e96::t_e93975b508afac 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c6f2ed84ed313ff7382e0491d4c0f6e64dd1a4f1",
+  "prompts": {},
+  "sessions": {
+    "s_7a98471a159e96": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be3ee502ffeF0weqg13NTlwcX",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
