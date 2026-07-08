@@ -1,0 +1,52 @@
+src/components/pengaturan-satuan/form-pengaturan.test.tsx
+  s_f1e5575f359f05::t_8803bc178965d5 76,82-84
+  s_f1e5575f359f05::t_436e6cdf8c3771 29
+src/app/dashboard/pengaturan/schemas.test.ts
+  s_f1e5575f359f05::t_888545ce15f6aa 65
+  s_f1e5575f359f05::t_381f5f9dfb21d5 102
+src/components/pengaturan-satuan/form-pengaturan.tsx
+  s_f1e5575f359f05::t_4fe9cc0d9219f2 103
+  s_f1e5575f359f05::t_907f35aeaef945 29
+  s_f1e5575f359f05::t_852084ff180c0a 98
+src/db/schema.ts
+  s_f1e5575f359f05::t_286634f8a1b5f3 40-42
+src/app/dashboard/pengaturan/actions.test.ts
+  s_f1e5575f359f05::t_fa01f667c0add5 91
+  s_f1e5575f359f05::t_157e0822c73e2f 302,304,313
+src/components/pengaturan-satuan/form-profil.test.tsx
+  s_f1e5575f359f05::t_150328cde4798b 29
+src/db/queries/satuan-pendidikan.test.ts
+  s_f1e5575f359f05::t_e15fb96d0e1456 141,153
+  s_f1e5575f359f05::t_dfb1e07e4a94af 62
+src/db/pengaturan.test.ts
+  s_f1e5575f359f05::t_01409715322b0c 173
+  s_f1e5575f359f05::t_cb19b86d987ac5 182
+  s_f1e5575f359f05::t_366706e54a715f 191
+src/db/migrations/0016_cetak_paper_size_lowercase.sql
+  s_f1e5575f359f05::t_1c7aa24b0ba300 1-44
+src/db/queries/cetak.ts
+  s_f1e5575f359f05::t_a0d27398712660 271
+src/app/dashboard/pengaturan/schemas.ts
+  s_f1e5575f359f05::t_3cc72e686a4e01 30
+src/app/dashboard/pengaturan/page.test.tsx
+  s_f1e5575f359f05::t_410587c4d44911 105
+src/db/queries/cetak.test.ts
+  s_f1e5575f359f05::t_3831bf7fc0cd70 303
+  s_f1e5575f359f05::t_3d37911be6391d 90-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4b0b34b0d0c6ddd3ebee56108462197604cff1b0",
+  "prompts": {},
+  "sessions": {
+    "s_f1e5575f359f05": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b549effe4Fk06TMU8uTTMB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
