@@ -1,0 +1,31 @@
+src/components/tombol-tema.tsx
+  s_127a66eff11f8c::t_e833ffe07a0a37 1-22
+src/components/theme-provider.tsx
+  s_127a66eff11f8c::t_2d6d392254e850 1-10
+src/components/app-shell.tsx
+  s_127a66eff11f8c::t_05a03e373993c1 43
+  s_127a66eff11f8c::t_c675c531eb885e 6
+src/app/layout.tsx
+  s_127a66eff11f8c::t_b4457a87eed545 10
+  s_127a66eff11f8c::t_4998fd9d846fef 51,55-64
+package.json
+  s_127a66eff11f8c::t_8cf77f61775d23 33
+package-lock.json
+  s_127a66eff11f8c::t_2964926bb5c912 20,7823-7832
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "96584f0ae9ff2fb7d96ccc974c423aab060b58dd",
+  "prompts": {},
+  "sessions": {
+    "s_127a66eff11f8c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b53eeffePe99iRVPIIzNwv",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
