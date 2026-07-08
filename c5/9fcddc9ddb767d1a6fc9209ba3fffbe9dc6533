@@ -1,0 +1,20 @@
+src/lib/auth/server.test.ts
+  s_d4e5913b9fe7ff::t_b258ad8b3df439 78,83-84,88
+  s_d4e5913b9fe7ff::t_5b92c3e9d2b3b3 1-77,79-82,85-87,89-285
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "c59fcddc9ddb767d1a6fc9209ba3fffbe9dc6533",
+  "prompts": {},
+  "sessions": {
+    "s_d4e5913b9fe7ff": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b5442ffeW7lvVNp6fdh6PM",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
