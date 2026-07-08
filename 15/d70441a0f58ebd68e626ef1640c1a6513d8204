@@ -1,0 +1,37 @@
+src/lib/form/parser.ts
+  s_8ba401eea5edb0::t_e1bf61fb6211b2 8-9
+src/db/queries/eraport.ts
+  s_8ba401eea5edb0::t_276f1ffab158bd 271-276,294
+  s_8ba401eea5edb0::t_2134bf13cc4d8f 286
+package.json
+  s_8ba401eea5edb0::t_e8e9cdaedae0f6 59
+src/app/dashboard/permintaan-ai/page.tsx
+  s_8ba401eea5edb0::t_107e7111320180 80-83
+src/db/schema/core.ts
+  s_8ba401eea5edb0::t_3267a72f1e0ca7 3
+  s_8ba401eea5edb0::t_2db6be87d525d8 41-46
+scripts/provision-e2e-user.ts
+  s_8ba401eea5edb0::t_f8192bc82921b3 60-65
+src/app/api/sinkronisasi/route.ts
+  s_8ba401eea5edb0::t_3f4550cb67a620 218-222
+src/app/api/sinkronisasi/route.test.ts
+  s_8ba401eea5edb0::t_9891f15b22dcb1 552-554
+package-lock.json
+  s_8ba401eea5edb0::t_22645deab87062 43,4490-4506,7632-7634,7638-7640,7642-7643,7649,7669-7671,7675-7677,7680,7683,10371-10373,10377-10379,10382,10401-10425
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "15d70441a0f58ebd68e626ef1640c1a6513d8204",
+  "prompts": {},
+  "sessions": {
+    "s_8ba401eea5edb0": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bd3185ffffecaOxzlGsIPDPU8",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
