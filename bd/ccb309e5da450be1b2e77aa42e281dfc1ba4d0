@@ -1,0 +1,130 @@
+src/app/dashboard/beban-mengajar/actions.ts
+  s_2166db5abab4e9::t_7449f32b26d397 46
+  s_2166db5abab4e9::t_47c28b7bca9df3 172
+  s_2166db5abab4e9::t_a68bb3420c4163 224
+  s_2166db5abab4e9::t_0d3733fcd5b26f 104
+  s_2166db5abab4e9::t_b20028ebc8a544 300
+  s_2166db5abab4e9::t_d1f79a731705a9 254
+src/app/dashboard/tahun-ajaran/actions.test.ts
+  s_2166db5abab4e9::t_c1f300125421b2 71-83
+src/app/dashboard/permintaan-ai/actions.ts
+  s_20a77f4327b795::t_1c3545716fe115 166-169
+  s_20a77f4327b795::t_4b745815c9920e 307-310
+  s_20a77f4327b795::t_589d346f0fd074 50
+  s_20a77f4327b795::t_9524b90ba3953e 268-271
+  s_20a77f4327b795::t_0b562b4638af47 225-228
+src/app/dashboard/peserta-didik/actions.ts
+  s_908259f5c79055::t_b38244acfdcad5 42
+  s_908259f5c79055::t_5a8784a6acd2b3 98
+  s_908259f5c79055::t_9dfade02b4c746 156,230,284,346,387,415,456
+src/app/dashboard/bank-soal/actions.test.ts
+  s_fc7454121ce750::t_62b5c2485452a8 28
+  s_fc7454121ce750::t_2072105480ac13 70
+  s_fc7454121ce750::t_1d3b5277f929ee 53
+  s_fc7454121ce750::t_0255f003bd5942 176,189-202
+  s_fc7454121ce750::t_4c32c42b54cf89 654-655
+src/app/dashboard/rombongan-belajar/actions.test.ts
+  s_fc7454121ce750::t_81b7f7ad4ecec6 74
+  s_fc7454121ce750::t_2fa5d0144dae15 264-277
+  s_fc7454121ce750::t_07843b971d0d1f 124
+  s_fc7454121ce750::t_45be46c693fbd8 246
+  s_fc7454121ce750::t_0e65c72faf7479 145
+src/app/dashboard/eraport/actions.ts
+  s_20a77f4327b795::t_dc5878e90eafe3 144-147
+  s_20a77f4327b795::t_ed5b06587deedb 66-69
+  s_20a77f4327b795::t_521ee799f3ba75 48
+  s_20a77f4327b795::t_3bd90fbd2a77b1 177-180
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_20a77f4327b795::t_165641436b10fd 69-81
+src/app/dashboard/arsip/actions.test.ts
+  s_20a77f4327b795::t_8ebec8c5d607d9 48-60,67-75
+src/app/dashboard/penilaian/actions.ts
+  s_908259f5c79055::t_e5036b5c0e0eb2 211,241,271
+  s_908259f5c79055::t_960ea94ca10af6 81,119,161
+  s_908259f5c79055::t_1ae1a50d852be8 49
+src/db/queries/arsip.ts
+  s_20a77f4327b795::t_bfde9346bfe91a 50,53
+src/app/dashboard/rombongan-belajar/actions.ts
+  s_fc7454121ce750::t_4d97e7fe8e768f 49
+  s_fc7454121ce750::t_ec3873416b06c9 116-119
+  s_fc7454121ce750::t_fdf92bfb068ea3 161-164,242-245,352-355
+  s_fc7454121ce750::t_46b38c936090f8 74-77
+src/app/dashboard/tahun-ajaran/actions.ts
+  s_2166db5abab4e9::t_25b694da94b331 51
+  s_2166db5abab4e9::t_ec47d4e8fbeffe 31
+  s_2166db5abab4e9::t_9c765ba11fabbf 84
+  s_2166db5abab4e9::t_e77bbd0151a976 114
+src/app/dashboard/bank-soal/actions.ts
+  s_fc7454121ce750::t_9c5a002a02eb13 41
+  s_fc7454121ce750::t_b9c46cc34a9fff 328-331,372-375
+  s_fc7454121ce750::t_b79d64d2f36b72 200-203,253-256
+  s_fc7454121ce750::t_96995222e6795e 141-144,400-403
+  s_fc7454121ce750::t_d94496b9b4070a 282-285
+src/app/dashboard/akses/actions.test.ts
+  s_2166db5abab4e9::t_4149d3d155f4cc 68-80
+src/app/dashboard/penilaian/actions.test.ts
+  s_908259f5c79055::t_3a3a3203e76073 110-122
+src/app/dashboard/akses/actions.ts
+  s_2166db5abab4e9::t_b4d67bb086381d 200
+  s_2166db5abab4e9::t_dfc6d832b5508e 33
+  s_2166db5abab4e9::t_1f17e8c4b592ee 146
+  s_2166db5abab4e9::t_5bb85e68453a4a 234
+  s_2166db5abab4e9::t_071df689cd7497 111
+  s_2166db5abab4e9::t_64621f8e176285 172
+src/app/dashboard/peserta-didik/actions.test.ts
+  s_908259f5c79055::t_796eae0911ec54 116-128
+src/components/arsip/daftar-retensi.tsx
+  s_20a77f4327b795::t_55046a2ff8c1f6 38,46
+  s_20a77f4327b795::t_8e4904ce67ca48 2-6
+  s_20a77f4327b795::t_5e97344b49b880 106-120
+src/app/dashboard/beban-mengajar/actions.test.ts
+  s_2166db5abab4e9::t_7b05924c36b8a5 120-132
+src/app/dashboard/arsip/actions.ts
+  s_20a77f4327b795::t_f9cd182a896c36 87-90
+  s_20a77f4327b795::t_2aa5340505fcfb 48-51
+  s_20a77f4327b795::t_a3c2349a7a80b6 28-35
+  s_20a77f4327b795::t_6ec80a6c3e2aaf 12
+  s_20a77f4327b795::t_339442929af42e 125-128
+src/app/dashboard/eraport/actions.test.ts
+  s_20a77f4327b795::t_3feaddd9c3dde8 75-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "bdccb309e5da450be1b2e77aa42e281dfc1ba4d0",
+  "prompts": {},
+  "sessions": {
+    "s_20a77f4327b795": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be21783bffejttIuDX4oBjj2Q",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_2166db5abab4e9": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be21789cffesgX0zMEUbCtKlV",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_908259f5c79055": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be2178e9ffe2lo2hJ5ZtEGTaw",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_fc7454121ce750": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be2178cbffe63BVtUQQkbrjLR",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
