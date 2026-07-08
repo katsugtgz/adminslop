@@ -34,6 +34,7 @@ const mocks = vi.hoisted(() => {
     listPaketSoal: vi.fn(async () => [] as PaketSoal[]),
     listButirInPaket: vi.fn(async () => [] as PaketSoalButir[]),
     cariButirSoalById: vi.fn(async () => null as ButirSoal | null),
+    cariButirSoalByIdBatch: vi.fn(async () => new Map<string, ButirSoal>()),
     fakeTx,
   };
 });
@@ -66,6 +67,7 @@ vi.mock("@/db/queries/bank-soal", () => ({
   listPaketSoal: mocks.listPaketSoal,
   listButirInPaket: mocks.listButirInPaket,
   cariButirSoalById: mocks.cariButirSoalById,
+  cariButirSoalByIdBatch: mocks.cariButirSoalByIdBatch,
 }));
 
 import Page from "./page";
@@ -220,6 +222,9 @@ beforeEach(() => {
   mocks.listPaketSoal.mockResolvedValue([PAKET_uts]);
   mocks.listButirInPaket.mockResolvedValue([PAKET_BUTIR_1]);
   mocks.cariButirSoalById.mockResolvedValue(BUTIR_PG);
+  mocks.cariButirSoalByIdBatch.mockResolvedValue(
+    new Map([[BUTIR_PG.id, BUTIR_PG]])
+  );
 });
 
 describe("BankSoalPage — akses gate (#16 / T7)", () => {
@@ -327,10 +332,11 @@ describe("BankSoalPage — drill-down (?paketId=... assembly view)", () => {
     expect(
       screen.getAllByText("Berapakah 2 + 2?").length
     ).toBeGreaterThanOrEqual(1);
-    // cariButirSoalById called for the member butir.
-    expect(mocks.cariButirSoalById).toHaveBeenCalledWith(
+    // cariButirSoalByIdBatch called for the member butir ids (single batched
+    // query instead of an N+1 fan-out).
+    expect(mocks.cariButirSoalByIdBatch).toHaveBeenCalledWith(
       mocks.fakeTx,
-      "butir_1"
+      ["butir_1"]
     );
     // listButirInPaket called for the focused paket.
     expect(mocks.listButirInPaket).toHaveBeenCalledWith(

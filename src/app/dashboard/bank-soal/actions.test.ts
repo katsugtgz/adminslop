@@ -599,6 +599,35 @@ describe("E. validation — throws before any DB work", () => {
     ).rejects.toThrow(/Urutan harus berupa angka/i);
     expect(tambahButirKePaket).not.toHaveBeenCalled();
   });
+
+  // BUGS-05: malformed pilihan JSON must throw a Bahasa validation error BEFORE
+  // any DB work — not a raw SyntaxError ("Unexpected token...") that leaks
+  // parser internals.
+  it("buatButirSoalAction malformed pilihan JSON -> throws /Format pilihan tidak valid/i; repo NOT called", async () => {
+    await expect(
+      buatButirSoalAction(
+        formData({
+          mataPelajaranId: "mp_1",
+          jenis: "pg",
+          pertanyaan: "Q?",
+          kunciJawaban: "A",
+          pilihan: "{not json",
+        })
+      )
+    ).rejects.toThrow(/Format pilihan tidak valid/i);
+    expect(buatButirSoal).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("ubahButirSoalAction malformed pilihan JSON -> throws /Format pilihan tidak valid/i; repo NOT called", async () => {
+    await expect(
+      ubahButirSoalAction(
+        formData({ id: "bs_1", pilihan: "[oops,]" })
+      )
+    ).rejects.toThrow(/Format pilihan tidak valid/i);
+    expect(ubahButirSoal).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
 });
 
 // ===========================================================================

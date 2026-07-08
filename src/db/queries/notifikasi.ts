@@ -52,6 +52,9 @@ export interface InputPreferensiNotifikasi {
   readonly aktif: boolean;
 }
 
+/** Default row cap for list queries — prevents unbounded recipient scans. */
+const DEFAULT_LIMIT = 200;
+
 /** Options for {@linkcode listNotifikasiByPengguna}. */
 export interface OpsiListNotifikasi {
   /** When true, return only unread (dibaca = false) rows. */
@@ -115,7 +118,8 @@ export async function listNotifikasiByPengguna(
         opts?.hanyaBelumDibaca ? eq(notifikasi.dibaca, false) : undefined
       )
     )
-    .orderBy(desc(notifikasi.dibuatPada));
+    .orderBy(desc(notifikasi.dibuatPada))
+    .limit(DEFAULT_LIMIT);
 }
 
 /**
@@ -252,7 +256,8 @@ export async function listNotifikasiAktif(
         notInArray(notifikasi.tipe, tipeNonaktifSubquery)
       )
     )
-    .orderBy(desc(notifikasi.dibuatPada));
+    .orderBy(desc(notifikasi.dibuatPada))
+    .limit(DEFAULT_LIMIT);
 }
 
 /** Re-exported for action-layer ownership helpers. */

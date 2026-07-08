@@ -3,7 +3,7 @@ const eduBtns = await page.locator('button', { hasText: /^(Profil Saya|Pengatura
 for (const btn of eduBtns) {
   const name = (await btn.innerText()).trim();
   try { await btn.click({ timeout: 5000 }); }
-  catch (e) { await btn.scrollIntoViewIfNeeded().catch(()=>{}); await btn.click({ timeout: 5000 }); }
+  catch (_e) { await btn.scrollIntoViewIfNeeded().catch(()=>{}); await btn.click({ timeout: 5000 }); }
   await page.waitForTimeout(2200);
   for (const txt of ['Baik, Saya Paham', 'Saya Mengerti & Lanjut', 'Tutup']) {
     const b = page.locator('button', { hasText: txt });

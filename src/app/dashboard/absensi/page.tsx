@@ -9,7 +9,7 @@ import {
 } from "@/db/queries/absensi";
 import { listRombonganBelajar } from "@/db/queries/rombongan-belajar";
 import { listAnggotaRombonganBelajar } from "@/db/queries/penempatan-rombongan-belajar";
-import { listPesertaDidik } from "@/db/queries/peserta-didik";
+import { listPesertaDidikByIds } from "@/db/queries/peserta-didik";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import type { PesertaDidik, RombonganBelajar } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
@@ -169,20 +169,18 @@ export default async function Page({
       }
 
       // Drill-down: roster + attendance for a tanggal.
-      const [anggota, allPeserta] = await Promise.all([
-        listAnggotaRombonganBelajar(
-          tx,
-          sp.rombonganBelajarId,
-          taAktif.id,
-          semester
-        ),
-        listPesertaDidik(tx, 500),
-      ]);
+      const anggota = await listAnggotaRombonganBelajar(
+        tx,
+        sp.rombonganBelajarId,
+        taAktif.id,
+        semester
+      );
 
       // Roster is the set of peserta_didik ids placed in this rombel for the
-      // active context; resolved to PesertaDidik rows for name display.
+      // active context; fetch ONLY those rows by id instead of loading all
+      // 500 tenant-wide and filtering in JS (over-fetch).
       const anggotaIds = new Set(anggota.map((a) => a.pesertaDidikId));
-      const peserta = allPeserta.filter((p) => anggotaIds.has(p.id));
+      const peserta = await listPesertaDidikByIds(tx, [...anggotaIds]);
 
       // Default tanggal to today (server-side) when absent or malformed.
       const tanggal =

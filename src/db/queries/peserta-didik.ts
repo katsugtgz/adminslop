@@ -14,7 +14,7 @@
  * AND updates the cache inside the caller's transaction — history is
  * append-only, never rewritten or deleted.
  */
-import { desc, eq, sql } from "drizzle-orm";
+import { desc, eq, inArray, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { pesertaDidik, riwayatStatusPesertaDidik } from "../schema";
@@ -85,6 +85,27 @@ export async function cariPesertaDidikById(
     .from(pesertaDidik)
     .where(eq(pesertaDidik.id, id));
   return rows[0] ?? null;
+}
+
+/**
+ * Batch fetch MANY peserta_didik by id in a SINGLE `inArray` query (RLS-scoped),
+ * newest first. Returns `PesertaDidik[]` (callers that need a `Map<id,row>`
+ * build it from the result). Cross-tenant / missing ids are simply absent.
+ * Replaces the over-fetch pattern of `listPesertaDidik(tx, 500)` + JS-side
+ * `.filter()` — callers that already hold the small set of relevant ids (e.g.
+ * a rombel roster) fetch ONLY those rows. An empty `ids` input short-circuits
+ * to `[]` (no query issued), avoiding an `IN ()` syntax error.
+ */
+export async function listPesertaDidikByIds(
+  db: Db | Tx,
+  ids: readonly string[]
+): Promise<PesertaDidik[]> {
+  if (ids.length === 0) return [];
+  return db
+    .select()
+    .from(pesertaDidik)
+    .where(inArray(pesertaDidik.id, [...ids]))
+    .orderBy(desc(pesertaDidik.dibuatPada));
 }
 
 /**

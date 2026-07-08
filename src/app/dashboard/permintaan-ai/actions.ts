@@ -236,7 +236,7 @@ export async function batalkanPermintaanAiAction(
     if (!permintaan) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    await assertPemilikPermintaan(tx, akses, async () => permintaan.dibuatOleh);
+    await assertPemilikPermintaan(tx, akses, () => Promise.resolve(permintaan.dibuatOleh));
     const status: StatusPermintaanAi = permintaan.status as StatusPermintaanAi;
     if (status !== "dibuat" && status !== "diproses") {
       throw new Error("Permintaan AI tidak dapat dibatalkan.");
@@ -316,7 +316,7 @@ export async function retryPermintaanAiAction(
     if (!original) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    await assertPemilikPermintaan(tx, akses, async () => original.dibuatOleh);
+    await assertPemilikPermintaan(tx, akses, () => Promise.resolve(original.dibuatOleh));
     // Both columns are CHECK-constrained text/jsonb; narrowing to the typed
     // unions is sound (the DB guarantees the literal vocabulary).
     await prosesPermintaanAi(

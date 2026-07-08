@@ -1,5 +1,5 @@
 import { getDb, withTenant } from "@/db/client";
-import { listRevisiByEraport, listDrafEraport } from "@/db/queries/eraport";
+import { listRevisiByEraportBatch, listDrafEraport } from "@/db/queries/eraport";
 import { listPesertaDidik } from "@/db/queries/peserta-didik";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
@@ -72,27 +72,30 @@ export default async function Page() {
     const pesertaMap = new Map(daftarPesertaDidik.map((p) => [p.id, p]));
 
     // Revision history per eraport (append-only, newest-first). Only needed
-    // for the detail expansion; load for every eraport in one pass.
-    const revisiEntries = await Promise.all(
-      daftarEraport.map(async (e) => [
-        e.id,
-        await listRevisiByEraport(tx, e.id, 500),
-      ] as const)
-    );
+    // for the detail expansion; load for every eraport in one batched query
+    // (inArray) to avoid an N+1 fan-out of one query per eraport.
     const revisiMap = new Map<
       string,
       { id: string; alasan: string; dibuatPada: Date; dibuatOleh: string | null }[]
     >();
-    for (const [eraportId, rows] of revisiEntries) {
-      revisiMap.set(
-        eraportId,
-        rows.map((r) => ({
-          id: r.id,
-          alasan: r.alasan,
-          dibuatPada: r.dibuatPada,
-          dibuatOleh: r.dibuatOleh,
-        }))
+    if (daftarEraport.length > 0) {
+      const batched = await listRevisiByEraportBatch(
+        tx,
+        daftarEraport.map((e) => e.id),
+        500
       );
+      for (const e of daftarEraport) {
+        const rows = batched.get(e.id) ?? [];
+        revisiMap.set(
+          e.id,
+          rows.map((r) => ({
+            id: r.id,
+            alasan: r.alasan,
+            dibuatPada: r.dibuatPada,
+            dibuatOleh: r.dibuatOleh,
+          }))
+        );
+      }
     }
 
     return { semester, daftarPesertaDidik, daftarEraport, pesertaMap, revisiMap };

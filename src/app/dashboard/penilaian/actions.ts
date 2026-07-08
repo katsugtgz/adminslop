@@ -95,7 +95,7 @@ export async function simpanKomponenNilaiBaruAction(
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: ownership (admin bypasses; guru must own beban_mengajar).
     // react-doctor-disable-next-line async-parallel: komponen insert depends on ownership gate; audit depends on kn.id, react-doctor/async-parallel
-    await assertPemilikBeban(tx, akses, async () => bebanMengajarId);
+    await assertPemilikBeban(tx, akses, () => Promise.resolve(bebanMengajarId));
     const kn = await buatKomponenNilai(tx, { bebanMengajarId, nama, bobot });
     await catatAudit(tx, {
       aktor: akses.userId,

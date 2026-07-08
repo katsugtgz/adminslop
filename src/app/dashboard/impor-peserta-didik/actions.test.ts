@@ -3,12 +3,25 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AksesSaya } from "@/lib/auth/akses-saya";
 import type { KeputusanAkses } from "@/lib/auth/otorisasi";
 import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
-import type { PesertaDidik } from "@/db/schema";
 
 // --- hoisted mocks ---------------------------------------------------------
 
 const mocks = vi.hoisted(() => {
-  const fakeTx = { __tx: true };
+  // BUGS-06: the dedup probe now runs as an inline
+  // `tx.select({nisn,nis}).from(pesertaDidik).where(inArray(...))` instead of
+  // the mocked listPesertaDidik(tx, 100000) full scan. `dedupRows.current` is
+  // the configurable result set returned by the mocked select chain.
+  const dedupRows: {
+    current: { nisn: string | null; nis: string | null }[];
+  } = { current: [] };
+  const fakeTx = {
+    __tx: true,
+    select: vi.fn(() => ({
+      from: () => ({
+        where: () => Promise.resolve(dedupRows.current),
+      }),
+    })),
+  };
   return {
     getAksesSaya: vi.fn(),
     getDb: vi.fn(() => ({ db: { __db: true } })),
@@ -20,7 +33,6 @@ const mocks = vi.hoisted(() => {
       ) => fn(fakeTx)
     ),
     catatAudit: vi.fn(async () => undefined),
-    listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
     buatPesertaDidikBatch: vi.fn(
       async (
         _tx: unknown,
@@ -47,6 +59,7 @@ const mocks = vi.hoisted(() => {
     ),
     revalidatePath: vi.fn(),
     fakeTx,
+    dedupRows,
   };
 });
 
@@ -55,10 +68,10 @@ const {
   getDb,
   withTenant,
   catatAudit,
-  listPesertaDidik,
   buatPesertaDidikBatch,
   revalidatePath,
   fakeTx: fakeTxRef,
+  dedupRows,
 } = mocks;
 
 vi.mock("@/lib/auth/akses-saya", () => ({
@@ -80,7 +93,6 @@ vi.mock("@/db/client", () => ({
   catatAudit: mocks.catatAudit,
 }));
 vi.mock("@/db/queries/peserta-didik", () => ({
-  listPesertaDidik: mocks.listPesertaDidik,
   buatPesertaDidikBatch: mocks.buatPesertaDidikBatch,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
@@ -151,13 +163,12 @@ beforeEach(() => {
   getDb.mockReset();
   withTenant.mockReset();
   catatAudit.mockReset();
-  listPesertaDidik.mockReset();
   buatPesertaDidikBatch.mockReset();
   revalidatePath.mockReset();
+  dedupRows.current = [];
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(async (_db, _t, fn) => fn(fakeTxRef));
   catatAudit.mockResolvedValue(undefined);
-  listPesertaDidik.mockResolvedValue([]);
   buatPesertaDidikBatch.mockImplementation(async (_tx, inputs) =>
     inputs.map((input: { nama: string; nisn?: string | null; nis?: string | null; tanggalLahir: string; jenisKelamin: string }) => ({
       id: `pd_${input.nama}`,
@@ -338,21 +349,8 @@ describe("C. validation errors — tidak_valid rows", () => {
 describe("D. duplicate handling (AC#5 — no silent overwrite)", () => {
   it("NISN already in tenant -> row 'perlu_koreksi', NOT inserted; does NOT throw (softer)", async () => {
     getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
-    const existing: PesertaDidik[] = [
-      {
-        id: "pd_old",
-        tenantId: "org_A",
-        nama: "Lama",
-        nisn: "12345678",
-        nis: null,
-        tanggalLahir: "2009-01-01",
-        jenisKelamin: "L",
-        status: "aktif",
-        dibuatPada: new Date("2026-01-01T00:00:00Z"),
-        diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
-      },
-    ];
-    listPesertaDidik.mockResolvedValue(existing);
+    // BUGS-06: the dedup probe returns only the colliding NISN projection.
+    dedupRows.current = [{ nisn: "12345678", nis: null }];
 
     // The duplicate row is skipped (perlu_koreksi); a second fresh row inserts.
     await imporPesertaDidikAction(
@@ -462,5 +460,73 @@ describe("G. non-active akses context", () => {
       )
     ).rejects.toThrow(/belum dipilih/i);
     expect(withTenant).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// H. CSV size cap (MAX_CSV_BYTES = 2 MB). Two independent guards exist in the
+// action: (1) File `.size` pre-check, (2) decoded `content.length` check that
+// also covers string entries (which bypass the .size check). Both must reject
+// BEFORE any tenant DB work (withTenant / batch / audit) touches the database.
+// ===========================================================================
+
+describe("H. CSV size cap (2 MB)", () => {
+  const MAX_BYTES = 2 * 1024 * 1024;
+
+  it("File with .size > MAX -> throws /2 MB/i before any DB write", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+
+    const fd = new FormData();
+    fd.append(
+      "file",
+      new File(["x".repeat(MAX_BYTES + 1)], "besar.csv", {
+        type: "text/csv",
+      })
+    );
+
+    await expect(imporPesertaDidikAction(fd)).rejects.toThrow(/melebihi batas ukuran/i);
+
+    expect(withTenant).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("string field with content.length > MAX -> throws /2 MB/i (size pre-check skipped for strings)", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+
+    // String entry: `typeof fileField === "string"` skips the `.size` guard, so
+    // the content-length guard is the only protection. Pad well past 2 MB.
+    const fd = new FormData();
+    const padding = "x".repeat(MAX_BYTES + 1);
+    fd.append("file", `${CSV_HEADER}\n${padding}`);
+
+    await expect(imporPesertaDidikAction(fd)).rejects.toThrow(/melebihi batas ukuran/i);
+
+    expect(withTenant).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
+  });
+
+  it("File at exactly MAX bytes -> size cap admits it (reaches DB layer)", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+
+    // Build a CSV whose total byte length is exactly MAX_BYTES so both the
+    // `.size` and `content.length` guards see size === MAX (not > MAX). The
+    // nama is padded to land on the exact boundary.
+    const prefix = `${CSV_HEADER}\nBudi,,,2010-05-15,`;
+    const pad = MAX_BYTES - prefix.length - "L".length;
+    const exact = `${prefix}${"a".repeat(pad)}L`;
+    expect(exact.length).toBe(MAX_BYTES);
+
+    const fd = new FormData();
+    fd.append("file", new File([exact], "batas.csv", { type: "text/csv" }));
+
+    // The size cap uses strict `>`, so exactly MAX is admitted. The padded
+    // nama may trip the row validator and throw a summary — that is a separate
+    // concern. The signal we lock here is that withTenant ran, proving the
+    // size cap did not reject the boundary-size file.
+    await imporPesertaDidikAction(fd).catch((e: Error) => {
+      expect(e.message).not.toMatch(/melebihi batas ukuran/i);
+    });
+    expect(withTenant).toHaveBeenCalledTimes(1);
   });
 });

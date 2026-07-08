@@ -12,6 +12,7 @@ import { cleanupTestTenants } from "../test-cleanup";
 import {
   buatDrafAi,
   cariDrafAiByPermintaan,
+  cariDrafAiByPermintaanBatch,
   verifikasiDrafAi,
 } from "./draf-ai";
 import { buatPermintaanAi } from "./permintaan-ai";
@@ -335,7 +336,43 @@ describeOrSkip(
       expect(aAfter!.diverifikasiOleh).toBeNull();
     });
 
-    // 7. FK CASCADE: deleting permintaan_ai removes its 1:1 draf_ai. Verified
+    // 7. PERF-02 batch lookup: a single query resolves drafts for many
+    //    permintaan ids at once. Absent / cross-tenant ids are simply missing
+    //    from the returned Map. Empty input short-circuits without hitting the
+    //    DB (returns an empty Map).
+    itOrSkip("cariDrafAiByPermintaanBatch resolves multiple drafts in one query; absent ids omitted", async () => {
+      const { aId, bId, missingId } = await withTenant(db, SEED_A, async (tx) => {
+        const a = await seedPermintaanDanDraf(tx, "batch-a");
+        const b = await seedPermintaanDanDraf(tx, "batch-b");
+        return {
+          aId: a.permintaan.id,
+          bId: b.permintaan.id,
+          missingId: "00000000-0000-0000-0000-000000000000",
+        };
+      });
+
+      const map = await withTenant(db, SEED_A, (tx) =>
+        cariDrafAiByPermintaanBatch(tx, [aId, bId, missingId])
+      );
+      expect(map.size).toBe(2);
+      expect(map.get(aId)?.id).toBeTruthy();
+      expect(map.get(bId)?.id).toBeTruthy();
+      expect(map.has(missingId)).toBe(false);
+
+      // Empty input -> empty map, no DB round trip.
+      const empty = await withTenant(db, SEED_A, (tx) =>
+        cariDrafAiByPermintaanBatch(tx, [])
+      );
+      expect(empty.size).toBe(0);
+
+      // Cross-tenant: SEED_B cannot see SEED_A's drafts (RLS).
+      const bView = await withTenant(db, SEED_B, (tx) =>
+        cariDrafAiByPermintaanBatch(tx, [aId, bId])
+      );
+      expect(bView.size).toBe(0);
+    });
+
+    // 8. FK CASCADE: deleting permintaan_ai removes its 1:1 draf_ai. Verified
     //    through the repo (cariDrafAiByPermintaan) so the cascade is observed
     //    at the data-access layer.
     itOrSkip("cascades permintaan_ai -> draf_ai (FK CASCADE)", async () => {

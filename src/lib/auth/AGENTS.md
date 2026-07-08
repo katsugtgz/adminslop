@@ -54,5 +54,7 @@ AuthKit, tenant resolution, permission evaluation, and ownership guards.
   `PERAN_KE_IZIN_DEFAULT`, tests, and ADR/docs when semantics change.
 - Changing `IzinSlug` requires updating permission maps, route/action checks,
   tests, and visible copy.
-- Test gaps exist around `membership.ts`, `server.ts`, and direct ownership guard
-  coverage; add tests when touching those seams.
+- `membership.ts`, `server.ts`, and `kepemilikan.ts` ownership gates are
+  covered; when changing RoleSlug/IzinSlug or adding a new ownership chain
+  resolver, extend `membership.test.ts` / `kepemilikan.test.ts` rather than
+  asserting behavior at the action layer only.

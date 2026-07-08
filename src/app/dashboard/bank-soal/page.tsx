@@ -2,7 +2,7 @@ import Link from "next/link";
 import { LayoutGrid, Search } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
-import { cariButirSoalById, listButirInPaket, listButirSoal, listPaketSoal } from "@/db/queries/bank-soal";
+import { cariButirSoalById, cariButirSoalByIdBatch, listButirInPaket, listButirSoal, listPaketSoal } from "@/db/queries/bank-soal";
 import { listMataPelajaran } from "@/db/queries/mata-pelajaran";
 import { listTahunAjaran } from "@/db/queries/tahun-ajaran";
 import { listTingkat } from "@/db/queries/tingkat";
@@ -111,13 +111,12 @@ export default async function Page({
         );
         nextUrutan =
           paketMembers.reduce((max, m) => Math.max(max, m.urutan), 0) + 1;
-        // Fan out the unique butir lookups concurrently (each is an independent
-        // indexed read under RLS).
+        // Batch the unique butir lookups into a SINGLE inArray query rather
+        // than fanning out one cariButirSoalById per paket member (N+1).
         const uniqueButirIds = [...new Set(paketMembers.map((m) => m.butirSoalId))];
-        const butirResults = await Promise.all(
-          uniqueButirIds.map((id) => cariButirSoalById(tx, id))
-        );
-        for (const b of butirResults) {
+        const butirResults = await cariButirSoalByIdBatch(tx, uniqueButirIds);
+        for (const id of uniqueButirIds) {
+          const b = butirResults.get(id);
           if (b) butirInPaketMap.set(b.id, b);
         }
       }

@@ -75,6 +75,22 @@ function ambilString(item: Record<string, unknown>, key: string): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/**
+ * Parse the `pilihan` JSON field (BUGS-05). A malformed payload used to throw a
+ * raw `SyntaxError` whose message ("Unexpected token...") leaks parser internals
+ * and reads as an English stack trace to a Bahasa user. This wraps the parse in
+ * a try/catch and re-throws a plain Bahasa validation error so the action layer
+ * surfaces a consistent, localized message — mirroring the JSON guard already
+ * present in `imporButirSoalJsonAction`.
+ */
+function parsePilihan(raw: string): unknown {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    throw new Error("Format pilihan tidak valid (wajib JSON yang valid).");
+  }
+}
+
 function validasiKandidatImpor(
   item: unknown,
   index: number
@@ -160,9 +176,7 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
   const pembahasanRaw = trimField(formData, "pembahasan");
   const pembahasan = pembahasanRaw || null;
   const pilihanRaw = trimField(formData, "pilihan");
-  const pilihan = pilihanRaw
-    ? JSON.parse(pilihanRaw) as unknown
-    : null;
+  const pilihan = pilihanRaw ? parsePilihan(pilihanRaw) : null;
   const drafAiIdRaw = trimField(formData, "drafAiId");
   const drafAiId = drafAiIdRaw || null;
 
@@ -226,7 +240,7 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
   if (formData.has("pembahasan"))
     perubahan.pembahasan = pembahasanRaw || null;
   const pilihanRaw = trimField(formData, "pilihan");
-  if (pilihanRaw) perubahan.pilihan = JSON.parse(pilihanRaw) as unknown;
+  if (pilihanRaw) perubahan.pilihan = parsePilihan(pilihanRaw);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

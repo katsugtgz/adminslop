@@ -125,7 +125,7 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
     // C3 gate 2: ownership of the target Rombongan Belajar (admin bypasses;
     // guru must own the rombel via beban_mengajar / wali_kelas).
     // react-doctor-disable-next-line async-parallel: catatAbsensi depends on ownership gate; audit depends on row.id, react-doctor/async-parallel
-    await assertPemilikRombongan(tx, akses, async () => rombonganBelajarId);
+    await assertPemilikRombongan(tx, akses, () => Promise.resolve(rombonganBelajarId));
     const penempatan = await listPenempatanByPesertaDidik(tx, pesertaDidikId);
     if (!penempatan.some((p) => p.rombonganBelajarId === rombonganBelajarId)) {
       throw new Error("Peserta Didik tidak terdaftar di Rombongan Belajar ini.");

@@ -50,8 +50,13 @@ const E2E_ORG_EXTERNAL_ID = "e2e-test-satuan-pendidikan";
 const E2E_ORG_ROLE_SLUG: RoleSlug = "admin_satuan_pendidikan";
 const E2E_ORG_ROLE_NAME = "Admin Satuan Pendidikan";
 
-const E2E_USER_EMAIL = "e2e-test@adminslop.test";
-const E2E_USER_PASSWORD = "E2eTestPass123!";
+// SEC-01: credentials come from env (E2E_AUTH_EMAIL / E2E_AUTH_PASSWORD) so the
+// password is never baked into version control. The fallbacks preserve the old
+// local-dev defaults for a bare `npx tsx` run without env, but CI / shared
+// environments MUST set the env vars (the script echoes them for secret setup).
+const E2E_USER_EMAIL = process.env.E2E_AUTH_EMAIL ?? "e2e-test@adminslop.test";
+const E2E_USER_PASSWORD =
+  process.env.E2E_AUTH_PASSWORD ?? "E2eTestPass123!";
 const E2E_USER_NAME = "E2E Test Admin";
 
 /** Aktor marker for audit rows — distinguishes e2e seed from dev seed. */
@@ -301,7 +306,7 @@ async function seedTenantData(
         .returning({ id: schema.rombonganBelajar.id });
       rombel = [{ id: row!.id }];
     }
-    const rombelId = rombel[0]!.id;
+    const _rombelId = rombel[0]!.id;
 
     // ── 3 Peserta Didik (idempotent via fixed NISN) ─────────────────────
     const seedPeserta = [

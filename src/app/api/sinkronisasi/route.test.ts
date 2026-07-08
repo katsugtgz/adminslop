@@ -17,6 +17,7 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 
 const mocks = vi.hoisted(() => {
   const tableRows = new Map<unknown, unknown[]>();
+  const updateReturning = { current: [{ id: "mock_row" }] as unknown[] };
   function snakeToCamel(s: string): string {
     return s.replace(/_([a-z0-9])/g, (_m, c) => c.toUpperCase());
   }
@@ -54,21 +55,29 @@ const mocks = vi.hoisted(() => {
               "Mock .where() received no supported equality predicates.",
             );
           }
-          return rows.filter((r) => {
+          const filtered = rows.filter((r) => {
             const row = r as Record<string, unknown>;
             return preds.every(
               (p) => row[snakeToCamel(p.col)] === p.val || row[p.col] === p.val
             );
-          });
+          }) as unknown[] & { orderBy?: () => unknown[] };
+          // listPenempatanByPesertaDidik chains `.orderBy(asc(...))`. Fixture
+          // order is irrelevant to the route's `.some()` check, so a no-op
+          // keeps the WHERE contract intact without modeling sort direction.
+          filtered.orderBy = () => filtered;
+          return filtered;
         },
       }),
     }),
     insert: vi.fn(() => ({
       values: () => ({ returning: async () => [{ id: "mock_row" }] }),
     })),
+    // `updateReturning.current` is the row set returned by UPDATE...RETURNING.
+    // Default = one row (happy UPDATE). The AC#4 lost-race test sets it to []
+    // to simulate 0 rows matching the (id, versi) predicate.
     update: vi.fn(() => ({
       set: () => ({
-        where: () => ({ returning: async () => [{ id: "mock_row" }] }),
+        where: () => ({ returning: async () => updateReturning.current }),
       }),
     })),
   };
@@ -85,11 +94,19 @@ const mocks = vi.hoisted(() => {
     catatAudit: vi.fn(async () => undefined),
     fakeTx: fakeTxLocal,
     tableRows,
+    updateReturning,
   };
 });
 
-const { getAksesSaya, getDb, withTenant, catatAudit, fakeTx: fakeTxRef, tableRows } =
-  mocks;
+const {
+  getAksesSaya,
+  getDb,
+  withTenant,
+  catatAudit,
+  fakeTx: fakeTxRef,
+  tableRows,
+  updateReturning,
+} = mocks;
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
@@ -183,6 +200,7 @@ function aturFixtures(opts: {
   rombel?: unknown[];
   wali?: unknown[];
   absensi?: unknown[];
+  penempatan?: unknown[];
 }): void {
   tableRows.clear();
   if (opts.penilaian) tableRows.set(dbSchema.penilaian, opts.penilaian);
@@ -191,13 +209,17 @@ function aturFixtures(opts: {
   if (opts.rombel) tableRows.set(dbSchema.rombonganBelajar, opts.rombel);
   if (opts.wali) tableRows.set(dbSchema.waliKelas, opts.wali);
   if (opts.absensi) tableRows.set(dbSchema.absensiHarian, opts.absensi);
+  if (opts.penempatan)
+    tableRows.set(dbSchema.penempatanRombonganBelajar, opts.penempatan);
 }
 
-/** Build a POST Request whose JSON body is `body`. */
+/** Build a POST Request whose JSON body is `body`. Sends a same-origin
+ * `Origin` header so requests clear the SEC-07 origin gate (browsers always
+ * send Origin on POST); cross-origin rejection is covered in its own test. */
 function postJson(body: unknown): Request {
   return new Request("http://localhost/api/sinkronisasi", {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", origin: "http://localhost" },
     body: JSON.stringify(body),
   });
 }
@@ -233,6 +255,7 @@ beforeEach(() => {
   withTenant.mockImplementation(async (_db, _tenantId, fn) => fn(fakeTxRef));
   catatAudit.mockResolvedValue(undefined);
   tableRows.clear();
+  updateReturning.current = [{ id: "mock_row" }];
 });
 
 // ===========================================================================
@@ -428,5 +451,166 @@ describe("gate-1: wali_kelas (read-only) -> 403 before any work", () => {
   it("10. unrecognized envelope tipe -> 400", async () => {
     const res = await POST(postJson({ tipe: "lainnya", draft: {} }));
     expect(res.status).toBe(400);
+  });
+});
+
+// ===========================================================================
+// TESTS-02 — Block B: happy-path writes + AC#4 optimistic-concurrency paths.
+// Admin bypasses ownership so fixtures model only the data path. Covers the
+// four distinct sync branches the C1/C3/C14 denies above do NOT exercise:
+//   B.1 INSERT (no existing row)          -> ok / versi 1
+//   B.2 UPDATE (versi matches)            -> ok / versi N+1
+//   B.3 conflict (versi mismatch)         -> konflik / server versi (no write)
+//   B.4 conflict (lost race: returning[]) -> konflik / versi N+1 (no write)
+// ===========================================================================
+
+describe("B. happy path + AC#4 conflict", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+  });
+
+  it("B.1 no existing row -> INSERT -> 200 ok / versi 1 + audit", async () => {
+    // No nilai_peserta_didik fixture -> natural-key lookup resolves null ->
+    // INSERT branch. Admin bypasses the Beban ownership gate.
+    aturFixtures({});
+    const res = await POST(postJson({ tipe: "nilai", draft: DRAFT_NILAI_VALID }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "ok", versi: 1 });
+    expect(fakeTxRef.insert).toHaveBeenCalledTimes(1);
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+
+  it("B.2 existing row, versi matches -> UPDATE -> 200 ok / versi N+1 + audit", async () => {
+    // Server row at versi 1; client draft also versi 1 -> match -> UPDATE bumps
+    // to versi 2. The mock UPDATE...RETURNING yields one row (default).
+    aturFixtures({});
+    tableRows.set(dbSchema.nilaiPesertaDidik, [
+      { id: "nilai_1", penilaianId: "p_1", pesertaDidikId: "pd_1", versi: 1 },
+    ]);
+    const res = await POST(postJson({ tipe: "nilai", draft: DRAFT_NILAI_VALID }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "ok", versi: 2 });
+    expect(fakeTxRef.update).toHaveBeenCalledTimes(1);
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+
+  it("B.3 versi mismatch (server ahead) -> 200 konflik / server versi; no write", async () => {
+    // Server row at versi 2; client draft versi 1 -> stale -> konflik. The
+    // server row is NOT overwritten; the client is told the current versi.
+    aturFixtures({});
+    tableRows.set(dbSchema.nilaiPesertaDidik, [
+      { id: "nilai_1", penilaianId: "p_1", pesertaDidikId: "pd_1", versi: 2 },
+    ]);
+    const res = await POST(
+      postJson({ tipe: "nilai", draft: { ...DRAFT_NILAI_VALID, versi: 1 } })
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "konflik", versi: 2 });
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+
+  it("B.4 lost race (UPDATE returning []) -> 200 konflik / versi N+1; no audit", async () => {
+    // versi matched at SELECT time, but another sync bumped it before the
+    // UPDATE -> 0 rows match (id, versi) -> konflik. The audit MUST NOT run
+    // (nothing was written). insert never runs; update ran but wrote nothing.
+    aturFixtures({});
+    tableRows.set(dbSchema.nilaiPesertaDidik, [
+      { id: "nilai_1", penilaianId: "p_1", pesertaDidikId: "pd_1", versi: 1 },
+    ]);
+    updateReturning.current = [];
+    const res = await POST(postJson({ tipe: "nilai", draft: DRAFT_NILAI_VALID }));
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "konflik", versi: 2 });
+    expect(fakeTxRef.update).toHaveBeenCalledTimes(1);
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// BUGS-03 — absensi new-row placement gate. A guru/admin who owns the rombel
+// must NOT insert attendance for a peserta didik who is NOT enrolled there.
+// The gate throws KepemilikanError -> 403 (not a 500 leak). Placed students
+// still insert successfully (the allow direction).
+// ===========================================================================
+
+describe("BUGS-03: absensi placement gate on new-row insert", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+  });
+
+  it("placed student -> INSERT -> 200 ok / versi 1", async () => {
+    aturFixtures({
+      penempatan: [{ pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" }],
+    });
+    const res = await POST(
+      postJson({ tipe: "absensi", draft: DRAFT_ABSENSI_VALID })
+    );
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ status: "ok", versi: 1 });
+    expect(fakeTxRef.insert).toHaveBeenCalledTimes(1);
+    expect(catatAudit).toHaveBeenCalledTimes(1);
+  });
+
+  it("unplaced student -> 403 KepemilikanError; no write", async () => {
+    // pd_1 is placed in rombel_OTHER, but the draft targets rombel_1.
+    aturFixtures({
+      penempatan: [{ pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_OTHER" }],
+    });
+    const res = await POST(
+      postJson({ tipe: "absensi", draft: DRAFT_ABSENSI_VALID })
+    );
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.status).toBe("error");
+    expect(body.pesan).toBe(
+      "Peserta Didik tidak terdaftar di Rombongan Belajar ini."
+    );
+    expect(fakeTxRef.insert).not.toHaveBeenCalled();
+    expect(fakeTxRef.update).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
+  });
+});
+
+// ===========================================================================
+// SEC-07 — same-origin guard. A missing Origin (non-browser probe) and a
+// cross-origin Origin are both rejected with 403 BEFORE any auth/DB work.
+// ===========================================================================
+
+describe("SEC-07: origin gate rejects before auth", () => {
+  it("missing Origin header -> 403; no auth resolution", async () => {
+    const req = new Request("http://localhost/api/sinkronisasi", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ tipe: "nilai", draft: DRAFT_NILAI_VALID }),
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(403);
+    expect(getAksesSaya).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
+  });
+
+  it("cross-origin Origin -> 403; no auth resolution", async () => {
+    const req = new Request("http://localhost/api/sinkronisasi", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin: "https://evil.example",
+      },
+      body: JSON.stringify({ tipe: "nilai", draft: DRAFT_NILAI_VALID }),
+    });
+    const res = await POST(req);
+    expect(res.status).toBe(403);
+    expect(getAksesSaya).not.toHaveBeenCalled();
+    expect(withTenant).not.toHaveBeenCalled();
   });
 });

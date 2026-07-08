@@ -34,7 +34,7 @@ const mocks = vi.hoisted(() => {
     listAnggotaRombonganBelajar: vi.fn(
       async () => [] as PenempatanRombonganBelajar[]
     ),
-    listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
+    listPesertaDidikByIds: vi.fn(async () => [] as PesertaDidik[]),
     getTahunAjaranAktif: vi.fn(async () => null as TahunAjaran | null),
     getSemesterAktif: vi.fn(async () => null as TaSemester | null),
     getAbsensiByTanggal: vi.fn(async () => [] as AbsensiHarian[]),
@@ -66,7 +66,7 @@ vi.mock("@/db/queries/penempatan-rombongan-belajar", () => ({
   listAnggotaRombonganBelajar: mocks.listAnggotaRombonganBelajar,
 }));
 vi.mock("@/db/queries/peserta-didik", () => ({
-  listPesertaDidik: mocks.listPesertaDidik,
+  listPesertaDidikByIds: mocks.listPesertaDidikByIds,
 }));
 vi.mock("@/db/queries/tahun-ajaran", () => ({
   getTahunAjaranAktif: mocks.getTahunAjaranAktif,
@@ -198,7 +198,7 @@ beforeEach(() => {
   mocks.getSemesterAktif.mockResolvedValue("ganjil");
   mocks.listRombonganBelajar.mockResolvedValue([ROMBEL_1A]);
   mocks.listAnggotaRombonganBelajar.mockResolvedValue([PENEMPATAN_ANDI]);
-  mocks.listPesertaDidik.mockResolvedValue([PD_ANDI]);
+  mocks.listPesertaDidikByIds.mockResolvedValue([PD_ANDI]);
   mocks.getAbsensiByTanggal.mockResolvedValue([]);
   mocks.getRekapByRombonganBelajar.mockResolvedValue(
     new Map([["pd_1", REKAP_ANDI]])

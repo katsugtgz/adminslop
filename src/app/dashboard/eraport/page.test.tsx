@@ -19,7 +19,7 @@ const mocks = vi.hoisted(() => {
       ) => fn(fakeTx)
     ),
     listDrafEraport: vi.fn(async () => [] as DrafEraport[]),
-    listRevisiByEraport: vi.fn(async () => [] as RevisiEraport[]),
+    listRevisiByEraportBatch: vi.fn(async () => new Map<string, RevisiEraport[]>()),
     listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
     getTahunAjaranAktif: vi.fn(async () => null as TahunAjaran | null),
     getSemesterAktif: vi.fn(async () => "ganjil" as "ganjil" | "genap" | null),
@@ -44,7 +44,7 @@ vi.mock("@/db/client", () => ({
 }));
 vi.mock("@/db/queries/eraport", () => ({
   listDrafEraport: mocks.listDrafEraport,
-  listRevisiByEraport: mocks.listRevisiByEraport,
+  listRevisiByEraportBatch: mocks.listRevisiByEraportBatch,
 }));
 vi.mock("@/db/queries/peserta-didik", () => ({
   listPesertaDidik: mocks.listPesertaDidik,
@@ -148,7 +148,7 @@ beforeEach(() => {
   mocks.getSemesterAktif.mockResolvedValue("ganjil");
   mocks.listPesertaDidik.mockResolvedValue([pesertaDidik("pd_1")]);
   mocks.listDrafEraport.mockResolvedValue([]);
-  mocks.listRevisiByEraport.mockResolvedValue([]);
+  mocks.listRevisiByEraportBatch.mockResolvedValue(new Map());
 });
 
 describe("EraportPage — render by akses context (#13 / T7)", () => {
