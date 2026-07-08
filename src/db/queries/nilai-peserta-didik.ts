@@ -21,10 +21,10 @@
  * domain contract: nilai 0..100, bobot integer-ish weights); we convert to
  * string on insert (`String(...)`) and back to number on read (`Number(...)`).
  */
-import { eq, inArray, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
-import { komponenNilai, nilaiPesertaDidik, penilaian } from "../schema";
+import { nilaiPesertaDidik } from "../schema";
 import type { NilaiPesertaDidik } from "../schema";
 
 export interface InputNilai {
@@ -113,134 +113,102 @@ export async function hapusNilai(db: Db | Tx, id: string): Promise<void> {
 /**
  * AC#3 DERIVATION — Nilai Akhir = Σ(component_avg × bobot) / Σ(bobot).
  *
- * PURELY DERIVED — NEVER STORED. For the given beban_mengajar:
- *  1. Load all komponen_nilai (with bobot) under the beban.
- *  2. Load all penilaian under those komponen.
- *  3. Load all nilai_peserta_didik rows under those penilaian.
- *  4. For each student who has any nilai row, group their rows by komponen and
- *     compute the per-component average of NON-NULL nilai (NULL = absent,
- *     excluded from the average).
- *  5. Nilai Akhir = Σ(avg_k × bobot_k) / Σ(bobot_k) for components where
- *     avg_k is non-null. Components with all-NULL (or no nilai) are EXCLUDED
- *     from numerator AND denominator. If no component has a non-null avg,
- *     nilaiAkhir = 0.
- *  6. Return sorted by pesertaDidikId, with a rincian entry per component
- *     where the student has any nilai row (auditable per AC#3).
+ * PURELY DERIVED — NEVER STORED. Single SQL query joins komponen_nilai →
+ * penilaian → nilai_peserta_didik, aggregates per (student, component) in a
+ * CTE, then computes the weighted average via window functions. NULL nilai
+ * (absent) are excluded from the average — AVG ignores NULLs and COUNT(n.nilai)
+ * counts only non-NULL values. RLS scopes every table to the current tenant.
  *
- * RLS scopes every step to the current tenant — a cross-tenant beban id
- * yields an empty result (the komponen rows are invisible).
+ * Output shape (NilaiAkhirPesertaDidik) is preserved: the flat SQL rows are
+ * grouped by peserta_didik_id into nested `rincian` arrays in TS.
  *
- * Implemented as three composed queries rather than one window-function SQL:
- * the derivation logic is auditable in TS, and the row counts are bounded by
- * the beban (one teaching load → modest number of komponen/penilaian/students).
+ * Previous implementation ran 3 sequential queries + JS aggregation; that logic
+ * is preserved as a reference in the git history (commit prior to this change).
  */
 export async function getNilaiAkhir(
   db: Db | Tx,
   bebanMengajarId: string
 ): Promise<NilaiAkhirPesertaDidik[]> {
-  // 1. Komponen + bobot (RLS-scoped; cross-tenant beban → empty).
-  const komponenRows = await db
-    .select({
-      id: komponenNilai.id,
-      nama: komponenNilai.nama,
-      bobot: komponenNilai.bobot,
-    })
-    .from(komponenNilai)
-    .where(eq(komponenNilai.bebanMengajarId, bebanMengajarId));
+  const result = await db.execute<{
+    peserta_didik_id: string;
+    komponen_id: string;
+    komponen_nama: string;
+    komponen_bobot: number;
+    rata_rata: number | null;
+    jumlah_penilaian: number;
+    nilai_akhir: number;
+  }>(sql`
+    WITH per_component AS (
+      SELECT
+        k.id AS komponen_id,
+        k.nama AS komponen_nama,
+        k.bobot::float8 AS komponen_bobot,
+        n.peserta_didik_id,
+        AVG(n.nilai::float8) AS rata_rata,
+        COUNT(n.nilai)::int AS jumlah_penilaian
+      FROM komponen_nilai k
+      JOIN penilaian p ON p.komponen_nilai_id = k.id
+      JOIN nilai_peserta_didik n ON n.penilaian_id = p.id
+      WHERE k.beban_mengajar_id = ${bebanMengajarId}
+      GROUP BY k.id, k.nama, k.bobot, n.peserta_didik_id
+    )
+    SELECT
+      peserta_didik_id,
+      komponen_id,
+      komponen_nama,
+      komponen_bobot,
+      rata_rata,
+      jumlah_penilaian,
+      COALESCE(
+        SUM(CASE WHEN rata_rata IS NOT NULL THEN rata_rata * komponen_bobot ELSE 0 END)
+          OVER (PARTITION BY peserta_didik_id)
+        / NULLIF(
+            SUM(CASE WHEN rata_rata IS NOT NULL THEN komponen_bobot ELSE 0 END)
+              OVER (PARTITION BY peserta_didik_id),
+            0
+          ),
+        0
+      ) AS nilai_akhir
+    FROM per_component
+    ORDER BY peserta_didik_id, komponen_id
+  `);
 
-  if (komponenRows.length === 0) return [];
+  const rows = result.rows;
+  if (rows.length === 0) return [];
 
-  // 2. Penilaian under those komponen.
-  const komponenIds = komponenRows.map((k) => k.id);
-  const penilaianRows = await db
-    .select({
-      id: penilaian.id,
-      komponenNilaiId: penilaian.komponenNilaiId,
-    })
-    .from(penilaian)
-    .where(inArray(penilaian.komponenNilaiId, komponenIds));
-
-  if (penilaianRows.length === 0) return [];
-
-  // penilaian.id → komponen.id lookup.
-  const penilaianToKomponen = new Map<string, string>();
-  for (const p of penilaianRows) {
-    penilaianToKomponen.set(p.id, p.komponenNilaiId);
-  }
-
-  // 3. Nilai rows under those penilaian.
-  const penilaianIds = penilaianRows.map((p) => p.id);
-  const nilaiRows = await db
-    .select({
-      pesertaDidikId: nilaiPesertaDidik.pesertaDidikId,
-      penilaianId: nilaiPesertaDidik.penilaianId,
-      nilai: nilaiPesertaDidik.nilai,
-    })
-    .from(nilaiPesertaDidik)
-    .where(inArray(nilaiPesertaDidik.penilaianId, penilaianIds));
-
-  if (nilaiRows.length === 0) return [];
-
-  // 4. Aggregate per (pesertaDidikId, komponenNilaiId): sum + count of NON-NULL
-  //    nilai, AND track komponen presence (any row, even NULL) for the rincian.
-  //    The unique constraint (tenant, penilaian, peserta_didik) means at most
-  //    one nilai row per penilaian per student, so count == count of penilaian.
-  type ComponentAccum = { sum: number; count: number };
-  const byKey = new Map<string, ComponentAccum>(); // `${pdId}|${komponenId}`
-  const presenceByStudent = new Map<string, Set<string>>(); // pdId → komponenIds
-
-  for (const n of nilaiRows) {
-    const komponenId = penilaianToKomponen.get(n.penilaianId);
-    if (!komponenId) continue; // orphaned (shouldn't happen; defensive)
-
-    const presence = presenceByStudent.get(n.pesertaDidikId) ?? new Set<string>();
-    presence.add(komponenId);
-    presenceByStudent.set(n.pesertaDidikId, presence);
-
-    if (n.nilai === null) continue; // absent: counts toward presence, NOT the average
-
-    const key = `${n.pesertaDidikId}|${komponenId}`;
-    const prev = byKey.get(key) ?? { sum: 0, count: 0 };
-    prev.sum += Number(n.nilai);
-    prev.count += 1;
-    byKey.set(key, prev);
-  }
-
-  // 5. Build the result per student.
-  const hasil: NilaiAkhirPesertaDidik[] = [];
-  for (const [pdId, presence] of presenceByStudent) {
-    const rincian = komponenRows.flatMap((k) => {
-      if (!presence.has(k.id)) return [];
-      const accum = byKey.get(`${pdId}|${k.id}`);
-      const bobot = Number(k.bobot);
-      return [
-        {
-          komponenNilaiId: k.id,
-          nama: k.nama,
-          bobot,
-          rataRata: accum && accum.count > 0 ? accum.sum / accum.count : null,
-          jumlahPenilaian: accum?.count ?? 0,
-        },
-      ];
-    });
-
-    // Weighted average: Σ(avg × bobot) / Σ(bobot) over components with non-null avg.
-    let numerator = 0;
-    let denominator = 0;
-    for (const r of rincian) {
-      if (r.rataRata !== null) {
-        numerator += r.rataRata * r.bobot;
-        denominator += r.bobot;
-      }
+  const byStudent = new Map<
+    string,
+    {
+      pesertaDidikId: string;
+      nilaiAkhir: number;
+      rincian: {
+        komponenNilaiId: string;
+        nama: string;
+        bobot: number;
+        rataRata: number | null;
+        jumlahPenilaian: number;
+      }[];
     }
-    const nilaiAkhir = denominator > 0 ? numerator / denominator : 0;
+  >();
 
-    hasil.push({ pesertaDidikId: pdId, nilaiAkhir, rincian });
+  for (const row of rows) {
+    let entry = byStudent.get(row.peserta_didik_id);
+    if (!entry) {
+      entry = {
+        pesertaDidikId: row.peserta_didik_id,
+        nilaiAkhir: row.nilai_akhir,
+        rincian: [],
+      };
+      byStudent.set(row.peserta_didik_id, entry);
+    }
+    entry.rincian.push({
+      komponenNilaiId: row.komponen_id,
+      nama: row.komponen_nama,
+      bobot: row.komponen_bobot,
+      rataRata: row.rata_rata,
+      jumlahPenilaian: row.jumlah_penilaian,
+    });
   }
 
-  // 6. Stable order: sort by pesertaDidikId ascending.
-  hasil.sort((a, b) =>
-    a.pesertaDidikId < b.pesertaDidikId ? -1 : a.pesertaDidikId > b.pesertaDidikId ? 1 : 0
-  );
-  return hasil;
+  return [...byStudent.values()];
 }
