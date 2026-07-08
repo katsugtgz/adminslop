@@ -36,6 +36,11 @@ export async function simpanProfilSatuanPendidikanAction(
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
   }
   const { membership } = ctx;
+  // Style B (ADR 0008 D4): canAdminSatuanPendidikan is a pure role-predicate —
+  // it is pembatasan-immune (does NOT consult pembatasan_akses). Every other
+  // feature module uses Style A (akses.boleh(slug), pembatasan-aware).
+  // Migration to Style A is DEFERRED per ADR 0008 Decision 4 (behavior change,
+  // needs owner sign-off; tracked in the pengaturan deferral GitHub issue).
   if (!canAdminSatuanPendidikan(membership.roleSlug)) {
     throw new Error("Anda tidak memiliki izin mengubah Profil Satuan Pendidikan.");
   }
@@ -84,6 +89,11 @@ export async function simpanPengaturanSatuanPendidikanAction(
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
   }
   const { membership } = ctx;
+  // Style B (ADR 0008 D4): canAdminSatuanPendidikan is a pure role-predicate —
+  // it is pembatasan-immune (does NOT consult pembatasan_akses). Every other
+  // feature module uses Style A (akses.boleh(slug), pembatasan-aware).
+  // Migration to Style A is DEFERRED per ADR 0008 Decision 4 (behavior change,
+  // needs owner sign-off; tracked in the pengaturan deferral GitHub issue).
   if (!canAdminSatuanPendidikan(membership.roleSlug)) {
     throw new Error(
       "Anda tidak memiliki izin mengubah Pengaturan Satuan Pendidikan.",

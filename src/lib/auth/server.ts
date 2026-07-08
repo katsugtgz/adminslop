@@ -23,6 +23,7 @@ export const ACTIVE_TENANT_MAX_AGE = 60 * 60 * 24 * 30; // 30 hari
  * second `withAuth` round-trip.
  */
 export async function getActiveTenantContext(): Promise<TenantResolution> {
+  // cache()-wrapping was considered and rejected — see ADR 0008 Decision 1 (Shape A3 rejected).
   const auth = await withAuth();
   if (!auth.user) return { status: "denied", authenticated: false };
 

@@ -34,89 +34,98 @@ export function canViewPengaturanSatuanPendidikan(
 // ─── #6: Akses (Peran/Izin/Pembatasan) evaluator ─────────────────────────────
 
 /**
- * Baked-in peran (role) → default Izin map. Read-only constant. The starting
- * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
- * rows are applied. `dev` mirrors admin for the local DEV_MEMBERSHIP_ALL flow
- * ONLY — it is NOT a global superuser (scoped to seeded tenants; §13 of the
- * identity doc).
+ * Shared admin izin surface — the full management vocabulary. Referenced by
+ * both `admin_satuan_pendidikan` and the local-only `dev` shim so the ADR
+ * 0004 Decision 1 "dev mirrors admin" invariant is STRUCTURAL (single source
+ * of truth), not a hand-copied list that can drift. `dev` is NOT a global
+ * superuser — it is scoped to seeded tenants behind DEV_MEMBERSHIP_ALL
+ * (identity doc §13; ADR 0004 D1).
  */
-export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+const ADMIN_IZIN: readonly IzinSlug[] = [
   // peserta_didik:baca + rombongan_belajar:baca granted to every teaching role
   // (students and classes are core teaching data); buat/ubah remain
   // admin-scoped. No :hapus this slice (archive, not hard-delete per
   // CONTEXT.md). Tahun Ajaran management is admin-only, but kepala_sekolah
   // reads it. kurikulum:baca is universal — curriculum reference data is
   // read-only for all roles.
-  admin_satuan_pendidikan: [
-    "ptk:baca",
-    "ptk:buat",
-    "ptk:hapus",
-    "akses:kelola",
-    "akses:baca",
-    "peserta_didik:baca",
-    "peserta_didik:buat",
-    "peserta_didik:ubah",
-    "tahun_ajaran:baca",
-    "tahun_ajaran:kelola",
-    "rombongan_belajar:baca",
-    "rombongan_belajar:buat",
-    "rombongan_belajar:ubah",
-    "rombongan_belajar:kelola_penempatan",
-    "kurikulum:baca",
-    "beban_mengajar:baca",
-    "beban_mengajar:buat",
-    "beban_mengajar:ubah",
-    "wali_kelas:baca",
-    "wali_kelas:buat",
-    "wali_kelas:ubah",
-    "penilaian:baca",
-    "penilaian:buat",
-    "penilaian:ubah",
-    // Permintaan AI + Draf AI: admin manages the full AI request/draft/verify
-    // lifecycle school-wide.
-    "permintaan_ai:baca",
-    "permintaan_ai:buat",
-    "draf_ai:baca",
-    "draf_ai:verifikasi",
-    "absensi:baca",
-    "absensi:buat",
-    "absensi:ubah",
-    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
-    "impor_peserta_didik:baca",
-    "impor_peserta_didik:kelola",
-    "ekspor_peserta_didik:baca",
-    // Notifikasi (#20): everyone reads/manages their own; admin manages
-    // system-wide notification creation (kelola).
-    "notifikasi:baca",
-    "notifikasi:kelola",
-    // E-Raport: admin manages the full document lifecycle school-wide.
-    "eraport:baca",
-    "eraport:buat",
-    "eraport:terbit",
-    "eraport:revisi",
-    // Bank Soal + Paket Soal: admin manages the full question-bank + package
-    // assembly surface school-wide.
-    "bank_soal:baca",
-    "bank_soal:buat",
-    "bank_soal:ubah",
-    "paket_soal:baca",
-    "paket_soal:buat",
-    "paket_soal:ubah",
-    // Perangkat Ajar: admin manages all teaching documents school-wide.
-    "perangkat_ajar:baca",
-    "perangkat_ajar:buat",
-    "perangkat_ajar:ubah",
-    // Arsip (#19): admin manages archive/recovery/retention school-wide.
-    "arsip:baca",
-    "arsip:kelola",
-    // Cetak: admin manages the full print/export surface (#14) — templates,
-    // preview, dokumen generation.
-    "cetak:baca",
-    "cetak:buat",
-    "cetak:ubah",
-    // offline:baca (#21) — every member sees their own pending drafts.
-    "offline:baca",
-  ],
+  "ptk:baca",
+  "ptk:buat",
+  "ptk:hapus",
+  "akses:kelola",
+  "akses:baca",
+  "peserta_didik:baca",
+  "peserta_didik:buat",
+  "peserta_didik:ubah",
+  "tahun_ajaran:baca",
+  "tahun_ajaran:kelola",
+  "rombongan_belajar:baca",
+  "rombongan_belajar:buat",
+  "rombongan_belajar:ubah",
+  "rombongan_belajar:kelola_penempatan",
+  "kurikulum:baca",
+  "beban_mengajar:baca",
+  "beban_mengajar:buat",
+  "beban_mengajar:ubah",
+  "wali_kelas:baca",
+  "wali_kelas:buat",
+  "wali_kelas:ubah",
+  "penilaian:baca",
+  "penilaian:buat",
+  "penilaian:ubah",
+  // Permintaan AI + Draf AI: admin manages the full AI request/draft/verify
+  // lifecycle school-wide.
+  "permintaan_ai:baca",
+  "permintaan_ai:buat",
+  "draf_ai:baca",
+  "draf_ai:verifikasi",
+  "absensi:baca",
+  "absensi:buat",
+  "absensi:ubah",
+  // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
+  "impor_peserta_didik:baca",
+  "impor_peserta_didik:kelola",
+  "ekspor_peserta_didik:baca",
+  // Notifikasi (#20): everyone reads/manages their own; admin manages
+  // system-wide notification creation (kelola).
+  "notifikasi:baca",
+  "notifikasi:kelola",
+  // E-Raport: admin manages the full document lifecycle school-wide.
+  "eraport:baca",
+  "eraport:buat",
+  "eraport:terbit",
+  "eraport:revisi",
+  // Bank Soal + Paket Soal: admin manages the full question-bank + package
+  // assembly surface school-wide.
+  "bank_soal:baca",
+  "bank_soal:buat",
+  "bank_soal:ubah",
+  "paket_soal:baca",
+  "paket_soal:buat",
+  "paket_soal:ubah",
+  // Perangkat Ajar: admin manages all teaching documents school-wide.
+  "perangkat_ajar:baca",
+  "perangkat_ajar:buat",
+  "perangkat_ajar:ubah",
+  // Arsip (#19): admin manages archive/recovery/retention school-wide.
+  "arsip:baca",
+  "arsip:kelola",
+  // Cetak: admin manages the full print/export surface (#14) — templates,
+  // preview, dokumen generation.
+  "cetak:baca",
+  "cetak:buat",
+  "cetak:ubah",
+  // offline:baca (#21) — every member sees their own pending drafts.
+  "offline:baca",
+];
+
+/**
+ * Baked-in peran (role) → default Izin map. Read-only constant. The starting
+ * izin a role grants before any explicit `izin_akses` / `pembatasan_akses`
+ * rows are applied. `admin_satuan_pendidikan` and `dev` share {@linkcode
+ * ADMIN_IZIN} so they cannot drift apart (ADR 0004 D1).
+ */
+export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
+  admin_satuan_pendidikan: ADMIN_IZIN,
   kepala_sekolah: [
     "akses:baca",
     "peserta_didik:baca",
@@ -224,72 +233,7 @@ export const PERAN_KE_IZIN_DEFAULT: Record<RoleSlug, readonly IzinSlug[]> = {
     // offline:baca (#21) — every member sees their own pending drafts.
     "offline:baca",
   ],
-  dev: [
-    "ptk:baca",
-    "ptk:buat",
-    "ptk:hapus",
-    "akses:kelola",
-    "akses:baca",
-    "peserta_didik:baca",
-    "peserta_didik:buat",
-    "peserta_didik:ubah",
-    "tahun_ajaran:baca",
-    "tahun_ajaran:kelola",
-    "rombongan_belajar:baca",
-    "rombongan_belajar:buat",
-    "rombongan_belajar:ubah",
-    "rombongan_belajar:kelola_penempatan",
-    "kurikulum:baca",
-    "beban_mengajar:baca",
-    "beban_mengajar:buat",
-    "beban_mengajar:ubah",
-    "wali_kelas:baca",
-    "wali_kelas:buat",
-    "wali_kelas:ubah",
-    "penilaian:baca",
-    "penilaian:buat",
-    "penilaian:ubah",
-    // Permintaan AI + Draf AI: dev mirrors admin (full lifecycle).
-    "permintaan_ai:baca",
-    "permintaan_ai:buat",
-    "draf_ai:baca",
-    "draf_ai:verifikasi",
-    "absensi:baca",
-    "absensi:buat",
-    "absensi:ubah",
-    // Impor/Ekspor Peserta Didik: admin manages bulk CSV import/export.
-    "impor_peserta_didik:baca",
-    "impor_peserta_didik:kelola",
-    "ekspor_peserta_didik:baca",
-    // Notifikasi (#20): dev mirrors admin (system-wide notification management).
-    "notifikasi:baca",
-    "notifikasi:kelola",
-    // E-Raport: dev mirrors admin (full lifecycle).
-    "eraport:baca",
-    "eraport:buat",
-    "eraport:terbit",
-    "eraport:revisi",
-    // Bank Soal + Paket Soal: dev mirrors admin (full surface).
-    "bank_soal:baca",
-    "bank_soal:buat",
-    "bank_soal:ubah",
-    "paket_soal:baca",
-    "paket_soal:buat",
-    "paket_soal:ubah",
-    // Perangkat Ajar: dev mirrors admin.
-    "perangkat_ajar:baca",
-    "perangkat_ajar:buat",
-    "perangkat_ajar:ubah",
-    // Arsip (#19): dev mirrors admin.
-    "arsip:baca",
-    "arsip:kelola",
-    // Cetak: dev mirrors admin (full print/export surface).
-    "cetak:baca",
-    "cetak:buat",
-    "cetak:ubah",
-    // offline:baca (#21) — every member sees their own pending drafts.
-    "offline:baca",
-  ],
+  dev: ADMIN_IZIN,
 };
 
 /** Input to `evaluasiAkses`. The caller has already confirmed membership. */
@@ -333,11 +277,6 @@ export function evaluasiAkses(input: InputEvaluasiAkses): KeputusanAkses {
     return { diizinkan: true, sumber: "peran" };
   }
   return { diizinkan: false, sumber: "tidak_ada_izin" };
-}
-
-/** True if `roleSlug`'s defaults include `akses:kelola` (can administer Akses). */
-export function dapatMengelolaAkses(roleSlug: RoleSlug): boolean {
-  return PERAN_KE_IZIN_DEFAULT[roleSlug].includes("akses:kelola");
 }
 
 /** True if `roleSlug`'s defaults include `akses:baca` (can view the Akses page). */

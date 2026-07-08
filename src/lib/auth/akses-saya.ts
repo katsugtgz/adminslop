@@ -62,6 +62,7 @@ export type AksesAktif = Extract<AksesSaya, { status: "active" }>;
  * session GUC `app.tenant_id` (identity doc §13).
  */
 export async function getAksesSaya(): Promise<AksesSaya> {
+  // cache()-wrapping was considered and rejected — see ADR 0008 Decision 1 (Shape A3 rejected).
   const ctx = await getActiveTenantContext();
   if (ctx.status === "denied") {
     return { status: "denied", authenticated: ctx.authenticated };

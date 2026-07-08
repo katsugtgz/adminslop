@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { dapatMelihatAkses, dapatMengelolaAkses, evaluasiAkses } from "./otorisasi";
+import { dapatMelihatAkses, evaluasiAkses, PERAN_KE_IZIN_DEFAULT } from "./otorisasi";
 import type { IzinSlug, RoleSlug } from "./types";
 
 /** Minimal evaluator input: no grants, no restrictions (defaults only). */
@@ -108,17 +108,6 @@ describe("evaluasiAkses (#6 T1) — role default coverage across all peran", () 
   });
 });
 
-describe("dapatMengelolaAkses (#6 T1) — page visibility for Akses administration", () => {
-  it.each<[RoleSlug, boolean]>([
-    ["admin_satuan_pendidikan", true],
-    ["dev", true],
-    ["guru", false],
-    ["kepala_sekolah", false],
-  ])("dapatMengelolaAkses('%s') -> %s", (roleSlug, expected) => {
-    expect(dapatMengelolaAkses(roleSlug)).toBe(expected);
-  });
-});
-
 describe("dapatMelihatAkses (#6 T1) — read visibility for Akses page", () => {
   it.each<[RoleSlug, boolean]>([
     ["kepala_sekolah", true],
@@ -126,6 +115,20 @@ describe("dapatMelihatAkses (#6 T1) — read visibility for Akses page", () => {
     ["guru", false],
   ])("dapatMelihatAkses('%s') -> %s", (roleSlug, expected) => {
     expect(dapatMelihatAkses(roleSlug)).toBe(expected);
+  });
+});
+
+describe("PERAN_KE_IZIN_DEFAULT — ADR 0004 D1 'dev mirrors admin' structural invariant", () => {
+  // THEME 4: dev and admin_satuan_pendidikan MUST share the same izin list.
+  // They reference a single ADMIN_IZIN constant, so drift is impossible by
+  // construction. This test locks the invariant: if someone re-introduces a
+  // hand-copied dev list, this fails.
+  it("PERAN_KE_IZIN_DEFAULT.dev === PERAN_KE_IZIN_DEFAULT.admin_satuan_pendidikan (same array reference)", () => {
+    expect(PERAN_KE_IZIN_DEFAULT.dev).toBe(PERAN_KE_IZIN_DEFAULT.admin_satuan_pendidikan);
+  });
+
+  it("PERAN_KE_IZIN_DEFAULT.dev equals admin list by value (defensive — guards against accidental array rebuild)", () => {
+    expect(PERAN_KE_IZIN_DEFAULT.dev).toEqual(PERAN_KE_IZIN_DEFAULT.admin_satuan_pendidikan);
   });
 });
 

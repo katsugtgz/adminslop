@@ -38,14 +38,15 @@ import type {
   KomponenNilai,
   NilaiPesertaDidik,
   Penilaian,
-  RombonganBelajar,
   WaliKelas,
 } from "@/db/schema";
 
-import type { AksesSaya } from "./akses-saya";
+import type { AksesAktif } from "./akses-saya";
 
-/** The "active" branch of {@linkcode AksesSaya} (post status check). */
-export type AksesAktif = Extract<AksesSaya, { status: "active" }>;
+// Re-export AksesAktif so callers that historically imported it from
+// kepemilikan (kepemilikan.test.ts, api/sinkronisasi/route.ts) keep working.
+// Canonical definition lives in akses-saya.ts (single source — THEME 8 dedup).
+export type { AksesAktif };
 
 /**
  * Ownership-denial error — lets callers (e.g. the sync route) distinguish a
@@ -231,18 +232,6 @@ async function cariWaliKelasByRombelDanPtk(
   );
 }
 
-/** Find a rombongan_belajar by id (tenant-scoped via the surrounding withTenant). */
-async function cariRombonganBelajarById(
-  tx: Tx,
-  id: string
-): Promise<RombonganBelajar | null> {
-  const rows = await tx
-    .select()
-    .from(dbSchema.rombonganBelajar)
-    .where(eq(dbSchema.rombonganBelajar.id, id));
-  return rows.find((r) => r.id === id) ?? null;
-}
-
 /** Find an absensi_harian by id (for resolving id -> rombonganBelajarId). */
 async function cariAbsensiById(tx: Tx, id: string): Promise<{ rombonganBelajarId: string | null } | null> {
   const rows = await tx
@@ -294,11 +283,6 @@ export async function assertPemilikRombongan(
     throw new KepemilikanError("Akun Anda belum terhubung dengan PTK. Hubungi admin.");
   }
   const rombonganBelajarId = await rombonganResolver();
-  // Existence is implicit: a missing rombel has no assignment rows, so both
-  // lookups return null and the guru is denied. (Resolved but unused — kept to
-  // make the "does this rombel exist in this tenant?" intent explicit and to
-  // anchor a future active-period tighten.)
-  void (await cariRombonganBelajarById(tx, rombonganBelajarId));
   const [beban, wali] = await Promise.all([
     cariBebanMengajarByRombelDanPtk(tx, rombonganBelajarId, myPtkId),
     cariWaliKelasByRombelDanPtk(tx, rombonganBelajarId, myPtkId),
