@@ -13,9 +13,13 @@ import type { Page } from "@playwright/test";
  * and carry a comment explaining why. Never allowlist product error text.
  */
 const ALLOW_PATTERNS: RegExp[] = [
-  // (intentionally empty — add proven Next.js/WorkOS dev noise here with a
-  // justification comment if a flaky failure is traced to a known benign
-  // message.)
+  // WorkOS hosted sign-in page (auth.workos.com) ships a
+  // Content-Security-Policy-Report-Only header containing
+  // 'upgrade-insecure-requests'. Browsers log this as a console.error-level
+  // message because the directive is invalid in report-only mode. It is
+  // third-party CSP noise — not an app error — and only surfaces on the
+  // authenticated tracer path that traverses the WorkOS sign-in domain.
+  /Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy/,
 ];
 
 /**

@@ -98,3 +98,74 @@ jobs:
 
       - name: Run e2e smoke tests
         run: npm run e2e
+
+  # Full e2e tracer — runs the authenticated vertical slice
+  # (e2e/mvp-tracer.spec.ts). Requires real WorkOS sandbox secrets + a
+  # provisioned test Pengguna (scripts/provision-e2e-user.ts). Unlike
+  # e2e-smoke, there is NO dummy fallback: if the required secrets are absent
+  # the job is skipped entirely (if-condition below), so missing credentials
+  # never fail CI — the tracer simply does not run until secrets are set.
+  e2e-tracer:
+    runs-on: ubuntu-latest
+    # Only run when the WorkOS sandbox + e2e creds secrets are configured on
+    # the repo. This keeps PRs green before provisioning and avoids
+    # dummy-fallback false positives.
+    if: ${{ vars.E2E_TRACER_ENABLED == 'true' }}
+    env:
+      NEXT_PUBLIC_WORKOS_REDIRECT_URI: http://localhost:3000/api/auth/callback
+      # Real secrets only — no dummy fallback. The tracer authenticates
+      # against the WorkOS sandbox and needs valid WORKOS_API_KEY,
+      # WORKOS_CLIENT_ID, and WORKOS_COOKIE_PASSWORD (>= 32 chars).
+      WORKOS_API_KEY: ${{ secrets.WORKOS_API_KEY }}
+      WORKOS_CLIENT_ID: ${{ secrets.WORKOS_CLIENT_ID }}
+      WORKOS_COOKIE_PASSWORD: ${{ secrets.WORKOS_COOKIE_PASSWORD }}
+      DATABASE_URL: postgresql://app_user:app_password@localhost:5432/eduadmin
+      DATABASE_MIGRATOR_URL: postgresql://postgres:postgres@localhost:5432/eduadmin
+      E2E_AUTH_EMAIL: ${{ secrets.E2E_AUTH_EMAIL }}
+      E2E_AUTH_PASSWORD: ${{ secrets.E2E_AUTH_PASSWORD }}
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: eduadmin
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d eduadmin"
+          --health-interval 2s
+          --health-timeout 2s
+          --health-retries 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Provision app_user role
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d eduadmin -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'app_user') THEN CREATE ROLE app_user WITH LOGIN PASSWORD 'app_password'; END IF; END \$\$;"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Migrate schema, then provision the WorkOS sandbox test Pengguna +
+      # Satuan Pendidikan + Keanggotaan + DB seed rows. Idempotent — safe on
+      # every run. Provisions real WorkOS resources using WORKOS_API_KEY.
+      - name: Migrate DB
+        run: npm run db:migrate
+
+      - name: Provision e2e test user + org + membership
+        run: npx tsx scripts/provision-e2e-user.ts
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e tracer
+        run: npm run e2e:tracer
