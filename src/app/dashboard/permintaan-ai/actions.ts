@@ -332,6 +332,8 @@ export async function retryPermintaanAiAction(
       throw new Error("Permintaan AI tidak ditemukan.");
     }
     await assertPemilikPermintaan(tx, akses, async () => original.dibuatOleh);
+    // Both columns are CHECK-constrained text/jsonb; narrowing to the typed
+    // unions is sound (the DB guarantees the literal vocabulary).
     await prosesPermintaanAi(
       tx,
       akses.userId,
