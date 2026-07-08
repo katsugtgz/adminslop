@@ -1,0 +1,19 @@
+README.md
+  s_c9c8fc4ff9e7a4::t_3761c095c76045 6-14,25-36,42-46,48-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "3701c411c12b10170fa5071b48adcba252d790bf",
+  "prompts": {},
+  "sessions": {
+    "s_c9c8fc4ff9e7a4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bd8daa53ffeTnqaQNeW7Ac5Pv",
+        "model": "glm-5.2"
+      },
+      "human_author": null
+    }
+  }
+}
