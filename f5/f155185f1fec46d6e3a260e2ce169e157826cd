@@ -1,0 +1,81 @@
+src/app/dashboard/impor-peserta-didik/page.tsx
+  s_62c10a2ea2b094::t_79ec7b47a44f8b 59
+src/app/dashboard/akses/page.tsx
+  s_62c10a2ea2b094::t_c76914f4924add 66-67
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_62c10a2ea2b094::t_5e6eb209c79230 63
+src/db/queries/wali-kelas.ts
+  s_62c10a2ea2b094::t_52321c316c3d94 79-80
+  s_62c10a2ea2b094::t_0f871c730df8e4 54
+src/app/dashboard/penilaian/page.tsx
+  s_62c10a2ea2b094::t_4f14cd354238c8 140-141,143
+  s_62c10a2ea2b094::t_285391d075f27a 157,161
+src/db/queries/akses.ts
+  s_62c10a2ea2b094::t_62dc2f5ce33f0f 22-30
+  s_62c10a2ea2b094::t_97fbb0d9e61ec7 75-76,79-80,85-87
+  s_62c10a2ea2b094::t_e71c443e22327a 11,17-18
+  s_62c10a2ea2b094::t_87f6991730d72d 19
+src/app/dashboard/absensi/page.tsx
+  s_62c10a2ea2b094::t_1d7cde39781c49 159
+  s_62c10a2ea2b094::t_4176163221fac4 181
+src/db/queries/penilaian.ts
+  s_62c10a2ea2b094::t_5e0fd681974efe 37-38,48-49
+src/db/queries/peserta-didik.ts
+  s_62c10a2ea2b094::t_71dc967125ac3e 58-72
+  s_62c10a2ea2b094::t_bdaf02052a94bd 17,23-24
+  s_62c10a2ea2b094::t_2ce683b72d2bfd 25
+src/db/queries/tahun-ajaran.ts
+  s_62c10a2ea2b094::t_dd796f8cc01cd1 20,26-27
+  s_62c10a2ea2b094::t_b60f6b02638315 60-73
+  s_62c10a2ea2b094::t_4fdf276c0feb97 28
+src/db/queries/bank-soal.ts
+  s_62c10a2ea2b094::t_e13f07a9ad2a17 217-218
+  s_62c10a2ea2b094::t_025d528adbdd3c 240
+  s_62c10a2ea2b094::t_8954d5b6aab0cb 299-300
+  s_62c10a2ea2b094::t_636df2c37e9b0a 200
+src/db/queries/rombongan-belajar.ts
+  s_62c10a2ea2b094::t_35f3fa02aa62b1 57-58,68-69
+src/db/queries/eraport.ts
+  s_62c10a2ea2b094::t_808a80a557d6d0 257-258,264-265
+  s_62c10a2ea2b094::t_58dd5963fd79ad 173-174
+  s_62c10a2ea2b094::t_c3d6d62742cb90 68
+src/db/queries/beban-mengajar.ts
+  s_62c10a2ea2b094::t_dd7bd92646eb2c 51
+  s_62c10a2ea2b094::t_390973ee4e94a6 76-77
+src/app/dashboard/tahun-ajaran/page.tsx
+  s_62c10a2ea2b094::t_733c05e34ce3f0 64
+src/app/dashboard/bank-soal/page.tsx
+  s_62c10a2ea2b094::t_ee1a4fb5ced1bd 94-96
+src/db/queries/cetak.ts
+  s_62c10a2ea2b094::t_374babaa616509 142-143
+  s_62c10a2ea2b094::t_770c17b0449b3c 95
+  s_62c10a2ea2b094::t_69950adb4f8ef6 228-229
+  s_62c10a2ea2b094::t_6141d7713d212b 78
+src/app/dashboard/rombongan-belajar/page.tsx
+  s_62c10a2ea2b094::t_54ee10896417da 93,97
+src/app/dashboard/beban-mengajar/page.tsx
+  s_62c10a2ea2b094::t_f9549460734bc3 120,127,129,131
+src/app/dashboard/cetak/page.tsx
+  s_62c10a2ea2b094::t_31dab8f46f49c9 56-59
+src/app/dashboard/peserta-didik/page.tsx
+  s_62c10a2ea2b094::t_05c031c193621b 60
+src/app/dashboard/eraport/page.tsx
+  s_62c10a2ea2b094::t_c14b7141447cc3 66-67
+  s_62c10a2ea2b094::t_bd8282d9841f4d 78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f5f155185f1fec46d6e3a260e2ce169e157826cd",
+  "prompts": {},
+  "sessions": {
+    "s_62c10a2ea2b094": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0f769affe3KySD08qNP542L",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
