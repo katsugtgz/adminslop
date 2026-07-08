@@ -19,7 +19,7 @@
  * rows. The action layer additionally enforces that the requested
  * `pengguna_id` equals `akses.pengguna.id` (cannot target another user).
  */
-import { and, count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq, notInArray, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { notifikasi, preferensiNotifikasi } from "../schema";
@@ -229,39 +229,30 @@ export async function aturPreferensiNotifikasi(
  * is included UNLESS its `tipe` has an explicit `aktif = false` preference.
  * (Convention: missing preference = aktif.) Ordered `dibuatPada DESC`.
  *
- * Implementation: load explicit inactive tipe set, then select notifications
- * whose tipe is NOT in that set.
+ * Single SQL query: the inactive-tipe set is resolved as a correlated subquery
+ * (`NOT IN (SELECT tipe FROM preferensi_notifikasi WHERE pengguna_id=? AND
+ * aktif=false)`) so the database filters — no JS-side `.filter()` over the full
+ * candidate set. When no preference is inactive, the subquery yields no rows
+ * and `NOT IN (empty)` is TRUE for all tipe, so every notification is returned.
  */
 export async function listNotifikasiAktif(
   db: Db | Tx,
   penggunaId: string
 ): Promise<Notifikasi[]> {
-  const preferensi = await db
-    .select()
-    .from(preferensiNotifikasi)
-    .where(eq(preferensiNotifikasi.penggunaId, penggunaId));
+  const tipeNonaktifSubquery = sql<{
+    tipe: string;
+  }[]>`(SELECT ${preferensiNotifikasi.tipe} FROM ${preferensiNotifikasi} WHERE ${preferensiNotifikasi.penggunaId} = ${penggunaId} AND ${preferensiNotifikasi.aktif} = false)`;
 
-  const tipeNonaktif = preferensi.flatMap((p) =>
-    !p.aktif ? [p.tipe] : []
-  );
-
-  if (tipeNonaktif.length === 0) {
-    return db
-      .select()
-      .from(notifikasi)
-      .where(eq(notifikasi.penggunaId, penggunaId))
-      .orderBy(desc(notifikasi.dibuatPada));
-  }
-
-  // Exclude every tipe flagged inactive. `ne` per-column cannot express
-  // NOT-IN cleanly across multiple values, so filter the candidate set when
-  // there are inactive tipe.
-  const rows = await db
+  return db
     .select()
     .from(notifikasi)
-    .where(eq(notifikasi.penggunaId, penggunaId))
+    .where(
+      and(
+        eq(notifikasi.penggunaId, penggunaId),
+        notInArray(notifikasi.tipe, tipeNonaktifSubquery)
+      )
+    )
     .orderBy(desc(notifikasi.dibuatPada));
-  return rows.filter((r) => !tipeNonaktif.includes(r.tipe));
 }
 
 /** Re-exported for action-layer ownership helpers. */
