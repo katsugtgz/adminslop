@@ -37,7 +37,7 @@ export default function SinkronisasiPage() {
               Kembali ke Dasbor
             </Link>
           </Button>
-          <p className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+          <p className="inline-flex items-center gap-2 eyebrow-accent">
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             Mode Offline
           </p>

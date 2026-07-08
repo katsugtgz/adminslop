@@ -60,7 +60,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="text-accent">Pro Premium</span>. Dibuat untuk Guru
             dan Satuan Pendidikan di Indonesia.
           </p>
-          <p className="font-mono text-xs uppercase tracking-[0.18em]">
+          <p className="eyebrow">
             v0.1.0
           </p>
         </div>

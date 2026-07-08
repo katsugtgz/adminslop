@@ -53,7 +53,7 @@ export function KepalaDashboard({
           <Building2 className="h-6 w-6" />
         </span>
         <div className="flex-1">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          <p className="eyebrow-accent">
             Satuan Pendidikan Aktif
           </p>
           <h1 className="mt-2 font-display text-3xl tracking-tight text-foreground sm:text-4xl">

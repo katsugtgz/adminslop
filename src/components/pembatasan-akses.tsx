@@ -39,7 +39,7 @@ export function PembatasanAkses({ authenticated = false }: { authenticated?: boo
       >
         <ShieldAlert className="h-7 w-7" />
       </span>
-      <p className="relative font-mono text-xs uppercase tracking-[0.22em] text-destructive/80">
+      <p className="relative eyebrow text-destructive/80">
         Akses Dibatasi
       </p>
       <h1 className="relative font-display text-2xl tracking-tight text-foreground sm:text-3xl">

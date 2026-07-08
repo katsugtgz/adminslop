@@ -27,7 +27,7 @@ export function DaftarCapaianPembelajaran({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        <p className="eyebrow-accent">
           04 — Capaian
         </p>
         <h2 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">

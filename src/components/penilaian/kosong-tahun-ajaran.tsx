@@ -24,7 +24,7 @@ export function KosongTahunAjaran({
         as="header"
         className="relative overflow-hidden rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm md:p-8"
       >
-        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+        <p className="eyebrow-accent">
           02 — Penilaian
         </p>
         <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">

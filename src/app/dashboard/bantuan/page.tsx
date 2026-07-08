@@ -93,7 +93,7 @@ export default function DashboardBantuanPage() {
          ════════════════════════════════════════════════════════ */}
       <section aria-labelledby="faq-judul" className="flex flex-col gap-8">
         <PageReveal className="flex flex-col gap-3" delay={2}>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow-accent">
             <MessagesSquare
               className="mr-2 inline h-3.5 w-3.5"
               aria-hidden="true"
@@ -166,7 +166,7 @@ export default function DashboardBantuanPage() {
           >
             <LifeBuoy className="h-5 w-5" />
           </span>
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow-accent">
             03 — Kontak
           </p>
           <h2

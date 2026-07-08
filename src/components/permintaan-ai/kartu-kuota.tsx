@@ -18,7 +18,7 @@ export function KartuKuota({ kuota }: { kuota: InfoKuotaAi }) {
         <div className="flex items-center gap-3">
           <span
             aria-hidden="true"
-            className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-accent"
+            className="eyebrow-accent"
           >
             01
           </span>

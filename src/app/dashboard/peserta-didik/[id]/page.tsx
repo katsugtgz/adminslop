@@ -103,7 +103,7 @@ export default async function Page({
           className="hero-glow pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-3xl"
           style={{ "--glow-opacity": 0.3, "--glow-extent": "70%" } as StyleWithVars}
         />
-        <p className="relative font-mono text-xs uppercase tracking-[0.22em] text-accent">
+        <p className="relative eyebrow-accent">
           404
         </p>
         <h1 className="relative font-display text-2xl tracking-tight text-foreground sm:text-3xl">
@@ -130,7 +130,7 @@ export default async function Page({
           style={{ "--glow-opacity": 0.4, "--glow-extent": "70%" } as StyleWithVars}
         />
         <div className="relative">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+          <p className="eyebrow-accent">
             01 — Peserta Didik · Detail
           </p>
           <h1 className="mt-3 font-display text-3xl tracking-tight text-foreground sm:text-4xl">

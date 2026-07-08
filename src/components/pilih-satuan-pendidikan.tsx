@@ -18,7 +18,7 @@ export function PilihSatuanPendidikan({
   return (
     <section className="mx-auto flex w-full max-w-md flex-col gap-6">
       <PageReveal as="header" className="flex flex-col gap-2">
-        <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+        <p className="eyebrow-accent">
           Keanggotaan
         </p>
         <h1 className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
