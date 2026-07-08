@@ -136,19 +136,39 @@ test("tracer: authenticated Pengguna reads Peserta Didik roster", async ({
   const email = E2E_AUTH_EMAIL as string;
   const password = E2E_AUTH_PASSWORD as string;
 
-  // Step 1 — authenticate. Navigating to a gated route while unauthenticated
-  // makes authkitMiddleware() redirect to the WorkOS-hosted sign-in page;
-  // after a successful sign-in WorkOS redirects back to the original target.
+  // Step 1 — authenticate. This app uses CLIENT-SIDE auth: the default
+  // `authkitMiddleware()` does NOT auto-redirect unauthenticated requests
+  // (middlewareAuth.enabled is false). Navigating to /dashboard renders the
+  // PembatasanAkses gate; its "Masuk" button calls
+  // `refreshAuth({ ensureSignedIn: true })` (AuthKitProvider client hook),
+  // which redirects the browser to the WorkOS-hosted sign-in page. After a
+  // successful sign-in WorkOS redirects back to the callback, which seals the
+  // session cookie and returns to /dashboard.
   await page.goto("/dashboard");
 
-  // WorkOS-hosted sign-in form (auth.workos.com). Selectors are intentionally
-  // tolerant; adjust if your sandbox auth surface differs.
-  await page.getByLabel(/email/i).fill(email);
-  await page.getByLabel(/password/i).fill(password);
-  await page.getByRole("button", { name: /(continue|sign in|masuk)/i }).click();
+  // Click the client-side "Masuk" trigger to start the WorkOS redirect.
+  // The button's accessible name is "Masuk ke EduAdmin Pro Premium"
+  // (aria-label on TombolMasuk); a substring match covers both the nav and
+  // card instances — either triggers the same refreshAuth redirect.
+  await page.getByRole("button", { name: /Masuk/ }).first().click();
 
-  // Step 2 — land on /dashboard after the callback sets the sealed cookie.
-  await page.waitForURL("**/dashboard", { timeout: 30_000 });
+  // WorkOS-hosted sign-in form (auth.workos.com). The sandbox uses an
+  // email-first two-step flow: enter email → Continue → password step.
+  // Selectors are intentionally tolerant; adjust if your sandbox auth surface
+  // differs (e.g. single-form Password/Passkey tabs).
+  await page.getByLabel(/email/i).fill(email);
+  await page.getByRole("button", { name: /continue/i }).click();
+
+  // Second step: password entry appears after the email is submitted.
+  await page.getByLabel(/password/i).fill(password);
+  await page.getByRole("button", { name: /(sign in|masuk|continue)/i }).click();
+
+  // Step 2 — after sign-in WorkOS redirects to the callback, which seals the
+  // session cookie and returns to the app root ("/"). The refreshAuth flow
+  // lands on "/" (Beranda), not the original deep link, so navigate to
+  // /dashboard explicitly.
+  await page.waitForURL("http://localhost:3000/", { timeout: 30_000 });
+  await page.goto("/dashboard");
 
   // Step 3 — tenant selection. If the active-tenant resolution is "choose"
   // (multiple Keanggotaan, none active), the PilihSatuanPendidikan chooser
