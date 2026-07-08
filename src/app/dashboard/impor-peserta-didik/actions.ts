@@ -19,14 +19,15 @@
 import { revalidatePath } from "next/cache";
 
 import { catatAudit, getDb, withTenant } from "@/db/client";
-import { buatPesertaDidik, listPesertaDidik } from "@/db/queries/peserta-didik";
+import { buatPesertaDidikBatch, listPesertaDidik } from "@/db/queries/peserta-didik";
+import type { InputBuatPesertaDidik, JenisKelamin } from "@/db/queries/peserta-didik";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { requireAuth } from "@/lib/auth/server";
 import { parseCsv } from "@/lib/impor/parse-csv";
 import { validasiBatch } from "@/lib/impor/validasi-peserta-didik";
-import type { JenisKelamin } from "@/db/queries/peserta-didik";
 
 const REVALIDATE_TARGET = "/dashboard/impor-peserta-didik";
+const MAX_CSV_BYTES = 2 * 1024 * 1024;
 
 /**
  * Impor Peserta Didik via CSV (AC#1–#5). Reads a CSV `file` field, parses it,
@@ -52,8 +53,15 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
   if (fileField === null) {
     throw new Error("Berkas CSV wajib diisi.");
   }
+  if (typeof fileField !== "string" && fileField.size > MAX_CSV_BYTES) {
+    throw new Error("Berkas CSV melebihi batas ukuran maksimum (2 MB).");
+  }
   const content =
     typeof fileField === "string" ? fileField : await fileField.text();
+
+  if (content.length > MAX_CSV_BYTES) {
+    throw new Error("Berkas CSV melebihi batas ukuran maksimum (2 MB).");
+  }
 
   // parseCsv throws on malformed CSV / missing header — propagate to the user.
   const baris = parseCsv(content);
@@ -70,26 +78,27 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
 
     const hasil = validasiBatch(baris, existingNisn, existingNis);
 
-    let berhasil = 0;
+    const validInputs: InputBuatPesertaDidik[] = [];
     let perluKoreksi = 0;
     let tidakValid = 0;
     for (const h of hasil) {
       if (h.status === "valid") {
-        // react-doctor-disable-next-line async-await-in-loop: serial: AC#5 no-silent-overwrite requires row-by-row validation, react-doctor/async-await-in-loop
-        await buatPesertaDidik(tx, {
+        validInputs.push({
           nama: h.data.nama,
           nisn: h.data.nisn ?? null,
           nis: h.data.nis ?? null,
           tanggalLahir: h.data.tanggalLahir,
           jenisKelamin: h.data.jenisKelamin as JenisKelamin,
         });
-        berhasil++;
       } else if (h.status === "perlu_koreksi") {
         perluKoreksi++;
       } else {
         tidakValid++;
       }
     }
+
+    const created = await buatPesertaDidikBatch(tx, validInputs);
+    const berhasil = created.length;
 
     await catatAudit(tx, {
       aktor: akses.userId,

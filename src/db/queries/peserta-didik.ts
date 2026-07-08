@@ -122,6 +122,60 @@ export async function buatPesertaDidik(
 }
 
 /**
+ * Batch-create peserta_didik rows (CSV import path). Same semantics as
+ * {@linkcode buatPesertaDidik} but groups inserts into chunks of
+ * {@linkcode BATCH_CHUNK_SIZE} to avoid serial round-trips. Each chunk:
+ *   1. Batch INSERT into peserta_didik with .returning() to get IDs.
+ *   2. Batch INSERT initial riwayat_status_peserta_didik (status='aktif')
+ *      for every created row.
+ * Both steps run inside the caller's `withTenant` so AC#2 (cache + history
+ * agree from row one) holds. Validation (AC#5 no-silent-overwrite) happens
+ * BEFORE this function is called — only pre-validated rows reach here.
+ */
+const BATCH_CHUNK_SIZE = 1000;
+
+export async function buatPesertaDidikBatch(
+  db: Db | Tx,
+  inputs: readonly InputBuatPesertaDidik[]
+): Promise<PesertaDidik[]> {
+  if (inputs.length === 0) return [];
+
+  const allCreated: PesertaDidik[] = [];
+
+  for (let i = 0; i < inputs.length; i += BATCH_CHUNK_SIZE) {
+    const chunk = inputs.slice(i, i + BATCH_CHUNK_SIZE);
+
+    const created = await db
+      .insert(pesertaDidik)
+      .values(
+        chunk.map((input) => ({
+          nama: input.nama,
+          nisn: input.nisn ?? null,
+          nis: input.nis ?? null,
+          tanggalLahir: input.tanggalLahir,
+          jenisKelamin: input.jenisKelamin,
+        }))
+      )
+      .returning();
+
+    await db
+      .insert(riwayatStatusPesertaDidik)
+      .values(
+        created.map((row) => ({
+          pesertaDidikId: row.id,
+          status: "aktif",
+          catatan: null,
+          dibuatOleh: null,
+        }))
+      );
+
+    allCreated.push(...created);
+  }
+
+  return allCreated;
+}
+
+/**
  * Update biodata ONLY (nama / nisn / nis / tanggalLahir / jenisKelamin). The
  * `status` cache is deliberately untouched — status changes flow through
  * `ubahStatus` so the append-only history stays consistent. Partial update:
