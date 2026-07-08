@@ -48,7 +48,7 @@ export function DaftarPaketSoal({
               <span className="text-sm font-semibold text-foreground">
                 {p.nama}
               </span>
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 {mapel ? mapel.nama : "—"}
                 {p.semester ? ` · ${p.semester}` : ""}
               </span>

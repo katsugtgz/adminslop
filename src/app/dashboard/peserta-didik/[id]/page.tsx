@@ -151,31 +151,31 @@ export default async function Page({
         ) : (
           <dl className="grid grid-cols-1 gap-3 rounded-2xl border border-border/60 bg-card p-6 text-card-foreground shadow-warm sm:grid-cols-2">
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Nama
               </dt>
               <dd className="text-sm font-semibold">{peserta.nama}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 NISN
               </dt>
               <dd className="text-sm">{peserta.nisn ? peserta.nisn : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 NIS
               </dt>
               <dd className="text-sm">{peserta.nis ? peserta.nis : "—"}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Tanggal Lahir
               </dt>
               <dd className="text-sm">{peserta.tanggalLahir}</dd>
             </div>
             <div className="flex flex-col gap-0.5">
-              <dt className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+              <dt className="eyebrow text-muted-foreground">
                 Jenis Kelamin
               </dt>
               <dd className="text-sm">

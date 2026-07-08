@@ -29,7 +29,7 @@ function RiwayatRevisi({
   if (revisiList.length === 0) return null;
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-dashed border-border bg-muted/30 p-3">
-      <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
+      <span className="eyebrow text-muted-foreground">
         Riwayat Revisi
       </span>
       <ul className="flex flex-col gap-1.5">
@@ -88,7 +88,7 @@ export function DetailEraport({
       {terbuka ? (
         <div className="flex flex-col gap-3 rounded-xl border border-border/60 bg-background p-4">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="eyebrow text-muted-foreground">
               Konten
             </span>
             <BadanEraport konten={eraport.konten} varian="layar" />

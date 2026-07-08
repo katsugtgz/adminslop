@@ -32,7 +32,7 @@ export function FormTempatkanPesertaDidik({
       className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-warm"
     >
       <div className="flex flex-col gap-1">
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+        <p className="eyebrow-accent">
           Penempatan
         </p>
         <h2 className="font-display text-xl tracking-tight text-foreground sm:text-2xl">

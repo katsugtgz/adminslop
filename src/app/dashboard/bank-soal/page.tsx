@@ -188,7 +188,7 @@ export default async function Page({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="bank-search"
-              className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+              className="eyebrow text-muted-foreground"
             >
               Cari
             </label>
@@ -345,7 +345,7 @@ export default async function Page({
 function ButirDetail({ butir }: { butir: ButirSoal }) {
   return (
     <article className="bg-grain flex flex-col gap-2 rounded-2xl border border-border bg-card p-5 text-card-foreground shadow-warm">
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="eyebrow text-muted-foreground">
         Detail Butir Soal
       </span>
       <p className="font-display text-lg tracking-tight text-foreground">

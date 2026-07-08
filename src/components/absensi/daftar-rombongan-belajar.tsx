@@ -62,7 +62,7 @@ export function DaftarRombonganBelajarAbsensi({
               {selected && (
                 <span
                   aria-hidden="true"
-                  className="font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-accent"
+                  className="eyebrow-accent"
                 >
                   Terpilih
                 </span>

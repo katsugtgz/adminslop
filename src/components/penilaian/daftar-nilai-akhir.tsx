@@ -37,7 +37,7 @@ export function DaftarNilaiAkhir({
     <div className="overflow-x-auto rounded-2xl border border-border/60 bg-card text-card-foreground shadow-warm">
       <table className="w-full border-collapse text-sm">
         <thead>
-          <tr className="border-b border-border text-left font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">
+          <tr className="border-b border-border text-left eyebrow text-muted-foreground">
             <th scope="col" className="p-3 font-medium sm:p-4">
               Nama
             </th>

@@ -40,7 +40,7 @@ export function DaftarPerangkatAjar({
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span className="flex flex-col gap-0.5">
               <span className="text-sm font-semibold text-foreground">{p.judul}</span>
-              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 {LABEL_JENIS[p.jenis as keyof typeof LABEL_JENIS]} · Mata
                 Pelajaran {p.mataPelajaranId.slice(0, 8)}
               </span>

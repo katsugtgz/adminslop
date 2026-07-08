@@ -57,7 +57,7 @@ export function DaftarKomponenNilai({
               className="flex flex-col gap-0.5 hover:text-accent"
             >
               <span className="text-sm font-semibold">{k.nama}</span>
-              <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="eyebrow text-muted-foreground">
                 Bobot: {k.bobot}
               </span>
             </Link>
