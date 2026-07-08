@@ -323,6 +323,12 @@ export async function assertPemilikRombongan(
  *
  * `pemilikResolver` returns the `dibuatOleh` value from the already-loaded
  * row (the caller loads it for status checks anyway — no extra DB hit).
+ *
+ * The leading `_tx` is intentionally unused: this gate performs no DB lookup
+ * of its own (the caller pre-loads the row and hands over `dibuatOleh`). It
+ * is kept solely for signature symmetry with {@linkcode assertPemilikBeban}
+ * and {@linkcode assertPemilikRombongan} so all three gates share the
+ * `(tx, akses, resolver)` call shape at every action site.
  */
 export async function assertPemilikPermintaan(
   _tx: Tx,
