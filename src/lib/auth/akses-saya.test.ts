@@ -16,6 +16,7 @@ const mocks = vi.hoisted(() => {
   return {
     fakeDb,
     fakeTx,
+    requireAuth: vi.fn(() => Promise.resolve()),
     getActiveTenantContext: vi.fn(),
     getAuthenticatedUserId: vi.fn(),
     evaluasiAkses: vi.fn(),
@@ -35,6 +36,7 @@ const mocks = vi.hoisted(() => {
 });
 
 vi.mock("./server", () => ({
+  requireAuth: mocks.requireAuth,
   getActiveTenantContext: mocks.getActiveTenantContext,
   getAuthenticatedUserId: mocks.getAuthenticatedUserId,
 }));
@@ -48,7 +50,7 @@ vi.mock("@/db/queries/akses", () => ({
   loadAksesPengguna: mocks.loadAksesPengguna,
 }));
 
-import { getAksesSaya } from "./akses-saya";
+import { getAksesSaya, requireAksesAktif } from "./akses-saya";
 
 const m = (orgId: string, roleSlug: RoleSlug): Membership => ({
   orgId,
@@ -313,5 +315,71 @@ describe("getAksesSaya (#6, T4 — authorization composition)", () => {
     expect(mocks.cariPenggunaByUserId).not.toHaveBeenCalled();
     expect(mocks.loadAksesPengguna).not.toHaveBeenCalled();
     expect(mocks.withTenant).not.toHaveBeenCalled();
+  });
+});
+
+describe("requireAksesAktif (#6 — prologue extraction target)", () => {
+  it("izin allowed -> returns AksesAktif; calls requireAuth first", async () => {
+    const membership = m("org_A", "admin_satuan_pendidikan");
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "active",
+      membership,
+    });
+    mocks.getAuthenticatedUserId.mockResolvedValue("workos_u_1");
+    mocks.cariPenggunaByUserId.mockResolvedValue(null);
+    mocks.evaluasiAkses.mockReturnValue({ diizinkan: true, sumber: "peran" });
+
+    const akses = await requireAksesAktif("ptk:buat");
+
+    expect(akses.status).toBe("active");
+    expect(mocks.requireAuth).toHaveBeenCalledTimes(1);
+  });
+
+  it("izin denied, no pesanTolak -> throws generic default message", async () => {
+    const membership = m("org_A", "guru");
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "active",
+      membership,
+    });
+    mocks.getAuthenticatedUserId.mockResolvedValue("workos_u_2");
+    mocks.cariPenggunaByUserId.mockResolvedValue(null);
+    mocks.evaluasiAkses.mockReturnValue({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+
+    await expect(requireAksesAktif("ptk:buat")).rejects.toThrow(
+      "Anda tidak memiliki izin untuk aksi ini.",
+    );
+  });
+
+  it("izin denied, pesanTolak provided -> throws feature-specific message", async () => {
+    const membership = m("org_A", "guru");
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "active",
+      membership,
+    });
+    mocks.getAuthenticatedUserId.mockResolvedValue("workos_u_3");
+    mocks.cariPenggunaByUserId.mockResolvedValue(null);
+    mocks.evaluasiAkses.mockReturnValue({
+      diizinkan: false,
+      sumber: "tidak_ada_izin",
+    });
+
+    await expect(
+      requireAksesAktif("ptk:buat", "Anda tidak memiliki izin untuk menambah PTK."),
+    ).rejects.toThrow("Anda tidak memiliki izin untuk menambah PTK.");
+  });
+
+  it("status not active -> throws 'Satuan Pendidikan Aktif belum dipilih.'", async () => {
+    mocks.getActiveTenantContext.mockResolvedValue({
+      status: "denied",
+      authenticated: true,
+    });
+
+    await expect(requireAksesAktif("ptk:buat")).rejects.toThrow(
+      "Satuan Pendidikan Aktif belum dipilih.",
+    );
+    expect(mocks.evaluasiAkses).not.toHaveBeenCalled();
   });
 });

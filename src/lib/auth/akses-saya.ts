@@ -135,19 +135,28 @@ export async function getAksesSaya(): Promise<AksesSaya> {
  * the narrowed {@linkcode AksesAktif}. Throws on the two deny outcomes
  * (identity doc §12 — the action is the boundary, not the UI):
  *  - "Satuan Pendidikan Aktif belum dipilih." when status is `denied`/`choose`.
- *  - "Anda tidak memiliki izin untuk aksi ini." when `boleh(izin)` denies.
+ *  - `pesanTolak` (default "Anda tidak memiliki izin untuk aksi ini.") when
+ *    `boleh(izin)` denies.
  *
  * Callers needing the {@linkcode KeputusanAkses} object (not just pass/fail)
  * call `akses.boleh(...)` on the returned value; `evaluasiAkses` is pure.
+ *
+ * @param izin Permission slug to check.
+ * @param pesanTolak Optional feature-specific reject message. When omitted the
+ *   generic default is used. Pass the same string the inline prologue threw so
+ *   user-facing copy and test assertions remain unchanged after extraction.
  */
-export async function requireAksesAktif(izin: IzinSlug): Promise<AksesAktif> {
+export async function requireAksesAktif(
+  izin: IzinSlug,
+  pesanTolak?: string,
+): Promise<AksesAktif> {
   await requireAuth();
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     throw new Error("Satuan Pendidikan Aktif belum dipilih.");
   }
   if (!akses.boleh(izin).diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk aksi ini.");
+    throw new Error(pesanTolak ?? "Anda tidak memiliki izin untuk aksi ini.");
   }
   return akses;
 }
