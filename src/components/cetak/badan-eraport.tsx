@@ -318,7 +318,7 @@ function BagianMataPelajaran({
         </thead>
         <tbody>
           {daftar.map((mp, i) => (
-            <tr key={i}>
+            <tr key={mp.nama ?? `baris-${i + 1}`}>
               <td className={`${k.td} text-center`}>{i + 1}</td>
               <td className={k.td}>{mp.nama ?? "—"}</td>
               <td className={`${k.td} text-center`}>
