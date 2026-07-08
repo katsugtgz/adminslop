@@ -39,6 +39,7 @@ import {
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { KepemilikanError } from "@/lib/auth/kepemilikan";
 import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
@@ -465,10 +466,20 @@ export async function imporButirSoalJsonAction(
   let gagal = parsed.length - kandidat.length;
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
-    const hasilSimpan = await Promise.all(
-      kandidat.map(async (item) => {
-        try {
-          const butir = await buatButirSoal(tx, {
+    // BUGS-02: previously `Promise.all(kandidat.map(...))` over a single tx
+    // client. That was structurally unsound — pg serializes queries on one
+    // connection, and a failed insert aborts the surrounding transaction
+    // (Postgres "current transaction is aborted" state). Every subsequent
+    // insert then failed and the final COMMIT became ROLLBACK, yet the action
+    // reported tersimpan:N>0. The sequential loop below processes items in
+    // order, and each item runs inside its own Drizzle nested transaction
+    // (SAVEPOINT sp_n ... RELEASE sp_n). A bad row rolls back ONLY that row's
+    // insert+audit without poisoning the surrounding transaction, so partial
+    // success is HONEST: tersimpan reflects rows that actually committed.
+    for (const item of kandidat) {
+      try {
+        await tx.transaction(async (sp) => {
+          const butir = await buatButirSoal(sp, {
             mataPelajaranId: item.mataPelajaranId,
             tingkatId: item.tingkatId,
             jenis: item.jenis,
@@ -478,7 +489,7 @@ export async function imporButirSoalJsonAction(
             pembahasan: item.pembahasan,
             dibuatOleh: akses.userId,
           });
-          await catatAudit(tx, {
+          await catatAudit(sp, {
             aktor: akses.userId,
             aksi: "impor-ai-eksternal",
             target: `butir_soal:${butir.id}`,
@@ -486,23 +497,25 @@ export async function imporButirSoalJsonAction(
               provenance: `eksternal-pengguna:${akses.userId}:${item.jenis}:${new Date().toISOString()}`,
             },
           });
-          return { ok: true as const };
-        } catch (error) {
-          const detail =
-            error instanceof Error ? error.message : "kesalahan basis data";
-          return {
-            ok: false as const,
-            error: `Butir ${item.nomor}: gagal disimpan (${detail}).`,
-          };
-        }
-      })
-    );
-    for (const hasil of hasilSimpan) {
-      if (hasil.ok) {
+        });
         tersimpan += 1;
-      } else {
+      } catch (error) {
         gagal += 1;
-        errors.push(hasil.error);
+        // SEC-02: never surface raw DB internals (constraint names, column
+        // identifiers, stack traces) to the client. KepemilikanError messages
+        // are intentional user-facing ownership denials — preserve them
+        // verbatim (mirrors src/app/api/sinkronisasi/route.ts:336-345). Any
+        // other failure collapses to a generic Bahasa message; the real error
+        // is logged server-side for operator triage.
+        if (error instanceof KepemilikanError) {
+          errors.push(`Butir ${item.nomor}: ${error.message}`);
+        } else {
+          console.error(
+            `[imporButirSoalJsonAction] Butir ${item.nomor} gagal disimpan`,
+            error
+          );
+          errors.push(`Butir ${item.nomor}: gagal disimpan.`);
+        }
       }
     }
   });

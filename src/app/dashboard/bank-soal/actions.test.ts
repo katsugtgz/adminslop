@@ -11,7 +11,18 @@ import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 // repo fns, so fakeTx is a plain sentinel.
 
 const mocks = vi.hoisted(() => {
-  const fakeTxLocal = { __tx: true };
+  // fakeTxLocal models a Drizzle tx handle. The `.transaction(fn)` method
+  // mirrors Drizzle's nested-transaction SAVEPOINT semantics: it invokes `fn`
+  // with a (fake) savepoint handle, and if `fn` throws, the throw propagates
+  // (the action's try/catch then records the failure). The savepoint handle is
+  // fakeTxLocal itself so `buatButirSoal(fakeTxRef, ...)` assertions still hold.
+  const fakeTxLocal: {
+    __tx: true;
+    transaction: (fn: (sp: unknown) => Promise<unknown>) => Promise<unknown>;
+  } = {
+    __tx: true,
+    transaction: async (fn) => fn(fakeTxLocal),
+  };
   return {
     getAksesSaya: vi.fn(),
     requireAuth: vi.fn(async () => ({ userId: "workos_u_1" })),
@@ -783,5 +794,87 @@ describe("G. imporButirSoalJsonAction", () => {
       fakeTxRef,
       expect.not.objectContaining({ tenantId: "org_B" })
     );
+  });
+
+  // =========================================================================
+  // BUGS-02 + SEC-02 — honest counts (no tx poisoning) + no raw DB leak.
+  // =========================================================================
+
+  it("BUGS-02: one failed insert among a batch reports honest tersimpan (not inflated)", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+    // First kandidat saves, second throws a DB-shaped error.
+    buatButirSoal
+      .mockResolvedValueOnce({ id: "bs_ok" })
+      .mockRejectedValueOnce(
+        new Error(
+          'insert or update on table "butir_soal" violates foreign key constraint "butir_soal_mata_pelajaran_id_fkey"'
+        )
+      );
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify([validButir, validButir]) })
+    );
+
+    expect(hasil.ok).toBe(true); // ok = at least one saved (matches tersimpan>0)
+    expect(hasil.tersimpan).toBe(1); // HONEST: only one row actually committed
+    expect(hasil.gagal).toBe(1);
+    expect(buatButirSoal).toHaveBeenCalledTimes(2);
+    expect(catatAudit).toHaveBeenCalledTimes(1); // only the successful row's audit
+    errSpy.mockRestore();
+  });
+
+  it("SEC-02: raw DB error text never reaches the client error message", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+    const rawDbMessage =
+      'duplicate key value violates unique constraint "butir_soal_pertanyaan_key"';
+    buatButirSoal.mockRejectedValueOnce(new Error(rawDbMessage));
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify([validButir]) })
+    );
+
+    expect(hasil.tersimpan).toBe(0);
+    expect(hasil.gagal).toBe(1);
+    expect(hasil.errors).toHaveLength(1);
+    const msg = hasil.errors[0];
+    expect(msg).toMatch(/Butir 1: gagal disimpan\.$/);
+    // The raw Postgres internals MUST NOT be present anywhere in the message.
+    expect(msg).not.toMatch(/duplicate key/i);
+    expect(msg).not.toMatch(/constraint/i);
+    expect(msg).not.toMatch(/butir_soal_pertanyaan_key/);
+    expect(msg).not.toContain(rawDbMessage);
+    // Real error is logged server-side for operator triage.
+    expect(errSpy).toHaveBeenCalledWith(
+      expect.stringMatching(/Butir 1 gagal disimpan/),
+      expect.any(Error)
+    );
+    errSpy.mockRestore();
+  });
+
+  it("SEC-02: KepemilikanError message IS preserved (intentional user-facing denial)", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+    const { KepemilikanError } = await import("@/lib/auth/kepemilikan");
+    buatButirSoal.mockRejectedValueOnce(
+      new KepemilikanError("Anda tidak memiliki izin untuk sumber daya ini.")
+    );
+    const errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({ jsonButir: JSON.stringify([validButir]) })
+    );
+
+    expect(hasil.tersimpan).toBe(0);
+    expect(hasil.gagal).toBe(1);
+    expect(hasil.errors).toEqual([
+      "Butir 1: Anda tidak memiliki izin untuk sumber daya ini.",
+    ]);
+    // KepemilikanError is intentional — must NOT be logged as an unexpected error.
+    expect(errSpy).not.toHaveBeenCalled();
+    errSpy.mockRestore();
   });
 });
