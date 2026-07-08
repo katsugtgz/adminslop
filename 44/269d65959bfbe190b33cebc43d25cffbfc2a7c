@@ -1,0 +1,27 @@
+src/db/queries/permintaan-ai.ts
+  s_9474cdff2e583d::t_0badeb923a107a 117-118,122-123,134-135
+src/db/queries/mutasi-peserta-didik.ts
+  s_9474cdff2e583d::t_c71c211c40a0fb 67-69,73-74,87-88
+src/db/queries/arsip.ts
+  s_9474cdff2e583d::t_7b3a68a60d51d3 188-189,193-194,206-208,226-228,246-248,266-268,284-285,289-290,294,298
+src/db/queries/perangkat-ajar.ts
+  s_9474cdff2e583d::t_da26a5d920c231 153-154,158-159,169-170,176-177,181-182,188-189
+src/db/queries/komponen-nilai.ts
+  s_9474cdff2e583d::t_7dddf443cdfd3b 35-37,41-42,52-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "44269d65959bfbe190b33cebc43d25cffbfc2a7c",
+  "prompts": {},
+  "sessions": {
+    "s_9474cdff2e583d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f42effee0wqRCXvMgMwDJ",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
