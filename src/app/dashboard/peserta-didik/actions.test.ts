@@ -677,12 +677,12 @@ describe("E. manual validation failures", () => {
     expect(buatPesertaDidik).not.toHaveBeenCalled();
   });
 
-  it("18. simpanPesertaDidikBaru + missing/invalid tanggalLahir -> /Tanggal lahir wajib diisi/i", async () => {
+  it("18. simpanPesertaDidikBaru + missing/invalid tanggalLahir -> /Tanggal lahir wajib berformat YYYY-MM-DD/i", async () => {
     await expect(
       simpanPesertaDidikBaruAction(
         formData({ nama: "Budi", jenisKelamin: "L" })
       )
-    ).rejects.toThrow(/Tanggal lahir wajib diisi/i);
+    ).rejects.toThrow(/Tanggal lahir wajib berformat YYYY-MM-DD/i);
     expect(buatPesertaDidik).not.toHaveBeenCalled();
   });
 

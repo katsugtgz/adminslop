@@ -20,13 +20,13 @@ export async function runMigrations(
   const client = await pool.connect();
   const applied: string[] = [];
   try {
+    await client.query("select pg_advisory_lock(hashtext('eduadmin:schema_migrations'))");
     await client.query(`
       create table if not exists schema_migrations (
         id          text primary key,
         applied_at  timestamptz not null default now()
       );
     `);
-    await client.query("select pg_advisory_lock(hashtext('eduadmin:schema_migrations'))");
 
     const files = (await fs.readdir(migrationsDir))
       .filter((f) => f.endsWith(".sql"))
