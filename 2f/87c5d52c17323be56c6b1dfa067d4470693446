@@ -1,0 +1,29 @@
+src/components/peserta-didik/daftar-peserta-didik.tsx
+  s_56046cdc6e3e8b::t_69d24ec64e1968 65-66,69,71,73,75,77
+  s_56046cdc6e3e8b::t_0ee490d4e88b96 143,145
+  s_56046cdc6e3e8b::t_b760856a47ce66 3
+src/components/peserta-didik/form-tambah.tsx
+  s_56046cdc6e3e8b::t_e4c40a2975f428 2,38,50,63,74,90
+src/components/cetak/kontrol-cetak.tsx
+  s_56046cdc6e3e8b::t_04b97278a56837 2,59,81,100,111,121,134
+src/components/cetak/form-template.tsx
+  s_56046cdc6e3e8b::t_20c4529bd34cbb 2,32,46,58,72,84
+src/components/peserta-didik/form-ubah-status.tsx
+  s_56046cdc6e3e8b::t_d1c86524421970 2,38,49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "2f87c5d52c17323be56c6b1dfa067d4470693446",
+  "prompts": {},
+  "sessions": {
+    "s_56046cdc6e3e8b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b548cffeyW94sOp91wxaBe",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
