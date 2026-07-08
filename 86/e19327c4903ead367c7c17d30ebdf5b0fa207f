@@ -1,0 +1,29 @@
+src/db/queries/nilai-peserta-didik.ts
+  s_8d0097abec9d15::t_8d7b561b6b90ad 128-129,145,150
+  s_8d0097abec9d15::t_d5029453ec2c66 117-118
+src/app/dashboard/eraport/actions.test.ts
+  s_8d0097abec9d15::t_1d7accf0e0d6aa 279
+  s_8d0097abec9d15::t_b14377a237967f 316
+  s_8d0097abec9d15::t_669d2d138eceaf 268
+src/db/queries/nilai-peserta-didik.test.ts
+  s_8d0097abec9d15::t_8b5c69b4900598 554-595
+  s_8d0097abec9d15::t_c957afb89c2f17 443,470
+src/app/dashboard/eraport/actions.ts
+  s_8d0097abec9d15::t_a999a0d43ec07e 102-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "86e19327c4903ead367c7c17d30ebdf5b0fa207f",
+  "prompts": {},
+  "sessions": {
+    "s_8d0097abec9d15": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bd8daab6ffcxviwA34WMnqDbz",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
