@@ -1,0 +1,24 @@
+src/lib/auth/akses-saya.ts
+  s_3283709b1d3239::t_a955865f44db5f 138-139,143-147,149-152,159
+src/lib/auth/akses-saya.test.ts
+  s_3283709b1d3239::t_3a0abf1518fd3f 39
+  s_3283709b1d3239::t_c024b3b5b5c009 19
+  s_3283709b1d3239::t_5631e7a1b7bcb4 53
+  s_3283709b1d3239::t_cb996117a8f25a 320-385
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "5c1423746ba671ba3c1d35a321afc98689cd552b",
+  "prompts": {},
+  "sessions": {
+    "s_3283709b1d3239": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be5e4a41ffef5zcshb1gV1VGn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
