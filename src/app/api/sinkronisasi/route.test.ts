@@ -549,7 +549,9 @@ describe("BUGS-03: absensi placement gate on new-row insert", () => {
 
   it("placed student -> INSERT -> 200 ok / versi 1", async () => {
     aturFixtures({
-      penempatan: [{ pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1" }],
+      penempatan: [
+        { pesertaDidikId: "pd_1", rombonganBelajarId: "rombel_1", status: "aktif" },
+      ],
     });
     const res = await POST(
       postJson({ tipe: "absensi", draft: DRAFT_ABSENSI_VALID })

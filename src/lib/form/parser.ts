@@ -5,7 +5,8 @@
  */
 
 export function trimField(formData: FormData, key: string): string {
-  return String(formData.get(key) ?? "").trim();
+  const val = formData.get(key);
+  return typeof val === "string" ? val.trim() : "";
 }
 
 export function optionalString(

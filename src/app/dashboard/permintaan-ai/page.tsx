@@ -77,13 +77,10 @@ export default async function Page() {
     }
     // PERF-02: single batch query replaces the N+1 Promise.all loop that issued
     // one cariDrafAiByPermintaan per selesai permintaan.
-    const drafMap = await cariDrafAiByPermintaanBatch(tx, selesaiIds);
-
-    const kuota = await getAtauBuatKuotaAi(
-      tx,
-      ta.id,
-      (semester ?? "ganjil") as Semester
-    );
+    const [drafMap, kuota] = await Promise.all([
+      cariDrafAiByPermintaanBatch(tx, selesaiIds),
+      getAtauBuatKuotaAi(tx, ta.id, (semester ?? "ganjil") as Semester),
+    ]);
 
     return { permintaanList, drafMap, kuota };
   });

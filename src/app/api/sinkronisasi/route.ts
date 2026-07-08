@@ -215,7 +215,11 @@ async function terapkanDraftAbsensi(
         draft.pesertaDidikId
       );
       if (
-        !penempatan.some((p) => p.rombonganBelajarId === draft.rombonganBelajarId)
+        !penempatan.some(
+          (p) =>
+            p.rombonganBelajarId === draft.rombonganBelajarId &&
+            p.status === "aktif"
+        )
       ) {
         throw new KepemilikanError(
           "Peserta Didik tidak terdaftar di Rombongan Belajar ini."

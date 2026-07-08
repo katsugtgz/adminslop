@@ -57,6 +57,12 @@ const E2E_ORG_ROLE_NAME = "Admin Satuan Pendidikan";
 const E2E_USER_EMAIL = process.env.E2E_AUTH_EMAIL ?? "e2e-test@adminslop.test";
 const E2E_USER_PASSWORD =
   process.env.E2E_AUTH_PASSWORD ?? "E2eTestPass123!";
+if (process.env.CI && !process.env.E2E_AUTH_EMAIL) {
+  throw new Error("E2E_AUTH_EMAIL must be set in CI");
+}
+if (process.env.CI && !process.env.E2E_AUTH_PASSWORD) {
+  throw new Error("E2E_AUTH_PASSWORD must be set in CI");
+}
 const E2E_USER_NAME = "E2E Test Admin";
 
 /** Aktor marker for audit rows — distinguishes e2e seed from dev seed. */

@@ -1,5 +1,6 @@
 import {
   boolean,
+  check,
   jsonb,
   pgTable,
   serial,
@@ -37,7 +38,12 @@ export const satuanPendidikan = pgTable("satuan_pendidikan", {
   cetakTampilkanHeader: boolean("cetak_tampilkan_header")
     .notNull()
     .default(true),
-});
+}, (t) => [
+  check(
+    "satuan_pendidikan_semester_aktif_check",
+    sql`${t.semesterAktif} in ('ganjil', 'genap')`,
+  ),
+]);
 
 /**
  * Smoke tenant-scoped record (#3). Throwaway artifact that proves the RLS
