@@ -1,0 +1,46 @@
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_62c10a2ea2b094::t_8b7fee34aee41d 170
+  s_62c10a2ea2b094::t_1588367694a8d8 179,193,209
+  s_62c10a2ea2b094::t_5fae981781e5d4 267-276
+  s_62c10a2ea2b094::t_3fcd316fe1119f 143,149-162
+  s_62c10a2ea2b094::t_26b3d0326529b5 302-311
+  s_62c10a2ea2b094::t_5dee95be6c5bf5 72
+  s_62c10a2ea2b094::t_d84d0da88a6d5d 59
+  s_62c10a2ea2b094::t_b5482d066b1b42 218,231-247
+  s_62c10a2ea2b094::t_b9ce00ae1de8df 357-366
+  s_62c10a2ea2b094::t_18a8016032edf7 422,435
+  s_62c10a2ea2b094::t_47178e4f0aaba2 24,27,33-46
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_62c10a2ea2b094::t_6f47ea28f840b1 22-23,30
+  s_62c10a2ea2b094::t_aa746be08184d9 56-58,62-64
+  s_62c10a2ea2b094::t_566b6ae60e3f43 81,86,100-101
+  s_62c10a2ea2b094::t_038b54f45d01cf 65
+  s_62c10a2ea2b094::t_c21da12ff507cc 102
+src/db/queries/peserta-didik.ts
+  s_62c10a2ea2b094::t_fab4befd0bf9ba 125-177
+  s_339b4f7398eec5::t_9761ca08077115 124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "98d4db0db3a017bdf39c9f0dccb63df449b478c2",
+  "prompts": {},
+  "sessions": {
+    "s_339b4f7398eec5": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bfe0f550ffe6WqsEf5OVG1uc8",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_62c10a2ea2b094": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf0f769affe3KySD08qNP542L",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
