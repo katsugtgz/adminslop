@@ -1,0 +1,19 @@
+src/app/dashboard/permintaan-ai/actions.ts
+  s_42531ba65b3890::t_e9fa2c09904a34 335-336
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9367319d2f68bddc5826048c38945ca0e3d45a7c",
+  "prompts": {},
+  "sessions": {
+    "s_42531ba65b3890": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f46cffbjP1oFfuePAVb1X",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
