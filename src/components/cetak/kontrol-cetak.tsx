@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Input, inputVariants } from "@/components/ui/input";
 import type { TemplateCetak } from "@/db/schema";
 
 import type { ServerAksi } from "./form-template";
-
-const INPUT_CLASS =
-  "h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 /** Selectable TERBIT E-Raport option for the Dokumen Cetak form. */
 export interface OpsiEraport {
@@ -58,7 +56,7 @@ export function KontrolCetak({
           id="cetak-eraport"
           name="drafEraportId"
           defaultValue=""
-          className={INPUT_CLASS}
+          className={inputVariants()}
           required
         >
           <option value="" disabled>
@@ -80,7 +78,7 @@ export function KontrolCetak({
           id="cetak-template"
           name="templateCetakId"
           defaultValue=""
-          className={INPUT_CLASS}
+          className={inputVariants()}
           required
         >
           <option value="" disabled>
@@ -99,7 +97,7 @@ export function KontrolCetak({
         <label htmlFor="cetak-format" className="text-sm font-medium">
           Format Kertas
         </label>
-        <select id="cetak-format" name="format" defaultValue="a4" className={INPUT_CLASS}>
+        <select id="cetak-format" name="format" defaultValue="a4" className={inputVariants()}>
           <option value="a4">A4</option>
           <option value="f4">F4</option>
         </select>
@@ -110,22 +108,20 @@ export function KontrolCetak({
           <label htmlFor="cetak-td-nama" className="text-sm font-medium">
             Nama Tanda Tangan
           </label>
-          <input
+          <Input
             id="cetak-td-nama"
             name="tandaTanganNama"
             type="text"
-            className={INPUT_CLASS}
           />
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="cetak-td-peran" className="text-sm font-medium">
             Peran Tanda Tangan
           </label>
-          <input
+          <Input
             id="cetak-td-peran"
             name="tandaTanganPeran"
             type="text"
-            className={INPUT_CLASS}
             placeholder="Contoh: Kepala Sekolah"
           />
         </div>
@@ -135,11 +131,10 @@ export function KontrolCetak({
         <label htmlFor="cetak-stempel" className="text-sm font-medium">
           Stempel (URL gambar, opsional)
         </label>
-        <input
+        <Input
           id="cetak-stempel"
           name="stempelUrl"
           type="url"
-          className={INPUT_CLASS}
           placeholder="https://..."
         />
       </div>

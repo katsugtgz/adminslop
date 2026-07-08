@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Input, inputVariants } from "@/components/ui/input";
 import type { ServerAksi } from "./form-tambah";
-
-const INPUT_CLASS =
-  "h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 /**
  * Per-row form to transition a Peserta Didik's status (aktif / pindah / lulus /
@@ -37,7 +35,7 @@ export function FormUbahStatus({
         id={`pd-status-${pesertaId}`}
         name="status"
         defaultValue="aktif"
-        className={INPUT_CLASS}
+        className={inputVariants()}
       >
         <option value="aktif">Aktif</option>
         <option value="pindah">Pindah</option>
@@ -48,13 +46,12 @@ export function FormUbahStatus({
       <label htmlFor={`pd-catatan-${pesertaId}`} className="sr-only">
         Catatan
       </label>
-      <input
+      <Input
         id={`pd-catatan-${pesertaId}`}
         name="catatan"
         type="text"
         placeholder="Catatan"
         aria-label="Catatan"
-        className={INPUT_CLASS}
       />
 
       <Button type="submit" size="sm">
