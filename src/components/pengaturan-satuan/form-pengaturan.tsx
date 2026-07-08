@@ -26,7 +26,7 @@ const SEMESTER_OPTIONS = [
   { value: "ganjil", label: "Ganjil" },
   { value: "genap", label: "Genap" },
 ] as const;
-const PAPER_SIZE_OPTIONS = ["A4", "F4"] as const;
+const PAPER_SIZE_OPTIONS = ["a4", "f4"] as const;
 
 export function FormPengaturan({
   values,
@@ -95,12 +95,12 @@ export function FormPengaturan({
             id="pengaturan-cetakPaperSize"
             name="cetakPaperSize"
             disabled={readOnly}
-            defaultValue={values.cetakPaperSize || "A4"}
+            defaultValue={values.cetakPaperSize || "a4"}
             className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm ring-offset-background transition-colors disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {PAPER_SIZE_OPTIONS.map((p) => (
               <option key={p} value={p}>
-                {p}
+                {p.toUpperCase()}
               </option>
             ))}
           </select>

@@ -27,7 +27,7 @@ export const PengaturanSatuanPendidikanSchema = z.object({
   tahunAjaran: z.string().trim().regex(/^\d{4}\/\d{4}$/),
   semester: z.enum(["ganjil", "genap"]),
   zonaWaktu: z.string().min(1).default("Asia/Jakarta"),
-  cetakPaperSize: z.enum(["A4", "F4"]).default("A4"),
+  cetakPaperSize: z.enum(["a4", "f4"]).default("a4"),
   cetakTampilkanLogo: z.boolean().default(true),
   cetakTampilkanHeader: z.boolean().default(true),
 });

@@ -87,8 +87,8 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     const seed = new pg.Pool({ connectionString: MIG_URL });
     await seed.query(`
       insert into satuan_pendidikan (id, nama, npsn, alamat, logo_url, cetak_paper_size) values
-        ('org_CETAK_a', 'Satuan Pendidikan Cetak A', '20XXXXXA', 'Jl. Cetak A No. 1', 'https://a.example/logo.png', 'A4'),
-        ('org_CETAK_b', 'Satuan Pendidikan Cetak B', '20XXXXXB', 'Jl. Cetak B No. 2', null, 'F4')
+        ('org_CETAK_a', 'Satuan Pendidikan Cetak A', '20XXXXXA', 'Jl. Cetak A No. 1', 'https://a.example/logo.png', 'a4'),
+        ('org_CETAK_b', 'Satuan Pendidikan Cetak B', '20XXXXXB', 'Jl. Cetak B No. 2', null, 'f4')
       on conflict (id) do update set
         nama = excluded.nama,
         npsn = excluded.npsn,
@@ -300,8 +300,7 @@ describeOrSkip("cetak repository (queries/cetak.ts — #14)", () => {
     expect(konten!.namaSatuanPendidikan).toBe("Satuan Pendidikan Cetak A");
     expect(konten!.npsn).toBe("20XXXXXA");
     expect(konten!.logoUrl).toBe("https://a.example/logo.png");
-    // Preferensi. DB stores "A4" (uppercase); getKontenCetak normalises to the
-    // lowercase FormatCetak type so PratinjauEraport's `=== "a4"` branch matches.
+    // Preferensi. DB stores lowercase ("a4"|"f4") — matches FormatCetak.
     expect(konten!.formatPreferensi).toBe("a4");
     // Default template resolved.
     expect(konten!.template).not.toBeNull();

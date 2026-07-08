@@ -268,9 +268,7 @@ export async function getKontenCetak(
     npsn: sp?.npsn ?? null,
     alamat: sp?.alamat ?? null,
     logoUrl: sp?.logoUrl ?? null,
-    // DB stores uppercase ("A4"|"F4"); FormatCetak + PratinjauEraport use
-    // lowercase. Normalise at the boundary (regression-guard for AC#3 print size).
-    formatPreferensi: ((sp?.cetakPaperSize ?? "A4") as string).toLowerCase() as FormatCetak,
+    formatPreferensi: (sp?.cetakPaperSize ?? "a4") as FormatCetak,
     tampilkanLogoDefault: sp?.cetakTampilkanLogo ?? true,
     tampilkanHeaderDefault: sp?.cetakTampilkanHeader ?? true,
     template: template

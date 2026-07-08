@@ -26,7 +26,7 @@ function fakeRow(
     tahunAjaranAktif: "2026/2027",
     semesterAktif: "ganjil",
     zonaWaktu: "Asia/Jakarta",
-    cetakPaperSize: "A4",
+    cetakPaperSize: "a4",
     cetakTampilkanLogo: true,
     cetakTampilkanHeader: true,
     ...overrides,
@@ -73,13 +73,15 @@ describe("FormPengaturan (#5)", () => {
     expect(optionValues).toEqual(["ganjil", "genap"]);
   });
 
-  it("renders cetakPaperSize select with A4/F4 options", () => {
+  it("renders cetakPaperSize select with a4/f4 option values", () => {
     render(<FormPengaturan values={fakeRow()} />);
     const select = screen.getByLabelText(
       /Ukuran Kertas Cetak/i,
     ) as HTMLSelectElement;
     const optionValues = Array.from(select.options).map((o) => o.value);
-    expect(optionValues).toEqual(["A4", "F4"]);
+    expect(optionValues).toEqual(["a4", "f4"]);
+    const optionLabels = Array.from(select.options).map((o) => o.textContent);
+    expect(optionLabels).toEqual(["A4", "F4"]);
   });
 
   it("cetakTampilkanLogo checkbox defaultChecked when values true", () => {
