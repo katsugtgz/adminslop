@@ -1,0 +1,19 @@
+src/components/cetak/badan-eraport.tsx
+  s_2d9fb48682751d::t_285819e53c90fe 321
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6d3b41d0279501379ee0e9f8bf724c416ebbd5fc",
+  "prompts": {},
+  "sessions": {
+    "s_2d9fb48682751d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b5465ffe0vZClUzTKDeqos",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
