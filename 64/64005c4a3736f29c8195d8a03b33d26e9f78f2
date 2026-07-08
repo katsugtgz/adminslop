@@ -1,0 +1,43 @@
+src/lib/auth/otorisasi.ts
+  s_3814b435368991::t_c27e8d38ff9b34 51-118,121-126
+  s_3814b435368991::t_f6fa18df558807 236
+  s_3814b435368991::t_6fa7551f3128c9 119-120,127-128
+  s_3814b435368991::t_6bfbc93aeda89b 37-42,44
+src/lib/auth/otorisasi.test.ts
+  s_3814b435368991::t_a68bf834be3094 3
+  s_3814b435368991::t_3611a1c1c0af27 121-132
+  s_7a98471a159e96::t_56b33c888d6c02 133-134
+src/lib/auth/kepemilikan.ts
+  s_3814b435368991::t_782093347ecb89 44,46-49
+src/lib/auth/akses-saya.ts
+  s_3814b435368991::t_3da0cf927c67fa 65
+src/app/dashboard/pengaturan/actions.ts
+  s_3814b435368991::t_996f98adb8a6f1 39-43
+  s_3814b435368991::t_ca8292ecb4a8f1 92-96
+src/lib/auth/server.ts
+  s_3814b435368991::t_3a7a9fda0837f4 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "6464005c4a3736f29c8195d8a03b33d26e9f78f2",
+  "prompts": {},
+  "sessions": {
+    "s_3814b435368991": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be3ee495ffeibKni2xlLSpsaM",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_7a98471a159e96": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be3ee502ffeF0weqg13NTlwcX",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
