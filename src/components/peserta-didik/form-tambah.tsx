@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Input, inputVariants } from "@/components/ui/input";
 
 /**
  * A server action reference — `(formData) => Promise<void>`. Plain server forms
@@ -6,9 +7,6 @@ import { Button } from "@/components/ui/button";
  * are the authoritative gate — identity doc §12).
  */
 export type ServerAksi = (formData: FormData) => Promise<void> | void;
-
-const INPUT_CLASS =
-  "h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 /**
  * Form to add a new Peserta Didik (student). Server-rendered only; posts to
@@ -37,12 +35,11 @@ export function FormTambah({ action }: { action: ServerAksi }) {
         <label htmlFor="pd-nama" className="text-sm font-medium">
           Nama
         </label>
-        <input
+        <Input
           id="pd-nama"
           name="nama"
           type="text"
           required
-          className={INPUT_CLASS}
         />
       </div>
 
@@ -50,13 +47,12 @@ export function FormTambah({ action }: { action: ServerAksi }) {
         <label htmlFor="pd-nisn" className="text-sm font-medium">
           NISN
         </label>
-        <input
+        <Input
           id="pd-nisn"
           name="nisn"
           type="text"
           inputMode="numeric"
           maxLength={8}
-          className={INPUT_CLASS}
         />
       </div>
 
@@ -64,11 +60,10 @@ export function FormTambah({ action }: { action: ServerAksi }) {
         <label htmlFor="pd-nis" className="text-sm font-medium">
           NIS
         </label>
-        <input
+        <Input
           id="pd-nis"
           name="nis"
           type="text"
-          className={INPUT_CLASS}
         />
       </div>
 
@@ -76,12 +71,11 @@ export function FormTambah({ action }: { action: ServerAksi }) {
         <label htmlFor="pd-tanggal-lahir" className="text-sm font-medium">
           Tanggal Lahir
         </label>
-        <input
+        <Input
           id="pd-tanggal-lahir"
           name="tanggalLahir"
           type="date"
           required
-          className={INPUT_CLASS}
         />
       </div>
 
@@ -93,7 +87,7 @@ export function FormTambah({ action }: { action: ServerAksi }) {
           id="pd-jenis-kelamin"
           name="jenisKelamin"
           defaultValue="L"
-          className={INPUT_CLASS}
+          className={inputVariants()}
         >
           <option value="L">Laki-laki</option>
           <option value="P">Perempuan</option>

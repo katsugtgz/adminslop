@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 /** Server action reference — `(formData) => Promise<void>`. Shared across this folder. */
 export type ServerAksi = (formData: FormData) => Promise<void> | void;
-
-const INPUT_CLASS =
-  "h-11 rounded-md border border-input bg-background px-3 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
 /**
  * Form to create a Template Cetak. Server-rendered only; posts to
@@ -31,12 +29,11 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
         <label htmlFor="cetak-nama" className="text-sm font-medium">
           Nama Template
         </label>
-        <input
+        <Input
           id="cetak-nama"
           name="nama"
           type="text"
           required
-          className={INPUT_CLASS}
           placeholder="Contoh: Template Rapor Standar"
         />
       </div>
@@ -46,12 +43,11 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
           <label htmlFor="cetak-margin" className="text-sm font-medium">
             Margin (mm)
           </label>
-          <input
+          <Input
             id="cetak-margin"
             name="marginMm"
             type="number"
             min={0}
-            className={INPUT_CLASS}
             placeholder="15"
           />
         </div>
@@ -59,12 +55,11 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
           <label htmlFor="cetak-font" className="text-sm font-medium">
             Ukuran Font
           </label>
-          <input
+          <Input
             id="cetak-font"
             name="fontSize"
             type="number"
             min={6}
-            className={INPUT_CLASS}
             placeholder="12"
           />
         </div>
@@ -74,11 +69,10 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
         <label htmlFor="cetak-header-text" className="text-sm font-medium">
           Teks Header
         </label>
-        <input
+        <Input
           id="cetak-header-text"
           name="headerText"
           type="text"
-          className={INPUT_CLASS}
           placeholder="LAPORAN HASIL BELAJAR"
         />
       </div>
@@ -87,11 +81,10 @@ export function FormTemplateCetak({ action }: { action: ServerAksi }) {
         <label htmlFor="cetak-footer-text" className="text-sm font-medium">
           Teks Footer
         </label>
-        <input
+        <Input
           id="cetak-footer-text"
           name="footerText"
           type="text"
-          className={INPUT_CLASS}
           placeholder="Dokumen ini dicetak secara elektronik."
         />
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { Badge, type BadgeVariantProps } from "@/components/ui/badge";
 import type { PesertaDidik } from "@/db/schema";
 
 import { FormUbahStatus } from "./form-ubah-status";
@@ -61,19 +62,19 @@ function labelStatus(slug: string): string {
   }
 }
 
-/** Tailwind badge classes tuned per status for at-a-glance scanning. */
-function badgeClass(status: string): string {
+/** Badge variant for a status slug, using semantic design tokens. */
+function variantStatus(status: string): NonNullable<BadgeVariantProps["variant"]> {
   switch (status) {
     case "aktif":
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300";
+      return "success";
     case "lulus":
-      return "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300";
+      return "accent";
     case "pindah":
-      return "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300";
+      return "warning";
     case "keluar":
-      return "bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300";
+      return "destructive";
     default:
-      return "bg-muted text-muted-foreground";
+      return "secondary";
   }
 }
 
@@ -139,13 +140,9 @@ export function DaftarPesertaDidik({
               </td>
               <td className="px-4 py-3">{labelJenisKelamin(pd.jenisKelamin)}</td>
               <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${badgeClass(
-                    pd.status
-                  )}`}
-                >
+                <Badge variant={variantStatus(pd.status)}>
                   {labelStatus(pd.status)}
-                </span>
+                </Badge>
               </td>
               {bolehTulis && (
                 <td className="px-4 py-3">
