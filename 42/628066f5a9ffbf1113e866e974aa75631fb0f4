@@ -1,0 +1,51 @@
+src/db/schema/perangkat-ajar.ts
+  s_79de2c48897201::t_00739ef96b0675 1-74
+src/db/schema/ai.ts
+  s_79de2c48897201::t_69f39383306c4f 1-143
+src/db/schema/bank-soal.ts
+  s_79de2c48897201::t_e63d8842d0d881 1-158
+src/db/AGENTS.md
+  s_79de2c48897201::t_f822cdbf7b5dd8 8-14
+src/db/schema/arsip.ts
+  s_79de2c48897201::t_1fc447fe0c97de 1-39
+src/db/schema/kurikulum.ts
+  s_79de2c48897201::t_d50962e7807f92 1-182
+src/db/schema/akademik.ts
+  s_79de2c48897201::t_7f4b59e40df0b5 1-170
+src/db/schema/penilaian.ts
+  s_79de2c48897201::t_10f9a90aff6128 1-141
+src/db/schema/cetak.ts
+  s_79de2c48897201::t_132c7eeda38c72 1-84
+src/db/schema/core.ts
+  s_79de2c48897201::t_1d14a224f66db4 1-85
+src/db/schema/notifikasi.ts
+  s_79de2c48897201::t_84f51fe5040021 1-78
+src/db/schema/eraport.ts
+  s_79de2c48897201::t_3ca5ce1c68180d 1-104
+src/db/schema/absensi.ts
+  s_79de2c48897201::t_2b6992253d93b2 1-79
+src/db/schema/peserta-didik.ts
+  s_79de2c48897201::t_898b4f8ce81b7a 1-177
+src/db/schema.ts
+  s_79de2c48897201::t_1cec329250c395 1-15
+src/db/schema/akses.ts
+  s_79de2c48897201::t_b8c38deee8332a 1-150
+src/db/schema/beban-mengajar.ts
+  s_79de2c48897201::t_4e1bfed7e74707 1-124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "42628066f5a9ffbf1113e866e974aa75631fb0f4",
+  "prompts": {},
+  "sessions": {
+    "s_79de2c48897201": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bd8daaa6ffegaA8WhSjS7pPf5",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
