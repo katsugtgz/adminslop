@@ -18,6 +18,15 @@ const ALLOW_PATTERNS: RegExp[] = [
   // message.)
 ];
 
+/**
+ * React "unique key prop" warning. Dev-only (stripped in production) but
+ * signals real reconciliation bugs — stale state, re-render churn, lost
+ * component identity. Matched against full error text to preserve stack-trace
+ * context in `keyPropWarnings`.
+ */
+const KEY_PROP_PATTERN =
+  /Each child in (?:a list|an array or iterator) should have a unique "key" prop/;
+
 export class ConsoleGuard {
   private readonly errors: string[] = [];
 
@@ -49,5 +58,19 @@ export class ConsoleGuard {
 
   get count(): number {
     return this.errors.length;
+  }
+
+  get keyPropWarnings(): string[] {
+    return this.errors.filter((e) => KEY_PROP_PATTERN.test(e));
+  }
+
+  get hasKeyPropWarnings(): boolean {
+    return this.keyPropWarnings.length > 0;
+  }
+
+  formatKeyPropWarnings(): string {
+    const warnings = this.keyPropWarnings;
+    if (warnings.length === 0) return "(no key-prop warnings)";
+    return warnings.map((e, i) => `${i + 1}. ${e}`).join("\n");
   }
 }

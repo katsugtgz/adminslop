@@ -96,6 +96,27 @@ test("smoke: dev server /health is up (always-green wiring proof)", async ({
 });
 
 /**
+ * Key-prop smoke — fails on any React "unique key prop" console.error.
+ * Public routes only; auth-gated routes (`/`, `/dashboard/*`) redirect to
+ * WorkOS before React hydrates, so their trees need credentials.
+ */
+test("smoke: public list-rendering pages have no React key-prop warnings", async ({
+  page,
+}) => {
+  const guard = new ConsoleGuard(page).attach();
+
+  for (const path of ["/panduan", "/bantuan"]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  }
+
+  expect(
+    guard.hasKeyPropWarnings,
+    `React key-prop warnings on public list pages:\n${guard.formatKeyPropWarnings()}`,
+  ).toBe(false);
+});
+
+/**
  * Full vertical tracer — gated behind provisioned sandbox credentials.
  *
  * Skipped unless `E2E_AUTH_EMAIL` + `E2E_AUTH_PASSWORD` are set (see header).
