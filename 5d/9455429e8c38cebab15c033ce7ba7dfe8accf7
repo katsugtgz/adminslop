@@ -1,0 +1,19 @@
+src/db/migrations/0017_fk_indexes.sql
+  s_f1e5575f359f05::t_d34d383561f782 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "5d9455429e8c38cebab15c033ce7ba7dfe8accf7",
+  "prompts": {},
+  "sessions": {
+    "s_f1e5575f359f05": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b549effe4Fk06TMU8uTTMB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
