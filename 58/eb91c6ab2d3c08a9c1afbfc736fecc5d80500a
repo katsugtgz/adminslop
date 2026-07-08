@@ -1,0 +1,19 @@
+src/db/migrations/0018_revoke_append_only_dml.sql
+  s_f1e5575f359f05::t_229c48b8f618f3 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "58eb91c6ab2d3c08a9c1afbfc736fecc5d80500a",
+  "prompts": {},
+  "sessions": {
+    "s_f1e5575f359f05": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b549effe4Fk06TMU8uTTMB",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
