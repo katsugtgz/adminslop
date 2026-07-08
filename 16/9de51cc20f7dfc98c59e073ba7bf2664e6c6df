@@ -1,0 +1,75 @@
+src/components/rombongan-belajar/form-rombongan-belajar-baru.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 32
+src/components/cetak/badan-eraport.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 228
+src/components/absensi/form-absensi.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 70,81,101
+src/components/bank-soal/daftar-butir-paket.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 58
+src/components/bank-soal/daftar-butir-soal.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 69
+src/components/rombongan-belajar/form-tingkat-baru.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 26
+src/components/tahun-ajaran/kontrol-semester.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 30
+src/components/penilaian/daftar-komponen-nilai.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 60
+src/components/eraport/form-revisi.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 25
+src/components/cetak/daftar-template.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 60
+src/components/beban-mengajar/form-wali-kelas.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 27
+src/components/permintaan-ai/kartu-draf.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 56
+src/app/dashboard/penilaian/page.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 255
+src/components/tahun-ajaran/form-tahun-ajaran-baru.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 23
+src/components/penilaian/daftar-penilaian.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 60
+src/app/dashboard/bank-soal/page.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 191,348
+src/components/absensi/rekap-absensi.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 41
+src/components/penilaian/daftar-nilai-akhir.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 40
+src/components/permintaan-ai/daftar-permintaan.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 106
+src/components/absensi/daftar-rombongan-belajar.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 65
+src/components/bank-soal/form-tambah-butir.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 44,68,86
+src/components/perangkat-ajar/daftar-perangkat-ajar.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 43
+src/components/rombongan-belajar/form-tempatkan-peserta-didik.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 35
+src/components/eraport/detail-eraport.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 32,91
+src/app/dashboard/peserta-didik/[id]/page.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 154,160,166,172,178
+src/components/dashboard-aktif/ringkasan-tenant.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 38,49
+src/components/perangkat-ajar/kontrol-verifikasi-ai.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 45
+src/components/beban-mengajar/form-beban-mengajar-baru.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 40
+src/components/bank-soal/daftar-paket-soal.tsx
+  s_127a66eff11f8c::t_f21886f5e1c3a6 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "169de51cc20f7dfc98c59e073ba7bf2664e6c6df",
+  "prompts": {},
+  "sessions": {
+    "s_127a66eff11f8c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b53eeffePe99iRVPIIzNwv",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
