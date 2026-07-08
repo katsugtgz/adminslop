@@ -25,8 +25,8 @@ import { revalidatePath } from "next/cache";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatDokumenCetak, buatTemplateCetak } from "@/db/queries/cetak";
 import type { FormatCetak } from "@/db/queries/cetak";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { checkboxField, optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/cetak";
 
@@ -41,22 +41,22 @@ function isValidFormat(value: string): value is FormatCetak {
  */
 function parsePengaturan(formData: FormData): Record<string, unknown> {
   const pengaturan: Record<string, unknown> = {};
-  const marginMm = String(formData.get("marginMm") ?? "").trim();
+  const marginMm = trimField(formData, "marginMm");
   if (marginMm) {
     const n = Number(marginMm);
     if (Number.isFinite(n)) pengaturan.marginMm = n;
   }
-  const fontSize = String(formData.get("fontSize") ?? "").trim();
+  const fontSize = trimField(formData, "fontSize");
   if (fontSize) {
     const n = Number(fontSize);
     if (Number.isFinite(n)) pengaturan.fontSize = n;
   }
-  const headerText = String(formData.get("headerText") ?? "").trim();
+  const headerText = trimField(formData, "headerText");
   if (headerText) pengaturan.headerText = headerText;
-  const footerText = String(formData.get("footerText") ?? "").trim();
+  const footerText = trimField(formData, "footerText");
   if (footerText) pengaturan.footerText = footerText;
-  pengaturan.showLogo = formData.get("showLogo") === "on";
-  pengaturan.showHeader = formData.get("showHeader") === "on";
+  pengaturan.showLogo = checkboxField(formData, "showLogo");
+  pengaturan.showHeader = checkboxField(formData, "showHeader");
   return pengaturan;
 }
 
@@ -70,19 +70,11 @@ function parsePengaturan(formData: FormData): Record<string, unknown> {
 export async function buatTemplateCetakAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("cetak:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk membuat Template Cetak.");
-  }
+  const akses = await requireAksesAktif("cetak:buat", "Anda tidak memiliki izin untuk membuat Template Cetak.");
 
-  const nama = String(formData.get("nama") ?? "").trim();
-  if (!nama) throw new Error("Nama Template wajib diisi.");
+  const nama = requiredString(formData, "nama", "Nama Template wajib diisi.");
 
-  const isDefault = formData.get("isDefault") === "on";
+  const isDefault = checkboxField(formData, "isDefault");
   const pengaturan = parsePengaturan(formData);
 
   const { db } = getDb();
@@ -118,33 +110,21 @@ export async function buatTemplateCetakAction(
 export async function buatDokumenCetakAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("cetak:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk membuat Dokumen Cetak.");
-  }
+  const akses = await requireAksesAktif("cetak:buat", "Anda tidak memiliki izin untuk membuat Dokumen Cetak.");
 
-  const drafEraportId = String(formData.get("drafEraportId") ?? "").trim();
-  if (!drafEraportId) throw new Error("Draf E-Raport wajib dipilih.");
-  const templateCetakId = String(formData.get("templateCetakId") ?? "").trim();
-  if (!templateCetakId) throw new Error("Template Cetak wajib dipilih.");
+  const drafEraportId = requiredString(formData, "drafEraportId", "Draf E-Raport wajib dipilih.");
+  const templateCetakId = requiredString(formData, "templateCetakId", "Template Cetak wajib dipilih.");
 
-  const formatRaw = String(formData.get("format") ?? "a4").trim();
+  const formatRaw = trimField(formData, "format") || "a4";
   if (!isValidFormat(formatRaw)) {
     throw new Error("Format Kertas tidak valid (hanya A4 atau F4).");
   }
   const format: FormatCetak = formatRaw;
 
   // AC#4 PRINT ELEMENTS — stored verbatim, confer no authorization.
-  const tandaTanganNama =
-    String(formData.get("tandaTanganNama") ?? "").trim() || null;
-  const tandaTanganPeran =
-    String(formData.get("tandaTanganPeran") ?? "").trim() || null;
-  const stempelUrl =
-    String(formData.get("stempelUrl") ?? "").trim() || null;
+  const tandaTanganNama = optionalString(formData, "tandaTanganNama");
+  const tandaTanganPeran = optionalString(formData, "tandaTanganPeran");
+  const stempelUrl = optionalString(formData, "stempelUrl");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

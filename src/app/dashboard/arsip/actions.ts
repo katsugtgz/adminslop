@@ -33,6 +33,7 @@ import {
   type TabelArsip,
 } from "@/db/queries/arsip";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/arsip";
 
@@ -50,13 +51,12 @@ export async function arsipkanAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk mengelola Arsip."
   );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID wajib diisi.");
+  const id = requiredString(formData, "id", "ID wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -89,13 +89,12 @@ export async function pulihkanAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk mengelola Arsip."
   );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID wajib diisi.");
+  const id = requiredString(formData, "id", "ID wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -127,13 +126,12 @@ export async function aturRetensiAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk mengelola Arsip."
   );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const periodeRaw = String(formData.get("periodeBulan") ?? "").trim();
-  if (!periodeRaw) throw new Error("Periode (Bulan) wajib diisi.");
+  const periodeRaw = requiredString(formData, "periodeBulan", "Periode (Bulan) wajib diisi.");
   const periodeBulan = Number(periodeRaw);
   if (Number.isNaN(periodeBulan)) {
     throw new Error("Periode (Bulan) harus berupa angka.");
@@ -141,8 +139,7 @@ export async function aturRetensiAction(formData: FormData): Promise<void> {
   if (periodeBulan <= 0) {
     throw new Error("Periode (Bulan) harus lebih besar dari 0.");
   }
-  const keteranganRaw = String(formData.get("keterangan") ?? "").trim();
-  const keterangan = keteranganRaw || undefined;
+  const keterangan = optionalString(formData, "keterangan") ?? undefined;
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

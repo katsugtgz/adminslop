@@ -40,6 +40,7 @@ import {
   type StatusPesertaDidik,
 } from "@/db/queries/peserta-didik";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/peserta-didik";
 
@@ -52,14 +53,6 @@ const STATUS_VALID = ["aktif", "pindah", "lulus", "keluar"] as const;
 /** Valid arah mutasi literals. */
 const ARAH_VALID = ["masuk", "keluar"] as const;
 type ArahMutasi = (typeof ARAH_VALID)[number];
-
-/**
- * Read + trim a formData field. Returns "" when absent (FormData.get returns
- * null for missing fields). Never throws.
- */
-function trimField(formData: FormData, key: string): string {
-  return String(formData.get(key) ?? "").trim();
-}
 
 /**
  * True iff `value` parses as a real calendar date. Accepts ISO `YYYY-MM-DD`

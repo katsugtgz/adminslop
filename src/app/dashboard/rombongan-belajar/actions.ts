@@ -47,18 +47,9 @@ import {
 import { getTahunAjaranAktif, getSemesterAktif, cariTahunAjaranById } from "@/db/queries/tahun-ajaran";
 import { buatTingkat, cariTingkatBerikutnya, cariTingkatById } from "@/db/queries/tingkat";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/rombongan-belajar";
-
-// --- manual validation helper (no zod) -------------------------------------
-
-/**
- * Read + trim a formData field. Returns "" when absent (FormData.get returns
- * null for missing fields). Never throws.
- */
-function trimField(formData: FormData, key: string): string {
-  return String(formData.get(key) ?? "").trim();
-}
 
 // 1. simpanTingkatBaruAction -------------------------------------------------
 

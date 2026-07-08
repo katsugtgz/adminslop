@@ -21,8 +21,7 @@ import { revalidatePath } from "next/cache";
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatPesertaDidikBatch, listPesertaDidik } from "@/db/queries/peserta-didik";
 import type { InputBuatPesertaDidik, JenisKelamin } from "@/db/queries/peserta-didik";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { parseCsv } from "@/lib/impor/parse-csv";
 import { validasiBatch } from "@/lib/impor/validasi-peserta-didik";
 
@@ -40,14 +39,7 @@ const MAX_CSV_BYTES = 2 * 1024 * 1024;
  * from `akses.membership.orgId` — never from formData (§13).
  */
 export async function imporPesertaDidikAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("impor_peserta_didik:kelola").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengimpor Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("impor_peserta_didik:kelola", "Anda tidak memiliki izin untuk mengimpor Peserta Didik.");
 
   const fileField = formData.get("file");
   if (fileField === null) {

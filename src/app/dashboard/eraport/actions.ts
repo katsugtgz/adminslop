@@ -47,6 +47,7 @@ import type { SemesterEraport } from "@/db/queries/eraport";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikBeban } from "@/lib/auth/kepemilikan";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/eraport";
 
@@ -69,13 +70,13 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
   );
 
   // 2. Manual validation (no zod).
-  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
+  const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) {
     throw new Error("Peserta Didik wajib dipilih.");
   }
-  const bebanMengajarIdRaw = String(formData.get("bebanMengajarId") ?? "").trim();
-  const drafAiIdRaw = String(formData.get("drafAiId") ?? "").trim();
-  const catatanRaw = String(formData.get("catatan") ?? "").trim();
+  const bebanMengajarIdRaw = trimField(formData, "bebanMengajarId");
+  const drafAiIdRaw = trimField(formData, "drafAiId");
+  const catatanRaw = trimField(formData, "catatan");
 
   // 3. Resolve period + build konten under tenant scope. orgId from membership
   //    ONLY. AC#4 validation (draf_ai disetujui) runs inside buatDrafEraport.
@@ -146,7 +147,7 @@ export async function terbitkanEraportAction(formData: FormData): Promise<void> 
     "Anda tidak memiliki izin untuk menerbitkan E-Raport."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID E-Raport wajib diisi.");
 
   const { db } = getDb();
@@ -179,13 +180,13 @@ export async function catatRevisiEraportAction(
     "Anda tidak memiliki izin untuk mencatat revisi E-Raport."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID E-Raport wajib diisi.");
-  const alasan = String(formData.get("alasan") ?? "").trim();
+  const alasan = trimField(formData, "alasan");
   if (!alasan) throw new Error("Alasan Revisi wajib diisi.");
 
   let kontenPerubahan: Record<string, unknown> | null = null;
-  const kontenPerubahanRaw = String(formData.get("kontenPerubahan") ?? "").trim();
+  const kontenPerubahanRaw = trimField(formData, "kontenPerubahan");
   if (kontenPerubahanRaw) {
     let parsed: unknown;
     try {

@@ -53,6 +53,7 @@ import {
   bebanIdDariNilai,
   bebanIdDariPenilaian,
 } from "@/lib/auth/kepemilikan";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -80,11 +81,11 @@ export async function simpanKomponenNilaiBaruAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const bebanMengajarId = String(formData.get("bebanMengajarId") ?? "").trim();
+  const bebanMengajarId = trimField(formData, "bebanMengajarId");
   if (!bebanMengajarId) throw new Error("ID Beban Mengajar wajib diisi.");
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Komponen wajib diisi.");
-  const bobotRaw = String(formData.get("bobot") ?? "").trim();
+  const bobotRaw = trimField(formData, "bobot");
   if (!bobotRaw) throw new Error("Bobot wajib diisi.");
   const bobot = Number(bobotRaw);
   if (Number.isNaN(bobot)) throw new Error("Bobot harus berupa angka.");
@@ -118,11 +119,11 @@ export async function simpanPenilaianBaruAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const komponenNilaiId = String(formData.get("komponenNilaiId") ?? "").trim();
+  const komponenNilaiId = trimField(formData, "komponenNilaiId");
   if (!komponenNilaiId) throw new Error("ID Komponen Nilai wajib diisi.");
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Penilaian wajib diisi.");
-  const tanggal = String(formData.get("tanggal") ?? "").trim();
+  const tanggal = trimField(formData, "tanggal");
   if (!tanggal) throw new Error("Tanggal Penilaian wajib diisi.");
 
   const { db } = getDb();
@@ -160,18 +161,18 @@ export async function simpanPenilaianBaruAction(
 export async function upsertNilaiAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const penilaianId = String(formData.get("penilaianId") ?? "").trim();
+  const penilaianId = trimField(formData, "penilaianId");
   if (!penilaianId) throw new Error("ID Penilaian wajib diisi.");
-  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
+  const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
-  const nilaiRaw = String(formData.get("nilai") ?? "").trim();
+  const nilaiRaw = trimField(formData, "nilai");
   let nilai: number | null = null;
   if (nilaiRaw) {
     const parsed = Number(nilaiRaw);
     if (Number.isNaN(parsed)) throw new Error("Nilai harus berupa angka.");
     nilai = parsed;
   }
-  const catatanRaw = String(formData.get("catatan") ?? "").trim();
+  const catatanRaw = trimField(formData, "catatan");
   const catatan: string | undefined = catatanRaw || undefined;
 
   const { db } = getDb();
@@ -210,7 +211,7 @@ export async function hapusKomponenNilaiAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Komponen Nilai wajib diisi.");
   assertUuidShape(id);
 
@@ -240,7 +241,7 @@ export async function hapusKomponenNilaiAction(
 export async function hapusPenilaianAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Penilaian wajib diisi.");
   assertUuidShape(id);
 
@@ -270,7 +271,7 @@ export async function hapusPenilaianAction(formData: FormData): Promise<void> {
 export async function hapusNilaiAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Nilai wajib diisi.");
   assertUuidShape(id);
 

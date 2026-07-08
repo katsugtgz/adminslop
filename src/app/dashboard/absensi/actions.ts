@@ -27,12 +27,12 @@ import { catatAudit, getDb, withTenant } from "@/db/client";
 import { catatAbsensi, ubahAbsensi } from "@/db/queries/absensi";
 import type { MetodeInput, StatusKehadiran } from "@/db/queries/absensi";
 import { listPenempatanByPesertaDidik } from "@/db/queries/penempatan-rombongan-belajar";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import {
   assertPemilikRombongan,
   rombonganBelajarIdDariAbsensi,
 } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
+import { optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/absensi";
 
@@ -77,33 +77,21 @@ function isIsoDateShape(s: string): boolean {
  */
 export async function catatAbsensiAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("absensi:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mencatat Absensi.");
-  }
+  const akses = await requireAksesAktif("absensi:buat", "Anda tidak memiliki izin untuk mencatat Absensi.");
 
   // 2. Manual validation (no zod).
-  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
-  if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
-  const rombonganBelajarId = String(
-    formData.get("rombonganBelajarId") ?? ""
-  ).trim();
-  if (!rombonganBelajarId) throw new Error("ID Rombongan Belajar wajib diisi.");
-  const tanggal = String(formData.get("tanggal") ?? "").trim();
-  if (!tanggal) throw new Error("Tanggal wajib diisi.");
+  const pesertaDidikId = requiredString(formData, "pesertaDidikId", "ID Peserta Didik wajib diisi.");
+  const rombonganBelajarId = requiredString(formData, "rombonganBelajarId", "ID Rombongan Belajar wajib diisi.");
+  const tanggal = requiredString(formData, "tanggal", "Tanggal wajib diisi.");
   if (!isIsoDateShape(tanggal)) {
     throw new Error("Tanggal harus berformat YYYY-MM-DD.");
   }
-  const statusRaw = String(formData.get("statusKehadiran") ?? "").trim();
+  const statusRaw = trimField(formData, "statusKehadiran");
   if (!isValidStatus(statusRaw)) {
     throw new Error("Status Kehadiran tidak valid.");
   }
   const statusKehadiran: StatusKehadiran = statusRaw;
-  const metodeRaw = String(formData.get("metodeInput") ?? "").trim();
+  const metodeRaw = trimField(formData, "metodeInput");
   // metodeInput is OPTIONAL; default 'manual' in the repo. When provided, it
   // must be in the closed vocabulary.
   let metodeInput: MetodeInput | undefined;
@@ -113,10 +101,8 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
     }
     metodeInput = metodeRaw;
   }
-  const catatanRaw = String(formData.get("catatan") ?? "").trim();
-  const catatan = catatanRaw || undefined;
-  const sumberQrRaw = String(formData.get("sumberQr") ?? "").trim();
-  const sumberQr = sumberQrRaw || undefined;
+  const catatan = optionalString(formData, "catatan") ?? undefined;
+  const sumberQr = optionalString(formData, "sumberQr") ?? undefined;
 
   // Task #15 guardrail (AC#3 audit-trail integrity): a row marked
   // `metode_input='qr'` MUST carry a non-empty `sumber_qr` session token.
@@ -182,17 +168,9 @@ export async function catatAbsensiAction(formData: FormData): Promise<void> {
  * string clears it (null). Audit row appended inside the transaction.
  */
 export async function ubahAbsensiAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("absensi:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Absensi.");
-  }
+  const akses = await requireAksesAktif("absensi:ubah", "Anda tidak memiliki izin untuk mengubah Absensi.");
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Absensi wajib diisi.");
+  const id = requiredString(formData, "id", "ID Absensi wajib diisi.");
 
   // Either statusKehadiran OR catatan (or both) must be present. Build a
   // partial update so a caller can correct ONE field without forcing the
@@ -203,7 +181,7 @@ export async function ubahAbsensiAction(formData: FormData): Promise<void> {
   } = {};
 
   if (formData.has("statusKehadiran")) {
-    const statusRaw = String(formData.get("statusKehadiran") ?? "").trim();
+    const statusRaw = trimField(formData, "statusKehadiran");
     if (statusRaw !== "") {
       if (!isValidStatus(statusRaw)) {
         throw new Error("Status Kehadiran tidak valid.");
@@ -212,7 +190,7 @@ export async function ubahAbsensiAction(formData: FormData): Promise<void> {
     }
   }
   if (formData.has("catatan")) {
-    const catatanRaw = String(formData.get("catatan") ?? "").trim();
+    const catatanRaw = trimField(formData, "catatan");
     // An empty catatan CLEARS the note (writes null) — a corrected row can
     // both add and remove a note.
     perubahan.catatan = catatanRaw;

@@ -44,29 +44,11 @@ import type { Semester } from "@/db/queries/beban-mengajar";
 import { hapusWaliKelas, upsertWaliKelas } from "@/db/queries/wali-kelas";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { optionalString, requiredString } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/beban-mengajar";
 
 // --- shared helpers --------------------------------------------------------
-
-/**
- * Read a formData field as a trimmed string, returning `null` when empty.
- * Used for optional id-style fields where empty means "absent".
- */
-function optionalString(formData: FormData, key: string): string | null {
-  const raw = String(formData.get(key) ?? "").trim();
-  return raw || null;
-}
-
-/**
- * Read a formData field as a trimmed string, throwing the given Bahasa error
- * when empty. Used for required id-style fields.
- */
-function requiredString(formData: FormData, key: string, error: string): string {
-  const raw = String(formData.get(key) ?? "").trim();
-  if (!raw) throw new Error(error);
-  return raw;
-}
 
 /**
  * Resolve the active academic period (Tahun Ajaran + Semester) SERVER-SIDE

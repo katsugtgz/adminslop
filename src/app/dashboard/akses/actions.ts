@@ -32,6 +32,7 @@ import {
 } from "@/db/queries/akses";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import type { IzinSlug } from "@/lib/auth/types";
+import { checkboxField, optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 /** Closed vocabulary of valid IzinSlug literals (single source of truth). */
 const IZIN_SLUGS = [
@@ -111,10 +112,9 @@ export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("ptk:buat", "Anda tidak memiliki izin untuk menambah PTK.");
 
   // 2. Manual validation (no zod)
-  const nama = String(formData.get("nama") ?? "").trim();
-  if (!nama) throw new Error("Nama PTK wajib diisi.");
-  const nip = String(formData.get("nip") ?? "").trim() || null;
-  const jenisRaw = String(formData.get("jenis") ?? "");
+  const nama = requiredString(formData, "nama", "Nama PTK wajib diisi.");
+  const nip = optionalString(formData, "nip");
+  const jenisRaw = trimField(formData, "jenis");
   if (jenisRaw !== "pendidik" && jenisRaw !== "tenaga_kependidikan") {
     throw new Error("Jenis PTK tidak valid.");
   }
@@ -145,8 +145,7 @@ export async function simpanPtkBaruAction(formData: FormData): Promise<void> {
 export async function hapusPtkAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("ptk:hapus", "Anda tidak memiliki izin untuk menghapus PTK.");
 
-  const ptkId = String(formData.get("ptkId") ?? "").trim();
-  if (!ptkId) throw new Error("ID PTK tidak valid.");
+  const ptkId = requiredString(formData, "ptkId", "ID PTK tidak valid.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -171,10 +170,8 @@ export async function hapusPtkAction(formData: FormData): Promise<void> {
 export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
-  const penggunaId = String(formData.get("penggunaId") ?? "").trim();
-  if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");
-  const ptkIdRaw = String(formData.get("ptkId") ?? "").trim();
-  const ptkId = ptkIdRaw || null;
+  const penggunaId = requiredString(formData, "penggunaId", "ID Pengguna wajib diisi.");
+  const ptkId = optionalString(formData, "ptkId");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -199,14 +196,13 @@ export async function linkPtkPenggunaAction(formData: FormData): Promise<void> {
 export async function aturIzinAksesAction(formData: FormData): Promise<void> {
   const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
-  const penggunaId = String(formData.get("penggunaId") ?? "").trim();
-  if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");
-  const slugRaw = String(formData.get("slug") ?? "").trim();
+  const penggunaId = requiredString(formData, "penggunaId", "ID Pengguna wajib diisi.");
+  const slugRaw = trimField(formData, "slug");
   if (!isValidIzinSlug(slugRaw)) {
     throw new Error("Slug izin tidak valid.");
   }
   const slug: IzinSlug = slugRaw;
-  const aktif = formData.get("aktif") === "on";
+  const aktif = checkboxField(formData, "aktif");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -233,16 +229,14 @@ export async function aturPembatasanAksesAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("akses:kelola", "Anda tidak memiliki izin untuk mengelola akses.");
 
-  const penggunaId = String(formData.get("penggunaId") ?? "").trim();
-  if (!penggunaId) throw new Error("ID Pengguna wajib diisi.");
-  const slugRaw = String(formData.get("slug") ?? "").trim();
+  const penggunaId = requiredString(formData, "penggunaId", "ID Pengguna wajib diisi.");
+  const slugRaw = trimField(formData, "slug");
   if (!isValidIzinSlug(slugRaw)) {
     throw new Error("Slug izin tidak valid.");
   }
   const slug: IzinSlug = slugRaw;
-  const aktif = formData.get("aktif") === "on";
-  const alasanRaw = String(formData.get("alasan") ?? "").trim();
-  const alasan = alasanRaw || null;
+  const aktif = checkboxField(formData, "aktif");
+  const alasan = optionalString(formData, "alasan");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

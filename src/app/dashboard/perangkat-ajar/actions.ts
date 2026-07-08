@@ -46,8 +46,8 @@ import type {
   Semester,
 } from "@/db/queries/perangkat-ajar";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/perangkat-ajar";
 
@@ -90,36 +90,32 @@ export async function buatPerangkatAjarAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("perangkat_ajar:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk membuat Perangkat Ajar.");
-  }
+  const akses = await requireAksesAktif(
+    "perangkat_ajar:buat",
+    "Anda tidak memiliki izin untuk membuat Perangkat Ajar."
+  );
 
   // 2. Manual validation (no zod).
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (!isValidJenis(jenisRaw)) {
     throw new Error("Jenis Perangkat Ajar tidak valid.");
   }
   const jenis: JenisPerangkatAjar = jenisRaw;
 
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (!mataPelajaranId) {
     throw new Error("Mata Pelajaran wajib dipilih.");
   }
 
-  const judul = String(formData.get("judul") ?? "").trim();
+  const judul = trimField(formData, "judul");
   if (!judul) throw new Error("Judul wajib diisi.");
 
-  const konten = parseKonten(String(formData.get("konten") ?? "").trim());
+  const konten = parseKonten(trimField(formData, "konten"));
 
-  const drafAiIdRaw = String(formData.get("drafAiId") ?? "").trim();
+  const drafAiIdRaw = trimField(formData, "drafAiId");
   const drafAiId = drafAiIdRaw || null;
 
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || null;
 
   // 3. Execute under tenant scope. orgId from membership ONLY. The active
@@ -168,32 +164,26 @@ export async function buatPerangkatAjarAction(
 export async function ubahPerangkatAjarAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("perangkat_ajar:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengubah Perangkat Ajar.");
-  }
+  const akses = await requireAksesAktif(
+    "perangkat_ajar:ubah",
+    "Anda tidak memiliki izin untuk mengubah Perangkat Ajar."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Perangkat Ajar wajib diisi.");
 
   // Partial update: empty/absent fields -> undefined (skip, don't null-out).
   // judul is required at CREATE; here an explicit non-empty value updates it.
-  const judulRaw = String(formData.get("judul") ?? "").trim();
+  const judulRaw = trimField(formData, "judul");
   const judul = judulRaw === "" ? undefined : judulRaw;
 
-  const kontenRaw = String(formData.get("konten") ?? "").trim();
+  const kontenRaw = trimField(formData, "konten");
   const konten = kontenRaw === "" ? undefined : parseKonten(kontenRaw);
 
-  const mataPelajaranIdRaw = String(
-    formData.get("mataPelajaranId") ?? ""
-  ).trim();
+  const mataPelajaranIdRaw = trimField(formData, "mataPelajaranId");
   const mataPelajaranId = mataPelajaranIdRaw || undefined;
 
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || undefined;
 
   const { db } = getDb();
@@ -228,20 +218,14 @@ export async function ubahPerangkatAjarAction(
 export async function verifikasiDokumenAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("perangkat_ajar:ubah").diizinkan) {
-    throw new Error(
-      "Anda tidak memiliki izin untuk verifikasi Dokumen AI."
-    );
-  }
+  const akses = await requireAksesAktif(
+    "perangkat_ajar:ubah",
+    "Anda tidak memiliki izin untuk verifikasi Dokumen AI."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Perangkat Ajar wajib diisi.");
-  const keputusanRaw = String(formData.get("keputusan") ?? "").trim();
+  const keputusanRaw = trimField(formData, "keputusan");
   if (keputusanRaw !== "disetujui" && keputusanRaw !== "ditolak") {
     throw new Error("Keputusan verifikasi tidak valid.");
   }

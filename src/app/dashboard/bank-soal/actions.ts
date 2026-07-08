@@ -40,6 +40,7 @@ import {
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { KepemilikanError } from "@/lib/auth/kepemilikan";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
@@ -143,26 +144,26 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk Bank Soal."
   );
 
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (!mataPelajaranId) throw new Error("Mata Pelajaran wajib diisi.");
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || null;
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (!isValidJenis(jenisRaw)) {
     throw new Error("Jenis Butir Soal tidak valid.");
   }
   const jenis: JenisButirSoal = jenisRaw;
-  const pertanyaan = String(formData.get("pertanyaan") ?? "").trim();
+  const pertanyaan = trimField(formData, "pertanyaan");
   if (!pertanyaan) throw new Error("Pertanyaan wajib diisi.");
-  const kunciJawaban = String(formData.get("kunciJawaban") ?? "").trim();
+  const kunciJawaban = trimField(formData, "kunciJawaban");
   if (!kunciJawaban) throw new Error("Kunci Jawaban wajib diisi.");
-  const pembahasanRaw = String(formData.get("pembahasan") ?? "").trim();
+  const pembahasanRaw = trimField(formData, "pembahasan");
   const pembahasan = pembahasanRaw || null;
-  const pilihanRaw = String(formData.get("pilihan") ?? "").trim();
+  const pilihanRaw = trimField(formData, "pilihan");
   const pilihan = pilihanRaw
     ? JSON.parse(pilihanRaw) as unknown
     : null;
-  const drafAiIdRaw = String(formData.get("drafAiId") ?? "").trim();
+  const drafAiIdRaw = trimField(formData, "drafAiId");
   const drafAiId = drafAiIdRaw || null;
 
   const { db } = getDb();
@@ -202,29 +203,29 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk Bank Soal."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
 
   const perubahan: Record<string, unknown> = {};
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (mataPelajaranId) perubahan.mataPelajaranId = mataPelajaranId;
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   if (formData.has("tingkatId")) perubahan.tingkatId = tingkatIdRaw || null;
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (jenisRaw) {
     if (!isValidJenis(jenisRaw)) {
       throw new Error("Jenis Butir Soal tidak valid.");
     }
     perubahan.jenis = jenisRaw;
   }
-  const pertanyaan = String(formData.get("pertanyaan") ?? "").trim();
+  const pertanyaan = trimField(formData, "pertanyaan");
   if (pertanyaan) perubahan.pertanyaan = pertanyaan;
-  const kunciJawaban = String(formData.get("kunciJawaban") ?? "").trim();
+  const kunciJawaban = trimField(formData, "kunciJawaban");
   if (kunciJawaban) perubahan.kunciJawaban = kunciJawaban;
-  const pembahasanRaw = String(formData.get("pembahasan") ?? "").trim();
+  const pembahasanRaw = trimField(formData, "pembahasan");
   if (formData.has("pembahasan"))
     perubahan.pembahasan = pembahasanRaw || null;
-  const pilihanRaw = String(formData.get("pilihan") ?? "").trim();
+  const pilihanRaw = trimField(formData, "pilihan");
   if (pilihanRaw) perubahan.pilihan = JSON.parse(pilihanRaw) as unknown;
 
   const { db } = getDb();
@@ -255,7 +256,7 @@ export async function arsipkanButirSoalAction(
     "Anda tidak memiliki izin untuk Bank Soal."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
 
   const { db } = getDb();
@@ -284,15 +285,15 @@ export async function buatPaketSoalAction(formData: FormData): Promise<void> {
     "Anda tidak memiliki izin untuk Paket Soal."
   );
 
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Paket wajib diisi.");
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (!mataPelajaranId) throw new Error("Mata Pelajaran wajib diisi.");
-  const tahunAjaranId = String(formData.get("tahunAjaranId") ?? "").trim();
+  const tahunAjaranId = trimField(formData, "tahunAjaranId");
   if (!tahunAjaranId) throw new Error("Tahun Ajaran wajib diisi.");
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || null;
-  const semesterRaw = String(formData.get("semester") ?? "").trim();
+  const semesterRaw = trimField(formData, "semester");
   const semester = semesterRaw || null;
 
   const { db } = getDb();
@@ -330,15 +331,15 @@ export async function tambahButirKePaketAction(
     "Anda tidak memiliki izin untuk Paket Soal."
   );
 
-  const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
+  const paketSoalId = trimField(formData, "paketSoalId");
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
-  const butirSoalId = String(formData.get("butirSoalId") ?? "").trim();
+  const butirSoalId = trimField(formData, "butirSoalId");
   if (!butirSoalId) throw new Error("ID Butir Soal wajib diisi.");
-  const urutanRaw = String(formData.get("urutan") ?? "").trim();
+  const urutanRaw = trimField(formData, "urutan");
   if (!urutanRaw) throw new Error("Urutan wajib diisi.");
   const urutan = Number(urutanRaw);
   if (Number.isNaN(urutan)) throw new Error("Urutan harus berupa angka.");
-  const bobotRaw = String(formData.get("bobot") ?? "").trim();
+  const bobotRaw = trimField(formData, "bobot");
   const bobot = bobotRaw || undefined;
 
   const { db } = getDb();
@@ -374,9 +375,9 @@ export async function hapusButirDariPaketAction(
     "Anda tidak memiliki izin untuk Paket Soal."
   );
 
-  const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
+  const paketSoalId = trimField(formData, "paketSoalId");
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
-  const butirSoalId = String(formData.get("butirSoalId") ?? "").trim();
+  const butirSoalId = trimField(formData, "butirSoalId");
   if (!butirSoalId) throw new Error("ID Butir Soal wajib diisi.");
 
   const { db } = getDb();
@@ -402,7 +403,7 @@ export async function imporButirSoalJsonAction(
     "Anda tidak memiliki izin untuk Bank Soal."
   );
 
-  const jsonText = String(formData.get("jsonButir") ?? "").trim();
+  const jsonText = trimField(formData, "jsonButir");
   let parsed: unknown;
   try {
     parsed = JSON.parse(jsonText);

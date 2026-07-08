@@ -29,6 +29,7 @@ import {
   type Semester,
 } from "@/db/queries/tahun-ajaran";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/tahun-ajaran";
 
@@ -51,8 +52,7 @@ export async function simpanTahunAjaranBaruAction(
   const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
   // 2. Manual validation (no zod)
-  const nama = String(formData.get("nama") ?? "").trim();
-  if (!nama) throw new Error("Nama Tahun Ajaran wajib diisi.");
+  const nama = requiredString(formData, "nama", "Nama Tahun Ajaran wajib diisi.");
 
   // 3. Execute under tenant scope + audit. orgId from membership ONLY.
   const { db } = getDb();
@@ -83,8 +83,7 @@ export async function aktifkanTahunAjaranAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Tahun Ajaran wajib diisi.");
+  const id = requiredString(formData, "id", "ID Tahun Ajaran wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -113,7 +112,7 @@ export async function ubahSemesterAktifAction(
 ): Promise<void> {
   const akses = await requireAksesAktif("tahun_ajaran:kelola", "Anda tidak memiliki izin untuk mengelola Tahun Ajaran.");
 
-  const semesterRaw = String(formData.get("semester") ?? "").trim();
+  const semesterRaw = trimField(formData, "semester");
   if (!isValidSemester(semesterRaw)) {
     throw new Error("Semester tidak valid.");
   }

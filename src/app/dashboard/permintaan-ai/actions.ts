@@ -49,6 +49,7 @@ import type { JenisPermintaanAi, StatusPermintaanAi } from "@/db/queries/permint
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikPermintaan } from "@/lib/auth/kepemilikan";
+import { optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/permintaan-ai";
 
@@ -169,13 +170,13 @@ export async function buatPermintaanAiAction(formData: FormData): Promise<void> 
   );
 
   // 2. Manual validation (no zod).
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (!isValidJenis(jenisRaw)) {
     throw new Error("Jenis Permintaan AI tidak valid.");
   }
   const jenis: JenisPermintaanAi = jenisRaw;
 
-  const konteksRaw = String(formData.get("konteks") ?? "").trim();
+  const konteksRaw = optionalString(formData, "konteks");
   let konteks: Record<string, unknown> = {};
   if (konteksRaw) {
     let parsed: unknown;
@@ -227,8 +228,7 @@ export async function batalkanPermintaanAiAction(
     "Anda tidak memiliki izin untuk Permintaan AI."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Permintaan AI wajib diisi.");
+  const id = requiredString(formData, "id", "ID Permintaan AI wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -270,9 +270,8 @@ export async function verifikasiDrafAiAction(
     "Anda tidak memiliki izin untuk verifikasi Draf AI."
   );
 
-  const drafId = String(formData.get("drafId") ?? "").trim();
-  if (!drafId) throw new Error("ID Draf AI wajib diisi.");
-  const statusRaw = String(formData.get("status") ?? "").trim();
+  const drafId = requiredString(formData, "drafId", "ID Draf AI wajib diisi.");
+  const statusRaw = trimField(formData, "status");
   if (statusRaw !== "disetujui" && statusRaw !== "ditolak") {
     throw new Error("Status verifikasi tidak valid.");
   }
@@ -309,8 +308,7 @@ export async function retryPermintaanAiAction(
     "Anda tidak memiliki izin untuk Permintaan AI."
   );
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Permintaan AI wajib diisi.");
+  const id = requiredString(formData, "id", "ID Permintaan AI wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
