@@ -1,0 +1,52 @@
+src/app/dashboard/bank-soal/actions.ts
+  s_7d5b16a13e3b64::t_08869f08c6bc3b 18-23
+src/middleware.ts
+  s_7d5b16a13e3b64::t_91fb343c8fd12d 11-13
+src/app/dashboard/permintaan-ai/actions.ts
+  s_7d5b16a13e3b64::t_577e25e930daab 334
+  s_7d5b16a13e3b64::t_cb65f400b5c596 244
+  s_7d5b16a13e3b64::t_6527b49e46a806 51
+src/app/auth/actions.ts
+  s_7d5b16a13e3b64::t_d2abb5e7e33868 47
+src/app/dashboard/perangkat-ajar/actions.ts
+  s_7d5b16a13e3b64::t_ee8108518074d4 18-22
+src/app/dashboard/eraport/actions.ts
+  s_7d5b16a13e3b64::t_9534216b6ab12f 49
+  s_7d5b16a13e3b64::t_ce3d0e84b5a209 105
+src/lib/auth/kepemilikan.ts
+  s_7d5b16a13e3b64::t_1703ebca29ad1d 310-339
+src/app/dashboard/permintaan-ai/actions.test.ts
+  s_7d5b16a13e3b64::t_3b19424e03309d 387
+  s_7d5b16a13e3b64::t_a2cbea8d825258 535
+  s_7d5b16a13e3b64::t_b8bbb24f9284d3 405
+  s_7d5b16a13e3b64::t_62ac29bda22007 415-464
+src/app/dashboard/eraport/actions.test.ts
+  s_7d5b16a13e3b64::t_c3fe9d2f61e5d5 46
+  s_7d5b16a13e3b64::t_e15858cc88970a 153-154
+  s_7d5b16a13e3b64::t_3649297da035f5 11
+  s_95bf0e4ddfcce8::t_502d18e4fe8189 64-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "684b8af1491f8a8b12ca0ef146555893b404789a",
+  "prompts": {},
+  "sessions": {
+    "s_7d5b16a13e3b64": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf710317ffeUB1JMANJCKO5uR",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_95bf0e4ddfcce8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "682b3d1e-5a8d-4cfc-b379-3f9a1983afed",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
