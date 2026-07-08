@@ -1,0 +1,30 @@
+src/app/globals.css
+  s_127a66eff11f8c::t_ff44661db7aaa3 18-20
+  s_127a66eff11f8c::t_75130db0758f68 241-246,248-255,257-268,272-273,278-279,284,286-292,294-299,301-305,316-346
+  s_127a66eff11f8c::t_7323eec6dff265 180-184
+  s_d4e5913b9fe7ff::t_20f6406ac3808a 21,347
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ded9dc4c6a102a6fa751dda3a80a8e025a2c0e44",
+  "prompts": {},
+  "sessions": {
+    "s_127a66eff11f8c": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b53eeffePe99iRVPIIzNwv",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_d4e5913b9fe7ff": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bf2b5442ffeW7lvVNp6fdh6PM",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
