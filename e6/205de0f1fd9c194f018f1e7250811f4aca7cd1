@@ -1,0 +1,19 @@
+src/db/migrations/0019_perf_indexes.sql
+  s_7551353849e199::t_a858e87c0f0d08 1-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e6205de0f1fd9c194f018f1e7250811f4aca7cd1",
+  "prompts": {},
+  "sessions": {
+    "s_7551353849e199": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be3ee4dbffeyrdhl6drvdTyzD",
+        "model": "glm-5.2"
+      },
+      "human_author": null
+    }
+  }
+}
