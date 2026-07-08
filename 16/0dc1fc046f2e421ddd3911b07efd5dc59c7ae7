@@ -1,0 +1,25 @@
+package.json
+  s_c961ffc21015ce::t_e83a78a9e12829 64-68
+  s_c961ffc21015ce::t_4e82bafb8e36b5 23-24
+  s_c961ffc21015ce::t_21d02e48858914 57,59
+.husky/pre-commit
+  s_c961ffc21015ce::t_f8502dc0446f70 1
+package-lock.json
+  s_c961ffc21015ce::t_004684e20461e0 41,43,3973-3988,4422-4454,5413-5425,6329-6341,6582-6597,6871-6886,7614-7668,7692-7784,7878-7890,8228-8243,8838-8854,8866-8872,9218-9260,9335-9361,9476-9504,10396-10426,10453-10469
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "160dc1fc046f2e421ddd3911b07efd5dc59c7ae7",
+  "prompts": {},
+  "sessions": {
+    "s_c961ffc21015ce": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bd8daa26ffe3IUlRO5GdClD8F",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
