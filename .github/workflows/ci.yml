@@ -71,6 +71,15 @@ jobs:
       # This is a public value (no secret) — it matches the callback route in
       # src/middleware.ts matcher (/api/auth/:path*).
       NEXT_PUBLIC_WORKOS_REDIRECT_URI: http://localhost:3000/api/auth/callback
+      # AuthKit's updateSession throws if WORKOS_COOKIE_PASSWORD is missing or
+      # shorter than 32 chars. /dashboard is in the middleware matcher, so the
+      # middleware runs even for the unauthenticated smoke test and would 500
+      # without these. Mirrors the workflow-level fallback (lines 12-14); dummy
+      # values only, no real secrets. WORKOS_COOKIE_PASSWORD fallback is 48
+      # chars to satisfy the >=32 length requirement.
+      WORKOS_API_KEY: ${{ secrets.WORKOS_API_KEY || 'sk_test_dummy' }}
+      WORKOS_CLIENT_ID: ${{ secrets.WORKOS_CLIENT_ID || 'test_client_dummy' }}
+      WORKOS_COOKIE_PASSWORD: ${{ secrets.WORKOS_COOKIE_PASSWORD || 'dummy_cookie_password_for_ci_build_only_not_real' }}
 
     steps:
       - uses: actions/checkout@v4
