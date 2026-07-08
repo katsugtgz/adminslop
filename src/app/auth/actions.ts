@@ -42,6 +42,7 @@ export async function pilihSatuanPendidikanAction(formData: FormData) {
   (await cookies()).set(ACTIVE_TENANT_COOKIE, orgId, {
     httpOnly: true,
     sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
     path: "/",
     maxAge: ACTIVE_TENANT_MAX_AGE,
   });

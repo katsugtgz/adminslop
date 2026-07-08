@@ -20,6 +20,7 @@ export async function runMigrations(
   const client = await pool.connect();
   const applied: string[] = [];
   try {
+    await client.query("select pg_advisory_lock(hashtext('eduadmin:schema_migrations'))");
     await client.query(`
       create table if not exists schema_migrations (
         id          text primary key,
@@ -60,6 +61,11 @@ export async function runMigrations(
     }
     return applied;
   } finally {
+    try {
+      await client.query("select pg_advisory_unlock(hashtext('eduadmin:schema_migrations'))");
+    } catch {
+      /* connection already failed */
+    }
     client.release();
     await pool.end();
   }

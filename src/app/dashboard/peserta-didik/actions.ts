@@ -41,6 +41,7 @@ import {
 } from "@/db/queries/peserta-didik";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { requireAuth } from "@/lib/auth/server";
+import { requireIsoDate } from "@/lib/validation";
 
 const REVALIDATE_TARGET = "/dashboard/peserta-didik";
 
@@ -62,14 +63,6 @@ function trimField(formData: FormData, key: string): string {
   return String(formData.get(key) ?? "").trim();
 }
 
-/**
- * True iff `value` parses as a real calendar date. Accepts ISO `YYYY-MM-DD`
- * (the schema column type) and any string `Date.parse` accepts. Empty string
- * is invalid (caller checks presence first).
- */
-function isParseableDate(value: string): boolean {
-  return value.length > 0 && !Number.isNaN(Date.parse(value));
-}
 
 /**
  * Tenant-scoped existence guard (cubic P1-5). RLS already filters cross-tenant
@@ -109,10 +102,10 @@ export async function simpanPesertaDidikBaruAction(
   const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama wajib diisi.");
 
-  const tanggalLahir = trimField(formData, "tanggalLahir");
-  if (!isParseableDate(tanggalLahir)) {
-    throw new Error("Tanggal lahir wajib diisi.");
-  }
+  const tanggalLahir = requireIsoDate(
+    trimField(formData, "tanggalLahir"),
+    "Tanggal lahir wajib berformat YYYY-MM-DD."
+  );
 
   const jenisRaw = trimField(formData, "jenisKelamin");
   if (jenisRaw !== "L" && jenisRaw !== "P") {
@@ -186,10 +179,10 @@ export async function ubahPesertaDidikAction(
 
   const tanggalLahir = trimField(formData, "tanggalLahir");
   if (tanggalLahir) {
-    if (!isParseableDate(tanggalLahir)) {
-      throw new Error("Tanggal lahir wajib diisi.");
-    }
-    input.tanggalLahir = tanggalLahir;
+    input.tanggalLahir = requireIsoDate(
+      tanggalLahir,
+      "Tanggal lahir wajib berformat YYYY-MM-DD."
+    );
   }
 
   const jenisRaw = trimField(formData, "jenisKelamin");
@@ -321,10 +314,10 @@ export async function catatMutasiPesertaDidikAction(
   }
   const arah = arahRaw as ArahMutasi;
 
-  const tanggal = trimField(formData, "tanggal");
-  if (!isParseableDate(tanggal)) {
-    throw new Error("Tanggal mutasi wajib diisi.");
-  }
+  const tanggal = requireIsoDate(
+    trimField(formData, "tanggal"),
+    "Tanggal mutasi wajib diisi."
+  );
 
   const asalSekolah = trimField(formData, "asalSekolah") || null;
   const tujuanSekolah = trimField(formData, "tujuanSekolah") || null;

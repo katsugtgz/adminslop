@@ -20,6 +20,7 @@ import { asc, eq } from "drizzle-orm";
 import type { Db, Tx } from "../client";
 import { komponenNilai } from "../schema";
 import type { KomponenNilai } from "../schema";
+import { assertReturnedRow } from "@/lib/validation";
 
 export interface InputKomponenNilai {
   readonly bebanMengajarId: string;
@@ -66,7 +67,7 @@ export async function buatKomponenNilai(
       bobot: input.bobot.toString(),
     })
     .returning();
-  return row;
+  return assertReturnedRow(row, "Komponen Nilai gagal dibuat");
 }
 
 /**
@@ -98,12 +99,16 @@ export async function ubahKomponenNilai(
 }
 
 /**
- * Delete a komponen_nilai by id. RLS scopes to the current tenant — a cross-
- * tenant delete is a silent no-op (zero rows affected).
+ * Delete a komponen_nilai by id. Throws on missing/RLS-hidden rows so callers
+ * do not audit a write that never happened.
  */
 export async function hapusKomponenNilai(
   db: Db | Tx,
   id: string
 ): Promise<void> {
-  await db.delete(komponenNilai).where(eq(komponenNilai.id, id));
+  const [row] = await db
+    .delete(komponenNilai)
+    .where(eq(komponenNilai.id, id))
+    .returning({ id: komponenNilai.id });
+  assertReturnedRow(row, "Komponen Nilai tidak ditemukan");
 }

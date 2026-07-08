@@ -18,6 +18,7 @@ import { asc, eq } from "drizzle-orm";
 import type { Db, Tx } from "../client";
 import { penilaian } from "../schema";
 import type { Penilaian } from "../schema";
+import { assertReturnedRow } from "@/lib/validation";
 
 export interface InputPenilaian {
   readonly komponenNilaiId: string;
@@ -64,7 +65,7 @@ export async function buatPenilaian(
       dibuatOleh: input.dibuatOleh ?? null,
     })
     .returning();
-  return row;
+  return assertReturnedRow(row, "Penilaian gagal dibuat");
 }
 
 /**
@@ -97,9 +98,13 @@ export async function ubahPenilaian(
 }
 
 /**
- * Delete a penilaian by id. RLS scopes to the current tenant — a cross-tenant
- * delete is a silent no-op (zero rows affected).
+ * Delete a penilaian by id. Throws on missing/RLS-hidden rows so callers do
+ * not audit a write that never happened.
  */
 export async function hapusPenilaian(db: Db | Tx, id: string): Promise<void> {
-  await db.delete(penilaian).where(eq(penilaian.id, id));
+  const [row] = await db
+    .delete(penilaian)
+    .where(eq(penilaian.id, id))
+    .returning({ id: penilaian.id });
+  assertReturnedRow(row, "Penilaian tidak ditemukan");
 }
