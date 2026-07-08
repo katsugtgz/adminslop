@@ -1,0 +1,20 @@
+src/lib/auth/kepemilikan.test.ts
+  s_42531ba65b3890::t_0a6bdcc999608a 386-484
+  s_42531ba65b3890::t_99776935e7435b 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "555cf5619923ddf2bcd82ad5a728b3338042ab33",
+  "prompts": {},
+  "sessions": {
+    "s_42531ba65b3890": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f46cffbjP1oFfuePAVb1X",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
