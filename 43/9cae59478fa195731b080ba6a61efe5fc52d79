@@ -1,0 +1,197 @@
+src/app/dashboard/bank-soal/actions.ts
+  s_2241ae86a735e4::t_b2b2f446855810 243
+  s_2241ae86a735e4::t_bc7305059a400e 78-93
+  s_2241ae86a735e4::t_b2d0564d9ce3c2 179
+src/app/dashboard/penilaian/page.tsx
+  s_a9991a46a260ad::t_708e2fab130213 13
+  s_a9991a46a260ad::t_e67f20a1acd0be 154,166-174
+src/app/dashboard/eraport/actions.ts
+  s_80c7c480513830::t_6531d01fe8bfe6 101
+src/lib/auth/AGENTS.md
+  s_80c7c480513830::t_6ec7ecb47a12e3 57-60
+src/app/dashboard/eraport/page.test.tsx
+  s_a9991a46a260ad::t_ccfe3f079b0442 22
+  s_a9991a46a260ad::t_26b36821fa7487 47
+  s_a9991a46a260ad::t_7dad882f8e1db9 151
+src/app/dashboard/absensi/actions.ts
+  s_80c7c480513830::t_a60910238c6589 128
+src/app/dashboard/absensi/page.test.tsx
+  s_a9991a46a260ad::t_b6e5689262d71d 37
+  s_a9991a46a260ad::t_53e539d0c3fba7 69
+  s_a9991a46a260ad::t_8a24de93b2d23f 201
+src/app/dashboard/permintaan-ai/page.test.tsx
+  s_2241ae86a735e4::t_b1877a89a10769 23-27
+  s_2241ae86a735e4::t_d74bfcc8f69e13 172
+  s_2241ae86a735e4::t_3fe782c7aaea2e 205-206
+  s_2241ae86a735e4::t_d59bc2983456a2 240-241
+  s_2241ae86a735e4::t_d692ba8fcefa69 320-332
+  s_2241ae86a735e4::t_e5d7d39ca9b362 223-224
+  s_2241ae86a735e4::t_da28be8229534e 62
+src/app/dashboard/eraport/page.tsx
+  s_a9991a46a260ad::t_b282fb7fea31c8 75-76,81-85,87-98
+  s_a9991a46a260ad::t_b26b95d1f71d9d 2
+src/db/queries/eraport.ts
+  s_a9991a46a260ad::t_8270283b0b4d62 30
+  s_a9991a46a260ad::t_f6e4d729222069 267-304
+src/app/dashboard/akses/page.test.tsx
+  s_a9991a46a260ad::t_9e9a9823a0bf83 184
+  s_a9991a46a260ad::t_08150da5589a95 201
+  s_a9991a46a260ad::t_a81b6a1a1ab7f2 136,144-146
+  s_a9991a46a260ad::t_20c40b6676f60e 26-29
+  s_a9991a46a260ad::t_02fd5852efb4ed 53
+src/app/dashboard/impor-peserta-didik/actions.ts
+  s_2241ae86a735e4::t_eb1c36da824058 95-96,100-109
+  s_2241ae86a735e4::t_c5f2f71f16c6a8 84-94,97-99,110-116
+  s_2241ae86a735e4::t_7d5b677d3f126b 19,23,25
+  s_2241ae86a735e4::t_50679e53d73e68 34-51
+  s_2241ae86a735e4::t_3005b616994fb8 33
+scrape/walk-batch.cjs
+  s_80c7c480513830::t_3935406bc71b7d 10
+src/app/dashboard/bank-soal/page.test.tsx
+  s_a9991a46a260ad::t_09285983faa853 335-337,339
+  s_a9991a46a260ad::t_c63deac7d90d8b 70
+  s_a9991a46a260ad::t_1647f7541860e2 225-227
+  s_a9991a46a260ad::t_66d156cc33df12 37
+scripts/provision-e2e-user.ts
+  s_80c7c480513830::t_6ff034e227a238 309
+  s_2241ae86a735e4::t_75ebfced77820b 53-59
+src/app/onboarding/actions.ts
+  s_ee99af759d90fa::t_9bf933f118dca7 82-97
+next.config.ts
+  s_80c7c480513830::t_e268bc969e8afb 55-56
+  s_80c7c480513830::t_ac647475df71a4 57-59
+package.json
+  s_80c7c480513830::t_4811a946878d41 14-15
+src/db/queries/bank-soal.ts
+  s_a9991a46a260ad::t_6cb84b6e885ea1 22
+  s_a9991a46a260ad::t_8ec533d5f3ab39 190-204
+  s_a9991a46a260ad::t_41f5d73547393e 189
+src/app/dashboard/penilaian/page.test.tsx
+  s_a9991a46a260ad::t_f0754c0efaa977 89
+  s_a9991a46a260ad::t_013b394aef0b79 45
+  s_a9991a46a260ad::t_bcf7fa1c7b3706 281
+src/app/dashboard/akses/page.tsx
+  s_a9991a46a260ad::t_1ce87ff640e622 76-79
+  s_a9991a46a260ad::t_5f168bae6297ec 72
+  s_a9991a46a260ad::t_48b735fc57600b 4
+tsconfig.json
+  s_80c7c480513830::t_b213eed2403412 3
+src/app/dashboard/absensi/page.tsx
+  s_a9991a46a260ad::t_1c4dad0e36af09 12
+  s_a9991a46a260ad::t_fb84ef8e95bbd1 172-177,180-181,183
+src/app/dashboard/permintaan-ai/actions.ts
+  s_80c7c480513830::t_10acb30528a3a6 319
+  s_80c7c480513830::t_02c743e0fd48ee 239
+src/db/queries/akses.ts
+  s_a9991a46a260ad::t_cb7f48c4ff7364 11
+  s_a9991a46a260ad::t_4d733f56232b78 206-249
+  s_8abd67213fb92b::t_8163f44a61dede 205
+src/app/api/sinkronisasi/route.ts
+  s_ee99af759d90fa::t_0140dc77ce73c8 6
+  s_ee99af759d90fa::t_d6ff62fe5e92dc 207-223
+  s_ee99af759d90fa::t_f0a77790c61193 297-301,305,307
+  s_80c7c480513830::t_16f01282b11e30 198
+  s_ee99af759d90fa::t_fe8db21c956d60 302-304,306,308-312,322-329
+  s_80c7c480513830::t_b2a846ba5fbc14 259
+  s_ee99af759d90fa::t_f35fa476dbfefd 296
+eslint.config.mjs
+  s_80c7c480513830::t_124f935dd1aba6 24
+  s_80c7c480513830::t_5c5886ad3a71bc 22-23,35,37-38,49-60,62-63
+  s_80c7c480513830::t_f753ffe3b7328b 13-21,31-32
+  s_80c7c480513830::t_c9259c9a4bbd23 25-30
+  s_80c7c480513830::t_02dcda21a50b86 61,64
+  s_80c7c480513830::t_71bb5195c14743 65-77
+src/db/queries/peserta-didik.ts
+  s_a9991a46a260ad::t_15b4736b361431 91-110
+  s_a9991a46a260ad::t_478e373c40e733 17
+  s_a9991a46a260ad::t_c79bf87b64cc17 90
+src/app/dashboard/permintaan-ai/page.tsx
+  s_2241ae86a735e4::t_adf77e29dd68ff 78-80
+  s_2241ae86a735e4::t_6b01efde020b2f 4
+src/app/dashboard/bank-soal/actions.test.ts
+  s_2241ae86a735e4::t_7150e4c94fe18f 602-630
+src/db/queries/draf-ai.ts
+  s_2241ae86a735e4::t_8bf0d9bc5549ff 146-149,156,158,161
+  s_80c7c480513830::t_16865aabb82a86 117-125,144-145,159-160
+  s_2241ae86a735e4::t_4db4215267283d 26
+  s_2241ae86a735e4::t_35c609964613d0 85-109
+  s_2241ae86a735e4::t_8305f4f6c74672 84
+src/db/queries/notifikasi.ts
+  s_a9991a46a260ad::t_bc3d2f234ed7fc 259-260
+  s_a9991a46a260ad::t_3eb700d224595d 121-122
+  s_a9991a46a260ad::t_8b8641a31bc07c 55-57
+src/app/dashboard/impor-peserta-didik/actions.test.ts
+  s_2241ae86a735e4::t_7462c4b7d5bd6c 168
+  s_80c7c480513830::t_88b6f21ec3a2c5 487,503,528
+  s_2241ae86a735e4::t_8cebc4d21767fe 10-24,62,74
+  s_80c7c480513830::t_7b48d25f9390d8 465-486,488-502,504-508,510-511,515-522,530-532
+  s_2241ae86a735e4::t_2aec2bba142d47 352-353
+  s_80c7c480513830::t_4703f288bf04d3 509,512-514,523-527,529
+scrape/walk.cjs
+  s_80c7c480513830::t_eba7d7dfb8a83d 6
+src/db/queries/draf-ai.test.ts
+  s_2241ae86a735e4::t_47d2e18db34e27 339-375
+  s_2241ae86a735e4::t_c63a069948fabc 15
+src/app/dashboard/bank-soal/page.tsx
+  s_a9991a46a260ad::t_7cea83aee01787 114-115,117-119
+src/app/api/sinkronisasi/route.test.ts
+  s_ee99af759d90fa::t_de8c8efe41310c 216-218,222
+  s_ee99af759d90fa::t_7f7a763f034a76 20
+  s_ee99af759d90fa::t_d23cdd28594ad9 203,212-213
+  s_ee99af759d90fa::t_68967ef0c7342c 258
+  s_ee99af759d90fa::t_ca5bd07544fe90 58,63-68
+  s_ee99af759d90fa::t_bbf8e093267d7a 101-109
+  s_ee99af759d90fa::t_efb27d76e9a5d5 458-464,467,470-472,485-498,501-507,509,513-514,516-534,539-542,545,550,552,555,559-561,564-565,567,570,572,574-577,581-614
+  s_ee99af759d90fa::t_ebb9f48ba55523 75-77,80,97
+  s_ee99af759d90fa::t_5ba113e9408ec0 456-457,465-466,468-469,473-484,499-500,508,510-512,515,535-538,543-544,546-549,551,553-554,556-558,562-563,566,568-569,571,573,578-580,615-616
+src/app/dashboard/penilaian/actions.ts
+  s_80c7c480513830::t_64f5b1929afe51 98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "439cae59478fa195731b080ba6a61efe5fc52d79",
+  "prompts": {},
+  "sessions": {
+    "s_2241ae86a735e4": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bdda8fdfffe870dlpBpaCcU5V",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_80c7c480513830": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bdda8f42ffe0kmTggCmcIzu3y",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_8abd67213fb92b": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be44456affeBSS2Xm6oxXgg4e",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_a9991a46a260ad": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bdda8f89ffed2PA8uw40L0AOi",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_ee99af759d90fa": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bdda8ffbffekrxSPbKhMH0tUl",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
