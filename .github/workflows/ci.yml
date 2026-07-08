@@ -57,3 +57,35 @@ jobs:
       - run: npx tsc --noEmit
       - run: npx vitest run
       - run: npm run build
+
+  # Minimal e2e smoke — runs in parallel with build-and-test. No WorkOS
+  # secrets required: the smoke tests (e2e/ci-smoke.spec.ts) exercise only
+  # unauthenticated routes (/health 200, /dashboard renders PembatasanAkses
+  # auth gate). The auth-gated tracer in mvp-tracer.spec.ts skips gracefully
+  # when E2E_AUTH_EMAIL / E2E_AUTH_PASSWORD are absent, so the full suite
+  # stays green without credentials.
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    env:
+      # AuthKit middleware needs a redirect URI to construct the sign-in URL.
+      # This is a public value (no secret) — it matches the callback route in
+      # src/middleware.ts matcher (/api/auth/:path*).
+      NEXT_PUBLIC_WORKOS_REDIRECT_URI: http://localhost:3000/api/auth/callback
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Install only the chromium browser (playwright.config.ts uses a single
+      # chromium project). --with-deps installs required OS libraries.
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e smoke tests
+        run: npm run e2e
