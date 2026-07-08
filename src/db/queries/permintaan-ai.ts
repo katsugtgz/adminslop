@@ -114,11 +114,13 @@ export async function cariPermintaanAiById(
  * (`dibuatPada` DESC). Optional filters narrow the result independently; only
  * the supplied fields constrain the query. A cross-tenant status / dibuatOleh
  * filter yields `[]` only when no matching rows exist in this tenant — RLS
- * hides foreign rows regardless.
+ * hides foreign rows regardless. `limit` caps the result set to prevent
+ * unbounded tenant scans (default 200).
  */
 export async function listPermintaanAi(
   db: Db | Tx,
-  opts?: OpsiListPermintaanAi
+  opts?: OpsiListPermintaanAi,
+  limit: number = 200
 ): Promise<PermintaanAi[]> {
   const filters = [];
   if (opts?.status) filters.push(eq(permintaanAi.status, opts.status));
@@ -129,7 +131,8 @@ export async function listPermintaanAi(
     .select()
     .from(permintaanAi)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(desc(permintaanAi.dibuatPada));
+    .orderBy(desc(permintaanAi.dibuatPada))
+    .limit(limit);
 }
 
 /**

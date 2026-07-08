@@ -64,11 +64,14 @@ export async function tambahMutasi(
  * List transfer records visible under the current tenant (RLS-scoped). When
  * `pesertaDidikId` is provided, returns only that student's transfers;
  * otherwise returns all transfers in the tenant. Ordered by `tanggal` DESC
- * then `dibuat_pada` DESC (most recent first).
+ * then `dibuat_pada` DESC (most recent first). `limit` caps the result set to
+ * prevent unbounded tenant scans when no `pesertaDidikId` filter is supplied
+ * (default 200).
  */
 export async function listMutasi(
   db: Db | Tx,
-  pesertaDidikId?: string
+  pesertaDidikId?: string,
+  limit: number = 200
 ): Promise<MutasiPesertaDidik[]> {
   return db
     .select()
@@ -81,7 +84,8 @@ export async function listMutasi(
     .orderBy(
       desc(mutasiPesertaDidik.tanggal),
       desc(mutasiPesertaDidik.dibuatPada)
-    );
+    )
+    .limit(limit);
 }
 
 /**

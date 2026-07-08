@@ -185,11 +185,13 @@ export async function pulihkan(
  * whitelisted TabelArsip literal to its drizzle table object (AC#5: the
  * user-supplied string never reaches raw SQL). Returns BarisArsip rows tagged
  * with the source `tabel` so callers can fan out across tables concurrently
- * and concatenate.
+ * and concatenate. `limit` caps the per-table read to prevent unbounded
+ * tenant scans.
  */
 async function readArsipForTable(
   db: Db | Tx,
-  t: TabelArsip
+  t: TabelArsip,
+  limit: number
 ): Promise<BarisArsip[]> {
   switch (t) {
     case "ptk": {
@@ -201,7 +203,9 @@ async function readArsipForTable(
           label: ptk.nama,
         })
         .from(ptk)
-        .where(isNotNull(ptk.arsipPada));
+        .where(isNotNull(ptk.arsipPada))
+        .orderBy(desc(ptk.arsipPada))
+        .limit(limit);
       return rows.map((r) => ({
         id: r.id,
         tabel: "ptk",
@@ -219,7 +223,9 @@ async function readArsipForTable(
           label: penilaian.nama,
         })
         .from(penilaian)
-        .where(isNotNull(penilaian.arsipPada));
+        .where(isNotNull(penilaian.arsipPada))
+        .orderBy(desc(penilaian.arsipPada))
+        .limit(limit);
       return rows.map((r) => ({
         id: r.id,
         tabel: "penilaian",
@@ -237,7 +243,9 @@ async function readArsipForTable(
           label: bebanMengajar.semester,
         })
         .from(bebanMengajar)
-        .where(isNotNull(bebanMengajar.arsipPada));
+        .where(isNotNull(bebanMengajar.arsipPada))
+        .orderBy(desc(bebanMengajar.arsipPada))
+        .limit(limit);
       return rows.map((r) => ({
         id: r.id,
         tabel: "beban_mengajar",
@@ -255,7 +263,9 @@ async function readArsipForTable(
           label: waliKelas.semester,
         })
         .from(waliKelas)
-        .where(isNotNull(waliKelas.arsipPada));
+        .where(isNotNull(waliKelas.arsipPada))
+        .orderBy(desc(waliKelas.arsipPada))
+        .limit(limit);
       return rows.map((r) => ({
         id: r.id,
         tabel: "wali_kelas",
@@ -271,18 +281,21 @@ async function readArsipForTable(
  * List archived rows (arsip_pada IS NOT NULL) across the supported tables. When
  * `tabel` is omitted, scans all four; otherwise narrows to one. Ordered by
  * arsip_pada DESC (most recent first). RLS scopes every read to the tenant.
+ * `limit` caps the per-table reads AND the final merged result to prevent
+ * unbounded tenant scans (default 200).
  */
 export async function listArsip(
   db: Db | Tx,
-  tabel?: TabelArsip
+  tabel?: TabelArsip,
+  limit: number = 200
 ): Promise<BarisArsip[]> {
   const tables: readonly TabelArsip[] = tabel ? [tabel] : TABEL_ARSIP;
   const groups = await Promise.all(
-    tables.map((t) => readArsipForTable(db, t))
+    tables.map((t) => readArsipForTable(db, t, limit))
   );
   const out = groups.flat();
   out.sort((a, b) => b.arsipPada.getTime() - a.arsipPada.getTime());
-  return out;
+  return out.slice(0, limit);
 }
 
 /**

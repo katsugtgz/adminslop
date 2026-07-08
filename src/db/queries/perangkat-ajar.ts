@@ -150,11 +150,13 @@ export async function cariPerangkatAjarById(
  * List perangkat_ajar visible under the current tenant (RLS-scoped), ordered
  * by `judul` for stable display. AC#4: optional filters keep types separate —
  * `jenis` returns one type, `mataPelajaranId` narrows to a subject. Use
- * {@linkcode listByJenis} for the canonical type-specific slice.
+ * {@linkcode listByJenis} for the canonical type-specific slice. `limit` caps
+ * the result set to prevent unbounded tenant scans (default 200).
  */
 export async function listPerangkatAjar(
   db: Db | Tx,
-  opts?: { readonly jenis?: JenisPerangkatAjar; readonly mataPelajaranId?: string }
+  opts?: { readonly jenis?: JenisPerangkatAjar; readonly mataPelajaranId?: string },
+  limit: number = 200
 ): Promise<PerangkatAjar[]> {
   const filters = [];
   if (opts?.jenis) filters.push(eq(perangkatAjar.jenis, opts.jenis));
@@ -164,23 +166,27 @@ export async function listPerangkatAjar(
     .select()
     .from(perangkatAjar)
     .where(filters.length > 0 ? and(...filters) : undefined)
-    .orderBy(asc(perangkatAjar.judul));
+    .orderBy(asc(perangkatAjar.judul))
+    .limit(limit);
 }
 
 /**
  * AC#4 type-specific query: list every perangkat_ajar of exactly `jenis` under
  * the current tenant (RLS-scoped). The per-jenis discriminator keeps each
- * teaching-document type a distinct slice (not one monolithic format).
+ * teaching-document type a distinct slice (not one monolithic format). `limit`
+ * caps the result set to prevent unbounded tenant scans (default 200).
  */
 export async function listByJenis(
   db: Db | Tx,
-  jenis: JenisPerangkatAjar
+  jenis: JenisPerangkatAjar,
+  limit: number = 200
 ): Promise<PerangkatAjar[]> {
   return db
     .select()
     .from(perangkatAjar)
     .where(eq(perangkatAjar.jenis, jenis))
-    .orderBy(asc(perangkatAjar.judul));
+    .orderBy(asc(perangkatAjar.judul))
+    .limit(limit);
 }
 
 /**
