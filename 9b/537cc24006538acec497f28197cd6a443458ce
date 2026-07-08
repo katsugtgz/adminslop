@@ -1,0 +1,21 @@
+src/lib/form/parser.test.ts
+  s_3283709b1d3239::t_601611eca7ef7f 1-74
+src/lib/form/parser.ts
+  s_3283709b1d3239::t_08de8861b4a223 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "9b537cc24006538acec497f28197cd6a443458ce",
+  "prompts": {},
+  "sessions": {
+    "s_3283709b1d3239": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0be5e4a41ffef5zcshb1gV1VGn",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
