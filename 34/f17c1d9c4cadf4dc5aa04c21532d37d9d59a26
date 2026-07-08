@@ -1,0 +1,32 @@
+src/app/dashboard/eraport/actions.test.ts
+  s_42531ba65b3890::t_5fa9499ed0412d 58
+  s_42531ba65b3890::t_2a6b66d9b3e818 294-303
+  s_42531ba65b3890::t_e947776d840eb9 78
+  s_42531ba65b3890::t_0ef70a010d2c87 8-17,22
+  s_42531ba65b3890::t_3470681c38ffc7 608-639
+  s_9474cdff2e583d::t_d669f2671d1563 640
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "34f17c1d9c4cadf4dc5aa04c21532d37d9d59a26",
+  "prompts": {},
+  "sessions": {
+    "s_42531ba65b3890": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f46cffbjP1oFfuePAVb1X",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    },
+    "s_9474cdff2e583d": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bea3f42effee0wqRCXvMgMwDJ",
+        "model": "glm-5.2"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
