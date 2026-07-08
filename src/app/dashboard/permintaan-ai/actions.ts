@@ -107,7 +107,11 @@ async function prosesPermintaanAi(
   const semester = await getSemesterAktif(tx);
   if (!semester) throw new Error("Semester aktif belum diatur.");
 
-  // 2. AC#5 budget gate — checked BEFORE any processing / increment.
+  // 2. AC#5 budget gate — fast-path early reject. This pre-read is only a
+  //    hint to avoid processing when the budget is already obviously spent;
+  //    the AUTHORITATIVE gate is the atomic `terpakai < batas` predicate
+  //    inside tambahPemakaianKuota (step 4), which eliminates the TOCTOU race
+  //    between this read and the increment under concurrent calls.
   const kuota = await getAtauBuatKuotaAi(tx, ta.id, semester);
   if (kuota.tersisa <= 0) {
     throw new Error("Kuota AI untuk semester ini habis.");
