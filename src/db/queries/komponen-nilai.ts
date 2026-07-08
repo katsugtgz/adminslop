@@ -32,11 +32,14 @@ export interface InputKomponenNilai {
 /**
  * List komponen_nilai visible under the current tenant (RLS-scoped), ordered
  * by `dibuatPada` ascending for stable chronological display. When
- * `bebanMengajarId` is provided, results narrow to that teaching load.
+ * `bebanMengajarId` is provided, results narrow to that teaching load. `limit`
+ * caps the result set to prevent unbounded tenant scans when called without a
+ * `bebanMengajarId` filter (default 200).
  */
 export async function listKomponenNilai(
   db: Db | Tx,
-  bebanMengajarId?: string
+  bebanMengajarId?: string,
+  limit: number = 200
 ): Promise<KomponenNilai[]> {
   return db
     .select()
@@ -46,7 +49,8 @@ export async function listKomponenNilai(
         ? eq(komponenNilai.bebanMengajarId, bebanMengajarId)
         : undefined
     )
-    .orderBy(asc(komponenNilai.dibuatPada));
+    .orderBy(asc(komponenNilai.dibuatPada))
+    .limit(limit);
 }
 
 /**
