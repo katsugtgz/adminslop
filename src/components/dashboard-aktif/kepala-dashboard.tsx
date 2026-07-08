@@ -4,6 +4,7 @@ import { Building2, CheckCircle2, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageReveal } from "@/components/motion";
 import { IndikatorOffline } from "@/components/offline/indikator-offline";
+import { type StyleWithVars } from "@/lib/utils";
 
 const LABEL_PERAN: Record<string, string> = {
   admin_satuan_pendidikan: "Admin Satuan Pendidikan",
@@ -35,11 +36,8 @@ export function KepalaDashboard({
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.68 0.16 42 / 0.45) 0%, transparent 70%)",
-        }}
+        className="hero-glow pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full opacity-40 blur-3xl"
+        style={{ "--glow-opacity": 0.45, "--glow-extent": "70%" } as StyleWithVars}
       />
       <div
         aria-hidden="true"
