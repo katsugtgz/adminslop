@@ -6,6 +6,7 @@ import type { Pengguna } from "@/db/schema";
 import { evaluasiAkses, type KeputusanAkses } from "./otorisasi";
 import {
   assertPemilikBeban,
+  assertPemilikPermintaan,
   assertPemilikRombongan,
   bebanIdDariKomponen,
   bebanIdDariNilai,
@@ -379,6 +380,105 @@ describe("assertPemilikRombongan — non-owner denial", () => {
     await expect(
       assertPemilikRombongan(tx, guru, async () => "rombel_AUT_missing"),
     ).rejects.toThrow(KepemilikanError);
+  });
+});
+
+// ===========================================================================
+// assertPemilikPermintaan — per-user ownership gate (Permintaan AI surface).
+//
+// Unlike Beban/Rombongan (PTK-owned), a permintaan_ai is per-user:
+// row.dibuatOleh === akses.userId. The gate trusts the caller-supplied
+// resolver for the owner value (the caller pre-loads the row for status
+// checks). Admin (`akses:kelola`) short-circuits without resolving.
+// ===========================================================================
+
+describe("assertPemilikPermintaan — admin short-circuit", () => {
+  it("admin (akses:kelola) bypasses ownership check — no resolver call", async () => {
+    // Empty row store — admin should never read the row.
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const admin = makeAksesAktif("admin_satuan_pendidikan", { ptkId: null });
+    const resolver = vi.fn(async () => "workos_u_other");
+
+    await assertPemilikPermintaan(tx, admin, resolver);
+
+    expect(resolver).not.toHaveBeenCalled();
+  });
+
+  it("dev role (akses:kelola by default) also short-circuits", async () => {
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const dev = makeAksesAktif("dev", { ptkId: null });
+    const resolver = vi.fn(async () => "workos_u_other");
+
+    await assertPemilikPermintaan(tx, dev, resolver);
+
+    expect(resolver).not.toHaveBeenCalled();
+  });
+
+  it("guru granted akses:kelola via izin short-circuits (bypass keyed on permission, not role)", async () => {
+    // The bypass is `akses.boleh('akses:kelola')`, not a role-name check. A
+    // guru carrying an explicit akses:kelola grant therefore bypasses too.
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", {
+      ptkId: "ptk_mine",
+      izin: ["akses:kelola"],
+    });
+    const resolver = vi.fn(async () => "workos_u_other");
+
+    await assertPemilikPermintaan(tx, guru, resolver);
+
+    expect(resolver).not.toHaveBeenCalled();
+  });
+});
+
+describe("assertPemilikPermintaan — user ownership", () => {
+  it("owner passes — dibuatOleh === akses.userId", async () => {
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", { ptkId: "ptk_mine" });
+    // makeAksesAktif sets userId: "workos_u_AUT".
+    await assertPemilikPermintaan(tx, guru, async () => "workos_u_AUT");
+    // no throw = pass
+  });
+
+  it("non-owner throws KepemilikanError (dibuatOleh !== my userId)", async () => {
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", { ptkId: "ptk_mine" });
+
+    await expect(
+      assertPemilikPermintaan(tx, guru, async () => "workos_u_other"),
+    ).rejects.toThrow(KepemilikanError);
+  });
+
+  it("non-owner error message is in Bahasa Indonesia", async () => {
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", { ptkId: "ptk_mine" });
+
+    await expect(
+      assertPemilikPermintaan(tx, guru, async () => "workos_u_other"),
+    ).rejects.toThrow(/tidak memiliki izin untuk Permintaan AI/i);
+  });
+
+  it("missing permintaan (resolver throws) propagates KepemilikanError, not swallowed", async () => {
+    // The caller pre-loads the row; a missing/cross-tenant id makes the
+    // resolver throw. The gate must propagate that, never swallow it.
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", { ptkId: "ptk_mine" });
+
+    await expect(
+      assertPemilikPermintaan(tx, guru, async () => {
+        throw new KepemilikanError("Permintaan AI tidak ditemukan.");
+      }),
+    ).rejects.toThrow(/Permintaan AI tidak ditemukan/i);
+  });
+
+  it("resolver is called lazily (only when not admin)", async () => {
+    const tx = makeMockTx(new Map<unknown, unknown[]>());
+    const guru = makeAksesAktif("guru", { ptkId: "ptk_mine" });
+    const resolver = vi.fn(async () => "workos_u_AUT");
+
+    await assertPemilikPermintaan(tx, guru, resolver);
+
+    expect(resolver).toHaveBeenCalledTimes(1);
+    expect(resolver).toHaveBeenCalledWith();
   });
 });
 
