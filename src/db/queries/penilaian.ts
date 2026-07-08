@@ -34,7 +34,8 @@ export interface InputPenilaian {
  */
 export async function listPenilaian(
   db: Db | Tx,
-  komponenNilaiId?: string
+  komponenNilaiId?: string,
+  limit: number = 500
 ): Promise<Penilaian[]> {
   return db
     .select()
@@ -44,7 +45,8 @@ export async function listPenilaian(
         ? eq(penilaian.komponenNilaiId, komponenNilaiId)
         : undefined
     )
-    .orderBy(asc(penilaian.dibuatPada));
+    .orderBy(asc(penilaian.dibuatPada))
+    .limit(limit);
 }
 
 /**

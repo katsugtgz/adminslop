@@ -117,16 +117,18 @@ export default async function Page() {
           : listBebanMengajar(tx, {
               tahunAjaranId: taAktif.id,
               semester,
+              limit: 500,
             }),
         isGuruContext
           ? getWaliKelasSaya(tx, myPtkId, taAktif.id, semester)
           : listWaliKelas(tx, {
               tahunAjaranId: taAktif.id,
               semester,
+              limit: 500,
             }),
-        listPtk(tx),
+        listPtk(tx, 500),
         listMataPelajaran(tx),
-        listRombonganBelajar(tx, taAktif.id),
+        listRombonganBelajar(tx, taAktif.id, 500),
         listTingkat(tx),
       ]);
 

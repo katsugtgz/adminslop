@@ -14,11 +14,14 @@
  * AND updates the cache inside the caller's transaction — history is
  * append-only, never rewritten or deleted.
  */
-import { eq, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { pesertaDidik, riwayatStatusPesertaDidik } from "../schema";
 import type { PesertaDidik, RiwayatStatusPesertaDidik } from "../schema";
+
+/** Default row cap for list queries — prevents unbounded tenant scans. */
+const DEFAULT_LIMIT = 500;
 
 // Status + jenis-kelamin unions mirror the schema CHECK constraints.
 export type StatusPesertaDidik = "aktif" | "pindah" | "lulus" | "keluar";
@@ -52,9 +55,21 @@ export interface InputUbahStatus {
 
 // Peserta Didik CRUD -------------------------------------------------------
 
-/** List all peserta_didik visible under the current tenant (RLS-scoped). */
-export async function listPesertaDidik(db: Db | Tx): Promise<PesertaDidik[]> {
-  return db.select().from(pesertaDidik);
+/**
+ * List all peserta_didik visible under the current tenant (RLS-scoped), newest
+ * first. `limit` caps the result set to prevent unbounded tenant scans (default
+ * 500). Pass a higher limit when a caller legitimately needs more rows (e.g.
+ * CSV-import duplicate detection).
+ */
+export async function listPesertaDidik(
+  db: Db | Tx,
+  limit: number = DEFAULT_LIMIT
+): Promise<PesertaDidik[]> {
+  return db
+    .select()
+    .from(pesertaDidik)
+    .orderBy(desc(pesertaDidik.dibuatPada))
+    .limit(limit);
 }
 
 /**
@@ -104,6 +119,60 @@ export async function buatPesertaDidik(
   });
 
   return row;
+}
+
+/**
+ * Batch-create peserta_didik rows (CSV import path). Same semantics as
+ * {@linkcode buatPesertaDidik} but groups inserts into chunks of
+ * {@linkcode BATCH_CHUNK_SIZE} to avoid serial round-trips. Each chunk:
+ *   1. Batch INSERT into peserta_didik with .returning() to get IDs.
+ *   2. Batch INSERT initial riwayat_status_peserta_didik (status='aktif')
+ *      for every created row.
+ * Both steps run inside the caller's `withTenant` so AC#2 (cache + history
+ * agree from row one) holds. Validation (AC#5 no-silent-overwrite) happens
+ * BEFORE this function is called — only pre-validated rows reach here.
+ */
+const BATCH_CHUNK_SIZE = 1000;
+
+export async function buatPesertaDidikBatch(
+  db: Db | Tx,
+  inputs: readonly InputBuatPesertaDidik[]
+): Promise<PesertaDidik[]> {
+  if (inputs.length === 0) return [];
+
+  const allCreated: PesertaDidik[] = [];
+
+  for (let i = 0; i < inputs.length; i += BATCH_CHUNK_SIZE) {
+    const chunk = inputs.slice(i, i + BATCH_CHUNK_SIZE);
+
+    const created = await db
+      .insert(pesertaDidik)
+      .values(
+        chunk.map((input) => ({
+          nama: input.nama,
+          nisn: input.nisn ?? null,
+          nis: input.nis ?? null,
+          tanggalLahir: input.tanggalLahir,
+          jenisKelamin: input.jenisKelamin,
+        }))
+      )
+      .returning();
+
+    await db
+      .insert(riwayatStatusPesertaDidik)
+      .values(
+        created.map((row) => ({
+          pesertaDidikId: row.id,
+          status: "aktif",
+          catatan: null,
+          dibuatOleh: null,
+        }))
+      );
+
+    allCreated.push(...created);
+  }
+
+  return allCreated;
 }
 
 /**

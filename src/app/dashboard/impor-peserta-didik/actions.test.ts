@@ -21,28 +21,29 @@ const mocks = vi.hoisted(() => {
     ),
     catatAudit: vi.fn(async () => undefined),
     listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
-    buatPesertaDidik: vi.fn(
+    buatPesertaDidikBatch: vi.fn(
       async (
         _tx: unknown,
-        input: {
+        inputs: readonly {
           nama: string;
           nisn?: string | null;
           nis?: string | null;
           tanggalLahir: string;
           jenisKelamin: string;
-        }
-      ) => ({
-        id: `pd_${input.nama}`,
-        tenantId: "org_A",
-        nama: input.nama,
-        nisn: input.nisn ?? null,
-        nis: input.nis ?? null,
-        tanggalLahir: input.tanggalLahir,
-        jenisKelamin: input.jenisKelamin,
-        status: "aktif",
-        dibuatPada: new Date("2026-01-01T00:00:00Z"),
-        diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
-      })
+        }[]
+      ) =>
+        inputs.map((input) => ({
+          id: `pd_${input.nama}`,
+          tenantId: "org_A",
+          nama: input.nama,
+          nisn: input.nisn ?? null,
+          nis: input.nis ?? null,
+          tanggalLahir: input.tanggalLahir,
+          jenisKelamin: input.jenisKelamin,
+          status: "aktif",
+          dibuatPada: new Date("2026-01-01T00:00:00Z"),
+          diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
+        }))
     ),
     revalidatePath: vi.fn(),
     fakeTx,
@@ -55,7 +56,7 @@ const {
   withTenant,
   catatAudit,
   listPesertaDidik,
-  buatPesertaDidik,
+  buatPesertaDidikBatch,
   revalidatePath,
   fakeTx: fakeTxRef,
 } = mocks;
@@ -68,7 +69,7 @@ vi.mock("@/db/client", () => ({
 }));
 vi.mock("@/db/queries/peserta-didik", () => ({
   listPesertaDidik: mocks.listPesertaDidik,
-  buatPesertaDidik: mocks.buatPesertaDidik,
+  buatPesertaDidikBatch: mocks.buatPesertaDidikBatch,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
@@ -139,24 +140,26 @@ beforeEach(() => {
   withTenant.mockReset();
   catatAudit.mockReset();
   listPesertaDidik.mockReset();
-  buatPesertaDidik.mockReset();
+  buatPesertaDidikBatch.mockReset();
   revalidatePath.mockReset();
   getDb.mockImplementation(() => ({ db: { __db: true } }));
   withTenant.mockImplementation(async (_db, _t, fn) => fn(fakeTxRef));
   catatAudit.mockResolvedValue(undefined);
   listPesertaDidik.mockResolvedValue([]);
-  buatPesertaDidik.mockImplementation(async (_tx, input) => ({
-    id: `pd_${input.nama}`,
-    tenantId: "org_A",
-    nama: input.nama,
-    nisn: input.nisn ?? null,
-    nis: input.nis ?? null,
-    tanggalLahir: input.tanggalLahir,
-    jenisKelamin: input.jenisKelamin,
-    status: "aktif",
-    dibuatPada: new Date("2026-01-01T00:00:00Z"),
-    diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
-  }));
+  buatPesertaDidikBatch.mockImplementation(async (_tx, inputs) =>
+    inputs.map((input: { nama: string; nisn?: string | null; nis?: string | null; tanggalLahir: string; jenisKelamin: string }) => ({
+      id: `pd_${input.nama}`,
+      tenantId: "org_A",
+      nama: input.nama,
+      nisn: input.nisn ?? null,
+      nis: input.nis ?? null,
+      tanggalLahir: input.tanggalLahir,
+      jenisKelamin: input.jenisKelamin,
+      status: "aktif",
+      dibuatPada: new Date("2026-01-01T00:00:00Z"),
+      diperbaruiPada: new Date("2026-01-01T00:00:00Z"),
+    }))
+  );
 });
 
 // ===========================================================================
@@ -164,7 +167,7 @@ beforeEach(() => {
 // ===========================================================================
 
 describe("A. authorization denial — guru (no impor izin)", () => {
-  it("imporPesertaDidikAction -> throws /izin/i; buatPesertaDidik + audit + withTenant NOT called", async () => {
+  it("imporPesertaDidikAction -> throws /izin/i; buatPesertaDidikBatch + audit + withTenant NOT called", async () => {
     getAksesSaya.mockResolvedValue(aksesAktif("guru"));
 
     await expect(
@@ -173,7 +176,7 @@ describe("A. authorization denial — guru (no impor izin)", () => {
       )
     ).rejects.toThrow(/izin/i);
 
-    expect(buatPesertaDidik).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
     expect(withTenant).not.toHaveBeenCalled();
   });
@@ -187,7 +190,7 @@ describe("A. authorization denial — guru (no impor izin)", () => {
       )
     ).rejects.toThrow(/izin/i);
 
-    expect(buatPesertaDidik).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
   });
 
   it("admin WITH pembatasan['impor_peserta_didik:kelola'] -> DENIED (no superuser)", async () => {
@@ -203,7 +206,7 @@ describe("A. authorization denial — guru (no impor izin)", () => {
       )
     ).rejects.toThrow(/izin/i);
 
-    expect(buatPesertaDidik).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
   });
 });
 
@@ -212,7 +215,7 @@ describe("A. authorization denial — guru (no impor izin)", () => {
 // ===========================================================================
 
 describe("B. authorization success — admin clean import", () => {
-  it("2 valid rows -> buatPesertaDidik x2 + audit(impor_peserta_didik) + revalidatePath", async () => {
+  it("2 valid rows -> buatPesertaDidikBatch x1 (batch) + audit(impor_peserta_didik) + revalidatePath", async () => {
     getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
 
     await imporPesertaDidikAction(
@@ -225,14 +228,23 @@ describe("B. authorization success — admin clean import", () => {
       )
     );
 
-    expect(buatPesertaDidik).toHaveBeenCalledTimes(2);
-    expect(buatPesertaDidik).toHaveBeenCalledWith(fakeTxRef, {
-      nama: "Budi Santoso",
-      nisn: "12345678",
-      nis: "N1",
-      tanggalLahir: "2010-05-15",
-      jenisKelamin: "L",
-    });
+    expect(buatPesertaDidikBatch).toHaveBeenCalledTimes(1);
+    expect(buatPesertaDidikBatch).toHaveBeenCalledWith(fakeTxRef, [
+      {
+        nama: "Budi Santoso",
+        nisn: "12345678",
+        nis: "N1",
+        tanggalLahir: "2010-05-15",
+        jenisKelamin: "L",
+      },
+      {
+        nama: "Siti Aminah",
+        nisn: "87654321",
+        nis: "N2",
+        tanggalLahir: "2011-03-20",
+        jenisKelamin: "P",
+      },
+    ]);
     expect(catatAudit).toHaveBeenCalledTimes(1);
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
@@ -252,14 +264,16 @@ describe("B. authorization success — admin clean import", () => {
       formDataCsv(`${CSV_HEADER}\nBudi,,,2010-05-15,L`)
     );
 
-    expect(buatPesertaDidik).toHaveBeenCalledTimes(1);
-    expect(buatPesertaDidik).toHaveBeenCalledWith(fakeTxRef, {
-      nama: "Budi",
-      nisn: null,
-      nis: null,
-      tanggalLahir: "2010-05-15",
-      jenisKelamin: "L",
-    });
+    expect(buatPesertaDidikBatch).toHaveBeenCalledTimes(1);
+    expect(buatPesertaDidikBatch).toHaveBeenCalledWith(fakeTxRef, [
+      {
+        nama: "Budi",
+        nisn: null,
+        nis: null,
+        tanggalLahir: "2010-05-15",
+        jenisKelamin: "L",
+      },
+    ]);
   });
 });
 
@@ -285,14 +299,16 @@ describe("C. validation errors — tidak_valid rows", () => {
     ).rejects.toThrow(/tidak valid|gagal/i);
 
     // the one valid row WAS inserted before the summary throw
-    expect(buatPesertaDidik).toHaveBeenCalledTimes(1);
-    expect(buatPesertaDidik).toHaveBeenCalledWith(fakeTxRef, {
-      nama: "Budi",
-      nisn: "12345678",
-      nis: "N1",
-      tanggalLahir: "2010-05-15",
-      jenisKelamin: "L",
-    });
+    expect(buatPesertaDidikBatch).toHaveBeenCalledTimes(1);
+    expect(buatPesertaDidikBatch).toHaveBeenCalledWith(fakeTxRef, [
+      {
+        nama: "Budi",
+        nisn: "12345678",
+        nis: "N1",
+        tanggalLahir: "2010-05-15",
+        jenisKelamin: "L",
+      },
+    ]);
     // audit captured the summary including the failure count
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
@@ -338,14 +354,16 @@ describe("D. duplicate handling (AC#5 — no silent overwrite)", () => {
     );
 
     // only the fresh row inserted
-    expect(buatPesertaDidik).toHaveBeenCalledTimes(1);
-    expect(buatPesertaDidik).toHaveBeenCalledWith(fakeTxRef, {
-      nama: "Siti",
-      nisn: "87654321",
-      nis: "N2",
-      tanggalLahir: "2011-03-20",
-      jenisKelamin: "P",
-    });
+    expect(buatPesertaDidikBatch).toHaveBeenCalledTimes(1);
+    expect(buatPesertaDidikBatch).toHaveBeenCalledWith(fakeTxRef, [
+      {
+        nama: "Siti",
+        nisn: "87654321",
+        nis: "N2",
+        tanggalLahir: "2011-03-20",
+        jenisKelamin: "P",
+      },
+    ]);
     expect(catatAudit).toHaveBeenCalledWith(
       TX,
       expect.objectContaining({
@@ -401,7 +419,7 @@ describe("F. input failures", () => {
       )
     ).rejects.toThrow(/tidak valid/i);
 
-    expect(buatPesertaDidik).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
     expect(catatAudit).not.toHaveBeenCalled();
   });
 
@@ -414,7 +432,7 @@ describe("F. input failures", () => {
       )
     ).rejects.toThrow(/nama/i);
 
-    expect(buatPesertaDidik).not.toHaveBeenCalled();
+    expect(buatPesertaDidikBatch).not.toHaveBeenCalled();
   });
 });
 

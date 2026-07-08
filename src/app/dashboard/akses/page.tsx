@@ -63,8 +63,8 @@ export default async function Page() {
     akses.membership.orgId,
     async (tx) => {
       const [daftarPtk, daftarPengguna] = await Promise.all([
-        listPtk(tx),
-        listPengguna(tx),
+        listPtk(tx, 500),
+        listPengguna(tx, 500),
       ]);
       // izin/pembatasan per pengguna are only needed to render the management
       // matrix; skip the N reads for read-only viewers.

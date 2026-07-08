@@ -53,10 +53,10 @@ export default async function Page() {
   const data = await withTenant(db, akses.membership.orgId, async (tx) => {
     const [templates, dokumen, eraportTerbit, daftarPesertaDidik] =
       await Promise.all([
-        listTemplateCetak(tx),
-        listDokumenCetak(tx),
-        listDrafEraport(tx, { status: "terbit" }),
-        listPesertaDidik(tx),
+        listTemplateCetak(tx, { limit: 200 }),
+        listDokumenCetak(tx, { limit: 500 }),
+        listDrafEraport(tx, { status: "terbit", limit: 500 }),
+        listPesertaDidik(tx, 500),
       ]);
 
     const pesertaMap = new Map(daftarPesertaDidik.map((p) => [p.id, p.nama]));

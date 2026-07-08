@@ -8,17 +8,26 @@
  * `tenant_id` is NEVER passed as a function argument — it always defaults
  * from the GUC.
  */
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { izinAkses, pembatasanAkses, pengguna, ptk } from "../schema";
 import type { Pengguna, Ptk } from "../schema";
 
+/** Default row cap for list queries — prevents unbounded tenant scans. */
+const DEFAULT_LIMIT = 500;
+
 // PTK CRUD ----------------------------------------------------------------
 
-/** List all PTK records visible under the current tenant (RLS-scoped). */
-export async function listPtk(db: Db | Tx): Promise<Ptk[]> {
-  return db.select().from(ptk);
+/**
+ * List all PTK records visible under the current tenant (RLS-scoped), newest
+ * first. `limit` caps the result set (default 500).
+ */
+export async function listPtk(
+  db: Db | Tx,
+  limit: number = DEFAULT_LIMIT
+): Promise<Ptk[]> {
+  return db.select().from(ptk).orderBy(desc(ptk.dibuatPada)).limit(limit);
 }
 
 export interface InputBuatPtk {
@@ -63,15 +72,19 @@ export interface PenggunaDenganPtk extends Pengguna {
 
 /**
  * List penggunas with their optionally-linked PTK (left join). RLS scopes to
- * the current tenant.
+ * the current tenant. Ordered newest first; `limit` caps the result set
+ * (default 500).
  */
 export async function listPengguna(
-  db: Db | Tx
+  db: Db | Tx,
+  limit: number = DEFAULT_LIMIT
 ): Promise<PenggunaDenganPtk[]> {
   const rows = await db
     .select({ pengguna, ptk })
     .from(pengguna)
-    .leftJoin(ptk, eq(pengguna.ptkId, ptk.id));
+    .leftJoin(ptk, eq(pengguna.ptkId, ptk.id))
+    .orderBy(desc(pengguna.dibuatPada))
+    .limit(limit);
   return rows.map(({ pengguna: p, ptk: t }) => ({ ...p, ptk: t }));
 }
 

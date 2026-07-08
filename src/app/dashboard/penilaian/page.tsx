@@ -137,10 +137,10 @@ export default async function Page({
     const [bebanRows, ptks, mapel, rombels, tingkats] = await Promise.all([
       isGuruContext
         ? getBebanMengajarSaya(tx, myPtkId, taAktif.id, semester)
-        : listBebanMengajar(tx, { tahunAjaranId: taAktif.id, semester }),
-      listPtk(tx),
+        : listBebanMengajar(tx, { tahunAjaranId: taAktif.id, semester, limit: 500 }),
+      listPtk(tx, 500),
       listMataPelajaran(tx),
-      listRombonganBelajar(tx, taAktif.id),
+      listRombonganBelajar(tx, taAktif.id, 500),
       listTingkat(tx),
     ]);
 
@@ -154,11 +154,11 @@ export default async function Page({
       [komponen, nilaiAkhir, peserta] = await Promise.all([
         listKomponenNilai(tx, sp.bebanId),
         getNilaiAkhir(tx, sp.bebanId),
-        listPesertaDidik(tx),
+        listPesertaDidik(tx, 500),
       ]);
 
       if (sp.komponenId) {
-        penilaianRows = await listPenilaian(tx, sp.komponenId);
+        penilaianRows = await listPenilaian(tx, sp.komponenId, 500);
 
         if (sp.penilaianId) {
           nilaiRows = await listNilaiByPenilaian(tx, sp.penilaianId);

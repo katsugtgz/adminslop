@@ -17,11 +17,14 @@
  * atomic flip — unset all aktif rows in the tenant, then set the target —
  * inside the caller's transaction.
  */
-import { and, eq, sql } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { satuanPendidikan, tahunAjaran } from "../schema";
 import type { TahunAjaran } from "../schema";
+
+/** Default row cap for list queries — prevents unbounded tenant scans. */
+const DEFAULT_LIMIT = 200;
 
 // Semester union mirrors the schema CHECK constraint on satuan_pendidikan.
 export type Semester = "ganjil" | "genap";
@@ -54,9 +57,20 @@ export async function buatTahunAjaran(
   return row;
 }
 
-/** List all tahun_ajaran visible under the current tenant (RLS-scoped). */
-export async function listTahunAjaran(db: Db | Tx): Promise<TahunAjaran[]> {
-  return db.select().from(tahunAjaran);
+/**
+ * List all tahun_ajaran visible under the current tenant (RLS-scoped), newest
+ * first. `limit` caps the result set (default 200 — tenants rarely have many
+ * academic years).
+ */
+export async function listTahunAjaran(
+  db: Db | Tx,
+  limit: number = DEFAULT_LIMIT
+): Promise<TahunAjaran[]> {
+  return db
+    .select()
+    .from(tahunAjaran)
+    .orderBy(desc(tahunAjaran.dibuatPada))
+    .limit(limit);
 }
 
 /**

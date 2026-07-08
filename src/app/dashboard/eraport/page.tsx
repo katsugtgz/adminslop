@@ -63,8 +63,8 @@ export default async function Page() {
 
     const [semester, daftarPesertaDidik, daftarEraport] = await Promise.all([
       getSemesterAktif(tx),
-      listPesertaDidik(tx),
-      listDrafEraport(tx),
+      listPesertaDidik(tx, 500),
+      listDrafEraport(tx, { limit: 500 }),
     ]);
 
     // peserta_didik id -> row map for name resolution in the list.
@@ -75,7 +75,7 @@ export default async function Page() {
     const revisiEntries = await Promise.all(
       daftarEraport.map(async (e) => [
         e.id,
-        await listRevisiByEraport(tx, e.id),
+        await listRevisiByEraport(tx, e.id, 500),
       ] as const)
     );
     const revisiMap = new Map<

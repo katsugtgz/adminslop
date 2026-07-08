@@ -56,7 +56,7 @@ export default async function Page() {
   if (bolehEkspor) {
     const { db } = getDb();
     peserta = await withTenant(db, akses.membership.orgId, async (tx) =>
-      listPesertaDidik(tx)
+      listPesertaDidik(tx, 500)
     );
   }
 
