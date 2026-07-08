@@ -5,10 +5,21 @@ import type { KeputusanAkses } from "@/lib/auth/otorisasi";
 import type { IzinSlug, RoleSlug } from "@/lib/auth/types";
 
 const mocks = vi.hoisted(() => {
+  // Mirror of the real KepemilikanError shape. The whole kepemilikan module
+  // is mocked below (assertPemilikBeban is a vi.fn), so the real class is not
+  // importable here. We re-declare the minimal subclass so the rejection test
+  // can throw `new KepemilikanError(...)` and assert propagation faithfully.
+  class KepemilikanError extends Error {
+    constructor(message: string) {
+      super(message);
+      this.name = "KepemilikanError";
+    }
+  }
   const fakeTxLocal = { __tx: true };
   return {
     getAksesSaya: vi.fn(),
     assertPemilikBeban: vi.fn(async () => undefined),
+    KepemilikanError,
     getDb: vi.fn(() => ({ db: { __db: true } })),
     withTenant: vi.fn(
       async (
@@ -44,6 +55,7 @@ const mocks = vi.hoisted(() => {
 const {
   getAksesSaya,
   assertPemilikBeban,
+  KepemilikanError,
   getDb,
   withTenant,
   catatAudit,
@@ -63,6 +75,7 @@ vi.mock("@/lib/auth/akses-saya", () => ({
 }));
 vi.mock("@/lib/auth/kepemilikan", () => ({
   assertPemilikBeban: mocks.assertPemilikBeban,
+  KepemilikanError: mocks.KepemilikanError,
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
@@ -278,6 +291,16 @@ describe("B. guru success — buatDrafEraportAction (AC#1 draf from Nilai Akhir)
       })
     );
     expect(revalidatePath).toHaveBeenCalledWith("/dashboard/eraport");
+
+    // Gate 2 (AC#4 ownership): assertPemilikBeban invoked with the tenant tx,
+    // the active akses, and a resolver bound to the formData beban id — BEFORE
+    // getNilaiAkhir runs.
+    expect(assertPemilikBeban).toHaveBeenCalledWith(
+      TX,
+      expect.objectContaining({ userId: "workos_u_1", status: "active" }),
+      expect.any(Function)
+    );
+    expect(getNilaiAkhir).toHaveBeenCalledWith(TX, "bm_1");
   });
 
   it("5. no bebanMengajarId -> konten carries only period+student context (no nilaiAkhir)", async () => {
@@ -580,5 +603,38 @@ describe("J. tenant tamper-proofing", () => {
       "org_VICTIM",
       expect.anything()
     );
+  });
+});
+
+// ===========================================================================
+// K. AC#4 ownership gate (gate 2) — assertPemilikBeban rejection propagates.
+// A guru who passed gate 1 (eraport:buat) but does NOT own the beban is denied
+// at gate 2. The action MUST propagate the KepemilikanError and run NO
+// downstream work (getNilaiAkhir, buatDrafEraport, audit).
+// ===========================================================================
+
+describe("K. ownership gate (assertPemilikBeban) rejection propagates", () => {
+  beforeEach(() => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+  });
+
+  it("26. assertPemilikBeban rejects -> action throws /tidak memiliki izin/i; getNilaiAkhir + buatDrafEraport NOT called", async () => {
+    assertPemilikBeban.mockRejectedValueOnce(
+      new KepemilikanError(
+        "Anda tidak memiliki izin untuk Beban Mengajar ini."
+      )
+    );
+
+    await expect(
+      buatDrafEraportAction(
+        formData({ pesertaDidikId: "pd_1", bebanMengajarId: "bm_other" })
+      )
+    ).rejects.toThrow(/tidak memiliki izin untuk Beban Mengajar/i);
+
+    expect(assertPemilikBeban).toHaveBeenCalledTimes(1);
+    // The gate short-circuits the chain: no Nilai Akhir fetch, no insert, no audit.
+    expect(getNilaiAkhir).not.toHaveBeenCalled();
+    expect(buatDrafEraport).not.toHaveBeenCalled();
+    expect(catatAudit).not.toHaveBeenCalled();
   });
 });
