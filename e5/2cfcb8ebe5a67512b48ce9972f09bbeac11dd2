@@ -1,0 +1,19 @@
+AGENTS.md
+  s_175da4adb09543::t_6e5100f99fb575 3-74,78-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e52cfcb8ebe5a67512b48ce9972f09bbeac11dd2",
+  "prompts": {},
+  "sessions": {
+    "s_175da4adb09543": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0bfc37fdeffeKcciuYjru23Om3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Sisyphus <clio-agent@sisyphuslabs.ai>"
+    }
+  }
+}
