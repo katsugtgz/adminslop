@@ -15,6 +15,11 @@
 // so every repo lookup is already scoped to the active tenant — a cross-tenant
 // id simply resolves to "not found" (a deny).
 //
+// OWNERSHIP MODEL: Perangkat Ajar is a SCHOOL-WIDE shared resource — any guru
+// with `perangkat_ajar:buat`/`:ubah` may create/edit any Perangkat Ajar in the
+// tenant. No gate-2 ownership check is applied (unlike Beban Mengajar /
+// Rombongan Belajar which are PTK-owned). RLS + the role gate are the boundary.
+//
 // PERANGKAT AJAR LIFECYCLE (AC#1–5 of issue #17):
 //   AC#1 — documents are created per `jenis` (modul_ajar|rpp|silabus|prota|
 //          promes); jenis is fixed at creation (a CHECK discriminator).

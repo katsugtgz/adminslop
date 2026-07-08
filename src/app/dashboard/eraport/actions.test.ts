@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => {
   const fakeTxLocal = { __tx: true };
   return {
     getAksesSaya: vi.fn(),
+    assertPemilikBeban: vi.fn(async () => undefined),
     getDb: vi.fn(() => ({ db: { __db: true } })),
     withTenant: vi.fn(
       async (
@@ -42,6 +43,7 @@ const mocks = vi.hoisted(() => {
 
 const {
   getAksesSaya,
+  assertPemilikBeban,
   getDb,
   withTenant,
   catatAudit,
@@ -58,6 +60,9 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+}));
+vi.mock("@/lib/auth/kepemilikan", () => ({
+  assertPemilikBeban: mocks.assertPemilikBeban,
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
@@ -145,6 +150,8 @@ function aksesAktif(
 beforeEach(() => {
   vi.clearAllMocks();
   getAksesSaya.mockReset();
+  assertPemilikBeban.mockReset();
+  assertPemilikBeban.mockResolvedValue(undefined);
   getDb.mockReset();
   withTenant.mockReset();
   catatAudit.mockReset();

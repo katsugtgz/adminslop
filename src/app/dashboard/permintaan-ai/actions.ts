@@ -48,6 +48,7 @@ import {
 import type { JenisPermintaanAi, StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { assertPemilikPermintaan } from "@/lib/auth/kepemilikan";
 import { requireAuth } from "@/lib/auth/server";
 
 const REVALIDATE_TARGET = "/dashboard/permintaan-ai";
@@ -240,7 +241,7 @@ export async function batalkanPermintaanAiAction(
     if (!permintaan) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    // State machine: only dibuat / diproses are cancellable.
+    await assertPemilikPermintaan(tx, akses, async () => permintaan.dibuatOleh);
     const status: StatusPermintaanAi = permintaan.status as StatusPermintaanAi;
     if (status !== "dibuat" && status !== "diproses") {
       throw new Error("Permintaan AI tidak dapat dibatalkan.");
@@ -330,8 +331,7 @@ export async function retryPermintaanAiAction(
     if (!original) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    // Both columns are CHECK-constrained text/jsonb; narrowing to the typed
-    // unions is sound (the DB guarantees the literal vocabulary).
+    await assertPemilikPermintaan(tx, akses, async () => original.dibuatOleh);
     await prosesPermintaanAi(
       tx,
       akses.userId,
