@@ -245,7 +245,7 @@ export function DaftarModul({
                   deskripsi={modul.deskripsi}
                   href={modul.href}
                   labelTombol={modul.labelTombol}
-                  {...(modul.tampilan ? { tampilan: modul.tampilan } : {})}
+                  tampilan={modul.tampilan}
                 />
               ))}
             </div>

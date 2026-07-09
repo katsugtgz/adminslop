@@ -51,4 +51,36 @@ describe("DaftarModul", () => {
     expect(screen.getByRole("link", { name: "Buka Impor/Ekspor" }))
       .toHaveAttribute("href", "/dashboard/impor-peserta-didik");
   });
+
+  it("hides restricted modules and skips empty section headings", () => {
+    const izinTerbatas: IzinReachability = {
+      ...SEMUA_MODUL,
+      bolehLihatAbsensi: false,
+      bolehLihatCetak: false,
+      bolehLihatNotifikasi: false,
+      bolehLihatSinkronisasi: false,
+    };
+
+    render(<DaftarModul reachability={izinTerbatas} />);
+
+    expect(
+      screen.queryByRole("heading", { name: "Operasional harian" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Buka Sinkronisasi Data" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Buka Absensi Harian" })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Buka Notifikasi" })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Buka Cetak" }))
+      .not.toBeInTheDocument();
+
+    expect(screen.getByRole("heading", { name: "Dokumen & AI" }))
+      .toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Buka Penilaian" }))
+      .toBeInTheDocument();
+  });
 });

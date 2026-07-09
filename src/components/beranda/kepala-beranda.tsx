@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useId } from "react";
 import { ArrowRight, Compass, Sparkles } from "lucide-react";
 
 import { PageReveal, TextStagger } from "@/components/motion";
@@ -99,6 +100,8 @@ export function KepalaBeranda() {
 }
 
 function BatikPattern({ className }: { className?: string }) {
+  const patternId = `batik-dots-${useId().replaceAll(":", "")}`;
+
   return (
     <svg
       className={className}
@@ -109,7 +112,7 @@ function BatikPattern({ className }: { className?: string }) {
     >
       <defs>
         <pattern
-          id="batik-dots"
+          id={patternId}
           x="0"
           y="0"
           width="40"
@@ -126,7 +129,7 @@ function BatikPattern({ className }: { className?: string }) {
           />
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#batik-dots)" />
+      <rect width="100%" height="100%" fill={`url(#${patternId})`} />
     </svg>
   );
 }

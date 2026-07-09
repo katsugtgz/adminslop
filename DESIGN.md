@@ -11,26 +11,30 @@ text, terracotta action, subtle grain, and measured motion.
 
 ### Palette
 
-| Role | Token | Light | Dark | Usage |
-| --- | --- | --- | --- | --- |
-| Surface/page | `--background` | `oklch(0.985 0.008 95)` | `oklch(0.16 0.008 60)` | App background |
-| Text/primary | `--foreground` | `oklch(0.18 0.012 60)` | `oklch(0.96 0.005 85)` | Body, headings |
-| Surface/card | `--card` | `oklch(1 0 0)` | `oklch(0.2 0.008 60)` | Cards, panels |
-| Text/card | `--card-foreground` | `oklch(0.18 0.012 60)` | `oklch(0.96 0.005 85)` | Card text |
-| Surface/popover | `--popover` | `oklch(1 0 0)` | `oklch(0.2 0.008 60)` | Menus, tooltips |
-| Brand/primary | `--primary` | `oklch(0.22 0.015 60)` | `oklch(0.96 0.005 85)` | Primary buttons, logo mark |
-| Brand/primary text | `--primary-foreground` | `oklch(0.985 0.008 95)` | `oklch(0.16 0.008 60)` | Text on primary |
-| Surface/secondary | `--secondary` | `oklch(0.95 0.012 85)` | `oklch(0.26 0.01 60)` | Quiet icon wells, secondary fills |
-| Surface/muted | `--muted` | `oklch(0.96 0.008 85)` | `oklch(0.26 0.01 60)` | Empty states, soft panels |
-| Text/muted | `--muted-foreground` | `oklch(0.5 0.015 70)` | `oklch(0.68 0.012 75)` | Captions, helper text |
-| Accent/action | `--accent` | `oklch(0.68 0.16 42)` | `oklch(0.72 0.16 42)` | CTAs, focus, active nav |
-| Accent/action text | `--accent-foreground` | `oklch(0.99 0.005 95)` | `oklch(0.16 0.008 60)` | Text on accent |
-| Status/error | `--destructive` | `oklch(0.58 0.22 27)` | `oklch(0.7 0.19 22)` | Dangerous states |
-| Status/success | `--success` | `oklch(0.6 0.13 155)` | `oklch(0.7 0.15 155)` | Completion, connected status |
-| Status/warning | `--warning` | `oklch(0.75 0.15 75)` | `oklch(0.8 0.15 75)` | Caution |
-| Border/default | `--border` | `oklch(0.9 0.012 80)` | `oklch(1 0 0 / 10%)` | Dividers, cards |
-| Input/border | `--input` | `oklch(0.9 0.012 80)` | `oklch(1 0 0 / 15%)` | Inputs, outline buttons |
-| Focus/ring | `--ring` | `oklch(0.68 0.16 42)` | `oklch(0.72 0.16 42)` | Focus indicators |
+Token values live in `src/app/globals.css`: `:root` defines light mode, `.dark`
+defines dark mode, and `@theme inline` maps them into Tailwind v4 utilities.
+This table is the usage contract, not the raw color source of truth.
+
+| Role | Token | Usage |
+| --- | --- | --- |
+| Surface/page | `--background` | App background |
+| Text/primary | `--foreground` | Body, headings |
+| Surface/card | `--card` | Cards, panels |
+| Text/card | `--card-foreground` | Card text |
+| Surface/popover | `--popover` | Menus, tooltips |
+| Brand/primary | `--primary` | Primary buttons, logo mark |
+| Brand/primary text | `--primary-foreground` | Text on primary |
+| Surface/secondary | `--secondary` | Quiet icon wells, secondary fills |
+| Surface/muted | `--muted` | Empty states, soft panels |
+| Text/muted | `--muted-foreground` | Captions, helper text |
+| Accent/action | `--accent` | CTAs, focus, active nav |
+| Accent/action text | `--accent-foreground` | Text on accent |
+| Status/error | `--destructive` | Dangerous states |
+| Status/success | `--success` | Completion, connected status |
+| Status/warning | `--warning` | Caution |
+| Border/default | `--border` | Dividers, cards |
+| Input/border | `--input` | Inputs, outline buttons |
+| Focus/ring | `--ring` | Focus indicators |
 
 ### Rules
 
@@ -122,8 +126,8 @@ All spacing maps to Tailwind's 4px scale.
 - **Variants**: static panel, interactive module, dashed empty state.
 - **Spacing**: `p-5` for operational cards, `p-6 md:p-8` for page headers.
 - **States**: interactive cards use `hover:border-accent/40`,
-  `hover:shadow-warm-lg`, and `.t-lift`; empty states use dashed border and
-  muted fill.
+  `hover:shadow-warm-lg`, and `.t-lift`; these symbols are defined in
+  `src/app/globals.css`. Empty states use dashed border and muted fill.
 - **Accessibility**: whole-card links need a clear accessible name and visible
   focus ring.
 - **Motion**: transform-only lift; no hover motion on non-interactive cards.
@@ -195,3 +199,12 @@ interactive surfaces, and grain/glow is reserved for hero or high-level headers.
 - Large glows are atmospheric accents, not repeated filler.
 - Use `rounded-md`, `rounded-lg`, `rounded-xl`, and `rounded-2xl` by hierarchy;
   avoid making every element the same radius.
+
+## 8. Implementation Source
+
+- Theme tokens and Tailwind mappings: `src/app/globals.css` `:root`, `.dark`,
+  and `@theme inline`.
+- Surface utilities: `shadow-warm`, `shadow-warm-lg`, `bg-grain`, and
+  `hero-glow` are Tailwind v4 `@utility` rules in `src/app/globals.css`.
+- Motion primitives: `.t-lift`, `.t-rise`, `.t-stagger`, and `.t-shimmer` are
+  defined in the motion primitive layer in `src/app/globals.css`.
