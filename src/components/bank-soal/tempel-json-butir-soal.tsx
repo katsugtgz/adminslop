@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import type { HasilImpor } from "@/app/dashboard/bank-soal/actions";
+import { parseJsonTempel } from "@/lib/bank-soal/json-impor";
 
 export type ServerAksiImpor = (
   prevState: HasilImpor | null,
@@ -24,7 +25,7 @@ export function TempelJsonButirSoal({
       action={formAction}
       onSubmit={() => {
         try {
-          JSON.parse(jsonText);
+          parseJsonTempel(jsonText);
           setError(null);
         } catch (parseError) {
           const detail =

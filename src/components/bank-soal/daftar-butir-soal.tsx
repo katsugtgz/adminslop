@@ -83,7 +83,7 @@ export function DaftarButirSoal({
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  href={`${baseHref}&butirId=${b.id}`}
+                  href={`${baseHref}butirId=${b.id}`}
                   className="text-xs font-medium text-accent underline-offset-4 hover:underline"
                 >
                   Lihat detail

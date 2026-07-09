@@ -31,6 +31,12 @@ const mocks = vi.hoisted(() => {
     buatPaketSoal: vi.fn(async () => ({ id: "ps_new" })),
     tambahButirKePaket: vi.fn(async () => ({ id: "psb_new" })),
     hapusButirDariPaket: vi.fn(async () => undefined),
+    listMataPelajaran: vi.fn(async () => [
+      { id: "mp_1", kode: "MTK", nama: "Matematika" },
+    ]),
+    listTingkat: vi.fn(async () => [
+      { id: "t_1", nama: "Kelas 7", urutan: 7 },
+    ]),
     revalidatePath: vi.fn(),
     fakeTx: fakeTxLocal,
   };
@@ -48,6 +54,8 @@ const {
   buatPaketSoal,
   tambahButirKePaket,
   hapusButirDariPaket,
+  listMataPelajaran,
+  listTingkat,
   revalidatePath,
   fakeTx: fakeTxRef,
 } = mocks;
@@ -70,6 +78,12 @@ vi.mock("@/db/queries/bank-soal", () => ({
   buatPaketSoal: mocks.buatPaketSoal,
   tambahButirKePaket: mocks.tambahButirKePaket,
   hapusButirDariPaket: mocks.hapusButirDariPaket,
+}));
+vi.mock("@/db/queries/mata-pelajaran", () => ({
+  listMataPelajaran: mocks.listMataPelajaran,
+}));
+vi.mock("@/db/queries/tingkat", () => ({
+  listTingkat: mocks.listTingkat,
 }));
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
@@ -709,6 +723,55 @@ describe("G. imporButirSoalJsonAction", () => {
     ][];
     expect(calls[0][1]).not.toHaveProperty("drafAiId");
     expect(revalidatePath).toHaveBeenCalledWith("/dashboard/bank-soal");
+  });
+
+  it("imports JSON with literal line breaks inside strings", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({
+        jsonButir: `[{"mataPelajaranId":"matematika","tingkatI
+ d":"7","jenis":"pg","pertanyaan":"Hasil dari -15 + 8
+ adalah ...","pilihan":{"A":"-7","B":"-23","C":"7","D":"23"},"kunci
+ Jawaban":"A","pembahasan":"-15 + 8 = -(15 - 8) = -7."}]`,
+      })
+    );
+
+    expect(hasil).toEqual({ ok: true, tersimpan: 1, gagal: 0, errors: [] });
+    expect(listMataPelajaran).toHaveBeenCalledWith(fakeTxRef);
+    expect(listTingkat).toHaveBeenCalledWith(fakeTxRef);
+    expect(buatButirSoal).toHaveBeenCalledWith(
+      fakeTxRef,
+      expect.objectContaining({
+        mataPelajaranId: "mp_1",
+        tingkatId: "t_1",
+        pertanyaan: "Hasil dari -15 + 8 adalah ...",
+        kunciJawaban: "A",
+        pilihan: expect.objectContaining({ A: "-7" }),
+      })
+    );
+  });
+
+  it("reports unknown mataPelajaranId before insert", async () => {
+    getAksesSaya.mockResolvedValue(aksesAktif("guru"));
+
+    const hasil = await imporButirSoalJsonAction(
+      null,
+      formData({
+        jsonButir: JSON.stringify([
+          { ...validButir, mataPelajaranId: "astronomi" },
+        ]),
+      })
+    );
+
+    expect(hasil).toEqual({
+      ok: false,
+      tersimpan: 0,
+      gagal: 1,
+      errors: ["Butir 1: mataPelajaranId tidak dikenali."],
+    });
+    expect(buatButirSoal).not.toHaveBeenCalled();
   });
 
   it("skips invalid items and still imports valid ones", async () => {

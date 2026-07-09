@@ -54,7 +54,7 @@ export function DaftarPaketSoal({
               </span>
             </div>
             <Link
-              href={`${baseHref}&paketId=${p.id}`}
+              href={`${baseHref}paketId=${p.id}`}
               className="text-xs font-medium text-accent underline-offset-4 hover:underline"
             >
               Rakit / Lihat Butir

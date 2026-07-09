@@ -314,6 +314,25 @@ describe("BankSoalPage — management surface by role (#16 / T7)", () => {
 });
 
 describe("BankSoalPage — drill-down (?paketId=... assembly view)", () => {
+  it("links paket drill-down with ? when no search query exists", async () => {
+    mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    await renderPage();
+
+    expect(
+      screen.getByRole("link", { name: /Rakit \/ Lihat Butir/i })
+    ).toHaveAttribute("href", "/dashboard/bank-soal?paketId=paket_1");
+  });
+
+  it("links butir drill-down with & when search query exists", async () => {
+    mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
+    await renderPage({ q: "dua" });
+
+    expect(screen.getAllByRole("link", { name: /Lihat detail/i })[0]).toHaveAttribute(
+      "href",
+      "/dashboard/bank-soal?q=dua&butirId=butir_1"
+    );
+  });
+
   it("admin + paketId -> paket members list + Tambah ke Paket form (candidates exclude members)", async () => {
     mocks.getAksesSaya.mockResolvedValue(aksesAktif("admin_satuan_pendidikan"));
     await renderPage({ paketId: "paket_1" });

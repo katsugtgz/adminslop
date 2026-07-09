@@ -146,7 +146,10 @@ export default async function Page({
     mataPelajaran.map((m) => [m.id, m])
   );
 
-  const baseHref = search ? `/dashboard/bank-soal?q=${encodeURIComponent(search)}` : "/dashboard/bank-soal";
+  const params = new URLSearchParams();
+  if (search) params.set("q", search);
+  const queryPrefix = params.size > 0 ? `?${params.toString()}&` : "?";
+  const baseHref = `/dashboard/bank-soal${queryPrefix}`;
 
   return (
     <div className="flex flex-col gap-10 md:gap-14">

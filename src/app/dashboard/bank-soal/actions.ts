@@ -38,8 +38,11 @@ import {
   ubahButirSoal,
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
+import { listMataPelajaran } from "@/db/queries/mata-pelajaran";
+import { listTingkat } from "@/db/queries/tingkat";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { requireAuth } from "@/lib/auth/server";
+import { normalisasiKunciJson, parseJsonTempel } from "@/lib/bank-soal/json-impor";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
@@ -83,7 +86,7 @@ function validasiKandidatImpor(
     return { kandidat: null, errors: [`${label}: objek JSON tidak valid.`] };
   }
 
-  const row = item as Record<string, unknown>;
+  const row = normalisasiKunciJson(item);
   const errors: string[] = [];
   const mataPelajaranId = ambilString(row, "mataPelajaranId");
   if (!mataPelajaranId) errors.push(`${label}: mataPelajaranId wajib diisi.`);
@@ -127,6 +130,17 @@ function validasiKandidatImpor(
     },
     errors: [],
   };
+}
+
+function kunciReferensi(value: string): string {
+  return value.toLowerCase().replaceAll(/\s+/g, " ").trim();
+}
+
+function cariReferensi(
+  map: ReadonlyMap<string, string>,
+  value: string
+): string | null {
+  return map.get(value) ?? map.get(kunciReferensi(value)) ?? null;
 }
 
 // 1. buatButirSoalAction -----------------------------------------------------
@@ -433,7 +447,7 @@ export async function imporButirSoalJsonAction(
   const jsonText = String(formData.get("jsonButir") ?? "").trim();
   let parsed: unknown;
   try {
-    parsed = JSON.parse(jsonText);
+    parsed = parseJsonTempel(jsonText);
   } catch (error) {
     const detail = error instanceof Error ? error.message : "format tidak dikenal";
     return {
@@ -465,12 +479,45 @@ export async function imporButirSoalJsonAction(
   let gagal = parsed.length - kandidat.length;
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
+    const [mataPelajaran, tingkat] = await Promise.all([
+      listMataPelajaran(tx),
+      listTingkat(tx),
+    ] as const);
+    const mataPelajaranMap = new Map<string, string>();
+    for (const item of mataPelajaran) {
+      mataPelajaranMap.set(item.id, item.id);
+      if (item.kode) mataPelajaranMap.set(kunciReferensi(item.kode), item.id);
+      mataPelajaranMap.set(kunciReferensi(item.nama), item.id);
+    }
+    const tingkatMap = new Map<string, string>();
+    for (const item of tingkat) {
+      tingkatMap.set(item.id, item.id);
+      tingkatMap.set(String(item.urutan), item.id);
+      tingkatMap.set(kunciReferensi(item.nama), item.id);
+    }
+
     const hasilSimpan = await Promise.all(
       kandidat.map(async (item) => {
+        const mataPelajaranId = cariReferensi(mataPelajaranMap, item.mataPelajaranId);
+        if (!mataPelajaranId) {
+          return {
+            ok: false as const,
+            error: `Butir ${item.nomor}: mataPelajaranId tidak dikenali.`,
+          };
+        }
+        const tingkatId = item.tingkatId
+          ? cariReferensi(tingkatMap, item.tingkatId)
+          : null;
+        if (item.tingkatId && !tingkatId) {
+          return {
+            ok: false as const,
+            error: `Butir ${item.nomor}: tingkatId tidak dikenali.`,
+          };
+        }
         try {
           const butir = await buatButirSoal(tx, {
-            mataPelajaranId: item.mataPelajaranId,
-            tingkatId: item.tingkatId,
+            mataPelajaranId,
+            tingkatId,
             jenis: item.jenis,
             pertanyaan: item.pertanyaan,
             pilihan: item.pilihan,
