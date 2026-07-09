@@ -64,7 +64,7 @@ Kembalikan HANYA array JSON yang valid, tanpa komentar, tanpa markdown wrapper. 
 Aturan:
 - Bahasa Indonesia untuk semua konten
 - Fakta faktual, bebas hak cipta
-- JANGAN sertakan data pribadi siswa (NISN, nama, alamat, kontak wali)
+- JANGAN sertakan data pribadi Peserta Didik (NISN, nama, alamat, kontak wali)
 - Tingkat kesulitan: sesuaikan dengan tingkat yang diminta
 - Untuk pilihan ganda: kunci jawaban huruf kapital tunggal (A/B/C/D)
 - Untuk benar_salah: kunci jawaban "Benar" atau "Salah"`;

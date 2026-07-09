@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants, type ButtonVariantProps } from "@/components/ui/button-variants";
+import { ButtonDisabledSlot } from "@/components/ui/button-disabled-slot";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -17,13 +18,36 @@ export function Button({
   size,
   asChild = false,
   ref,
+  disabled = false,
+  "aria-busy": ariaBusy,
+  "aria-disabled": ariaDisabled,
+  tabIndex,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : "button";
+  const busy = ariaBusy === true || ariaBusy === "true";
+  const disabledState = disabled || busy;
+  const Comp = asChild
+    ? disabledState
+      ? ButtonDisabledSlot
+      : Slot
+    : "button";
+  const interactionProps = asChild
+    ? {
+        "aria-disabled": ariaDisabled ?? (disabledState ? true : undefined),
+        tabIndex: disabledState ? -1 : tabIndex,
+      }
+    : {
+        "aria-disabled": ariaDisabled,
+        disabled: disabledState,
+        tabIndex,
+      };
+
   return (
     <Comp
       className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
+      aria-busy={ariaBusy}
+      {...interactionProps}
       {...props}
     />
   );
