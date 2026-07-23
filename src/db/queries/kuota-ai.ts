@@ -8,13 +8,14 @@
  * tenant set in the session GUC `app.tenant_id`. `tenant_id` is NEVER passed
  * as a function argument — it always defaults from the GUC.
  *
- * AC#5 BUDGET ENFORCEMENT (split across layers): this repo exposes the
- * primitives — read (`getKuotaAi`), find-or-create (`getAtauBuatKuotaAi`),
- * increment (`tambahPemakaianKuota`). It does NOT reject requests when
- * `terpakai >= batas`. That gate lives in the ACTION layer: the action reads
- * `tersisa` and rejects BEFORE calling `tambahPemakaianKuota`. Keeping the
- * enforcement out of the repo keeps it a pure data-access surface (no business
- * rule leaks) and lets the action layer compose quota with authz + audit.
+ * AC#5 BUDGET ENFORCEMENT (atomic gate): the authoritative gate lives in
+ * `tambahPemakaianKuota` — its UPDATE carries a `terpakai < batas` predicate so
+ * the check-and-increment is one atomic statement and concurrent calls can
+ * never overdraw. The action layer still does a `tersisa <= 0` pre-read, but
+ * that is now only a fast-path early-reject hint, NOT the gate. The atomic
+ * UPDATE keeps enforcement at the data boundary where the row lock serializes
+ * contention, while still letting the action layer compose quota with authz +
+ * audit.
  *
  * `InfoKuotaAi` is the derived read shape: `tersisa = batas - terpakai`,
  * computed here so callers never have to re-derive it.
@@ -96,31 +97,59 @@ export async function getAtauBuatKuotaAi(
 }
 
 /**
- * AC#5 increment primitive. Atomically bumps `terpakai` by 1 (DB-side
- * `terpakai = terpakai + 1`) and returns the updated info. Throws when no row
- * exists for (tahunAjaranId, semester) — the action layer MUST have called
- * `getAtauBuatKuotaAi` first. The budget gate (`tersisa > 0`) is the action
- * layer's responsibility; this function does NOT enforce it and will happily
- * increment past `batas` if invoked.
+ * AC#5 atomic check-and-increment primitive. Bumps `terpakai` by 1 (DB-side
+ * `terpakai = terpakai + 1`) AND enforces the budget gate in ONE statement:
+ * the `WHERE terpakai < batas` predicate makes the check-and-increment atomic,
+ * eliminating the TOCTOU race that existed when the gate lived only in the
+ * action layer's pre-read. Under Postgres READ COMMITTED the UPDATE row lock
+ * serializes two concurrent calls on the same row: the second waits for the
+ * first to commit, then re-evaluates the predicate against the bumped row and
+ * matches zero rows.
+ *
+ * Throws when no row exists for (tahunAjaranId, semester) — the action layer
+ * MUST have called `getAtauBuatKuotaAi` first — and when the budget is
+ * exhausted (`terpakai >= batas`). The action layer's pre-read
+ * (`tersisa <= 0`) is kept only as a fast-path early reject; THIS function is
+ * the authoritative gate.
  */
 export async function tambahPemakaianKuota(
   db: Db | Tx,
   tahunAjaranId: string,
   semester: Semester
 ): Promise<InfoKuotaAi> {
+  // Atomic gate: the `terpakai < batas` predicate is evaluated at UPDATE time
+  // under the row lock, so two concurrent calls can never both pass it.
   const rows = await db
     .update(kuotaAi)
     .set({ terpakai: sql`${kuotaAi.terpakai} + 1` })
     .where(
       and(
         eq(kuotaAi.tahunAjaranId, tahunAjaranId),
-        eq(kuotaAi.semester, semester)
+        eq(kuotaAi.semester, semester),
+        sql`${kuotaAi.terpakai} < ${kuotaAi.batas}`
       )
     )
     .returning();
 
   if (rows.length === 0) {
-    throw new Error("Kuota AI tidak ditemukan");
+    // Zero updated rows means EITHER the row is absent/RLS-hidden OR the
+    // budget gate (`terpakai < batas`) failed. Distinguish them so callers get
+    // an accurate message. This SELECT is NOT a gate — the atomic UPDATE above
+    // is the gate; this read only selects the error message (a failed UPDATE
+    // cannot overdraw regardless of what this read observes).
+    const existing = await db
+      .select()
+      .from(kuotaAi)
+      .where(
+        and(
+          eq(kuotaAi.tahunAjaranId, tahunAjaranId),
+          eq(kuotaAi.semester, semester)
+        )
+      );
+    if (existing.length === 0) {
+      throw new Error("Kuota AI tidak ditemukan");
+    }
+    throw new Error("Kuota AI untuk semester ini habis.");
   }
   const row = rows[0];
   return {

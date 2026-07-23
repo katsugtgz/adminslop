@@ -47,9 +47,9 @@ import {
 } from "@/db/queries/permintaan-ai";
 import type { JenisPermintaanAi, StatusPermintaanAi } from "@/db/queries/permintaan-ai";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikPermintaan } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
+import { optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/permintaan-ai";
 
@@ -107,7 +107,11 @@ async function prosesPermintaanAi(
   const semester = await getSemesterAktif(tx);
   if (!semester) throw new Error("Semester aktif belum diatur.");
 
-  // 2. AC#5 budget gate — checked BEFORE any processing / increment.
+  // 2. AC#5 budget gate — fast-path early reject. This pre-read is only a
+  //    hint to avoid processing when the budget is already obviously spent;
+  //    the AUTHORITATIVE gate is the atomic `terpakai < batas` predicate
+  //    inside tambahPemakaianKuota (step 4), which eliminates the TOCTOU race
+  //    between this read and the increment under concurrent calls.
   const kuota = await getAtauBuatKuotaAi(tx, ta.id, semester);
   if (kuota.tersisa <= 0) {
     throw new Error("Kuota AI untuk semester ini habis.");
@@ -160,23 +164,19 @@ async function prosesPermintaanAi(
  */
 export async function buatPermintaanAiAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
   // 2. Manual validation (no zod).
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (!isValidJenis(jenisRaw)) {
     throw new Error("Jenis Permintaan AI tidak valid.");
   }
   const jenis: JenisPermintaanAi = jenisRaw;
 
-  const konteksRaw = String(formData.get("konteks") ?? "").trim();
+  const konteksRaw = optionalString(formData, "konteks");
   let konteks: Record<string, unknown> = {};
   if (konteksRaw) {
     let parsed: unknown;
@@ -223,17 +223,12 @@ export async function buatPermintaanAiAction(formData: FormData): Promise<void> 
 export async function batalkanPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Permintaan AI wajib diisi.");
+  const id = requiredString(formData, "id", "ID Permintaan AI wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -241,7 +236,7 @@ export async function batalkanPermintaanAiAction(
     if (!permintaan) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    await assertPemilikPermintaan(tx, akses, async () => permintaan.dibuatOleh);
+    await assertPemilikPermintaan(tx, akses, () => Promise.resolve(permintaan.dibuatOleh));
     const status: StatusPermintaanAi = permintaan.status as StatusPermintaanAi;
     if (status !== "dibuat" && status !== "diproses") {
       throw new Error("Permintaan AI tidak dapat dibatalkan.");
@@ -270,18 +265,13 @@ export async function batalkanPermintaanAiAction(
 export async function verifikasiDrafAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("draf_ai:verifikasi").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk verifikasi Draf AI.");
-  }
+  const akses = await requireAksesAktif(
+    "draf_ai:verifikasi",
+    "Anda tidak memiliki izin untuk verifikasi Draf AI."
+  );
 
-  const drafId = String(formData.get("drafId") ?? "").trim();
-  if (!drafId) throw new Error("ID Draf AI wajib diisi.");
-  const statusRaw = String(formData.get("status") ?? "").trim();
+  const drafId = requiredString(formData, "drafId", "ID Draf AI wajib diisi.");
+  const statusRaw = trimField(formData, "status");
   if (statusRaw !== "disetujui" && statusRaw !== "ditolak") {
     throw new Error("Status verifikasi tidak valid.");
   }
@@ -313,17 +303,12 @@ export async function verifikasiDrafAiAction(
 export async function retryPermintaanAiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("permintaan_ai:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Permintaan AI.");
-  }
+  const akses = await requireAksesAktif(
+    "permintaan_ai:buat",
+    "Anda tidak memiliki izin untuk Permintaan AI."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID Permintaan AI wajib diisi.");
+  const id = requiredString(formData, "id", "ID Permintaan AI wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -331,7 +316,7 @@ export async function retryPermintaanAiAction(
     if (!original) {
       throw new Error("Permintaan AI tidak ditemukan.");
     }
-    await assertPemilikPermintaan(tx, akses, async () => original.dibuatOleh);
+    await assertPemilikPermintaan(tx, akses, () => Promise.resolve(original.dibuatOleh));
     // Both columns are CHECK-constrained text/jsonb; narrowing to the typed
     // unions is sound (the DB guarantees the literal vocabulary).
     await prosesPermintaanAi(

@@ -47,10 +47,10 @@ export function labelTabelArsip(tabel: TabelArsip): string {
   }
 }
 
-const TABEL_ARSIP = ["ptk", "penilaian", "beban_mengajar", "wali_kelas"] as const;
+export const TABEL_ARSIP = ["ptk", "penilaian", "beban_mengajar", "wali_kelas"] as const;
 
 /** True iff `t` is a supported archive table (the whitelist check — AC#5). */
-function isTabelArsip(t: string): t is TabelArsip {
+export function isTabelArsip(t: string): t is TabelArsip {
   return (TABEL_ARSIP as readonly string[]).includes(t);
 }
 

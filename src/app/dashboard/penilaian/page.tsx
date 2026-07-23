@@ -10,7 +10,7 @@ import { listNilaiByPenilaian, getNilaiAkhir } from "@/db/queries/nilai-peserta-
 import type { NilaiAkhirPesertaDidik } from "@/db/queries/nilai-peserta-didik";
 import { listPtk } from "@/db/queries/akses";
 import { listPenilaian } from "@/db/queries/penilaian";
-import { listPesertaDidik } from "@/db/queries/peserta-didik";
+import { listPesertaDidikByIds } from "@/db/queries/peserta-didik";
 import { listMataPelajaran } from "@/db/queries/mata-pelajaran";
 import { listRombonganBelajar } from "@/db/queries/rombongan-belajar";
 import {
@@ -151,10 +151,9 @@ export default async function Page({
     let nilaiAkhir: NilaiAkhirPesertaDidik[] = [];
 
     if (sp.bebanId) {
-      [komponen, nilaiAkhir, peserta] = await Promise.all([
+      [komponen, nilaiAkhir] = await Promise.all([
         listKomponenNilai(tx, sp.bebanId),
         getNilaiAkhir(tx, sp.bebanId),
-        listPesertaDidik(tx, 500),
       ]);
 
       if (sp.komponenId) {
@@ -164,6 +163,15 @@ export default async function Page({
           nilaiRows = await listNilaiByPenilaian(tx, sp.penilaianId);
         }
       }
+
+      // Fetch ONLY the peserta_didik that have grade data for this beban
+      // (IDs derived from nilaiAkhir + nilaiRows), instead of over-fetching
+      // all 500 tenant-wide. Powers the Nilai Akhir display name lookup and
+      // the per-student Nilai entry form prefill.
+      const pesertaIds = new Set<string>();
+      for (const na of nilaiAkhir) pesertaIds.add(na.pesertaDidikId);
+      for (const n of nilaiRows) pesertaIds.add(n.pesertaDidikId);
+      peserta = await listPesertaDidikByIds(tx, [...pesertaIds]);
     }
 
     return {

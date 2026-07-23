@@ -46,14 +46,14 @@ import { catatAudit, getDb, withTenant } from "@/db/client";
 import { buatKomponenNilai, hapusKomponenNilai } from "@/db/queries/komponen-nilai";
 import { buatPenilaian, hapusPenilaian } from "@/db/queries/penilaian";
 import { hapusNilai, upsertNilai } from "@/db/queries/nilai-peserta-didik";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import {
   assertPemilikBeban,
   bebanIdDariKomponen,
   bebanIdDariNilai,
   bebanIdDariPenilaian,
 } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/penilaian";
 const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -79,20 +79,13 @@ function assertUuidShape(id: string): void {
 export async function simpanKomponenNilaiBaruAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const bebanMengajarId = String(formData.get("bebanMengajarId") ?? "").trim();
+  const bebanMengajarId = trimField(formData, "bebanMengajarId");
   if (!bebanMengajarId) throw new Error("ID Beban Mengajar wajib diisi.");
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Komponen wajib diisi.");
-  const bobotRaw = String(formData.get("bobot") ?? "").trim();
+  const bobotRaw = trimField(formData, "bobot");
   if (!bobotRaw) throw new Error("Bobot wajib diisi.");
   const bobot = Number(bobotRaw);
   if (Number.isNaN(bobot)) throw new Error("Bobot harus berupa angka.");
@@ -102,7 +95,7 @@ export async function simpanKomponenNilaiBaruAction(
   await withTenant(db, akses.membership.orgId, async (tx) => {
     // AC#4 gate 2: ownership (admin bypasses; guru must own beban_mengajar).
     // react-doctor-disable-next-line async-parallel: komponen insert depends on ownership gate; audit depends on kn.id, react-doctor/async-parallel
-    await assertPemilikBeban(tx, akses, async () => bebanMengajarId);
+    await assertPemilikBeban(tx, akses, () => Promise.resolve(bebanMengajarId));
     const kn = await buatKomponenNilai(tx, { bebanMengajarId, nama, bobot });
     await catatAudit(tx, {
       aktor: akses.userId,
@@ -124,20 +117,13 @@ export async function simpanKomponenNilaiBaruAction(
 export async function simpanPenilaianBaruAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const komponenNilaiId = String(formData.get("komponenNilaiId") ?? "").trim();
+  const komponenNilaiId = trimField(formData, "komponenNilaiId");
   if (!komponenNilaiId) throw new Error("ID Komponen Nilai wajib diisi.");
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Penilaian wajib diisi.");
-  const tanggal = String(formData.get("tanggal") ?? "").trim();
+  const tanggal = trimField(formData, "tanggal");
   if (!tanggal) throw new Error("Tanggal Penilaian wajib diisi.");
 
   const { db } = getDb();
@@ -173,27 +159,20 @@ export async function simpanPenilaianBaruAction(
  * optional teacher note.
  */
 export async function upsertNilaiAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:buat", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const penilaianId = String(formData.get("penilaianId") ?? "").trim();
+  const penilaianId = trimField(formData, "penilaianId");
   if (!penilaianId) throw new Error("ID Penilaian wajib diisi.");
-  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
+  const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
-  const nilaiRaw = String(formData.get("nilai") ?? "").trim();
+  const nilaiRaw = trimField(formData, "nilai");
   let nilai: number | null = null;
   if (nilaiRaw) {
     const parsed = Number(nilaiRaw);
     if (Number.isNaN(parsed)) throw new Error("Nilai harus berupa angka.");
     nilai = parsed;
   }
-  const catatanRaw = String(formData.get("catatan") ?? "").trim();
+  const catatanRaw = trimField(formData, "catatan");
   const catatan: string | undefined = catatanRaw || undefined;
 
   const { db } = getDb();
@@ -230,16 +209,9 @@ export async function upsertNilaiAction(formData: FormData): Promise<void> {
 export async function hapusKomponenNilaiAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Komponen Nilai wajib diisi.");
   assertUuidShape(id);
 
@@ -267,16 +239,9 @@ export async function hapusKomponenNilaiAction(
  * penilaian(id) -> komponen_nilai -> beban_mengajar.
  */
 export async function hapusPenilaianAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Penilaian wajib diisi.");
   assertUuidShape(id);
 
@@ -304,16 +269,9 @@ export async function hapusPenilaianAction(formData: FormData): Promise<void> {
  * nilai(id) -> penilaian -> komponen_nilai -> beban_mengajar.
  */
 export async function hapusNilaiAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("penilaian:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Penilaian.");
-  }
+  const akses = await requireAksesAktif("penilaian:ubah", "Anda tidak memiliki izin untuk Penilaian.");
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Nilai wajib diisi.");
   assertUuidShape(id);
 

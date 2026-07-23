@@ -45,9 +45,9 @@ import {
 } from "@/db/queries/eraport";
 import type { SemesterEraport } from "@/db/queries/eraport";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { assertPemilikBeban } from "@/lib/auth/kepemilikan";
-import { requireAuth } from "@/lib/auth/server";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/eraport";
 
@@ -64,23 +64,19 @@ const REVALIDATE_TARGET = "/dashboard/eraport";
  */
 export async function buatDrafEraportAction(formData: FormData): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI).
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk membuat Draf E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:buat",
+    "Anda tidak memiliki izin untuk membuat Draf E-Raport."
+  );
 
   // 2. Manual validation (no zod).
-  const pesertaDidikId = String(formData.get("pesertaDidikId") ?? "").trim();
+  const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) {
     throw new Error("Peserta Didik wajib dipilih.");
   }
-  const bebanMengajarIdRaw = String(formData.get("bebanMengajarId") ?? "").trim();
-  const drafAiIdRaw = String(formData.get("drafAiId") ?? "").trim();
-  const catatanRaw = String(formData.get("catatan") ?? "").trim();
+  const bebanMengajarIdRaw = trimField(formData, "bebanMengajarId");
+  const drafAiIdRaw = trimField(formData, "drafAiId");
+  const catatanRaw = trimField(formData, "catatan");
 
   // 3. Resolve period + build konten under tenant scope. orgId from membership
   //    ONLY. AC#4 validation (draf_ai disetujui) runs inside buatDrafEraport.
@@ -102,9 +98,12 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
       pesertaDidikId,
     };
     if (bebanMengajarIdRaw) {
-      await assertPemilikBeban(tx, akses, async () => bebanMengajarIdRaw);
-      const semua = await getNilaiAkhir(tx, bebanMengajarIdRaw);
-      const milikSiswa = semua.find((n) => n.pesertaDidikId === pesertaDidikId);
+      await assertPemilikBeban(tx, akses, () => Promise.resolve(bebanMengajarIdRaw));
+      const [milikSiswa] = await getNilaiAkhir(
+        tx,
+        bebanMengajarIdRaw,
+        pesertaDidikId
+      );
       if (milikSiswa) {
         konten = {
           ...konten,
@@ -146,16 +145,12 @@ export async function buatDrafEraportAction(formData: FormData): Promise<void> {
  * throws (RLS hides it).
  */
 export async function terbitkanEraportAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:terbit").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menerbitkan E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:terbit",
+    "Anda tidak memiliki izin untuk menerbitkan E-Raport."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID E-Raport wajib diisi.");
 
   const { db } = getDb();
@@ -183,22 +178,18 @@ export async function terbitkanEraportAction(formData: FormData): Promise<void> 
 export async function catatRevisiEraportAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("eraport:revisi").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mencatat revisi E-Raport.");
-  }
+  const akses = await requireAksesAktif(
+    "eraport:revisi",
+    "Anda tidak memiliki izin untuk mencatat revisi E-Raport."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID E-Raport wajib diisi.");
-  const alasan = String(formData.get("alasan") ?? "").trim();
+  const alasan = trimField(formData, "alasan");
   if (!alasan) throw new Error("Alasan Revisi wajib diisi.");
 
   let kontenPerubahan: Record<string, unknown> | null = null;
-  const kontenPerubahanRaw = String(formData.get("kontenPerubahan") ?? "").trim();
+  const kontenPerubahanRaw = trimField(formData, "kontenPerubahan");
   if (kontenPerubahanRaw) {
     let parsed: unknown;
     try {

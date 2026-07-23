@@ -19,7 +19,7 @@
  * never hard-deleted (per CONTEXT.md, no hard-delete of domain data); an
  * archived butir stays referenceable from existing paket via the junction.
  */
-import { and, asc, eq, ilike } from "drizzle-orm";
+import { and, asc, eq, ilike, inArray } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import {
@@ -184,6 +184,22 @@ export async function cariButirSoalById(
 ): Promise<ButirSoal | null> {
   const rows = await db.select().from(butirSoal).where(eq(butirSoal.id, id));
   return rows[0] ?? null;
+}
+
+/**
+ * Batch lookup of MANY butir_soal by id in a SINGLE `inArray` query (RLS-
+ * scoped). Returns a `Map<id, ButirSoal>`; cross-tenant / missing ids are
+ * simply absent from the map. Replaces the N+1 fan-out the paket-assembly
+ * drill-down ran (one `cariButirSoalById` per paket member). An empty `ids`
+ * input short-circuits to an empty Map (no query issued).
+ */
+export async function cariButirSoalByIdBatch(
+  db: Db | Tx,
+  ids: readonly string[]
+): Promise<Map<string, ButirSoal>> {
+  if (ids.length === 0) return new Map();
+  const rows = await db.select().from(butirSoal).where(inArray(butirSoal.id, [...ids]));
+  return new Map(rows.map((b) => [b.id, b]));
 }
 
 /**

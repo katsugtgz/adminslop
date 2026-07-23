@@ -166,8 +166,8 @@ describeOrSkip(
     });
 
     // 3. AC#5 tambahPemakaianKuota: each call bumps terpakai by 1 and
-    //    recomputes tersisa. Caller (action layer) is responsible for the
-    //    `tersisa > 0` gate BEFORE calling — this fn does not enforce it.
+    //    recomputes tersisa. The atomic gate (`terpakai < batas`) only bites
+    //    at the limit — see tests #4 and #4b for the rejection + race cases.
     itOrSkip("tambahPemakaianKuota increments terpakai and decrements tersisa", async () => {
       const { taId, after3 } = await withTenant(
         db,
@@ -204,27 +204,72 @@ describeOrSkip(
       expect(after3).toEqual(final);
     });
 
-    // 4. AC#5 repo does NOT enforce the budget gate: tambahPemakaianKuota
-    //    will happily increment past `batas` if invoked. The action layer is
-    //    responsible for checking `tersisa > 0` first. (Negative tersisa is
-    //    observable — proves the repo is a dumb primitive.)
-    itOrSkip("tambahPemakaianKuota does NOT enforce batas (action-layer gate)", async () => {
-      const { overInfo } = await withTenant(db, SEED_A, async (tx) => {
+    // 4. AC#5 atomic gate: tambahPemakaianKuota enforces `terpakai < batas`
+    //    INSIDE the UPDATE statement. When the budget is exhausted the UPDATE
+    //    matches zero rows and the function throws "habis" — it can no longer
+    //    increment past `batas`. The action layer pre-read is now only a
+    //    fast-path hint; THIS function is the authoritative gate.
+    itOrSkip("tambahPemakaianKuota enforces batas atomically (rejects when exhausted)", async () => {
+      const { taId } = await withTenant(db, SEED_A, async (tx) => {
         const ta = await seedTahunAjaran(tx, SEED_A, "over");
         await getAtauBuatKuotaAi(tx, ta.id, "ganjil", 1); // batas=1
 
-        // First increment: terpakai=1, tersisa=0 (legal).
+        // First increment: terpakai 0 -> 1, tersisa 1 -> 0 (legal, gate passes).
         const atLimit = await tambahPemakaianKuota(tx, ta.id, "ganjil");
+        expect(atLimit.terpakai).toBe(1);
         expect(atLimit.tersisa).toBe(0);
 
-        // Second increment: repo does NOT reject — terpakai=2, tersisa=-1.
-        // Action layer should have checked `tersisa > 0` before calling.
-        const overInfo = await tambahPemakaianKuota(tx, ta.id, "ganjil");
-        expect(overInfo.terpakai).toBe(2);
-        expect(overInfo.tersisa).toBe(-1);
-        return { overInfo };
+        // Second increment: gate fails (terpakai < batas is 1 < 1 == false) ->
+        // UPDATE matches zero rows -> throws "habis". Overdraw is impossible.
+        await expect(
+          tambahPemakaianKuota(tx, ta.id, "ganjil")
+        ).rejects.toThrow(/habis/);
+        return { taId: ta.id };
       });
-      expect(overInfo.tersisa).toBe(-1);
+
+      // Final state proves the overdraw never happened: terpakai stays at 1.
+      const final = await withTenant(db, SEED_A, (tx) =>
+        getKuotaAi(tx, taId, "ganjil")
+      );
+      expect(final).not.toBeNull();
+      expect(final!.terpakai).toBe(1);
+      expect(final!.tersisa).toBe(0);
+    });
+
+    // 4b. AC#5 TOCTOU race regression: two CONCURRENT tambahPemakaianKuota
+    //     calls against batas=1 must never both succeed. Each runs in its own
+    //     withTenant transaction; the Postgres UPDATE row lock serializes them
+    //     and the `terpakai < batas` predicate makes the loser match zero rows.
+    //     Exactly one fulfills, exactly one rejects, and terpakai ends at 1.
+    itOrSkip("tambahPemakaianKuota is race-safe: one of two concurrent calls wins", async () => {
+      const taId = await withTenant(db, SEED_A, async (tx) => {
+        const ta = await seedTahunAjaran(tx, SEED_A, "race");
+        await getAtauBuatKuotaAi(tx, ta.id, "ganjil", 1); // batas=1, terpakai=0
+        return ta.id;
+      });
+
+      const settled = await Promise.allSettled([
+        withTenant(db, SEED_A, (tx) => tambahPemakaianKuota(tx, taId, "ganjil")),
+        withTenant(db, SEED_A, (tx) => tambahPemakaianKuota(tx, taId, "ganjil")),
+      ]);
+
+      const fulfilled = settled.filter((s) => s.status === "fulfilled");
+      const rejected = settled.filter((s) => s.status === "rejected");
+      expect(fulfilled).toHaveLength(1);
+      expect(rejected).toHaveLength(1);
+      const winner = fulfilled[0] as PromiseFulfilledResult<{
+        terpakai: number;
+        tersisa: number;
+      }>;
+      expect(winner.value.terpakai).toBe(1);
+      const loser = rejected[0] as PromiseRejectedResult;
+      expect(String(loser.reason.message)).toMatch(/habis/);
+
+      const final = await withTenant(db, SEED_A, (tx) =>
+        getKuotaAi(tx, taId, "ganjil")
+      );
+      expect(final).not.toBeNull();
+      expect(final!.terpakai).toBe(1);
     });
 
     // 5. getKuotaAi returns null when no row exists (absence == absence; the

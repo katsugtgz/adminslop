@@ -7,7 +7,7 @@ const targets = ALL.slice(START, END);
 for (const name of targets) {
   const btn = page.locator('button', { hasText: name }).first();
   try { await btn.click({ timeout: 4000 }); }
-  catch (e) { await btn.scrollIntoViewIfNeeded().catch(()=>{}); await btn.click({ timeout: 4000 }).catch(()=>{}); }
+  catch (_e) { await btn.scrollIntoViewIfNeeded().catch(()=>{}); await btn.click({ timeout: 4000 }).catch(()=>{}); }
   await page.waitForTimeout(1500);
   const modalBtn = page.locator('button', { hasText: /^(Baik, Saya Paham|Saya Mengerti & Lanjut)$/ }).first();
   if (await modalBtn.count() > 0) { await modalBtn.click().catch(()=>{}); await page.waitForTimeout(400); }

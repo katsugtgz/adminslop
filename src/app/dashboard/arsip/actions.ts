@@ -9,7 +9,7 @@
 // "AC#5: hiding UI is not the authorization boundary".
 //
 // SECURITY (AC#5 — no SQL injection, strict table whitelist):
-// The `tabel` field in formData is validated against TABEL_ARSIP_WHITELIST
+// The `tabel` field in formData is validated against TABEL_ARSIP
 // BEFORE it reaches the repo. The repo layer (queries/arsip.ts) ALSO validates
 // via assertTabelArsip — defense in depth. The user-supplied string is NEVER
 // interpolated into raw SQL; it is switch/case-mapped to a real drizzle table
@@ -25,22 +25,17 @@
 import { revalidatePath } from "next/cache";
 
 import { catatAudit, getDb, withTenant } from "@/db/client";
-import { arsipkan, aturRetensi, pulihkan, type TabelArsip } from "@/db/queries/arsip";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import {
+  arsipkan,
+  aturRetensi,
+  isTabelArsip,
+  pulihkan,
+  type TabelArsip,
+} from "@/db/queries/arsip";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { optionalString, requiredString, trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/arsip";
-
-const TABEL_ARSIP_WHITELIST = [
-  "ptk",
-  "penilaian",
-  "beban_mengajar",
-  "wali_kelas",
-] as const satisfies readonly TabelArsip[];
-
-function isTabelArsip(t: string): t is TabelArsip {
-  return (TABEL_ARSIP_WHITELIST as readonly string[]).includes(t);
-}
 
 // 1. arsipkanAction ------------------------------------------------------------
 
@@ -51,22 +46,17 @@ function isTabelArsip(t: string): t is TabelArsip {
  * the whitelist (AC#5).
  */
 export async function arsipkanAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("arsip:kelola").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Arsip.");
-  }
+  const akses = await requireAksesAktif(
+    "arsip:kelola",
+    "Anda tidak memiliki izin untuk mengelola Arsip."
+  );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID wajib diisi.");
+  const id = requiredString(formData, "id", "ID wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -94,22 +84,17 @@ export async function arsipkanAction(formData: FormData): Promise<void> {
  * traceable. `tabel` is validated against the whitelist (AC#5).
  */
 export async function pulihkanAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("arsip:kelola").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Arsip.");
-  }
+  const akses = await requireAksesAktif(
+    "arsip:kelola",
+    "Anda tidak memiliki izin untuk mengelola Arsip."
+  );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const id = String(formData.get("id") ?? "").trim();
-  if (!id) throw new Error("ID wajib diisi.");
+  const id = requiredString(formData, "id", "ID wajib diisi.");
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -136,22 +121,17 @@ export async function pulihkanAction(formData: FormData): Promise<void> {
  * validated against the whitelist (AC#5).
  */
 export async function aturRetensiAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("arsip:kelola").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengelola Arsip.");
-  }
+  const akses = await requireAksesAktif(
+    "arsip:kelola",
+    "Anda tidak memiliki izin untuk mengelola Arsip."
+  );
 
-  const tabelRaw = String(formData.get("tabel") ?? "").trim();
+  const tabelRaw = trimField(formData, "tabel");
   if (!isTabelArsip(tabelRaw)) {
     throw new Error("Tabel tidak didukung.");
   }
   const tabel: TabelArsip = tabelRaw;
-  const periodeRaw = String(formData.get("periodeBulan") ?? "").trim();
-  if (!periodeRaw) throw new Error("Periode (Bulan) wajib diisi.");
+  const periodeRaw = requiredString(formData, "periodeBulan", "Periode (Bulan) wajib diisi.");
   const periodeBulan = Number(periodeRaw);
   if (Number.isNaN(periodeBulan)) {
     throw new Error("Periode (Bulan) harus berupa angka.");
@@ -159,8 +139,7 @@ export async function aturRetensiAction(formData: FormData): Promise<void> {
   if (periodeBulan <= 0) {
     throw new Error("Periode (Bulan) harus lebih besar dari 0.");
   }
-  const keteranganRaw = String(formData.get("keterangan") ?? "").trim();
-  const keterangan = keteranganRaw || undefined;
+  const keterangan = optionalString(formData, "keterangan") ?? undefined;
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {

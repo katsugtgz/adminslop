@@ -3,6 +3,7 @@ import { and, eq, sql } from "drizzle-orm";
 
 import { catatAudit, getDb, withTenant } from "@/db/client";
 import { dbSchema } from "@/db/client";
+import { listPenempatanByPesertaDidik } from "@/db/queries/penempatan-rombongan-belajar";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import {
   assertPemilikBeban,
@@ -194,7 +195,7 @@ async function terapkanDraftAbsensi(
     // (admin bypasses). Existing rows are re-checked against the server row's
     // rombel below; the draft rombel is client-supplied and not authoritative
     // for updates.
-    await assertPemilikRombongan(tx, akses, async () => draft.rombonganBelajarId);
+    await assertPemilikRombongan(tx, akses, () => Promise.resolve(draft.rombonganBelajarId));
 
     const existing = await cariAbsensiByNaturalKey(
       tx,
@@ -203,6 +204,27 @@ async function terapkanDraftAbsensi(
     );
 
     if (!existing) {
+      // BUGS-03: placement check for the new-row path. The draft's
+      // rombonganBelajarId is client-supplied; without this gate a guru who
+      // owns the rombel could INSERT attendance for a peserta didik who is NOT
+      // enrolled in that class. Mirrors `catatAbsensi` in
+      // dashboard/absensi/actions.ts. Throws KepemilikanError so the denial
+      // surfaces as 403 (not a 500 leak).
+      const penempatan = await listPenempatanByPesertaDidik(
+        tx,
+        draft.pesertaDidikId
+      );
+      if (
+        !penempatan.some(
+          (p) =>
+            p.rombonganBelajarId === draft.rombonganBelajarId &&
+            p.status === "aktif"
+        )
+      ) {
+        throw new KepemilikanError(
+          "Peserta Didik tidak terdaftar di Rombongan Belajar ini."
+        );
+      }
       const [row] = await tx
         .insert(dbSchema.absensiHarian)
         .values({
@@ -238,7 +260,7 @@ async function terapkanDraftAbsensi(
       return { status: "konflik" as const, versi: existing.versi };
     }
 
-    await assertPemilikRombongan(tx, akses, async () => existing.rombonganBelajarId);
+    await assertPemilikRombongan(tx, akses, () => Promise.resolve(existing.rombonganBelajarId));
 
     const versiBaru = existing.versi + 1;
     const updated = await tx
@@ -276,6 +298,23 @@ async function terapkanDraftAbsensi(
 }
 
 /**
+ * SEC-07: same-origin guard. Browsers always send `Origin` on a state-changing
+ * request (POST here), so a missing Origin is treated as hostile (403). When
+ * present, its `.origin` (scheme+host+port) MUST equal this server's origin —
+ * a mismatch is a CSRF-style probe and is refused before any auth/DB work.
+ * This complements — does not replace — AuthKit cookie auth + tenant resolution.
+ */
+function originDiperbolehkan(req: Request): boolean {
+  const origin = req.headers.get("origin");
+  if (!origin) return false;
+  try {
+    return new URL(origin).origin === new URL(req.url).origin;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * POST /api/sinkronisasi — receive one draft envelope and apply it. Body shape
  * is {@linkcode AmplopDraft}. Returns {@linkcode ResponsSinkronisasi}.
  *
@@ -284,6 +323,14 @@ async function terapkanDraftAbsensi(
  * izin yields 403. An unrecognized envelope yields 400.
  */
 export async function POST(req: Request): Promise<NextResponse<ResponsSinkronisasi>> {
+  // SEC-07: reject cross-origin POSTs before any auth/DB work.
+  if (!originDiperbolehkan(req)) {
+    return NextResponse.json<ResponsSinkronisasi>(
+      { status: "error", pesan: "Asal permintaan tidak diizinkan." },
+      { status: 403 }
+    );
+  }
+
   const akses = await getAksesSaya();
   if (akses.status !== "active") {
     return NextResponse.json<ResponsSinkronisasi>(

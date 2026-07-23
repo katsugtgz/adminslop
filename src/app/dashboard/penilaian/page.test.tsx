@@ -42,7 +42,7 @@ const mocks = vi.hoisted(() => {
     getTahunAjaranAktif: vi.fn(async () => null as TahunAjaran | null),
     getSemesterAktif: vi.fn(async () => null as Semester | null),
     listPtk: vi.fn(async () => [] as Ptk[]),
-    listPesertaDidik: vi.fn(async () => [] as PesertaDidik[]),
+    listPesertaDidikByIds: vi.fn(async () => [] as PesertaDidik[]),
     listMataPelajaran: vi.fn(async () => [] as MataPelajaran[]),
     listRombonganBelajar: vi.fn(async () => [] as RombonganBelajar[]),
     listTingkat: vi.fn(async () => [] as Tingkat[]),
@@ -86,7 +86,7 @@ vi.mock("@/db/queries/akses", () => ({
   listPtk: mocks.listPtk,
 }));
 vi.mock("@/db/queries/peserta-didik", () => ({
-  listPesertaDidik: mocks.listPesertaDidik,
+  listPesertaDidikByIds: mocks.listPesertaDidikByIds,
 }));
 vi.mock("@/db/queries/mata-pelajaran", () => ({
   listMataPelajaran: mocks.listMataPelajaran,
@@ -254,7 +254,6 @@ const NILAI_AKHIR_ANDI: NilaiAkhirPesertaDidik = {
       nama: "UTS",
       bobot: 30,
       rataRata: 80,
-      jumlahPenilaian: 1,
     },
   ],
 };
@@ -278,7 +277,7 @@ beforeEach(() => {
   mocks.listMataPelajaran.mockResolvedValue([MAPEL_MTK]);
   mocks.listRombonganBelajar.mockResolvedValue([ROMBEL_1A]);
   mocks.listTingkat.mockResolvedValue([TINGKAT_1]);
-  mocks.listPesertaDidik.mockResolvedValue([PD_ANDI]);
+  mocks.listPesertaDidikByIds.mockResolvedValue([PD_ANDI]);
   mocks.listKomponenNilai.mockResolvedValue([KOMPONEN_UTS]);
   mocks.listPenilaian.mockResolvedValue([PENILAIAN_TUGAS1]);
   mocks.listNilaiByPenilaian.mockResolvedValue([]);

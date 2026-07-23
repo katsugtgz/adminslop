@@ -79,6 +79,22 @@ export async function buatSatuanPendidikanBaruAction(
 
   const workos = getWorkOS();
 
+  // SEC-06: TOCTOU re-check. The gate above (line ~56) and the WorkOS mutation
+  // below are not atomic — between them a concurrent request (double-submit,
+  // second tab, replay) could create a Keanggotaan for this user. Re-query
+  // immediately before the external side effect (org creation) and abort if the
+  // user is no longer membership-free. This narrows the race window to the
+  // WorkOS call itself; a fully atomic guard would need WorkOS-side uniqueness,
+  // which is out of scope for this hardening pass.
+  const rechecked = await listMembershipsForUser(user.id);
+  if (rechecked.length > 0) {
+    return {
+      ok: false,
+      error:
+        "Anda sudah memiliki Satuan Pendidikan. Onboarding tidak tersedia.",
+    };
+  }
+
   // 1. Create the WorkOS Organization — this mints the canonical tenant id.
   const org = await workos.organizations.createOrganization({
     name: nama,

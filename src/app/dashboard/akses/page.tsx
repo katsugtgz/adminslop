@@ -1,7 +1,7 @@
 import { KeyRound } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
-import { listPengguna, listPtk, loadAksesPengguna } from "@/db/queries/akses";
+import { listPengguna, listPtk, loadAksesPenggunaBatch } from "@/db/queries/akses";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 
 import { DaftarPengguna } from "@/components/akses/daftar-pengguna";
@@ -69,20 +69,15 @@ export default async function Page() {
       ]);
       // izin/pembatasan per pengguna are only needed to render the management
       // matrix; skip the N reads for read-only viewers.
-      const aksesPerPengguna = new Map<
+      let aksesPerPengguna = new Map<
         string,
         { izin: string[]; pembatasan: string[] }
       >();
-      if (bolehKelola) {
-        const entries = await Promise.all(
-          daftarPengguna.map(async (pengguna) => [
-            pengguna.id,
-            await loadAksesPengguna(tx, pengguna.id),
-          ] as const)
+      if (bolehKelola && daftarPengguna.length > 0) {
+        aksesPerPengguna = await loadAksesPenggunaBatch(
+          tx,
+          daftarPengguna.map((p) => p.id)
         );
-        for (const [id, aksesRow] of entries) {
-          aksesPerPengguna.set(id, aksesRow);
-        }
       }
       return {
         ptks: daftarPtk,

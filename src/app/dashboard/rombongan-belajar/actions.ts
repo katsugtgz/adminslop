@@ -46,20 +46,10 @@ import {
 } from "@/db/queries/rombongan-belajar";
 import { getTahunAjaranAktif, getSemesterAktif, cariTahunAjaranById } from "@/db/queries/tahun-ajaran";
 import { buatTingkat, cariTingkatBerikutnya, cariTingkatById } from "@/db/queries/tingkat";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/rombongan-belajar";
-
-// --- manual validation helper (no zod) -------------------------------------
-
-/**
- * Read + trim a formData field. Returns "" when absent (FormData.get returns
- * null for missing fields). Never throws.
- */
-function trimField(formData: FormData, key: string): string {
-  return String(formData.get(key) ?? "").trim();
-}
 
 // 1. simpanTingkatBaruAction -------------------------------------------------
 
@@ -72,14 +62,10 @@ export async function simpanTingkatBaruAction(
   formData: FormData
 ): Promise<void> {
   // 1. Resolve + authorize (SERVER-SIDE — this is the boundary, NOT the UI)
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("rombongan_belajar:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk menambah Tingkat.");
-  }
+  const akses = await requireAksesAktif(
+    "rombongan_belajar:buat",
+    "Anda tidak memiliki izin untuk menambah Tingkat."
+  );
 
   // 2. Manual validation (no zod)
   const nama = trimField(formData, "nama");
@@ -118,16 +104,10 @@ export async function simpanTingkatBaruAction(
 export async function simpanRombonganBelajarBaruAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("rombongan_belajar:buat").diizinkan) {
-    throw new Error(
-      "Anda tidak memiliki izin untuk menambah Rombongan Belajar."
-    );
-  }
+  const akses = await requireAksesAktif(
+    "rombongan_belajar:buat",
+    "Anda tidak memiliki izin untuk menambah Rombongan Belajar."
+  );
 
   const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Rombongan Belajar wajib diisi.");
@@ -169,16 +149,10 @@ export async function simpanRombonganBelajarBaruAction(
 export async function tempatkanPesertaDidikAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("rombongan_belajar:kelola_penempatan").diizinkan) {
-    throw new Error(
-      "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
-    );
-  }
+  const akses = await requireAksesAktif(
+    "rombongan_belajar:kelola_penempatan",
+    "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
+  );
 
   const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
@@ -256,16 +230,10 @@ export async function tempatkanPesertaDidikAction(
 export async function kenaikanTingkatAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("rombongan_belajar:kelola_penempatan").diizinkan) {
-    throw new Error(
-      "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
-    );
-  }
+  const akses = await requireAksesAktif(
+    "rombongan_belajar:kelola_penempatan",
+    "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
+  );
 
   const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");
@@ -372,16 +340,10 @@ export async function kenaikanTingkatAction(
 export async function tinggalTingkatAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("rombongan_belajar:kelola_penempatan").diizinkan) {
-    throw new Error(
-      "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
-    );
-  }
+  const akses = await requireAksesAktif(
+    "rombongan_belajar:kelola_penempatan",
+    "Anda tidak memiliki izin untuk mengelola penempatan Peserta Didik."
+  );
 
   const pesertaDidikId = trimField(formData, "pesertaDidikId");
   if (!pesertaDidikId) throw new Error("ID Peserta Didik wajib diisi.");

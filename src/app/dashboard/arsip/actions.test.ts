@@ -45,17 +45,34 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+  // Mirror the real requireAksesAktif: delegate to the mocked getAksesSaya so
+  // every existing getAksesSaya.mockResolvedValue(...) setup continues to drive
+  // both the status branch and the boleh() branch unchanged.
+  requireAksesAktif: async (izin: IzinSlug, pesanTolak?: string) => {
+    const akses = await mocks.getAksesSaya();
+    if (akses.status !== "active") {
+      throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+    }
+    if (!akses.boleh(izin).diizinkan) {
+      throw new Error(pesanTolak ?? "Anda tidak memiliki izin untuk aksi ini.");
+    }
+    return akses;
+  },
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
   withTenant: mocks.withTenant,
   catatAudit: mocks.catatAudit,
 }));
-vi.mock("@/db/queries/arsip", () => ({
-  arsipkan: mocks.arsipkan,
-  pulihkan: mocks.pulihkan,
-  aturRetensi: mocks.aturRetensi,
-}));
+vi.mock("@/db/queries/arsip", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/db/queries/arsip")>();
+  return {
+    arsipkan: mocks.arsipkan,
+    pulihkan: mocks.pulihkan,
+    aturRetensi: mocks.aturRetensi,
+    isTabelArsip: actual.isTabelArsip,
+  };
+});
 vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
 
 import {

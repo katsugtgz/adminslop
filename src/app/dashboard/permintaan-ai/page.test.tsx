@@ -20,8 +20,11 @@ const mocks = vi.hoisted(() => {
       ) => fn(fakeTx)
     ),
     listPermintaanAi: vi.fn(async () => [] as PermintaanAi[]),
-    cariDrafAiByPermintaan: vi.fn(
-      async (_tx: unknown, _id: string): Promise<DrafAi | null> => null
+    cariDrafAiByPermintaanBatch: vi.fn(
+      async (
+        _tx: unknown,
+        _ids: readonly string[]
+      ): Promise<Map<string, DrafAi>> => new Map()
     ),
     getAtauBuatKuotaAi: vi.fn(
       async (): Promise<InfoKuotaAi> => ({
@@ -56,7 +59,7 @@ vi.mock("@/db/queries/permintaan-ai", () => ({
   cariDrafAiByPermintaan: vi.fn(),
 }));
 vi.mock("@/db/queries/draf-ai", () => ({
-  cariDrafAiByPermintaan: mocks.cariDrafAiByPermintaan,
+  cariDrafAiByPermintaanBatch: mocks.cariDrafAiByPermintaanBatch,
 }));
 vi.mock("@/db/queries/kuota-ai", () => ({
   getAtauBuatKuotaAi: mocks.getAtauBuatKuotaAi,
@@ -166,7 +169,7 @@ beforeEach(() => {
   mocks.getTahunAjaranAktif.mockResolvedValue(TA);
   mocks.getSemesterAktif.mockResolvedValue("ganjil");
   mocks.listPermintaanAi.mockResolvedValue([]);
-  mocks.cariDrafAiByPermintaan.mockResolvedValue(null);
+  mocks.cariDrafAiByPermintaanBatch.mockResolvedValue(new Map());
   mocks.getAtauBuatKuotaAi.mockResolvedValue({
     terpakai: 3,
     batas: 10,
@@ -199,8 +202,8 @@ describe("PermintaanAiPage — render by akses context (#12 / T7)", () => {
     mocks.listPermintaanAi.mockResolvedValue([
       permintaan("p_1", { status: "selesai" }),
     ]);
-    mocks.cariDrafAiByPermintaan.mockResolvedValue(
-      draf("p_1", { statusVerifikasi: "menunggu" })
+    mocks.cariDrafAiByPermintaanBatch.mockResolvedValue(
+      new Map([["p_1", draf("p_1", { statusVerifikasi: "menunggu" })]])
     );
     await renderPage();
 
@@ -217,8 +220,8 @@ describe("PermintaanAiPage — render by akses context (#12 / T7)", () => {
     mocks.listPermintaanAi.mockResolvedValue([
       permintaan("p_1", { status: "selesai" }),
     ]);
-    mocks.cariDrafAiByPermintaan.mockResolvedValue(
-      draf("p_1", { statusVerifikasi: "menunggu" })
+    mocks.cariDrafAiByPermintaanBatch.mockResolvedValue(
+      new Map([["p_1", draf("p_1", { statusVerifikasi: "menunggu" })]])
     );
     await renderPage();
 
@@ -234,8 +237,8 @@ describe("PermintaanAiPage — render by akses context (#12 / T7)", () => {
     mocks.listPermintaanAi.mockResolvedValue([
       permintaan("p_1", { status: "selesai" }),
     ]);
-    mocks.cariDrafAiByPermintaan.mockResolvedValue(
-      draf("p_1", { statusVerifikasi: "menunggu" })
+    mocks.cariDrafAiByPermintaanBatch.mockResolvedValue(
+      new Map([["p_1", draf("p_1", { statusVerifikasi: "menunggu" })]])
     );
     await renderPage();
 
@@ -314,11 +317,19 @@ describe("PermintaanAiPage — render by akses context (#12 / T7)", () => {
       permintaan("p_menunggu", { status: "selesai" }),
       permintaan("p_disetujui", { status: "selesai" }),
     ]);
-    mocks.cariDrafAiByPermintaan.mockImplementation(
-      async (_tx: unknown, id: string) =>
-        draf(id, {
-          statusVerifikasi: id === "p_disetujui" ? "disetujui" : "menunggu",
-        })
+    mocks.cariDrafAiByPermintaanBatch.mockImplementation(
+      async (_tx: unknown, ids: readonly string[]): Promise<Map<string, DrafAi>> => {
+        const m = new Map<string, DrafAi>();
+        for (const id of ids) {
+          m.set(
+            id,
+            draf(id, {
+              statusVerifikasi: id === "p_disetujui" ? "disetujui" : "menunggu",
+            })
+          );
+        }
+        return m;
+      }
     );
     await renderPage();
 

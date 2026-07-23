@@ -8,7 +8,7 @@
  * `tenant_id` is NEVER passed as a function argument — it always defaults
  * from the GUC.
  */
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { izinAkses, pembatasanAkses, pengguna, ptk } from "../schema";
@@ -200,6 +200,51 @@ export async function loadAksesPengguna(
     izin: izinRows.map((r) => r.slug),
     pembatasan: batasRows.map((r) => r.slug),
   };
+}
+
+/**
+ * Batch variant of {@linkcode loadAksesPengguna}: loads the izin + pembatasan
+ * slugs for MANY pengguna in TWO queries (one `inArray` per table), then groups
+ * the rows into a `Map<penggunaId, AksesPengguna>`. Replaces the N+1 fan-out
+ * the akses management page ran (one `loadAksesPengguna` per pengguna = 2N
+ * queries).
+ *
+ * RLS scopes every row to the current tenant. A `penggunaId` absent from the
+ * result map resolves to an empty `{ izin: [], pembatasan: [] }`. An empty
+ * `penggunaIds` input short-circuits to an empty Map (no query issued).
+ */
+export async function loadAksesPenggunaBatch(
+  db: Db | Tx,
+  penggunaIds: readonly string[]
+): Promise<Map<string, AksesPengguna>> {
+  const grouped = new Map<string, AksesPengguna>();
+  if (penggunaIds.length === 0) return grouped;
+
+  const ids = [...penggunaIds];
+  const [izinRows, batasRows] = await Promise.all([
+    db
+      .select({ penggunaId: izinAkses.penggunaId, slug: izinAkses.slug })
+      .from(izinAkses)
+      .where(inArray(izinAkses.penggunaId, ids)),
+    db
+      .select({
+        penggunaId: pembatasanAkses.penggunaId,
+        slug: pembatasanAkses.slug,
+      })
+      .from(pembatasanAkses)
+      .where(inArray(pembatasanAkses.penggunaId, ids)),
+  ]);
+
+  for (const id of ids) {
+    grouped.set(id, { izin: [], pembatasan: [] });
+  }
+  for (const row of izinRows) {
+    grouped.get(row.penggunaId)?.izin.push(row.slug);
+  }
+  for (const row of batasRows) {
+    grouped.get(row.penggunaId)?.pembatasan.push(row.slug);
+  }
+  return grouped;
 }
 
 /**

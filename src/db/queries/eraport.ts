@@ -27,7 +27,7 @@
  * NOT usable downstream until verified. The lookup reads `drafAi` directly via
  * the schema (the draf-ai repo is read-only here); RLS scopes it to the tenant.
  */
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 
 import type { Db, Tx } from "../client";
 import { drafAi, drafEraport, revisiEraport } from "../schema";
@@ -263,4 +263,44 @@ export async function listRevisiByEraport(
     .where(eq(revisiEraport.eraportId, eraportId))
     .orderBy(desc(revisiEraport.dibuatPada))
     .limit(limit);
+}
+
+/**
+ * Batch variant of {@linkcode listRevisiByEraport}: fetches the revision
+ * history for MANY eraport ids in a SINGLE query (uses `inArray`), then groups
+ * the rows into a `Map<eraportId, RevisiEraport[]>` (each list newest-first).
+ * Replaces the N+1 `Promise.all` fan-out the page used to run one
+ * `listRevisiByEraport` per eraport.
+ *
+ * The `eraportIds` set is already bounded by the caller's page size (see
+ * `listDrafEraport` limit), so no extra row cap is applied here.
+ *
+ * RLS scopes every row to the current tenant. `eraportId`s absent from the
+ * result map simply have no revisions (or are cross-tenant / missing — RLS
+ * hides both). An empty `eraportIds` input short-circuits to an empty Map
+ * (no query issued), avoiding an `IN ()` syntax error.
+ */
+export async function listRevisiByEraportBatch(
+  db: Db | Tx,
+  eraportIds: readonly string[],
+  _limit: number = 500
+): Promise<Map<string, RevisiEraport[]>> {
+  if (eraportIds.length === 0) return new Map();
+
+  const rows = await db
+    .select()
+    .from(revisiEraport)
+    .where(inArray(revisiEraport.eraportId, [...eraportIds]))
+    .orderBy(desc(revisiEraport.dibuatPada));
+
+  const grouped = new Map<string, RevisiEraport[]>();
+  for (const row of rows) {
+    const list = grouped.get(row.eraportId);
+    if (list) {
+      list.push(row);
+    } else {
+      grouped.set(row.eraportId, [row]);
+    }
+  }
+  return grouped;
 }

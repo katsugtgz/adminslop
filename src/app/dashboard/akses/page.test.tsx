@@ -23,11 +23,10 @@ const mocks = vi.hoisted(() => {
     ),
     listPtk: vi.fn(async () => [] as Ptk[]),
     listPengguna: vi.fn(async () => [] as PenggunaDenganPtk[]),
-    loadAksesPengguna: vi.fn(
-      async (): Promise<{ izin: string[]; pembatasan: string[] }> => ({
-        izin: [],
-        pembatasan: [],
-      })
+    loadAksesPenggunaBatch: vi.fn(
+      async (): Promise<
+        Map<string, { izin: string[]; pembatasan: string[] }>
+      > => new Map()
     ),
     fakeTx,
   };
@@ -51,7 +50,7 @@ vi.mock("@/db/client", () => ({
 vi.mock("@/db/queries/akses", () => ({
   listPtk: mocks.listPtk,
   listPengguna: mocks.listPengguna,
-  loadAksesPengguna: mocks.loadAksesPengguna,
+  loadAksesPenggunaBatch: mocks.loadAksesPenggunaBatch,
 }));
 
 import Page from "./page";
@@ -134,7 +133,7 @@ beforeEach(() => {
   mocks.withTenant.mockReset();
   mocks.listPtk.mockReset();
   mocks.listPengguna.mockReset();
-  mocks.loadAksesPengguna.mockReset();
+  mocks.loadAksesPenggunaBatch.mockReset();
   // restore default implementations
   mocks.getDb.mockImplementation(() => ({ db: { __db: true } }));
   mocks.withTenant.mockImplementation(
@@ -142,10 +141,9 @@ beforeEach(() => {
   );
   mocks.listPtk.mockResolvedValue([PTK_BUDI]);
   mocks.listPengguna.mockResolvedValue([PENGGUNA_SATU]);
-  mocks.loadAksesPengguna.mockResolvedValue({
-    izin: ["ptk:baca"],
-    pembatasan: [],
-  });
+  mocks.loadAksesPenggunaBatch.mockResolvedValue(
+    new Map([["pg_1", { izin: ["ptk:baca"], pembatasan: [] }]])
+  );
 });
 
 describe("AksesPage — render by akses context (#6 / T6)", () => {
@@ -183,7 +181,7 @@ describe("AksesPage — render by akses context (#6 / T6)", () => {
     expect(screen.getAllByRole("button", { name: /Hapus/i })).toHaveLength(1);
     expect(screen.getAllByRole("checkbox")).toHaveLength(110);
     expect(mocks.listPtk).toHaveBeenCalledTimes(1);
-    expect(mocks.loadAksesPengguna).toHaveBeenCalledTimes(1);
+    expect(mocks.loadAksesPenggunaBatch).toHaveBeenCalledTimes(1);
   });
 
   it("active + kepala_sekolah -> read-only lists (no forms, no checkboxes)", async () => {
@@ -200,7 +198,7 @@ describe("AksesPage — render by akses context (#6 / T6)", () => {
     expect(screen.queryByRole("button", { name: /Hapus/i })).toBeNull();
     expect(screen.queryByRole("checkbox")).toBeNull();
     // read-only viewers never load the per-pengguna akses matrix
-    expect(mocks.loadAksesPengguna).not.toHaveBeenCalled();
+    expect(mocks.loadAksesPenggunaBatch).not.toHaveBeenCalled();
   });
 
   it("active + guru (no akses:baca) -> Pembatasan Akses, no PTK data leaks", async () => {

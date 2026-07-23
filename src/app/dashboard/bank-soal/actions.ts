@@ -38,8 +38,9 @@ import {
   ubahButirSoal,
 } from "@/db/queries/bank-soal";
 import type { JenisButirSoal } from "@/db/queries/bank-soal";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
+import { KepemilikanError } from "@/lib/auth/kepemilikan";
+import { trimField } from "@/lib/form/parser";
 
 const REVALIDATE_TARGET = "/dashboard/bank-soal";
 
@@ -72,6 +73,22 @@ interface KandidatImporButir {
 function ambilString(item: Record<string, unknown>, key: string): string {
   const value = item[key];
   return typeof value === "string" ? value.trim() : "";
+}
+
+/**
+ * Parse the `pilihan` JSON field (BUGS-05). A malformed payload used to throw a
+ * raw `SyntaxError` whose message ("Unexpected token...") leaks parser internals
+ * and reads as an English stack trace to a Bahasa user. This wraps the parse in
+ * a try/catch and re-throws a plain Bahasa validation error so the action layer
+ * surfaces a consistent, localized message — mirroring the JSON guard already
+ * present in `imporButirSoalJsonAction`.
+ */
+function parsePilihan(raw: string): unknown {
+  try {
+    return JSON.parse(raw);
+  } catch {
+    throw new Error("Format pilihan tidak valid (wajib JSON yang valid).");
+  }
 }
 
 function validasiKandidatImpor(
@@ -138,35 +155,29 @@ function validasiKandidatImpor(
  * throws, propagating to the client as a Bahasa error).
  */
 export async function buatButirSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:buat",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (!mataPelajaranId) throw new Error("Mata Pelajaran wajib diisi.");
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || null;
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (!isValidJenis(jenisRaw)) {
     throw new Error("Jenis Butir Soal tidak valid.");
   }
   const jenis: JenisButirSoal = jenisRaw;
-  const pertanyaan = String(formData.get("pertanyaan") ?? "").trim();
+  const pertanyaan = trimField(formData, "pertanyaan");
   if (!pertanyaan) throw new Error("Pertanyaan wajib diisi.");
-  const kunciJawaban = String(formData.get("kunciJawaban") ?? "").trim();
+  const kunciJawaban = trimField(formData, "kunciJawaban");
   if (!kunciJawaban) throw new Error("Kunci Jawaban wajib diisi.");
-  const pembahasanRaw = String(formData.get("pembahasan") ?? "").trim();
+  const pembahasanRaw = trimField(formData, "pembahasan");
   const pembahasan = pembahasanRaw || null;
-  const pilihanRaw = String(formData.get("pilihan") ?? "").trim();
-  const pilihan = pilihanRaw
-    ? JSON.parse(pilihanRaw) as unknown
-    : null;
-  const drafAiIdRaw = String(formData.get("drafAiId") ?? "").trim();
+  const pilihanRaw = trimField(formData, "pilihan");
+  const pilihan = pilihanRaw ? parsePilihan(pilihanRaw) : null;
+  const drafAiIdRaw = trimField(formData, "drafAiId");
   const drafAiId = drafAiIdRaw || null;
 
   const { db } = getDb();
@@ -201,39 +212,35 @@ export async function buatButirSoalAction(formData: FormData): Promise<void> {
  * ditemukan".
  */
 export async function ubahButirSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:ubah",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
 
   const perubahan: Record<string, unknown> = {};
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (mataPelajaranId) perubahan.mataPelajaranId = mataPelajaranId;
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   if (formData.has("tingkatId")) perubahan.tingkatId = tingkatIdRaw || null;
-  const jenisRaw = String(formData.get("jenis") ?? "").trim();
+  const jenisRaw = trimField(formData, "jenis");
   if (jenisRaw) {
     if (!isValidJenis(jenisRaw)) {
       throw new Error("Jenis Butir Soal tidak valid.");
     }
     perubahan.jenis = jenisRaw;
   }
-  const pertanyaan = String(formData.get("pertanyaan") ?? "").trim();
+  const pertanyaan = trimField(formData, "pertanyaan");
   if (pertanyaan) perubahan.pertanyaan = pertanyaan;
-  const kunciJawaban = String(formData.get("kunciJawaban") ?? "").trim();
+  const kunciJawaban = trimField(formData, "kunciJawaban");
   if (kunciJawaban) perubahan.kunciJawaban = kunciJawaban;
-  const pembahasanRaw = String(formData.get("pembahasan") ?? "").trim();
+  const pembahasanRaw = trimField(formData, "pembahasan");
   if (formData.has("pembahasan"))
     perubahan.pembahasan = pembahasanRaw || null;
-  const pilihanRaw = String(formData.get("pilihan") ?? "").trim();
-  if (pilihanRaw) perubahan.pilihan = JSON.parse(pilihanRaw) as unknown;
+  const pilihanRaw = trimField(formData, "pilihan");
+  if (pilihanRaw) perubahan.pilihan = parsePilihan(pilihanRaw);
 
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
@@ -258,16 +265,12 @@ export async function ubahButirSoalAction(formData: FormData): Promise<void> {
 export async function arsipkanButirSoalAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:ubah",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
-  const id = String(formData.get("id") ?? "").trim();
+  const id = trimField(formData, "id");
   if (!id) throw new Error("ID Butir Soal wajib diisi.");
 
   const { db } = getDb();
@@ -291,24 +294,20 @@ export async function arsipkanButirSoalAction(
  * to a Tahun Ajaran (required) + optional semester + optional Tingkat.
  */
 export async function buatPaketSoalAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:buat",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
-  const nama = String(formData.get("nama") ?? "").trim();
+  const nama = trimField(formData, "nama");
   if (!nama) throw new Error("Nama Paket wajib diisi.");
-  const mataPelajaranId = String(formData.get("mataPelajaranId") ?? "").trim();
+  const mataPelajaranId = trimField(formData, "mataPelajaranId");
   if (!mataPelajaranId) throw new Error("Mata Pelajaran wajib diisi.");
-  const tahunAjaranId = String(formData.get("tahunAjaranId") ?? "").trim();
+  const tahunAjaranId = trimField(formData, "tahunAjaranId");
   if (!tahunAjaranId) throw new Error("Tahun Ajaran wajib diisi.");
-  const tingkatIdRaw = String(formData.get("tingkatId") ?? "").trim();
+  const tingkatIdRaw = trimField(formData, "tingkatId");
   const tingkatId = tingkatIdRaw || null;
-  const semesterRaw = String(formData.get("semester") ?? "").trim();
+  const semesterRaw = trimField(formData, "semester");
   const semester = semesterRaw || null;
 
   const { db } = getDb();
@@ -341,24 +340,20 @@ export async function buatPaketSoalAction(formData: FormData): Promise<void> {
 export async function tambahButirKePaketAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:ubah",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
-  const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
+  const paketSoalId = trimField(formData, "paketSoalId");
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
-  const butirSoalId = String(formData.get("butirSoalId") ?? "").trim();
+  const butirSoalId = trimField(formData, "butirSoalId");
   if (!butirSoalId) throw new Error("ID Butir Soal wajib diisi.");
-  const urutanRaw = String(formData.get("urutan") ?? "").trim();
+  const urutanRaw = trimField(formData, "urutan");
   if (!urutanRaw) throw new Error("Urutan wajib diisi.");
   const urutan = Number(urutanRaw);
   if (Number.isNaN(urutan)) throw new Error("Urutan harus berupa angka.");
-  const bobotRaw = String(formData.get("bobot") ?? "").trim();
+  const bobotRaw = trimField(formData, "bobot");
   const bobot = bobotRaw || undefined;
 
   const { db } = getDb();
@@ -389,18 +384,14 @@ export async function tambahButirKePaketAction(
 export async function hapusButirDariPaketAction(
   formData: FormData
 ): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("paket_soal:ubah").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Paket Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "paket_soal:ubah",
+    "Anda tidak memiliki izin untuk Paket Soal."
+  );
 
-  const paketSoalId = String(formData.get("paketSoalId") ?? "").trim();
+  const paketSoalId = trimField(formData, "paketSoalId");
   if (!paketSoalId) throw new Error("ID Paket Soal wajib diisi.");
-  const butirSoalId = String(formData.get("butirSoalId") ?? "").trim();
+  const butirSoalId = trimField(formData, "butirSoalId");
   if (!butirSoalId) throw new Error("ID Butir Soal wajib diisi.");
 
   const { db } = getDb();
@@ -421,16 +412,12 @@ export async function imporButirSoalJsonAction(
   _prevState: HasilImpor | null,
   formData: FormData
 ): Promise<HasilImpor> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("bank_soal:buat").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk Bank Soal.");
-  }
+  const akses = await requireAksesAktif(
+    "bank_soal:buat",
+    "Anda tidak memiliki izin untuk Bank Soal."
+  );
 
-  const jsonText = String(formData.get("jsonButir") ?? "").trim();
+  const jsonText = trimField(formData, "jsonButir");
   let parsed: unknown;
   try {
     parsed = JSON.parse(jsonText);
@@ -465,10 +452,20 @@ export async function imporButirSoalJsonAction(
   let gagal = parsed.length - kandidat.length;
   const { db } = getDb();
   await withTenant(db, akses.membership.orgId, async (tx) => {
-    const hasilSimpan = await Promise.all(
-      kandidat.map(async (item) => {
-        try {
-          const butir = await buatButirSoal(tx, {
+    // BUGS-02: previously `Promise.all(kandidat.map(...))` over a single tx
+    // client. That was structurally unsound — pg serializes queries on one
+    // connection, and a failed insert aborts the surrounding transaction
+    // (Postgres "current transaction is aborted" state). Every subsequent
+    // insert then failed and the final COMMIT became ROLLBACK, yet the action
+    // reported tersimpan:N>0. The sequential loop below processes items in
+    // order, and each item runs inside its own Drizzle nested transaction
+    // (SAVEPOINT sp_n ... RELEASE sp_n). A bad row rolls back ONLY that row's
+    // insert+audit without poisoning the surrounding transaction, so partial
+    // success is HONEST: tersimpan reflects rows that actually committed.
+    for (const item of kandidat) {
+      try {
+        await tx.transaction(async (sp) => {
+          const butir = await buatButirSoal(sp, {
             mataPelajaranId: item.mataPelajaranId,
             tingkatId: item.tingkatId,
             jenis: item.jenis,
@@ -478,7 +475,7 @@ export async function imporButirSoalJsonAction(
             pembahasan: item.pembahasan,
             dibuatOleh: akses.userId,
           });
-          await catatAudit(tx, {
+          await catatAudit(sp, {
             aktor: akses.userId,
             aksi: "impor-ai-eksternal",
             target: `butir_soal:${butir.id}`,
@@ -486,23 +483,25 @@ export async function imporButirSoalJsonAction(
               provenance: `eksternal-pengguna:${akses.userId}:${item.jenis}:${new Date().toISOString()}`,
             },
           });
-          return { ok: true as const };
-        } catch (error) {
-          const detail =
-            error instanceof Error ? error.message : "kesalahan basis data";
-          return {
-            ok: false as const,
-            error: `Butir ${item.nomor}: gagal disimpan (${detail}).`,
-          };
-        }
-      })
-    );
-    for (const hasil of hasilSimpan) {
-      if (hasil.ok) {
+        });
         tersimpan += 1;
-      } else {
+      } catch (error) {
         gagal += 1;
-        errors.push(hasil.error);
+        // SEC-02: never surface raw DB internals (constraint names, column
+        // identifiers, stack traces) to the client. KepemilikanError messages
+        // are intentional user-facing ownership denials — preserve them
+        // verbatim (mirrors src/app/api/sinkronisasi/route.ts:336-345). Any
+        // other failure collapses to a generic Bahasa message; the real error
+        // is logged server-side for operator triage.
+        if (error instanceof KepemilikanError) {
+          errors.push(`Butir ${item.nomor}: ${error.message}`);
+        } else {
+          console.error(
+            `[imporButirSoalJsonAction] Butir ${item.nomor} gagal disimpan`,
+            error
+          );
+          errors.push(`Butir ${item.nomor}: gagal disimpan.`);
+        }
       }
     }
   });

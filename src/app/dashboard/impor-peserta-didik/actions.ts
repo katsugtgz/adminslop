@@ -16,18 +16,38 @@
 // are marked `perlu_koreksi` by the validator and are SKIPPED — never silently
 // upserted. Only `status === 'valid'` rows are inserted.
 
+import { inArray, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 import { catatAudit, getDb, withTenant } from "@/db/client";
-import { buatPesertaDidikBatch, listPesertaDidik } from "@/db/queries/peserta-didik";
+import { buatPesertaDidikBatch } from "@/db/queries/peserta-didik";
 import type { InputBuatPesertaDidik, JenisKelamin } from "@/db/queries/peserta-didik";
-import { getAksesSaya } from "@/lib/auth/akses-saya";
-import { requireAuth } from "@/lib/auth/server";
+import { pesertaDidik } from "@/db/schema";
+import { requireAksesAktif } from "@/lib/auth/akses-saya";
 import { parseCsv } from "@/lib/impor/parse-csv";
 import { validasiBatch } from "@/lib/impor/validasi-peserta-didik";
 
 const REVALIDATE_TARGET = "/dashboard/impor-peserta-didik";
 const MAX_CSV_BYTES = 2 * 1024 * 1024;
+
+/**
+ * BUGS-06: collect the distinct, non-empty NISN/NIS values present in the
+ * parsed CSV batch. Only these candidates are queried against the tenant —
+ * replacing the previous `listPesertaDidik(tx, 100000)` full-table scan that
+ * loaded up to 100k full rows (all columns) just to extract two columns for
+ * duplicate detection.
+ */
+function kandidatDuplikat(
+  baris: readonly { readonly nisn?: string; readonly nis?: string }[]
+): { nisn: string[]; nis: string[] } {
+  const nisnSet = new Set<string>();
+  const nisSet = new Set<string>();
+  for (const row of baris) {
+    if (row.nisn) nisnSet.add(row.nisn);
+    if (row.nis) nisSet.add(row.nis);
+  }
+  return { nisn: [...nisnSet], nis: [...nisSet] };
+}
 
 /**
  * Impor Peserta Didik via CSV (AC#1–#5). Reads a CSV `file` field, parses it,
@@ -40,14 +60,7 @@ const MAX_CSV_BYTES = 2 * 1024 * 1024;
  * from `akses.membership.orgId` — never from formData (§13).
  */
 export async function imporPesertaDidikAction(formData: FormData): Promise<void> {
-  await requireAuth();
-  const akses = await getAksesSaya();
-  if (akses.status !== "active") {
-    throw new Error("Satuan Pendidikan Aktif belum dipilih.");
-  }
-  if (!akses.boleh("impor_peserta_didik:kelola").diizinkan) {
-    throw new Error("Anda tidak memiliki izin untuk mengimpor Peserta Didik.");
-  }
+  const akses = await requireAksesAktif("impor_peserta_didik:kelola", "Anda tidak memiliki izin untuk mengimpor Peserta Didik.");
 
   const fileField = formData.get("file");
   if (fileField === null) {
@@ -68,13 +81,39 @@ export async function imporPesertaDidikAction(formData: FormData): Promise<void>
 
   const { db } = getDb();
   const ringkasan = await withTenant(db, akses.membership.orgId, async (tx) => {
-    const existing = await listPesertaDidik(tx, 100000);
-    const existingNisn = existing
-      .map((p) => p.nisn)
-      .filter((v): v is string => v !== null);
-    const existingNis = existing
-      .map((p) => p.nis)
-      .filter((v): v is string => v !== null);
+    // BUGS-06: targeted duplicate probe. Previously this loaded up to 100k
+    // full peserta_didik rows via listPesertaDidik(tx, 100000) just to extract
+    // two nullable columns. Now we project only nisn/nis AND restrict to the
+    // distinct candidate values actually present in the import batch — so a
+    // 50-row import probes at most 50 NISN + 50 NIS values against an indexed
+    // lookup, never a full tenant scan. When the batch has no nisn/nis at all,
+    // the query is skipped entirely (nothing can collide).
+    const kandidat = kandidatDuplikat(baris);
+    let existingNisn: string[] = [];
+    let existingNis: string[] = [];
+    if (kandidat.nisn.length > 0 || kandidat.nis.length > 0) {
+      // `or` filters out undefined args, so passing undefined for the empty
+      // side collapses to just the defined predicate.
+      const rows = await tx
+        .select({ nisn: pesertaDidik.nisn, nis: pesertaDidik.nis })
+        .from(pesertaDidik)
+        .where(
+          or(
+            kandidat.nisn.length > 0
+              ? inArray(pesertaDidik.nisn, kandidat.nisn)
+              : undefined,
+            kandidat.nis.length > 0
+              ? inArray(pesertaDidik.nis, kandidat.nis)
+              : undefined,
+          ),
+        );
+      existingNisn = rows
+        .map((r) => r.nisn)
+        .filter((v): v is string => v !== null);
+      existingNis = rows
+        .map((r) => r.nis)
+        .filter((v): v is string => v !== null);
+    }
 
     const hasil = validasiBatch(baris, existingNisn, existingNis);
 

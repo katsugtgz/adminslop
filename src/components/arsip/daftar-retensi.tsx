@@ -1,24 +1,12 @@
 import { Button } from "@/components/ui/button";
+import {
+  isTabelArsip,
+  labelTabelArsip,
+  TABEL_ARSIP,
+} from "@/db/queries/arsip";
 import type { RetensiData } from "@/db/schema";
 
 import type { ServerAksi } from "./form-retensi";
-
-const TABEL_OPTS = ["ptk", "penilaian", "beban_mengajar", "wali_kelas"] as const;
-
-function labelTabel(tabel: string): string {
-  switch (tabel) {
-    case "ptk":
-      return "PTK";
-    case "penilaian":
-      return "Penilaian";
-    case "beban_mengajar":
-      return "Beban Mengajar";
-    case "wali_kelas":
-      return "Wali Kelas";
-    default:
-      return tabel;
-  }
-}
 
 /**
  * Retensi Data display + management form. Lists the existing retention policies
@@ -47,7 +35,7 @@ export function DaftarRetensi({
 
       {bolehKelola && (
         <ul className="flex flex-col gap-2">
-          {TABEL_OPTS.map((tabel) => {
+          {TABEL_ARSIP.map((tabel) => {
             const row = existing.get(tabel);
             return (
               <li
@@ -55,7 +43,7 @@ export function DaftarRetensi({
                 className="flex flex-col gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-sm font-semibold">{labelTabel(tabel)}</span>
+                  <span className="text-sm font-semibold">{labelTabelArsip(tabel)}</span>
                   {row && (
                     <span className="text-xs text-muted-foreground">
                       Periode saat ini: {row.periodeBulan} bulan
@@ -115,18 +103,21 @@ export function DaftarRetensi({
 
       {!bolehKelola && retensi.length > 0 && (
         <ul className="flex flex-col gap-2">
-          {retensi.map((r) => (
-            <li
-              key={r.id}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
-            >
-              <span className="text-sm font-semibold">{labelTabel(r.tabel)}</span>
-              <span className="text-xs text-muted-foreground">
-                Periode (Bulan): {r.periodeBulan}
-                {r.keterangan ? ` · ${r.keterangan}` : ""}
-              </span>
-            </li>
-          ))}
+          {retensi.map((r) => {
+            const label = isTabelArsip(r.tabel) ? labelTabelArsip(r.tabel) : r.tabel;
+            return (
+              <li
+                key={r.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card p-4 text-card-foreground shadow-sm"
+              >
+                <span className="text-sm font-semibold">{label}</span>
+                <span className="text-xs text-muted-foreground">
+                  Periode (Bulan): {r.periodeBulan}
+                  {r.keterangan ? ` · ${r.keterangan}` : ""}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

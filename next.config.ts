@@ -52,6 +52,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Do not advertise Next.js in the `X-Powered-By` response header.
+  poweredByHeader: false,
+  // Next.js types require `headers()` to return Promise<Header[]>, so `async`
+  // is mandatory even though this implementation returns a static array.
+  // eslint-disable-next-line @typescript-eslint/require-await
   async headers() {
     return [
       {

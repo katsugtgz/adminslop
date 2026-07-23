@@ -71,6 +71,7 @@ const mocks = vi.hoisted(() => {
   };
   return {
     getAksesSaya: vi.fn(),
+    requireAksesAktif: vi.fn(),
     getDb: vi.fn(() => ({ db: { __db: true } })),
     // withTenant runs the callback with fakeTx so repo fns receive it.
     withTenant: vi.fn(
@@ -120,6 +121,7 @@ const mocks = vi.hoisted(() => {
 
 const {
   getAksesSaya,
+  requireAksesAktif,
   getDb,
   withTenant,
   catatAudit,
@@ -140,6 +142,7 @@ const {
 
 vi.mock("@/lib/auth/akses-saya", () => ({
   getAksesSaya: mocks.getAksesSaya,
+  requireAksesAktif: mocks.requireAksesAktif,
 }));
 vi.mock("@/db/client", () => ({
   getDb: mocks.getDb,
@@ -240,6 +243,7 @@ function aksesAktif(
 
 beforeEach(() => {
   getAksesSaya.mockReset();
+  requireAksesAktif.mockReset();
   getDb.mockReset();
   withTenant.mockReset();
   catatAudit.mockReset();
@@ -257,6 +261,20 @@ beforeEach(() => {
   revalidatePath.mockReset();
   // restore default implementations cleared by mockReset
   getDb.mockImplementation(() => ({ db: { __db: true } }));
+  requireAksesAktif.mockImplementation(
+    async (izin: string, pesanTolak?: string) => {
+      const akses = await getAksesSaya();
+      if (!akses || akses.status !== "active") {
+        throw new Error("Satuan Pendidikan Aktif belum dipilih.");
+      }
+      if (!akses.boleh(izin).diizinkan) {
+        throw new Error(
+          pesanTolak ?? "Anda tidak memiliki izin untuk aksi ini."
+        );
+      }
+      return akses;
+    }
+  );
   withTenant.mockImplementation(
     async (
       _db: unknown,

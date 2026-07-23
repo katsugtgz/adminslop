@@ -1,11 +1,10 @@
 import { Sparkles } from "lucide-react";
 
 import { getDb, withTenant } from "@/db/client";
-import { cariDrafAiByPermintaan } from "@/db/queries/draf-ai";
+import { cariDrafAiByPermintaanBatch } from "@/db/queries/draf-ai";
 import { getAtauBuatKuotaAi, type Semester } from "@/db/queries/kuota-ai";
 import { listPermintaanAi } from "@/db/queries/permintaan-ai";
 import { getSemesterAktif, getTahunAjaranAktif } from "@/db/queries/tahun-ajaran";
-import type { DrafAi } from "@/db/schema";
 import { getAksesSaya } from "@/lib/auth/akses-saya";
 import { PembatasanAkses } from "@/components/pembatasan-akses";
 import { PilihSatuanPendidikan } from "@/components/pilih-satuan-pendidikan";
@@ -76,22 +75,12 @@ export default async function Page() {
     for (const p of permintaanList) {
       if (p.status === "selesai") selesaiIds.push(p.id);
     }
-    const drafEntries = await Promise.all(
-      selesaiIds.map(async (id) => [
-        id,
-        await cariDrafAiByPermintaan(tx, id),
-      ] as const)
-    );
-    const drafMap = new Map<string, DrafAi>();
-    for (const [id, draf] of drafEntries) {
-      if (draf) drafMap.set(id, draf);
-    }
-
-    const kuota = await getAtauBuatKuotaAi(
-      tx,
-      ta.id,
-      (semester ?? "ganjil") as Semester
-    );
+    // PERF-02: single batch query replaces the N+1 Promise.all loop that issued
+    // one cariDrafAiByPermintaan per selesai permintaan.
+    const [drafMap, kuota] = await Promise.all([
+      cariDrafAiByPermintaanBatch(tx, selesaiIds),
+      getAtauBuatKuotaAi(tx, ta.id, (semester ?? "ganjil") as Semester),
+    ]);
 
     return { permintaanList, drafMap, kuota };
   });
