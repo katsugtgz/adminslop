@@ -4,7 +4,6 @@ export default authkitMiddleware();
 
 export const config = {
   matcher: [
-    '/',
     '/dashboard',
     '/dashboard/:path*',
     // Onboarding uses withAuth() to read the session; middleware coverage keeps
